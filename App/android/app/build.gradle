@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.tls"
+        applicationId "com.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
