@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
+import ErrorMessages from "../Utils/ErrorMessages"
 import {
   StyleSheet,
   Text,
@@ -21,23 +22,40 @@ export default class RegisterUser extends Component {
     }
 
     RegisterUserToFirebase = () => {
-        auth()
-            .createUserWithEmailAndPassword( this.state.email, this.state.password)
-            .then((res) =>{
-                res.user.updateProfile({
-                    displayName : this.state.name
-                })
-                this.setState({
-                    name: '',
-                    email: '',
-                    password: '',
-                    error: null,
-                })
-                this.props.navigation.navigate('Login')
+
+        const { email, password, name } = this.state;
+
+        if (email==='' || password==='' || name==='')
+        {
+            this.setState({
+                error : "Enter details."
             })
-            .catch(err => this.setState({
-                error : err.message
-            }))
+        }
+        else
+        {
+            auth()
+                .createUserWithEmailAndPassword( email, password)
+                .then((res) =>{
+                    res.user.updateProfile({
+                        displayName : name
+                    })
+                    this.setState({
+                        name: '',
+                        email: '',
+                        password: '',
+                        error: null,
+                    })
+                    this.props.navigation.navigate('Login')
+                })
+                .catch( err => {
+                    var errorMessages = new ErrorMessages()
+                    var message = errorMessages.getErrorMessage(err.code)
+                    this.setState({
+                        error : message
+                    })
+                })
+        }
+
     }
 
     render(){
@@ -66,11 +84,11 @@ export default class RegisterUser extends Component {
                     value={this.state.password}
                 />
                 { this.state.error ?
-                    <Text style={{ color: 'red'}}>
+                    <Text style={styles.errorMessage}>
                         {this.state.error}
                     </Text> : <Text/>}
 
-                <Button title="Register" onPress={this.RegisterUserToFirebase} />
+                <Button style={styles.buttonMessage} title="Register" onPress={this.RegisterUserToFirebase} />
 
                 <Text
                     style = {styles.loginText}
@@ -105,6 +123,15 @@ const styles = StyleSheet.create({
         color: '#3740FE',
         marginTop: 25,
         textAlign: 'center'
+    },
+    errorMessage: {
+        color: 'red',
+        marginBottom: 15,
+        paddingTop : 10,
+        paddingBottom: 10,
+    },
+    buttonMessage: {
+        marginTop: 15
     }
 });
 
