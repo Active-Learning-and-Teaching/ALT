@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
+import ErrorMessages from "../Utils/ErrorMessages"
 import {
     StyleSheet,
     Text,
@@ -21,19 +22,33 @@ export default class LogIn extends Component {
     LoginUser = ()=>{
         const { email, password } = this.state;
 
-        auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(()=> {
-                this.setState({
-                    email: '',
-                    password: '',
-                    error: null,
-                })
-                this.props.navigation.navigate('DashBoard')
+        if (email==='' || password==='')
+        {
+            this.setState({
+                error : "Enter details."
             })
-            .catch(err => this.setState({
-                error : err.message
-            }))
+        }
+        else
+        {
+            auth()
+                .signInWithEmailAndPassword(email, password)
+                .then(()=> {
+                    this.setState({
+                        email: '',
+                        password: '',
+                        error: null,
+                    })
+                    this.props.navigation.navigate('DashBoard')
+                })
+                .catch( err => {
+                    var errorMessages = new ErrorMessages()
+                    var message = errorMessages.getErrorMessage(err.code)
+                    this.setState({
+                        error : message
+                    })
+                })
+        }
+
     }
 
     render(){
@@ -55,11 +70,11 @@ export default class LogIn extends Component {
                     value={this.state.password}
                 />
                 { this.state.error ?
-                <Text style={{ color: 'red'}}>
+                <Text style={styles.errorMessage}>
                     {this.state.error}
                 </Text> : <Text/>}
 
-                <Button title="Login" onPress={this.LoginUser} />
+                <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser} />
 
                 <Text
                     style = {styles.signupText}
@@ -94,6 +109,15 @@ const styles = StyleSheet.create({
         color: '#3740FE',
         marginTop: 25,
         textAlign: 'center'
+    },
+    errorMessage: {
+        color: 'red',
+        marginBottom: 15,
+        paddingTop : 10,
+        paddingBottom: 10,
+    },
+    buttonMessage: {
+        marginTop: 15
     }
 
 });
