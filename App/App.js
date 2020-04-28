@@ -13,6 +13,7 @@ import RegisterUser from './Components/RegisterUser';
 import CheckUserLoggedIn from './Components/CheckUserLoggedIn';
 import DashBoard from './Components/DashBoard';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import * as config from './config'
 
 const Stack = createStackNavigator();
 
@@ -34,7 +35,7 @@ export default class App extends Component{
     componentDidMount(): void {
         GoogleSignin.configure({
             scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-            webClientId: '769962526895-08kognjarhar35ife1q2r0gpvlh0kj3h.apps.googleusercontent.com',
+            webClientId: config.webClientId,
             offlineAccess: true
         })
     }
