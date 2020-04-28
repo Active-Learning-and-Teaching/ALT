@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "App-tvOS.app"
-               BlueprintName = "App-tvOS"
-               ReferencedContainer = "container:App.xcodeproj">
+               BuildableName = "TLS-tvOS.app"
+               BlueprintName = "TLS-tvOS"
+               ReferencedContainer = "container:TLS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "App-tvOSTests.xctest"
-               BlueprintName = "App-tvOSTests"
-               ReferencedContainer = "container:App.xcodeproj">
+               BuildableName = "TLS-tvOSTests.xctest"
+               BlueprintName = "TLS-tvOSTests"
+               ReferencedContainer = "container:TLS.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "App-tvOS.app"
-            BlueprintName = "App-tvOS"
-            ReferencedContainer = "container:App.xcodeproj">
+            BuildableName = "TLS-tvOS.app"
+            BlueprintName = "TLS-tvOS"
+            ReferencedContainer = "container:TLS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "App-tvOS.app"
-            BlueprintName = "App-tvOS"
-            ReferencedContainer = "container:App.xcodeproj">
+            BuildableName = "TLS-tvOS.app"
+            BlueprintName = "TLS-tvOS"
+            ReferencedContainer = "container:TLS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
