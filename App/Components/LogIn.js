@@ -8,6 +8,10 @@ import {
     TextInput,
     Button
 } from 'react-native';
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+} from '@react-native-community/google-signin';
 
 export default class LogIn extends Component {
     constructor() {
@@ -51,6 +55,26 @@ export default class LogIn extends Component {
 
     }
 
+    signInWithGoogle = async () => {
+        try
+        {
+            await GoogleSignin.hasPlayServices();
+            const { idToken } = await GoogleSignin.signIn();
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            return auth()
+                .signInWithCredential(googleCredential)
+                .then(this.props.navigation.navigate('DashBoard'));
+        }
+        catch (error)
+        {
+            var errorMessages = new ErrorMessages()
+            var message = errorMessages.getGoogleSignInError(error.code)
+            this.setState({
+                error : message
+            })
+        }
+    };
+
     render(){
         return(
             <View style = {styles.container}>
@@ -82,6 +106,16 @@ export default class LogIn extends Component {
                 >
                     Don't have an account? Register Now
                 </Text>
+
+                <Text style = {styles.or}> Or
+                </Text>
+
+                <GoogleSigninButton
+                    style={styles.googleSigninButton}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Dark}
+                    onPress={this.signInWithGoogle}/>
+
 
             </View>
         );
@@ -118,6 +152,18 @@ const styles = StyleSheet.create({
     },
     buttonMessage: {
         marginTop: 15
+    },
+    or: {
+        color: 'grey',
+        marginBottom: 15,
+        paddingTop : 13,
+        paddingBottom: 13,
+        alignSelf: "center",
+    },
+    googleSigninButton: {
+        width: '80%',
+        height: '10%',
+        alignSelf: "center",
     }
 
 });

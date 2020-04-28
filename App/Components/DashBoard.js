@@ -7,6 +7,7 @@ import {
     View,
     Alert
 } from 'react-native';
+import {GoogleSignin} from '@react-native-community/google-signin';
 
 export default class DashBoard extends Component {
     constructor() {
@@ -16,15 +17,22 @@ export default class DashBoard extends Component {
         };
     }
 
-    signOut = () => {
-        auth()
-            .signOut()
-            .then(
-                this.props.navigation.navigate('Login')
-            )
-            .catch(err => {
-                Alert.alert(err.message)
-            })
+    signOut = async () => {
+        try {
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut()
+            this.props.navigation.navigate('Login')
+        }
+        catch (error) {
+            auth()
+                .signOut()
+                .then(
+                    this.props.navigation.navigate('Login')
+                )
+                .catch(err => {
+                    Alert.alert(err.message)
+                })
+        }
     }
 
 
