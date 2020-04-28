@@ -5,12 +5,39 @@ import {
     View,
     ActivityIndicator,
 } from 'react-native';
+import {GoogleSignin} from '@react-native-community/google-signin';
+
+
 
 export default class CheckUserLoggedIn extends Component {
 
+    constructor() {
+        super();
+        this.isGoogleUser = this.isGoogleUser.bind(this)
+    }
+
+    isGoogleUser = async ()=>{
+        try{
+
+            const { idToken } = await GoogleSignin.signInSilently();
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            return auth()
+                .signInWithCredential(googleCredential)
+                .then(this.props.navigation.navigate('DashBoard'));
+
+        }
+        catch (error) {
+            this.props.navigation.navigate('Login')
+        }
+    }
+
     componentDidMount() {
         auth().onAuthStateChanged(user => {
-            this.props.navigation.navigate(user ? 'DashBoard' : 'Login')
+            if (user)
+                this.props.navigation.navigate('DashBoard')
+            else {
+                this.isGoogleUser()
+            }
         })
     }
 

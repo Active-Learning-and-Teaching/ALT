@@ -1,3 +1,7 @@
+import {
+    statusCodes,
+} from '@react-native-community/google-signin';
+
 export default class ErrorMessages{
 
     getErrorMessage( code ){
@@ -17,6 +21,22 @@ export default class ErrorMessages{
         }
 
         return "Please try again later.";
+    }
+
+    getGoogleSignInError (code){
+
+        if (code === statusCodes.SIGN_IN_CANCELLED) {
+            return "Login interrupted."
+        }
+        else if (code === statusCodes.IN_PROGRESS) {
+            return "Signin already in progress."
+        }
+        else if (code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            return "Play services not available or outdated."
+        }
+
+        return "Please try again later.";
+
     }
 
 }
