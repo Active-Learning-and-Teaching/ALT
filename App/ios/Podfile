@@ -49,8 +49,8 @@ def flipper_post_install(installer)
   end
 end
 
-target 'App' do
-  # Pods for App
+target 'TLS' do
+  # Pods for TLS
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -82,7 +82,7 @@ target 'App' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'AppTests' do
+  target 'TLSTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -99,10 +99,10 @@ target 'App' do
   end
 end
 
-target 'App-tvOS' do
-  # Pods for App-tvOS
+target 'TLS-tvOS' do
+  # Pods for TLS-tvOS
 
-  target 'App-tvOSTests' do
+  target 'TLS-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
