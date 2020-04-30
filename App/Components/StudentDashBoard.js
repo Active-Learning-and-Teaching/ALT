@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 
-export default class DashBoard extends Component {
+export default class StudentDashBoard extends Component {
     constructor() {
         super();
         this.state = {
@@ -44,7 +44,7 @@ export default class DashBoard extends Component {
     render(){
         return(
             <View style= {styles.container}>
-                <Text > WELCOME </Text>
+                <Text > WELCOME Student</Text>
                 <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
             </View>
         );
