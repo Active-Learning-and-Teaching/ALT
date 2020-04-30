@@ -5,7 +5,8 @@ import {
     View,
     ActivityIndicator,
 } from 'react-native';
-import {GoogleSignin} from '@react-native-community/google-signin';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+import database from '@react-native-firebase/database';
 
 
 
@@ -19,24 +20,43 @@ export default class CheckUserLoggedIn extends Component {
     isGoogleUser = async ()=>{
         try{
 
-            const { idToken } = await GoogleSignin.signInSilently();
-            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            const userInfo = await GoogleSignin.signInSilently();
+            const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
             return auth()
                 .signInWithCredential(googleCredential)
-                .then(this.props.navigation.navigate('DashBoard'));
+                .then(()=>{
+
+                    database()
+                        .ref('/sheets/Faculty')
+                        .orderByChild("Email")
+                        .equalTo(userInfo.user.email)
+                        .once("value")
+                        .then(snapshot => {
+                            if (snapshot.val()) {
+                                this.props.navigation.navigate('Faculty DashBoard')
+                            }
+                            else{
+                                this.props.navigation.navigate('Student DashBoard')
+                            }
+                        })
+                });
 
         }
         catch (error) {
-            this.props.navigation.navigate('Login')
+            if (error.code === statusCodes.SIGN_IN_REQUIRED)
+                this.props.navigation.navigate('Student DashBoard')
+            else
+                this.props.navigation.navigate('Login')
         }
     }
 
     componentDidMount() {
         auth().onAuthStateChanged(user => {
-            if (user)
-                this.props.navigation.navigate('DashBoard')
-            else {
+            if (user) {
                 this.isGoogleUser()
+            }
+            else {
+                this.props.navigation.navigate('Login')
             }
         })
     }

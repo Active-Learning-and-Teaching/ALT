@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
 import ErrorMessages from "../Utils/ErrorMessages"
+import database from '@react-native-firebase/database';
 import {
     StyleSheet,
     Text,
@@ -42,7 +43,7 @@ export default class LogIn extends Component {
                         password: '',
                         error: null,
                     })
-                    this.props.navigation.navigate('DashBoard')
+                    this.props.navigation.navigate('Student DashBoard')
                 })
                 .catch( err => {
                     var errorMessages = new ErrorMessages()
@@ -59,11 +60,27 @@ export default class LogIn extends Component {
         try
         {
             await GoogleSignin.hasPlayServices();
-            const { idToken } = await GoogleSignin.signIn();
-            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            const userInfo = await GoogleSignin.signIn();
+            const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
             return auth()
                 .signInWithCredential(googleCredential)
-                .then(this.props.navigation.navigate('DashBoard'));
+                .then(()=>{
+
+                    database()
+                        .ref('/sheets/Faculty')
+                        .orderByChild("Email")
+                        .equalTo(userInfo.user.email)
+                        .once("value")
+                        .then(snapshot => {
+
+                            if (snapshot.val()) {
+                                this.props.navigation.navigate('Faculty DashBoard')
+                            }
+                            else{
+                                this.props.navigation.navigate('Student DashBoard')
+                            }
+                        })
+                });
         }
         catch (error)
         {

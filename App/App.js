@@ -11,9 +11,10 @@ import {
 import LogIn from './Components/LogIn';
 import RegisterUser from './Components/RegisterUser';
 import CheckUserLoggedIn from './Components/CheckUserLoggedIn';
-import DashBoard from './Components/DashBoard';
+import StudentDashBoard from './Components/StudentDashBoard';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import * as config from './config'
+import FacultyDashBoard from './Components/FacultyDashBoard';
 
 const Stack = createStackNavigator();
 
@@ -24,7 +25,8 @@ function MyStack(){
                 <Stack.Screen name = "Loading" component={CheckUserLoggedIn}/>
                 <Stack.Screen name = "Login" component={LogIn}/>
                 <Stack.Screen name = "Register User" component={RegisterUser}/>
-                <Stack.Screen name = "DashBoard" component={DashBoard}/>
+                <Stack.Screen name = "Student DashBoard" component={StudentDashBoard}/>
+                <Stack.Screen name = "Faculty DashBoard" component={FacultyDashBoard}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
