@@ -10,19 +10,21 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/google-signin": "^4.0.0",
+    "@react-native-community/google-signin": "^4.0.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-firebase/app": "^6.7.1",
     "@react-native-firebase/auth": "^6.7.1",
     "@react-native-firebase/database": "^6.7.1",
     "@react-navigation/native": "^5.1.7",
-    "@react-navigation/stack": "^5.2.14",
+    "@react-navigation/stack": "^5.2.19",
     "react": "16.11.0",
     "react-native": "^0.62.2",
+    "react-native-elements": "^2.0.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-reanimated": "^1.8.0",
     "react-native-safe-area-context": "^0.7.3",
-    "react-native-screens": "^2.7.0"
+    "react-native-screens": "^2.7.0",
+    "react-native-vector-icons": "^6.6.0"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",

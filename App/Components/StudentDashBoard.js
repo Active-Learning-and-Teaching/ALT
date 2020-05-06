@@ -5,9 +5,11 @@ import {
     StyleSheet,
     Text,
     View,
-    Alert
+    Alert, ScrollView, SafeAreaView,
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {CoursePics} from '../Utils/CoursePics';
+import CourseCard from './CourseCard';
 
 export default class StudentDashBoard extends Component {
     constructor() {
@@ -43,23 +45,31 @@ export default class StudentDashBoard extends Component {
 
     render(){
         return(
-            <View style= {styles.container}>
-                <Text > WELCOME Student</Text>
-                <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
-            </View>
+            <SafeAreaView style={styles.safeContainer}>
+                <ScrollView>
+                    <View style={styles.grid}>
+                        {CoursePics.map(({coursename, instructor, imageurl},i)=> (
+                            <CourseCard coursename = {coursename} instructor = {instructor} imageurl = {imageurl} key={i}/>
+                        ))}
+                    </View>
+                    <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
+                </ScrollView>
+            </SafeAreaView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-
-    container: {
+    safeContainer: {
         flex: 1,
-        display: "flex",
-        justifyContent: 'center',
+        backgroundColor: 'transparent',
+    },
+    grid: {
+        marginTop: 10,
+        marginBottom: 10,
+        paddingTop : 10,
+        paddingBottom : 10,
         alignItems: 'center',
-        padding: 35,
-        backgroundColor: '#fff'
     },
     textStyle: {
         fontSize: 15,
@@ -68,6 +78,6 @@ const styles = StyleSheet.create({
     buttonMessage: {
         paddingTop : 10,
         marginTop: 15
-    }
+    },
 });
 
