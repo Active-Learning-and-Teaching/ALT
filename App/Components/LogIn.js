@@ -67,7 +67,7 @@ export default class LogIn extends Component {
                 .then(()=>{
 
                     database()
-                        .ref('/sheets/Faculty')
+                        .ref('/1bwxqLCmGXZ31-I7_GOCCWltW7dITFuy5eaKs1CZ2bPw/Faculty')
                         .orderByChild("Email")
                         .equalTo(userInfo.user.email)
                         .once("value")
