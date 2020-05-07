@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
+import database from '@react-native-firebase/database';
 import {
     Button,
     StyleSheet,
@@ -10,12 +11,14 @@ import {
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {CoursePics} from '../Utils/CoursePics';
 import CourseCard from './CourseCard';
+import Header from 'react-native-elements';
 
 export default class StudentDashBoard extends Component {
     constructor() {
         super();
         this.state = {
-            username : ''
+            username : '',
+            courseList: []
         };
     }
 
@@ -37,19 +40,37 @@ export default class StudentDashBoard extends Component {
         }
     }
 
+    getAllCourses = ()=>{
+        database()
+            .ref('/1bwxqLCmGXZ31-I7_GOCCWltW7dITFuy5eaKs1CZ2bPw/Courses')
+            .on('value', snapshot => {
+                const arr = snapshot.val().filter(n=>n)
+                const pics = CoursePics
+                const dup = []
 
-    // componentDidMount(){
-    //     // const {username} = auth().currentUser.displayName
-    //     // this.setState({username})
-    // }
+                for(var i=0; i<arr.length; i++)
+                {
+                    var dictionary = arr[i]
+                    dictionary['ImageUrl'] = pics[i]['imageurl']
+                    dup.push(dictionary)
+                }
+                this.setState({
+                    courseList : dup
+                })
+            })
+    }
+
+    componentDidMount(){
+        this.getAllCourses()
+    }
 
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
                     <View style={styles.grid}>
-                        {CoursePics.map(({coursename, instructor, imageurl},i)=> (
-                            <CourseCard coursename = {coursename} instructor = {instructor} imageurl = {imageurl} key={i}/>
+                        {this.state.courseList.map(({Name, Instructor, ImageUrl},i)=> (
+                            <CourseCard coursename = {Name} instructor = {Instructor} imageurl = {ImageUrl} key={i}/>
                         ))}
                     </View>
                     <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
