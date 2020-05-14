@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import database from '@react-native-firebase/database';
-
+import * as config from '../config'
 
 
 export default class CheckUserLoggedIn extends Component {
@@ -27,7 +27,7 @@ export default class CheckUserLoggedIn extends Component {
                 .then(()=>{
 
                     database()
-                        .ref('/sheets/Faculty')
+                        .ref(config['sheetFaculty'])
                         .orderByChild("Email")
                         .equalTo(userInfo.user.email)
                         .once("value")
@@ -43,10 +43,7 @@ export default class CheckUserLoggedIn extends Component {
 
         }
         catch (error) {
-            if (error.code === statusCodes.SIGN_IN_REQUIRED)
-                this.props.navigation.navigate('Student DashBoard')
-            else
-                this.props.navigation.navigate('Login')
+            this.props.navigation.navigate('Login')
         }
     }
 

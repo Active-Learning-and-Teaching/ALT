@@ -8,6 +8,7 @@ import {
     Alert
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import AddCourse from './CourseAdd';
 
 export default class FacultyDashBoard extends Component {
     constructor() {
@@ -46,6 +47,7 @@ export default class FacultyDashBoard extends Component {
             <View style= {styles.container}>
                 <Text > WELCOME Faculty</Text>
                 <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
+                <AddCourse/>
             </View>
         );
     }
