@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Overlay } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import {
     Text,
     View,
@@ -29,7 +29,9 @@ export default class  AddCourse extends Component {
     render(){
         return (
             <View>
-                <Button style={styles.buttonMessage} title="Add Course" onPress={this.toggleModal} />
+                <Icon name='plus-circle' type='font-awesome' style={{borderRadius:1}} onPress={this.toggleModal} />
+                {/*<Button style={styles.buttonMessage} title="Add Course" onPress={this.toggleModal} />*/}
+                {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} onPress={this.toggleModal} />*/}
 
                 <Modal
                     animationIn="slideInUp"

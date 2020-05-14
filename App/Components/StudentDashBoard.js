@@ -11,6 +11,7 @@ import {
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {CoursePics} from '../Utils/CoursePics';
 import CourseCard from './CourseCard';
+import {Icon} from 'react-native-elements';
 
 export default class StudentDashBoard extends Component {
     constructor() {
@@ -67,6 +68,8 @@ export default class StudentDashBoard extends Component {
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
+                    <Icon name='plus-circle' type='font-awesome' style={{borderRadius:1}}  />
+                    {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} />*/}
                     <View style={styles.grid}>
                         {this.state.courseList.map(({Name, Instructor, ImageUrl},i)=> (
                             <CourseCard coursename = {Name} instructor = {Instructor} imageurl = {ImageUrl} key={i}/>
