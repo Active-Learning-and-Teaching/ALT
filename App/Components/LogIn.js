@@ -13,6 +13,7 @@ import {
     GoogleSignin,
     GoogleSigninButton,
 } from '@react-native-community/google-signin';
+import * as config from '../config'
 
 export default class LogIn extends Component {
     constructor() {
@@ -67,7 +68,7 @@ export default class LogIn extends Component {
                 .then(()=>{
 
                     database()
-                        .ref('/1bwxqLCmGXZ31-I7_GOCCWltW7dITFuy5eaKs1CZ2bPw/Faculty')
+                        .ref(config['sheetFaculty'])
                         .orderByChild("Email")
                         .equalTo(userInfo.user.email)
                         .once("value")

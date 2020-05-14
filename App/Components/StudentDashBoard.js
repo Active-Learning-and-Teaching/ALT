@@ -11,7 +11,6 @@ import {
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {CoursePics} from '../Utils/CoursePics';
 import CourseCard from './CourseCard';
-import Header from 'react-native-elements';
 
 export default class StudentDashBoard extends Component {
     constructor() {
