@@ -9,6 +9,7 @@ import {
   Button,
   Alert,
 } from 'react-native';
+import student from '../Databases/Student';
 
 export default class RegisterUser extends Component {
     constructor() {
@@ -37,7 +38,7 @@ export default class RegisterUser extends Component {
                 .createUserWithEmailAndPassword( email, password)
                 .then((res) =>{
                     res.user.updateProfile({
-                        displayName : name
+                        displayName: name
                     })
                     this.setState({
                         name: '',
@@ -54,6 +55,13 @@ export default class RegisterUser extends Component {
                         error : message
                     })
                 })
+
+            auth().onAuthStateChanged( user => {
+                if (user) {
+                    console.log(user.email)
+                    student.getUser(user.uid, user.displayName, user.email)
+                }
+            })
         }
 
     }
@@ -134,4 +142,3 @@ const styles = StyleSheet.create({
         marginTop: 15
     }
 });
-
