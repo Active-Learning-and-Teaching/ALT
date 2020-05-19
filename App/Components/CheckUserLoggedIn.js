@@ -43,7 +43,11 @@ export default class CheckUserLoggedIn extends Component {
 
         }
         catch (error) {
-            this.props.navigation.navigate('Login')
+            if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+                this.props.navigation.navigate('Student DashBoard')
+            }
+            else
+                this.props.navigation.navigate('Login')
         }
     }
 
