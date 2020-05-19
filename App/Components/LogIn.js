@@ -14,6 +14,8 @@ import {
     GoogleSigninButton,
 } from '@react-native-community/google-signin';
 import * as config from '../config'
+import student from '../Databases/Student';
+import faculty from '../Databases/Faculty';
 
 export default class LogIn extends Component {
     constructor() {
@@ -75,9 +77,11 @@ export default class LogIn extends Component {
                         .then(snapshot => {
 
                             if (snapshot.val()) {
+                                faculty.getUser(userInfo.user.id, userInfo.user.name, userInfo.user.email)
                                 this.props.navigation.navigate('Faculty DashBoard')
                             }
                             else{
+                                student.getUser(userInfo.user.id, userInfo.user.name, userInfo.user.email);
                                 this.props.navigation.navigate('Student DashBoard')
                             }
                         })

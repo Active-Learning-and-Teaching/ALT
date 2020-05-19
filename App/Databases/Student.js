@@ -1,8 +1,7 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
-import student from './Student';
 
-class Faculty {
+class Student {
 
     id :string
     name :string
@@ -11,28 +10,7 @@ class Faculty {
     constructor() {
     }
 
-    reference = database().ref(config['internalDb']+'/Faculty/')
-
-    checkFaculty = (email)=> {
-        database()
-            .ref(config['sheetFaculty'])
-            .orderByChild("Email")
-            .equalTo(email)
-            .once("value")
-            .then(snapshot => {
-
-                if (snapshot.val()) {
-                    // faculty.getUser(userInfo.user.id, userInfo.user.name, userInfo.user.email)
-                    // this.props.navigation.navigate('Faculty DashBoard')
-                    return true
-                }
-                else{
-                    // student.getUser(userInfo.user.id, userInfo.user.name, userInfo.user.email);
-                    // this.props.navigation.navigate('Student DashBoard')
-                    return false
-                }
-            })
-    }
+    reference = database().ref(config['internalDb']+'/Student/')
 
     getUser = async (id, name, email) => {
         await this.reference
@@ -66,5 +44,5 @@ class Faculty {
     }
 }
 
-const faculty = new Faculty()
-export default faculty;
+const student = new Student()
+export default student;
