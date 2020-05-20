@@ -14,9 +14,16 @@ export default class FacultyDashBoard extends Component {
     constructor() {
         super();
         this.state = {
-            username : ''
+            currentUser : null
         };
     }
+
+    getCurrentUser = async () => {
+        const currentUser = await auth().currentUser;
+        await this.setState({
+            currentUser : currentUser
+        })
+    };
 
     signOut = async () => {
         try {
@@ -36,11 +43,18 @@ export default class FacultyDashBoard extends Component {
         }
     }
 
+    getAllCourses = ()=>{
+        console.log(this.state.currentUser)
+    }
 
-    // componentDidMount(){
-    //     // const {username} = auth().currentUser.displayName
-    //     // this.setState({username})
-    // }
+
+    componentDidMount(){
+        // const {username} = auth().currentUser.displayName
+        // this.setState({username})
+        this.getCurrentUser().then(() =>{
+            this.getAllCourses()
+        })
+    }
 
     render(){
         return(
