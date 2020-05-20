@@ -12,20 +12,18 @@ class Student {
 
     reference = database().ref(config['internalDb']+'/Student/')
 
-    getUser = async (id, name, email) => {
+     getUser  = async (email)=> {
+        let ans = false
         await this.reference
             .orderByChild("email")
             .equalTo(email)
             .once('value')
             .then(snapshot => {
                 if (snapshot.val()){
-                    console.log("true")
-                }
-                else{
-                    console.log("false")
-                    this.createUser(id, name, email)
+                    ans = true
                 }
             })
+         return ans
     }
 
     createUser =  (id, name, email)=>{

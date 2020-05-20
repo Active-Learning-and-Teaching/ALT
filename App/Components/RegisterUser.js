@@ -58,8 +58,11 @@ export default class RegisterUser extends Component {
 
             auth().onAuthStateChanged( user => {
                 if (user) {
-                    console.log(user.email)
-                    student.getUser(user.uid, user.displayName, user.email)
+                    student.getUser(user.email)
+                        .then(val => {
+                            if (!val)
+                                student.createUser(user.uid, user.displayName, user.email)
+                        })
                 }
             })
         }

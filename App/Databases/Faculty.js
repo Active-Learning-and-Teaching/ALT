@@ -13,41 +13,33 @@ class Faculty {
 
     reference = database().ref(config['internalDb']+'/Faculty/')
 
-    checkFaculty = (email)=> {
-        database()
+    checkFaculty = async (email)=> {
+        let ans = false
+        await database()
             .ref(config['sheetFaculty'])
             .orderByChild("Email")
             .equalTo(email)
             .once("value")
             .then(snapshot => {
-
-                if (snapshot.val()) {
-                    // faculty.getUser(userInfo.user.id, userInfo.user.name, userInfo.user.email)
-                    // this.props.navigation.navigate('Faculty DashBoard')
-                    return true
-                }
-                else{
-                    // student.getUser(userInfo.user.id, userInfo.user.name, userInfo.user.email);
-                    // this.props.navigation.navigate('Student DashBoard')
-                    return false
+                if (snapshot.val()){
+                    ans = true
                 }
             })
+        return ans
     }
 
-    getUser = async (id, name, email) => {
+    getUser  = async (email)=> {
+        let ans = false
         await this.reference
             .orderByChild("email")
             .equalTo(email)
             .once('value')
             .then(snapshot => {
                 if (snapshot.val()){
-                    console.log("true")
-                }
-                else{
-                    console.log("false")
-                    this.createUser(id, name, email)
+                    ans = true
                 }
             })
+        return ans
     }
 
     createUser =  (id, name, email)=>{
