@@ -69,19 +69,22 @@ export default class LogIn extends Component {
                 .signInWithCredential(googleCredential)
                 .then(()=>{
 
-                    database()
-                        .ref(config['sheetFaculty'])
-                        .orderByChild("Email")
-                        .equalTo(userInfo.user.email)
-                        .once("value")
-                        .then(snapshot => {
-
-                            if (snapshot.val()) {
-                                faculty.getUser(userInfo.user.id, userInfo.user.name, userInfo.user.email)
+                    faculty.checkFaculty(userInfo.user.email)
+                        .then(isFaculty => {
+                            if (isFaculty) {
+                                faculty.getUser(userInfo.user.email)
+                                    .then(val => {
+                                        if (!val)
+                                            faculty.createUser(userInfo.user.id, userInfo.user.name, userInfo.user.email)
+                                    })
                                 this.props.navigation.navigate('Faculty DashBoard')
                             }
                             else{
-                                student.getUser(userInfo.user.id, userInfo.user.name, userInfo.user.email);
+                                student.getUser(userInfo.user.email)
+                                    .then(val => {
+                                        if (!val)
+                                            student.createUser(userInfo.user.id, userInfo.user.name, userInfo.user.email)
+                                    })
                                 this.props.navigation.navigate('Student DashBoard')
                             }
                         })
