@@ -11,19 +11,55 @@ class Courses {
     passCode : string
     instructor : Faculty
 
-    constructor(courseName, courseCode, room, days) {
-        this.courseName = courseName
-        this.courseCode = courseCode
-        this.room = room
-        this.days = days
-        this.passCode = courseCode
+    constructor() {
     }
 
 
+    getcourseName() {
+        return this.courseName;
+    }
+
+    setcourseName(courseName) {
+        this.courseName = courseName;
+    }
+
+    getcourseCode() {
+        return this.courseCode;
+    }
+
+    setcourseCode(courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    getRoom() {
+        return this.room;
+    }
+
+    setRoom(room) {
+        this.room = room;
+    }
+
+    getDays() {
+        return this.days;
+    }
+
+    setDays(days) {
+        this.days = days;
+    }
 
     setInstructor(faculty){
         this.instructor = faculty
     }
+
+    // getCourseFaculty = async (userID) =>{
+    //     await this.reference
+    //         .orderByChild("instructor")
+    //         .equalTo(userID)
+    //         .on("value")
+    //         .then(snapshot =>{
+    //             console.log(snapshot)
+    //         })
+    // }
 
     getCourse  = async ()=> {
         let ans = false

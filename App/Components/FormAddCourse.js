@@ -53,7 +53,11 @@ export default class FormAddCourse extends Component {
             })
         } else {
             await this.addDays(day1, day2, day3)
-            const courses = new Courses(courseName, courseCode, room, this.state.days)
+            const courses = new Courses()
+            courses.setcourseName(courseName)
+            courses.setcourseCode(courseCode)
+            courses.setRoom(room)
+            courses.setDays(this.state.days)
             courses.setInstructor(this.props.instructor)
 
             await courses.getCourse()
