@@ -14,8 +14,8 @@ import {
     GoogleSigninButton,
 } from '@react-native-community/google-signin';
 import * as config from '../config'
-import student from '../Databases/Student';
-import faculty from '../Databases/Faculty';
+import Faculty from '../Databases/Faculty';
+import Student from '../Databases/Student';
 
 export default class LogIn extends Component {
     constructor() {
@@ -62,6 +62,9 @@ export default class LogIn extends Component {
     signInWithGoogle = async () => {
         try
         {
+            const faculty = new Faculty();
+            const student = new Student();
+
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);

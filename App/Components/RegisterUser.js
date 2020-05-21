@@ -9,7 +9,7 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import student from '../Databases/Student';
+import Student from '../Databases/Student';
 
 export default class RegisterUser extends Component {
     constructor() {
@@ -58,6 +58,7 @@ export default class RegisterUser extends Component {
 
             auth().onAuthStateChanged( user => {
                 if (user) {
+                    const student = new Student();
                     student.getUser(user.email)
                         .then(val => {
                             if (!val)

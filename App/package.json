@@ -18,6 +18,7 @@
     "@react-native-firebase/database": "^6.7.1",
     "@react-navigation/native": "^5.1.7",
     "@react-navigation/stack": "^5.2.19",
+    "crypto-random-string": "^3.2.0",
     "react": "16.11.0",
     "react-dom": "^16.13.1",
     "react-native": "^0.62.2",

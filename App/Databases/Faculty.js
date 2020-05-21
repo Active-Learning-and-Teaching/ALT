@@ -7,8 +7,32 @@ class Faculty {
     name :string
     email : string
 
-    constructor() {
+    constructor(){
     }
+
+    setID(id){
+        this.id = id;
+    }
+
+    setName(name){
+        this.name = name;
+    }
+    setEmail(email){
+        this.email = email;
+    }
+
+    getID(){
+        return this.id
+    }
+
+    getName(){
+        return this.name
+    }
+
+    getEmail(){
+        return this.email
+    }
+
 
     reference = database().ref(config['internalDb']+'/Faculty/')
 
@@ -57,5 +81,4 @@ class Faculty {
     }
 }
 
-const faculty = new Faculty()
-export default faculty;
+export default Faculty;
