@@ -7,6 +7,8 @@ import {
     Button,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
+import Courses from '../Databases/Courses';
+// import courses from '../Databases/Courses';
 
 export default class FormAddCourse extends Component {
     constructor(props) {
@@ -51,9 +53,14 @@ export default class FormAddCourse extends Component {
             })
         } else {
             await this.addDays(day1, day2, day3)
-            //backend
-            console.log(courseName, courseCode, room, error, day1, day2, day3, this.state.days)
+            const courses = new Courses(courseName, courseCode, room, this.state.days)
+            courses.setInstructor(this.props.instructor)
 
+            await courses.getCourse()
+                .then(courseExists => {
+                    if (!courseExists)
+                        courses.createCourse()
+            })
             this.setState({
                 courseName: '',
                 courseCode: '',
@@ -65,14 +72,6 @@ export default class FormAddCourse extends Component {
                 error: null,
             })
             this.props.toggle()
-
-                // .catch( err => {
-                    //         var errorMessages = new ErrorMessages()
-                    //         var message = errorMessages.getErrorMessage(err.code)
-                    //         this.setState({
-                    //             error : message
-                    //         })
-                    //     })
         }
 
     }

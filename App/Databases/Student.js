@@ -10,6 +10,17 @@ class Student {
     constructor() {
     }
 
+    setID(id){
+        this.id = id;
+    }
+
+    setName(name){
+        this.name = name;
+    }
+    setEmail(email){
+        this.email = email;
+    }
+
     reference = database().ref(config['internalDb']+'/Student/')
 
      getUser  = async (email)=> {
@@ -42,5 +53,5 @@ class Student {
     }
 }
 
-const student = new Student()
-export default student;
+
+export default Student;

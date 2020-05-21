@@ -9,11 +9,13 @@ import {
 import Modal from 'react-native-modal';
 import Dimensions from '../Utils/Dimensions';
 import FormAddCourse from './FormAddCourse';
+import RegisterUser from './RegisterUser';
+import StudentAddCourseForm from './StudentAddCourseForm';
 
 export default class  AddCourse extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             visible : false,
         }
@@ -42,7 +44,9 @@ export default class  AddCourse extends Component {
                     onBackButtonPress= {this.toggleModal}
                     avoidKeyboard>
                     <View style={{flex: 1}}>
-                        <FormAddCourse toggle={this.toggleModal}/>
+                        {this.props.type==="faculty"?<FormAddCourse toggle={this.toggleModal} instructor = {this.props.instructor} />
+                        :<StudentAddCourseForm student = {this.props.student} toggle={this.toggleModal}/>}
+
                     </View>
                 </Modal>
             </View>

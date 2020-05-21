@@ -12,6 +12,9 @@ import {GoogleSignin} from '@react-native-community/google-signin';
 import {CoursePics} from '../Utils/CoursePics';
 import CourseCard from './CourseCard';
 import {Icon} from 'react-native-elements';
+import Faculty from '../Databases/Faculty';
+import Student from '../Databases/Student';
+import AddCourse from './CourseAdd';
 
 export default class StudentDashBoard extends Component {
     constructor() {
@@ -24,8 +27,13 @@ export default class StudentDashBoard extends Component {
 
     getCurrentUser = async () => {
         const currentUser = await auth().currentUser;
+        const student = new Student()
+        student.setID(currentUser.uid)
+        student.setName(currentUser.displayName)
+        student.setEmail(currentUser.email)
+
         await this.setState({
-            currentUser : currentUser
+            currentUser : student
         })
     };
 
@@ -67,6 +75,7 @@ export default class StudentDashBoard extends Component {
             })
     }
 
+
     componentDidMount(){
         this.getCurrentUser().then(() =>{
             this.getAllCourses()
@@ -78,7 +87,7 @@ export default class StudentDashBoard extends Component {
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-                    <Icon name='plus-circle' type='font-awesome' style={{borderRadius:1}}  />
+                    <AddCourse student = {this.state.currentUser} type = {"student"} />
                     {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} />*/}
                     <View style={styles.grid}>
                         {this.state.courseList.map(({Name, Instructor, ImageUrl},i)=> (

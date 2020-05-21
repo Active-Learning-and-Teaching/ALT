@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import AddCourse from './CourseAdd';
+import Faculty from '../Databases/Faculty';
 
 export default class FacultyDashBoard extends Component {
     constructor() {
@@ -20,8 +21,13 @@ export default class FacultyDashBoard extends Component {
 
     getCurrentUser = async () => {
         const currentUser = await auth().currentUser;
+        const faculty = new Faculty()
+        faculty.setID(currentUser.uid)
+        faculty.setName(currentUser.displayName)
+        faculty.setEmail(currentUser.email)
+
         await this.setState({
-            currentUser : currentUser
+            currentUser : faculty
         })
     };
 
@@ -44,6 +50,7 @@ export default class FacultyDashBoard extends Component {
     }
 
     getAllCourses = ()=>{
+        console.log(this.state.currentUser.getID())
         console.log(this.state.currentUser)
     }
 
@@ -61,7 +68,7 @@ export default class FacultyDashBoard extends Component {
             <View style= {styles.container}>
                 <Text > WELCOME Faculty</Text>
                 <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
-                <AddCourse/>
+                <AddCourse instructor = {this.state.currentUser} type = {"faculty"} />
             </View>
         );
     }
