@@ -70,8 +70,7 @@ export default class FormAddCourse extends Component {
             const pass = courses.getPassCode()
             await courses.getCourse(pass)
                 .then(async value => {
-                    await this.props.instructor.addCourse(value).then(r => console.log("Added Course to Faculty"))
-                    console.log(value)
+                    await this.props.instructor.addCourseFaculty(value).then(r => console.log("Added Course to Faculty"))
                 })
 
             this.setState({

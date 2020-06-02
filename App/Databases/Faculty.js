@@ -111,9 +111,7 @@ class Faculty {
     }
 
 
-    getAllFaculty
-
-    getCoursesofFaculty = async () =>{
+    getCourseFaculty = async () =>{
         let ans = []
         await database()
             .ref(config['internalDb']+'/Faculty/'+this.url)
@@ -143,8 +141,8 @@ class Faculty {
             })
     }
 
-    addCourse = async (courseUrl) => {
-        await this.getCoursesofFaculty().then(
+    addCourseFaculty = async (courseUrl) => {
+        await this.getCourseFaculty().then(
             value => {
                 value.push(courseUrl)
                 this.setCourseFaculty(value)

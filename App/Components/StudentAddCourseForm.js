@@ -6,40 +6,44 @@ import {
     TextInput,
     Button,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
 import Courses from '../Databases/Courses';
 
 export default class StudentAddCourseForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            courseCode: '',
+            passCode: '',
             error: null,
         };
     }
 
     joinCourse = async () => {
 
-        const {courseCode, error} = this.state;
+        const {passCode, error} = this.state;
 
-        if (courseCode === '') {
+        if (passCode === '') {
             this.setState({
-                error: "Please Enter Course Code."
+                error: "Please Enter Course Pass Code."
             })
         } else {
-            // const courses = new Courses()
-            console.log(this.props.student)
-            console.log(courseCode)
+            const courses = new Courses()
+            await courses.getCourse(passCode)
+                .then(async value => {
+                    if (value){
+                        await this.props.student.addCourseStudent(value).then(r => console.log("Added Course to Student"))
+                        this.props.toggle()
+                    }
+                    else {
+                        this.setState({
+                            error:"Incorrect Code"
+                        })
+                    }
+                })
 
-            // await courses.getCourse()
-            //     .then(courseExists => {
-            //         if (courseExists)
-            //             courses.createCourse()
-            //     })
             this.setState({
-                courseCode: '',
+                passCode: '',
             })
-            this.props.toggle()
+
         }
 
     }
@@ -54,9 +58,9 @@ export default class StudentAddCourseForm extends Component {
                 <TextInput
                     style={styles.textInput}
                     autoCapitalize="none"
-                    placeholder="Course Code"
-                    onChangeText={courseCode => this.setState({ courseCode })}
-                    value={this.state.courseCode}
+                    placeholder="Pass Code"
+                    onChangeText={passCode => this.setState({ passCode })}
+                    value={this.state.passCode}
                 />
                 { this.state.error ?
                     <Text style={styles.errorMessage}>

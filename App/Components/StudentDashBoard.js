@@ -12,7 +12,6 @@ import {GoogleSignin} from '@react-native-community/google-signin';
 import {CoursePics} from '../Utils/CoursePics';
 import CourseCard from './CourseCard';
 import {Icon} from 'react-native-elements';
-import Faculty from '../Databases/Faculty';
 import Student from '../Databases/Student';
 import CourseAdd from './CourseAdd';
 
@@ -80,6 +79,7 @@ export default class StudentDashBoard extends Component {
     componentDidMount(){
         this.getCurrentUser().then(() =>{
             this.getAllCourses()
+            console.log(this.state.currentUser.name)
         })
 
     }
