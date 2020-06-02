@@ -59,7 +59,7 @@ export default class FacultyDashBoard extends Component {
 
     componentDidMount(){
         this.getCurrentUser().then(() =>{
-            this.getAllCourses().then(r => console.log("H"))
+            // this.getAllCourses().then(r => console.log("H"))
         })
     }
 

@@ -19,6 +19,7 @@ export default class RegisterUser extends Component {
             email: '',
             password: '',
             error: null,
+            names :''
         };
     }
 
@@ -41,6 +42,7 @@ export default class RegisterUser extends Component {
                         displayName: name
                     })
                     this.setState({
+                        names:this.state.name,
                         name: '',
                         email: '',
                         password: '',
@@ -62,7 +64,7 @@ export default class RegisterUser extends Component {
                     student.getUser(user.email)
                         .then(val => {
                             if (!val)
-                                student.createUser(user.uid, user.displayName, user.email)
+                                student.createUser(user.uid, this.state.names, user.email)
                         })
                 }
             })

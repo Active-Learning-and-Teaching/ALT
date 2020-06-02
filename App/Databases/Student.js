@@ -22,13 +22,26 @@ class Student {
         this.email = email;
     }
 
+    getID(){
+        return this.id
+    }
+
+    getName(){
+        return this.name
+    }
+
+    getEmail(){
+        return this.email
+    }
+
     setUrl(){
-        this.getFaculty(this.email)
+        this.getStudent(this.email)
             .then( val => {
                     this.url = val
                 }
             )
     }
+
     getUrl(){
         return this.url
     }
@@ -72,13 +85,53 @@ class Student {
             .set({
                 name : name,
                 email : email,
-                photo : null,
+                photo : "0",
                 id : id
             })
             .then(()=>{
                 console.log('Data added')
             })
     }
+
+    getCourseStudent = async () =>{
+        let ans = []
+        await database()
+            .ref(config['internalDb']+'/Student/'+this.url)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const keys = Object(snapshot.val());
+                    if ("courses" in keys)
+                        ans = keys["courses"].map(x=>x)
+                }
+            })
+        return ans
+    }
+
+    setCourseStudent = async (courses) =>{
+        await database()
+            .ref(config['internalDb']+'/Student/'+this.url)
+            .set({
+                name : this.getName(),
+                email : this.getEmail(),
+                photo : 0,
+                id : this.getID(),
+                courses : courses
+            })
+            .then(()=>{
+                console.log("Courses added")
+            })
+    }
+
+    addCourseStudent = async (courseUrl) => {
+        await this.getCourseStudent().then(
+            value => {
+                value.push(courseUrl)
+                this.setCourseStudent(value)
+            }
+        )
+    }
+
 }
 
 
