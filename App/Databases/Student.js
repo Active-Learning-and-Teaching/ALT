@@ -6,6 +6,7 @@ class Student {
     id :string
     name :string
     email : string
+    url : string
 
     constructor() {
     }
@@ -21,8 +22,20 @@ class Student {
         this.email = email;
     }
 
+    setUrl(){
+        this.getFaculty(this.email)
+            .then( val => {
+                    this.url = val
+                }
+            )
+    }
+    getUrl(){
+        return this.url
+    }
+
     reference = database().ref(config['internalDb']+'/Student/')
 
+    //Login
      getUser  = async (email)=> {
         let ans = false
         await this.reference
@@ -35,6 +48,21 @@ class Student {
                 }
             })
          return ans
+    }
+
+    getStudent  = async (email)=> {
+        let ans = ""
+        await this.reference
+            .orderByChild("email")
+            .equalTo(email)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const keys = Object.keys(snapshot.val());
+                    ans = keys[0]
+                }
+            })
+        return ans
     }
 
     createUser =  (id, name, email)=>{

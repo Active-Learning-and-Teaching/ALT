@@ -14,7 +14,7 @@ import CourseCard from './CourseCard';
 import {Icon} from 'react-native-elements';
 import Faculty from '../Databases/Faculty';
 import Student from '../Databases/Student';
-import AddCourse from './CourseAdd';
+import CourseAdd from './CourseAdd';
 
 export default class StudentDashBoard extends Component {
     constructor() {
@@ -31,6 +31,7 @@ export default class StudentDashBoard extends Component {
         student.setID(currentUser.uid)
         student.setName(currentUser.displayName)
         student.setEmail(currentUser.email)
+        student.setUrl()
 
         await this.setState({
             currentUser : student
@@ -87,13 +88,17 @@ export default class StudentDashBoard extends Component {
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-                    <AddCourse student = {this.state.currentUser} type = {"student"} />
+
+                    <CourseAdd student = {this.state.currentUser} type = {"student"} />
+
+
                     {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} />*/}
                     <View style={styles.grid}>
                         {this.state.courseList.map(({Name, Instructor, ImageUrl},i)=> (
                             <CourseCard coursename = {Name} instructor = {Instructor} imageurl = {ImageUrl} key={i}/>
                         ))}
                     </View>
+
                     <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
                 </ScrollView>
             </SafeAreaView>

@@ -8,7 +8,7 @@ import {
     Alert
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
-import AddCourse from './CourseAdd';
+import CourseAdd from './CourseAdd';
 import Faculty from '../Databases/Faculty';
 
 export default class FacultyDashBoard extends Component {
@@ -25,6 +25,7 @@ export default class FacultyDashBoard extends Component {
         faculty.setID(currentUser.uid)
         faculty.setName(currentUser.displayName)
         faculty.setEmail(currentUser.email)
+        await faculty.setUrl()
 
         await this.setState({
             currentUser : faculty
@@ -49,17 +50,16 @@ export default class FacultyDashBoard extends Component {
         }
     }
 
-    getAllCourses = ()=>{
-        console.log(this.state.currentUser.getID())
-        console.log(this.state.currentUser)
+    getAllCourses = async ()=>{
+        // console.log(this.state.currentUser.getID())
+        // console.log(this.state.currentUser)
+
     }
 
 
     componentDidMount(){
-        // const {username} = auth().currentUser.displayName
-        // this.setState({username})
         this.getCurrentUser().then(() =>{
-            this.getAllCourses()
+            this.getAllCourses().then(r => console.log("H"))
         })
     }
 
@@ -68,7 +68,9 @@ export default class FacultyDashBoard extends Component {
             <View style= {styles.container}>
                 <Text > WELCOME Faculty</Text>
                 <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
-                <AddCourse instructor = {this.state.currentUser} type = {"faculty"} />
+
+                <CourseAdd instructor = {this.state.currentUser} type = {"faculty"} />
+
             </View>
         );
     }

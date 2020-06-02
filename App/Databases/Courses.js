@@ -9,7 +9,7 @@ class Courses {
     room : string
     days : []
     passCode : string
-    instructor : Faculty
+    instructors = []
 
     constructor() {
     }
@@ -47,35 +47,37 @@ class Courses {
         this.days = days;
     }
 
-    setInstructor(faculty){
-        this.instructor = faculty
+    getPassCode(){
+        return this.passCode
     }
 
-    // getCourseFaculty = async (userID) =>{
-    //     await this.reference
-    //         .orderByChild("instructor")
-    //         .equalTo(userID)
-    //         .on("value")
-    //         .then(snapshot =>{
-    //             console.log(snapshot)
-    //         })
-    // }
+    setPassCode(){
+        this.passCode = (+new Date).toString(36)
+    }
 
-    getCourse  = async ()=> {
-        let ans = false
+    addInstructors(faculty){
+        this.instructors.push(faculty.getUrl())
+    }
+
+    reference = database().ref(config['internalDb']+'/Courses/')
+
+    getCourse  = async (passCode)=> {
+        let ans = ""
         await this.reference
-            .orderByChild("courseCode")
-            .equalTo(this.courseCode)
+            .orderByChild("passCode")
+            .equalTo(passCode)
             .once('value')
             .then(snapshot => {
                 if (snapshot.val()){
-                    ans = true
+                    const keys = Object.keys(snapshot.val());
+                    ans = keys[0]
                 }
             })
         return ans
     }
 
     createCourse =  ()=>{
+
         this.reference
             .push()
             .set({
@@ -83,16 +85,16 @@ class Courses {
                 courseCode : this.courseCode,
                 room : this.room,
                 days : this.days,
-                passCode : this.courseCode,
-                instructor : this.instructor.getID(),
+                passCode : this.passCode,
+                instructors : this.instructors,
             })
             .then(()=>{
                 console.log('Data added')
+                console.log(this.passCode)
             })
     }
 
 
-    reference = database().ref(config['internalDb']+'/Courses/')
 
 
 

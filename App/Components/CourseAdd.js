@@ -12,7 +12,7 @@ import FormAddCourse from './FormAddCourse';
 import RegisterUser from './RegisterUser';
 import StudentAddCourseForm from './StudentAddCourseForm';
 
-export default class  AddCourse extends Component {
+export default class  CourseAdd extends Component {
 
     constructor(props) {
         super(props);
