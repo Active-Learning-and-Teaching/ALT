@@ -54,17 +54,26 @@ export default class FormAddCourse extends Component {
         } else {
             await this.addDays(day1, day2, day3)
             const courses = new Courses()
+
             courses.setcourseName(courseName)
             courses.setcourseCode(courseCode)
             courses.setRoom(room)
             courses.setDays(this.state.days)
-            courses.setInstructor(this.props.instructor)
+            courses.setPassCode()
+            //Passing Faculty object to add his Url (Signature)
+            courses.addInstructors(this.props.instructor)
 
-            await courses.getCourse()
-                .then(courseExists => {
-                    if (!courseExists)
-                        courses.createCourse()
-            })
+            //Create course
+            courses.createCourse()
+
+            //Adding Course to Faculty
+            const pass = courses.getPassCode()
+            await courses.getCourse(pass)
+                .then(async value => {
+                    await this.props.instructor.addCourse(value).then(r => console.log("Added Course to Faculty"))
+                    console.log(value)
+                })
+
             this.setState({
                 courseName: '',
                 courseCode: '',

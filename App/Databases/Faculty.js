@@ -6,6 +6,7 @@ class Faculty {
     id :string
     name :string
     email : string
+    url : string
 
     constructor(){
     }
@@ -32,10 +33,20 @@ class Faculty {
     getEmail(){
         return this.email
     }
-
+    async setUrl() {
+        await this.getFaculty(this.email)
+            .then(val => {
+                    this.url = val
+                }
+            )
+    }
+    getUrl(){
+        return this.url
+    }
 
     reference = database().ref(config['internalDb']+'/Faculty/')
 
+    //Checking if user is faculty
     checkFaculty = async (email)=> {
         let ans = false
         await database()
@@ -51,6 +62,7 @@ class Faculty {
         return ans
     }
 
+    //Login
     getUser  = async (email)=> {
         let ans = false
         await this.reference
@@ -65,6 +77,23 @@ class Faculty {
         return ans
     }
 
+    //Getting Faculty Url for Course Signature
+    getFaculty  = async (email)=> {
+        let ans = ""
+        await this.reference
+            .orderByChild("email")
+            .equalTo(email)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const keys = Object.keys(snapshot.val());
+                    ans = keys[0]
+                }
+            })
+        return ans
+    }
+
+
     createUser =  (id, name, email)=>{
         console.log(id)
         this.reference
@@ -72,13 +101,65 @@ class Faculty {
             .set({
                 name : name,
                 email : email,
-                photo : null,
-                id : id
+                photo : 0,
+                id : id,
+                courses : []
             })
             .then(()=>{
                 console.log('Data added')
             })
     }
+
+
+    getAllFaculty
+
+    getCoursesofFaculty = async () =>{
+        let ans = []
+        await database()
+            .ref(config['internalDb']+'/Faculty/'+this.url)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const keys = Object(snapshot.val());
+                    if ("courses" in keys)
+                        ans = keys["courses"].map(x=>x)
+                }
+            })
+        return ans
+    }
+
+    setCourseFaculty = async (courses) =>{
+        await database()
+            .ref(config['internalDb']+'/Faculty/'+this.url)
+            .set({
+                name : this.getName(),
+                email : this.getEmail(),
+                photo : 0,
+                id : this.getID(),
+                courses : courses
+            })
+            .then(()=>{
+                console.log("Courses added")
+            })
+    }
+
+    addCourse = async (courseUrl) => {
+        await this.getCoursesofFaculty().then(
+            value => {
+                value.push(courseUrl)
+                this.setCourseFaculty(value)
+            }
+        )
+    }
+
+
+
+
+
+
+
+
+
 }
 
 export default Faculty;
