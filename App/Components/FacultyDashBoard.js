@@ -3,19 +3,23 @@ import auth from '@react-native-firebase/auth'
 import {
     Button,
     StyleSheet,
-    Text,
     View,
-    Alert
+    Alert, ScrollView, SafeAreaView,
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import CourseAdd from './CourseAdd';
 import Faculty from '../Databases/Faculty';
+import database from '@react-native-firebase/database';
+import * as config from '../config';
+import Courses from '../Databases/Courses';
+import CourseCard from './CourseCard';
 
 export default class FacultyDashBoard extends Component {
     constructor() {
         super();
         this.state = {
-            currentUser : null
+            currentUser : null,
+            courseList: []
         };
     }
 
@@ -25,7 +29,7 @@ export default class FacultyDashBoard extends Component {
         faculty.setID(currentUser.uid)
         faculty.setName(currentUser.displayName)
         faculty.setEmail(currentUser.email)
-        await faculty.setUrl()
+        await faculty.setUrl().then(()=>{console.log()})
 
         await this.setState({
             currentUser : faculty
@@ -50,34 +54,72 @@ export default class FacultyDashBoard extends Component {
         }
     }
 
-    getAllCourses = async ()=>{
-        // console.log(this.state.currentUser.getID())
-        // console.log(this.state.currentUser)
+    getAllCourses = ()=>{
+        database()
+            .ref(config['internalDb']+'/Faculty/'+this.state.currentUser.url)
+            .on('value', snapshot => {
+                if (snapshot.val()){
+                    const keys = Object(snapshot.val());
+                    if ("courses" in keys) {
+                        const arr = snapshot.val()["courses"].filter(n=>n)
+                        const course = new Courses()
+                        const courses = []
 
+                        for(var i=0; i<arr.length; i++){
+                            course.getCourseByUrl(arr[i])
+                                .then(r => {
+                                    courses.push(r)
+                                    this.setState({
+                                        courseList : courses
+                                    })
+                                })
+                        }
+                    }
+                }
+            })
     }
 
 
     componentDidMount(){
         this.getCurrentUser().then(() =>{
-            // this.getAllCourses().then(r => console.log("H"))
+            this.getAllCourses()
         })
     }
 
     render(){
         return(
-            <View style= {styles.container}>
-                <Text > WELCOME Faculty</Text>
-                <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
+            <SafeAreaView style={styles.safeContainer}>
+                <ScrollView>
 
-                <CourseAdd instructor = {this.state.currentUser} type = {"faculty"} />
+                    <CourseAdd instructor = {this.state.currentUser} type = {"faculty"} />
 
-            </View>
+
+                    {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} />*/}
+                    <View style={styles.grid}>
+                        {this.state.courseList.map(({courseName, instructor, imageURL},i)=> (
+                            <CourseCard coursename = {courseName} instructor = {instructor} imageURL={imageURL} key={i}/>
+                        ))}
+                    </View>
+
+                    <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
+                </ScrollView>
+            </SafeAreaView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-
+    safeContainer: {
+        flex: 1,
+        backgroundColor: 'transparent',
+    },
+    grid: {
+        marginTop: 10,
+        marginBottom: 10,
+        paddingTop : 10,
+        paddingBottom : 10,
+        alignItems: 'center',
+    },
     container: {
         flex: 1,
         display: "flex",

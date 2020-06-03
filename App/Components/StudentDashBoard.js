@@ -4,12 +4,10 @@ import database from '@react-native-firebase/database';
 import {
     Button,
     StyleSheet,
-    Text,
     View,
     Alert, ScrollView, SafeAreaView,
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
-import {CoursePics} from '../Utils/CoursePics';
 import CourseCard from './CourseCard';
 import {Icon} from 'react-native-elements';
 import Student from '../Databases/Student';
