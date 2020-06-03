@@ -2,12 +2,18 @@ import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 import { Tile } from 'react-native-elements'
 import Dimensions from '../Utils/Dimensions';
+import {CoursePics} from '../Utils/CoursePics';
 
 export default class  CourseCard extends Component{
+
+    getImage = () =>{
+        return CoursePics(this.props.imageURL)
+    }
+
     render(){
         return(
             <Tile
-                imageSrc={this.props.imageurl}
+                imageSrc={this.getImage()}
                 imageContainerStyle={styles.imageContainer}
                 activeOpacity={0.7}
                 title = {this.props.coursename}
