@@ -10,6 +10,8 @@ class Courses {
     days : []
     passCode : string
     instructors = []
+    imageURL : string
+    instructor : string
 
     constructor() {
     }
@@ -55,8 +57,17 @@ class Courses {
         this.passCode = (+new Date).toString(36)
     }
 
+    async setImage(){
+        this.imageURL = Math.floor(Math.random() * (8)) +1
+    }
+
+    getImage(){
+        return this.imageURL
+    }
+
     addInstructors(faculty){
         this.instructors.push(faculty.getUrl())
+        this.instructor = faculty.getName()
     }
 
     reference = database().ref(config['internalDb']+'/Courses/')
@@ -87,6 +98,8 @@ class Courses {
                 days : this.days,
                 passCode : this.passCode,
                 instructors : this.instructors,
+                imageURL : this.imageURL,
+                instructor: this.instructor
             })
             .then(()=>{
                 console.log('Data added')
@@ -95,10 +108,17 @@ class Courses {
     }
 
 
-
-
-
-
+    getCourseByUrl = async (courseUrl) => {
+        let ans = {}
+        await database()
+            .ref(config['internalDb']+'/Courses/'+courseUrl)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val())
+                    ans = snapshot.val()
+            })
+        return ans
+    }
 
 }
 

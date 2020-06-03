@@ -14,6 +14,8 @@ import CourseCard from './CourseCard';
 import {Icon} from 'react-native-elements';
 import Student from '../Databases/Student';
 import CourseAdd from './CourseAdd';
+import * as config from '../config';
+import Courses from '../Databases/Courses';
 
 export default class StudentDashBoard extends Component {
     constructor() {
@@ -30,7 +32,7 @@ export default class StudentDashBoard extends Component {
         student.setID(currentUser.uid)
         student.setName(currentUser.displayName)
         student.setEmail(currentUser.email)
-        student.setUrl()
+        await student.setUrl().then(()=>{console.log()})
 
         await this.setState({
             currentUser : student
@@ -57,21 +59,26 @@ export default class StudentDashBoard extends Component {
 
     getAllCourses = ()=>{
         database()
-            .ref('/1bwxqLCmGXZ31-I7_GOCCWltW7dITFuy5eaKs1CZ2bPw/Courses')
+            .ref(config['internalDb']+'/Student/'+this.state.currentUser.url)
             .on('value', snapshot => {
-                const arr = snapshot.val().filter(n=>n)
-                const pics = CoursePics
-                const dup = []
+                if (snapshot.val()){
+                    const keys = Object(snapshot.val());
+                    if ("courses" in keys) {
+                        const arr = snapshot.val()["courses"].filter(n=>n)
+                        const course = new Courses()
+                        const courses = []
 
-                for(var i=0; i<arr.length; i++)
-                {
-                    var dictionary = arr[i]
-                    dictionary['ImageUrl'] = pics[i]['imageurl']
-                    dup.push(dictionary)
+                        for(var i=0; i<arr.length; i++){
+                            course.getCourseByUrl(arr[i])
+                                .then(r => {
+                                    courses.push(r)
+                                    this.setState({
+                                        courseList : courses
+                                    })
+                                })
+                        }
+                    }
                 }
-                this.setState({
-                    courseList : dup
-                })
             })
     }
 
@@ -79,9 +86,7 @@ export default class StudentDashBoard extends Component {
     componentDidMount(){
         this.getCurrentUser().then(() =>{
             this.getAllCourses()
-            console.log(this.state.currentUser.name)
         })
-
     }
 
     render(){
@@ -94,8 +99,8 @@ export default class StudentDashBoard extends Component {
 
                     {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} />*/}
                     <View style={styles.grid}>
-                        {this.state.courseList.map(({Name, Instructor, ImageUrl},i)=> (
-                            <CourseCard coursename = {Name} instructor = {Instructor} imageurl = {ImageUrl} key={i}/>
+                        {this.state.courseList.map(({courseName, instructor, imageURL},i)=> (
+                            <CourseCard coursename = {courseName} instructor = {instructor} imageURL={imageURL} key={i}/>
                         ))}
                     </View>
 

@@ -60,6 +60,7 @@ export default class FormAddCourse extends Component {
             courses.setRoom(room)
             courses.setDays(this.state.days)
             courses.setPassCode()
+            await courses.setImage()
             //Passing Faculty object to add his Url (Signature)
             courses.addInstructors(this.props.instructor)
 

@@ -1,5 +1,6 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
+import {useEffect} from 'react';
 
 class Student {
 
@@ -34,8 +35,8 @@ class Student {
         return this.email
     }
 
-    setUrl(){
-        this.getStudent(this.email)
+    async setUrl(){
+        await this.getStudent(this.email)
             .then( val => {
                     this.url = val
                 }
@@ -126,8 +127,10 @@ class Student {
     addCourseStudent = async (courseUrl) => {
         await this.getCourseStudent().then(
             value => {
-                value.push(courseUrl)
-                this.setCourseStudent(value)
+                if (!value.includes(courseUrl)){
+                    value.push(courseUrl)
+                    this.setCourseStudent(value)
+                }
             }
         )
     }
