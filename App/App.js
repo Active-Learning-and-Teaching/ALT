@@ -15,6 +15,10 @@ import StudentDashBoard from './Components/StudentDashBoard';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import * as config from './config'
 import FacultyDashBoard from './Components/FacultyDashBoard';
+import CoursePage from './Components/CoursePage';
+import KbcHomePage from './Components/KbcHomePage';
+import AttendanceHomePage from './Components/AttendanceHomePage';
+import FeedbackHomePage from './Components/FeedbackHomePage';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +31,11 @@ function MyStack(){
                 <Stack.Screen name = "Register User" component={RegisterUser}/>
                 <Stack.Screen name = "Student DashBoard" component={StudentDashBoard}/>
                 <Stack.Screen name = "Faculty DashBoard" component={FacultyDashBoard}/>
+
+                <Stack.Screen name = "Course DashBoard" component={CoursePage}/>
+                <Stack.Screen name = "Kbc DashBoard" component={KbcHomePage}/>
+                <Stack.Screen name = "Attendance DashBoard" component={AttendanceHomePage}/>
+                <Stack.Screen name = "Feedback DashBoard" component={FeedbackHomePage}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
