@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import { Icon } from 'react-native-elements';
 import {
-    Text,
     View,
-    Button,
-    TouchableHighlight, StyleSheet,
+    StyleSheet,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Dimensions from '../Utils/Dimensions';
 import FormAddCourse from './FormAddCourse';
-import RegisterUser from './RegisterUser';
 import StudentAddCourseForm from './StudentAddCourseForm';
 
 export default class  CourseAdd extends Component {

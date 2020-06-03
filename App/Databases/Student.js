@@ -1,6 +1,5 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
-import {useEffect} from 'react';
 
 class Student {
 

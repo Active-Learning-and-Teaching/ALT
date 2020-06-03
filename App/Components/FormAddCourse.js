@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import Courses from '../Databases/Courses';
-// import courses from '../Databases/Courses';
 
 export default class FormAddCourse extends Component {
     constructor(props) {
