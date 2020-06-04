@@ -83,6 +83,7 @@ export default class StudentDashBoard extends Component {
 
     componentDidMount(){
         this.getCurrentUser().then(() =>{
+            console.log(this.state.currentUser.name)
             this.getAllCourses()
         })
     }
@@ -97,8 +98,8 @@ export default class StudentDashBoard extends Component {
 
                     {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} />*/}
                     <View style={styles.grid}>
-                        {this.state.courseList.map(({courseName, instructor, imageURL},i)=> (
-                            <CourseCard coursename = {courseName} instructor = {instructor} imageURL={imageURL} navigation ={this.props.navigation}  key={i}/>
+                        {this.state.courseList.map((item,i)=> (
+                            <CourseCard course = {item} type = {"student"}  user = {this.state.currentUser} navigation ={this.props.navigation}  key={i}/>
                         ))}
                     </View>
 
