@@ -13,13 +13,11 @@ export default class  CourseCard extends Component{
     render(){
         return(
             <Tile
-                onPress={()=>{
-                    this.props.navigation.navigate('Course DashBoard',{
-                        course : this.props.course,
-                        type : this.props.type,
-                        user : this.props.user,
-                    })
-                }}
+                onPress={()=>{this.props.navigation.navigate("Course", {
+                    course : this.props.course,
+                    user : this.props.user,
+                    type : this.props.type,
+                })}}
                 imageSrc={this.getImage()}
                 imageContainerStyle={styles.imageContainer}
                 activeOpacity={0.7}

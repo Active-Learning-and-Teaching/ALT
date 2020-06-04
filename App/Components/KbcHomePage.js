@@ -7,7 +7,7 @@ export default class KbcHomePage extends Component{
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-                    <Text>Kbc Home Page</Text>
+                    <Text>KBC PAGE</Text>
                 </ScrollView>
             </SafeAreaView>
 

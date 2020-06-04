@@ -7,7 +7,7 @@ export default class AttendanceHomePage extends Component{
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-                    <Text>Attendance Home Page</Text>
+                    <Text>ATTENDANCE PAGE</Text>
                 </ScrollView>
             </SafeAreaView>
 

@@ -7,7 +7,7 @@ export default class FeedbackHomePage extends Component{
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-                    <Text>Feedback Home Page</Text>
+                    <Text>FEEDBACK</Text>
                 </ScrollView>
             </SafeAreaView>
 
