@@ -7,7 +7,7 @@ import {CoursePics} from '../Utils/CoursePics';
 export default class  CourseCard extends Component{
 
     getImage = () =>{
-        return CoursePics(this.props.imageURL)
+        return CoursePics(this.props.course.imageURL)
     }
 
     render(){
@@ -15,15 +15,17 @@ export default class  CourseCard extends Component{
             <Tile
                 onPress={()=>{
                     this.props.navigation.navigate('Course DashBoard',{
-                        course: this.props.coursename
+                        course : this.props.course,
+                        type : this.props.type,
+                        user : this.props.user,
                     })
                 }}
                 imageSrc={this.getImage()}
                 imageContainerStyle={styles.imageContainer}
                 activeOpacity={0.7}
-                title = {this.props.coursename}
+                title = {this.props.course.courseName}
                 titleStyle={styles.title}
-                caption={this.props.instructor}
+                caption={this.props.course.instructor}
                 captionStyle={styles.caption}
                 containerStyle={styles.container}
                 featured
