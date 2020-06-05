@@ -83,7 +83,10 @@ export default class StudentDashBoard extends Component {
 
     componentDidMount(){
         this.getCurrentUser().then(() =>{
-            console.log(this.state.currentUser.name)
+            if(this.state.currentUser.url==""){
+                this.componentDidMount()
+
+            }
             this.getAllCourses()
         })
     }

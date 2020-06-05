@@ -82,6 +82,10 @@ export default class FacultyDashBoard extends Component {
 
     componentDidMount(){
         this.getCurrentUser().then(() =>{
+            if(this.state.currentUser.url==""){
+                this.componentDidMount()
+
+            }
             this.getAllCourses()
         })
     }
