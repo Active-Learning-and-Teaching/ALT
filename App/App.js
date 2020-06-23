@@ -8,51 +8,9 @@ import StudentDashBoard from './Components/StudentDashBoard';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import * as config from './config'
 import FacultyDashBoard from './Components/FacultyDashBoard';
-import CoursePage from './Components/CoursePage';
-import KbcHomePage from './Components/KbcHomePage';
-import AttendanceHomePage from './Components/AttendanceHomePage';
-import FeedbackHomePage from './Components/FeedbackHomePage';
-import createBottomTabNavigator from '@react-navigation/bottom-tabs/src/navigators/createBottomTabNavigator';
-import {Icon} from 'react-native-elements';
+import TabNavigator from './Components/TabNavigator';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
-
-function BottomTab() {
-
-    return(
-        <Tab.Navigator initialRouteName = "CoursePage">
-            <Tab.Screen name = "Course DashBoard" component={CoursePage}
-                        options={{
-                            tabBarLabel: 'Home',
-                            tabBarIcon: ({focused}) =>(
-                                    <Icon name='home' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
-                                ),
-                        }}/>
-            <Tab.Screen name = "Kbc DashBoard" component={KbcHomePage}
-                        options={{
-                            tabBarLabel: 'KBC',
-                            tabBarIcon: ({focused}) =>(
-                                <Icon name='gamepad' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
-                            ),
-                        }} />
-            <Tab.Screen name = "Attendance DashBoard" component={AttendanceHomePage}
-                        options={{
-                            tabBarLabel: 'Attendance',
-                            tabBarIcon: ({focused}) =>(
-                                <Icon name='users' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
-                            ),
-                        }}/>
-            <Tab.Screen name = "Feedback DashBoard" component={FeedbackHomePage}
-                        options={{
-                            tabBarLabel: 'Feedback',
-                            tabBarIcon: ({focused}) =>(
-                                <Icon name='comments' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
-                            ),
-                        }}/>
-        </Tab.Navigator>
-    )
-}
 
 function MyStack(){
     return (
@@ -90,7 +48,7 @@ function MyStack(){
                                   headerLeft : null,
                                   // headerRight : {CourseAdd}
                               }}/>
-                <Stack.Screen name = "Course" component={BottomTab}/>
+                <Stack.Screen name = "Course" component={TabNavigator}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

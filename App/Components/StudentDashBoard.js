@@ -27,9 +27,9 @@ export default class StudentDashBoard extends Component {
     getCurrentUser = async () => {
         const currentUser = await auth().currentUser;
         const student = new Student()
-        student.setID(currentUser.uid)
-        student.setName(currentUser.displayName)
-        student.setEmail(currentUser.email)
+        await student.setID(currentUser.uid)
+        await student.setName(currentUser.displayName)
+        await student.setEmail(currentUser.email)
         await student.setUrl().then(()=>{console.log()})
 
         await this.setState({
