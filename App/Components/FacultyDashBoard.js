@@ -26,9 +26,9 @@ export default class FacultyDashBoard extends Component {
     getCurrentUser = async () => {
         const currentUser = await auth().currentUser;
         const faculty = new Faculty()
-        faculty.setID(currentUser.uid)
-        faculty.setName(currentUser.displayName)
-        faculty.setEmail(currentUser.email)
+        await faculty.setID(currentUser.uid)
+        await faculty.setName(currentUser.displayName)
+        await faculty.setEmail(currentUser.email)
         await faculty.setUrl().then(()=>{console.log()})
 
         await this.setState({

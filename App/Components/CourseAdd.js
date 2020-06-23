@@ -3,11 +3,13 @@ import { Icon } from 'react-native-elements';
 import {
     View,
     StyleSheet,
+    Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Dimensions from '../Utils/Dimensions';
 import FormAddCourse from './FormAddCourse';
 import StudentAddCourseForm from './StudentAddCourseForm';
+import AnnouncementsAdd from './AnnouncementsAdd';
 
 export default class  CourseAdd extends Component {
 
@@ -28,6 +30,7 @@ export default class  CourseAdd extends Component {
     render(){
         return (
             <View>
+                {/*{Platform.OS==='android' ? :}*/}
                 <Icon name='plus-circle' type='font-awesome' style={{borderRadius:1}} onPress={this.toggleModal} />
                 {/*<Button style={styles.buttonMessage} title="Add Course" onPress={this.toggleModal} />*/}
                 {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} onPress={this.toggleModal} />*/}
@@ -41,8 +44,9 @@ export default class  CourseAdd extends Component {
                     onBackButtonPress= {this.toggleModal}
                     avoidKeyboard>
                     <View style={{flex: 1}}>
-                        {this.props.type==="faculty"?<FormAddCourse toggle={this.toggleModal} instructor = {this.props.instructor} />
-                        :<StudentAddCourseForm student = {this.props.student} toggle={this.toggleModal}/>}
+                        { this.props.type==="faculty" ? <FormAddCourse toggle={this.toggleModal} instructor = {this.props.instructor} />
+                        : this.props.type==="student" ? <StudentAddCourseForm student = {this.props.student} toggle={this.toggleModal}/>
+                        : <AnnouncementsAdd course = {this.props.course} toggle={this.toggleModal}/>}
 
                     </View>
                 </Modal>
