@@ -48,7 +48,11 @@ function MyStack(){
                                   headerLeft : null,
                                   // headerRight : {CourseAdd}
                               }}/>
-                <Stack.Screen name = "Course" component={TabNavigator}/>
+                <Stack.Screen name = "Course" component={TabNavigator}
+                              options={{
+                                  headerTitle : null,
+                                  // headerRight : {CourseAdd}
+                              }}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

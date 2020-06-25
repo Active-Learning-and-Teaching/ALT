@@ -6,8 +6,7 @@ import {CoursePics} from '../Utils/CoursePics';
 import CourseAdd from './CourseAdd';
 import database from '@react-native-firebase/database';
 import * as config from '../config';
-import Courses from '../Databases/Courses';
-import Announcement from '../Databases/Announcement';
+import AnnouncementCard from './AnnouncementCard';
 
 export default class  CoursePage extends Component{
     constructor(props) {
@@ -33,7 +32,6 @@ export default class  CoursePage extends Component{
                     this.setState({
                         announcementList : Object.values(snapshot.val())
                     })
-                    console.log(this.state.announcementList)
                 }
             })
     }
@@ -51,9 +49,9 @@ export default class  CoursePage extends Component{
                             imageSrc={this.getImage()}
                             imageContainerStyle={styles.imageContainer}
                             activeOpacity={0.7}
-                            title = {this.state.course.courseName}
+                            title = {this.state.course.courseName + " (" + this.state.course.passCode + ")"}
                             titleStyle={styles.title}
-                            caption={this.state.course.passCode + "\n" +"\n"+ this.state.course.instructor}
+                            caption={this.state.course.instructor}
                             captionStyle={styles.caption}
                             containerStyle={styles.container}
                             featured
@@ -62,6 +60,12 @@ export default class  CoursePage extends Component{
                     </View>
 
                     {this.state.type==="faculty"?<CourseAdd course = {this.state.course} type = {"Faculty Announcement"} />:<Text/>}
+
+                    <View style={styles.grid}>
+                        {this.state.announcementList.map((item,i)=> (
+                            <AnnouncementCard announcement = {item} key={i}/>
+                        ))}
+                    </View>
 
 
                     {/*<Text style={styles.textInput}>COURSE HOME PAGE</Text>*/}

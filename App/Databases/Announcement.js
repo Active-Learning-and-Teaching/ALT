@@ -44,16 +44,16 @@ class Announcement {
 
     reference = database().ref(config['internalDb']+'/Announcements/')
 
-    createAnnouncement =  (passCode, heading, description, date)=>{
-        this.reference
+    createAnnouncement =  async (passCode, heading, description, date) => {
+        await this.reference
             .push()
             .set({
-                passCode : passCode,
-                heading : heading,
-                description : description,
-                date : date
+                passCode: passCode,
+                heading: heading,
+                description: description,
+                date: date
             })
-            .then(()=>{
+            .then(() => {
                 console.log('Data added')
             })
     }
