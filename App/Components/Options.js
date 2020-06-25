@@ -68,7 +68,10 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 35,
+        paddingTop: 10,
+        paddingBottom:10,
+        paddingLeft : 30,
+        paddingRight : 30
     },
     avatarStyle : {
         flex: 2,
