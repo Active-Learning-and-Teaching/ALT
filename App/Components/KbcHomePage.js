@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Button, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import {Slider, Text} from 'react-native-elements';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {Slider, Text, Button} from 'react-native-elements';
 import KBC from '../Databases/KBC';
 import moment from 'moment';
 import Options from './Options';
@@ -8,6 +8,7 @@ import database from '@react-native-firebase/database';
 import * as config from '../config';
 import Courses from '../Databases/Courses';
 import KBCResponses from '../Databases/KBCResponses';
+import CountDown from 'react-native-countdown-component';
 
 export default class KbcHomePage extends Component{
     constructor(props) {
@@ -23,7 +24,8 @@ export default class KbcHomePage extends Component{
             iconc : 'alpha-c',
             icond : 'alpha-d',
             error : null,
-            currentQuiz : false
+            currentQuiz : false,
+            currentDuration : 0
         };
         this.setOption = this.setOption.bind(this);
     }
@@ -49,18 +51,22 @@ export default class KbcHomePage extends Component{
                     const starttime = values['startTime']
                     const endtime = values['endTime']
                     const curr = moment().format("DD/MM/YYYY HH:mm:ss")
-                    console.log(starttime)
-                    console.log(curr)
+                    const temp = moment(endtime, "DD/MM/YYYY HH:mm:ss")
+
+                    const duration = Math.abs(moment().diff(temp, "minutes"))*60 + Math.abs(moment().diff(temp, "seconds"))
+                    console.log(duration)
                     if (curr >= starttime && curr <= endtime){
                         console.log(true)
                         this.setState({
-                            currentQuiz : true
+                            currentQuiz : true,
+                            currentDuration : duration
                         })
                     }
                     else{
                         console.log(false)
                         this.setState({
-                            currentQuiz : false
+                            currentQuiz : false,
+                            currentDuration : 0
                         })
                     }
                 }
@@ -200,6 +206,15 @@ export default class KbcHomePage extends Component{
                         :
                         <ScrollView>
                             <Text style={styles.or}> Quiz in Progress</Text>
+                            <CountDown
+                                until={this.state.currentDuration}
+                                size={30}
+                                onFinish={() => alert('Quiz Over!')}
+                                digitStyle={{backgroundColor: '#FFF'}}
+                                digitTxtStyle={{color: '#2697BF'}}
+                                timeToShow={['M', 'S']}
+                                timeLabels={{m: 'Min', s: 'Sec'}}
+                            />
                         </ScrollView>
 
                 :
@@ -209,7 +224,18 @@ export default class KbcHomePage extends Component{
                     </ScrollView>
                     :
                     <ScrollView>
+
                         <Text h2 style={styles.heading}> Quick KBC</Text>
+
+                        <CountDown
+                            until={this.state.currentDuration}
+                            size={30}
+                            onFinish={() => alert('Quiz Over!')}
+                            digitStyle={{backgroundColor: '#FFF'}}
+                            digitTxtStyle={{color: '#2697BF'}}
+                            timeToShow={['M', 'S']}
+                            timeLabels={{m: 'Min', s: 'Sec'}}
+                        />
 
                         <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
                                  iconc={this.state.iconc} icond={this.state.icond}/>
@@ -223,6 +249,7 @@ export default class KbcHomePage extends Component{
 
                             <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
                         </View>
+
                     </ScrollView>
                 }
             </SafeAreaView>
@@ -243,7 +270,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         padding: 35,
-        fontSize : 25,
+        fontSize : 22,
         color: '#2697BF',
         marginTop: 5,
         textAlign: 'center'
@@ -270,7 +297,9 @@ const styles = StyleSheet.create({
         marginTop: 200,
         color: 'grey',
         alignSelf: "center",
-        fontSize: 18
+        fontSize: 22,
+        paddingBottom: 20,
+        fontWeight : "bold"
     },
     slider: {
         display: "flex",
