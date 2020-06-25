@@ -32,14 +32,17 @@ export default class AnnouncementsAdd extends Component {
             const announcement =  new Announcement()
             const dateAndTime= moment().format("DD/MM/YYYY HH:mm")
             console.log(dateAndTime)
-            announcement.createAnnouncement(this.props.course.passCode, heading, description, dateAndTime)
+            await announcement.createAnnouncement(this.props.course.passCode, heading, description, dateAndTime)
+                .then(()=>{
 
-            this.setState({
-                heading: '',
-                description : ''
-            })
+                    this.setState({
+                        heading: '',
+                        description : ''
+                    })
 
-            this.props.toggle()
+                    this.props.toggle()
+
+                })
 
         }
 
