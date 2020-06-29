@@ -6,7 +6,6 @@ import moment from 'moment';
 import Options from './Options';
 import database from '@react-native-firebase/database';
 import * as config from '../config';
-import Courses from '../Databases/Courses';
 import KBCResponses from '../Databases/KBCResponses';
 import CountDown from 'react-native-countdown-component';
 
@@ -53,8 +52,7 @@ export default class KbcHomePage extends Component{
                     const curr = moment().format("DD/MM/YYYY HH:mm:ss")
                     const temp = moment(endtime, "DD/MM/YYYY HH:mm:ss")
 
-                    const duration = Math.abs(moment().diff(temp, "minutes"))*60 + Math.abs(moment().diff(temp, "seconds"))
-                    console.log(duration)
+                    const duration = Math.abs(moment().diff(temp, "seconds"))
                     if (curr >= starttime && curr <= endtime){
                         console.log(true)
                         this.setState({
@@ -172,7 +170,7 @@ export default class KbcHomePage extends Component{
                 {this.state.type === "faculty" ?
                     this.state.currentQuiz === false ?
                     <ScrollView>
-                        <Text h2 style={styles.heading}> Quick KBC</Text>
+                        <Text h2 style={styles.heading}> In-Class Quiz!</Text>
 
                         <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
                                  iconc={this.state.iconc} icond={this.state.icond}/>
@@ -225,7 +223,7 @@ export default class KbcHomePage extends Component{
                     :
                     <ScrollView>
 
-                        <Text h2 style={styles.heading}> Quick KBC</Text>
+                        <Text h2 style={styles.heading}> In-Class Quiz</Text>
 
                         <CountDown
                             until={this.state.currentDuration}
