@@ -3,8 +3,8 @@ import createBottomTabNavigator from '@react-navigation/bottom-tabs/src/navigato
 import {Icon} from 'react-native-elements';
 import CoursePage from './CoursePage';
 import KbcHomePage from './KbcHomePage';
-import AttendanceHomePage from './AttendanceHomePage';
 import FeedbackHomePage from './FeedbackHomePage';
+import StudentList from './StudentList';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +36,7 @@ export default class TabNavigator extends Component{
                                     <Icon name='home' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                                 ),
                             }}/>
-                <Tab.Screen name = "Kbc DashBoard"
+                <Tab.Screen name = "Quiz DashBoard"
                             component={KbcHomePage}
                             initialParams={{
                                 type : this.state.type,
@@ -44,24 +44,11 @@ export default class TabNavigator extends Component{
                                 course: this.state.course
                             }}
                             options={{
-                                tabBarLabel: 'KBC',
+                                tabBarLabel: 'Quiz',
                                 tabBarIcon: ({focused}) =>(
                                     <Icon name='gamepad' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                                 ),
                             }} />
-                <Tab.Screen name = "Attendance DashBoard"
-                            component={AttendanceHomePage}
-                            initialParams={{
-                                type : this.state.type,
-                                user: this.state.user,
-                                course: this.state.course
-                            }}
-                            options={{
-                                tabBarLabel: 'Attendance',
-                                tabBarIcon: ({focused}) =>(
-                                    <Icon name='users' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
-                                ),
-                            }}/>
                 <Tab.Screen name = "Feedback DashBoard"
                             component={FeedbackHomePage}
                             initialParams={{
@@ -75,6 +62,20 @@ export default class TabNavigator extends Component{
                                     <Icon name='comments' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                                 ),
                             }}/>
+                <Tab.Screen name = "Student List"
+                            component={StudentList}
+                            initialParams={{
+                                type : this.state.type,
+                                user: this.state.user,
+                                course: this.state.course
+                            }}
+                            options={{
+                                tabBarLabel: 'Students',
+                                tabBarIcon: ({focused}) =>(
+                                    <Icon name='users' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
+                                ),
+                            }}/>
+
             </Tab.Navigator>
         );
     }

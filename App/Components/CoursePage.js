@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Button, SafeAreaView, ScrollView, StyleSheet, View, Text} from 'react-native';
+import Toast from 'react-native-simple-toast';
+import Clipboard from "@react-native-community/clipboard";
 import Dimensions from '../Utils/Dimensions';
 import {Tile} from 'react-native-elements';
 import {CoursePics} from '../Utils/CoursePics';
@@ -46,6 +48,10 @@ export default class  CoursePage extends Component{
                 <ScrollView>
                     <View style ={styles.grid}>
                         <Tile
+                            onPress={()=>{
+                                Clipboard.setString(this.state.course.passCode)
+                                Toast.show('PassCode Copied to Clipboard');
+                            }}
                             imageSrc={this.getImage()}
                             imageContainerStyle={styles.imageContainer}
                             activeOpacity={0.7}
@@ -66,15 +72,6 @@ export default class  CoursePage extends Component{
                             <AnnouncementCard announcement = {item} key={i}/>
                         ))}
                     </View>
-
-
-                    {/*<Text style={styles.textInput}>COURSE HOME PAGE</Text>*/}
-
-                    {/*<Text style={styles.textInput}> {this.state.course.courseCode} : {this.state.course.courseName}</Text>*/}
-                    {/*<Text style={styles.textInput} > Instructor : {this.state.course.instructor}</Text>*/}
-                    {/*<Text style={styles.textInput} > PassCode : {this.state.course.passCode}</Text>*/}
-                    {/*<Text style={styles.textInput} > Room : {this.state.course.room}</Text>*/}
-                    {/*<Text style={styles.textInput} > {this.state.type} : {this.state.user.name}</Text>*/}
 
                 </ScrollView>
             </SafeAreaView>
