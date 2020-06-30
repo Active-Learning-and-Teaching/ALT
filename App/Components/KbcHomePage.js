@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import {Slider, Text, Button} from 'react-native-elements';
-import KBC from '../Databases/KBC';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import moment from 'moment';
-import Options from './Options';
 import database from '@react-native-firebase/database';
 import * as config from '../config';
-import KBCResponses from '../Databases/KBCResponses';
-import CountDown from 'react-native-countdown-component';
+import KbcFacultyPage from './KbcFacultyPage';
+import KbcStudentPage from './KbcStudentPage';
 
 export default class KbcHomePage extends Component{
     constructor(props) {
@@ -16,27 +13,9 @@ export default class KbcHomePage extends Component{
             type : this.props.route.params.type,
             course : this.props.route.params.course,
             user : this.props.route.params.user,
-            time : 2,
-            option : "",
-            icona : 'alpha-a',
-            iconb : 'alpha-b',
-            iconc : 'alpha-c',
-            icond : 'alpha-d',
-            error : null,
             currentQuiz : false,
             currentDuration : 0
         };
-        this.setOption = this.setOption.bind(this);
-    }
-
-    setOption(value,a,b,c,d){
-        this.setState({
-            option : value,
-            icona : a,
-            iconb : b,
-            iconc : c,
-            icond : d,
-        })
     }
 
     ifCurrentQuiz = ()=>{
@@ -61,7 +40,6 @@ export default class KbcHomePage extends Component{
                         })
                     }
                     else{
-                        console.log(false)
                         this.setState({
                             currentQuiz : false,
                             currentDuration : 0
@@ -75,180 +53,23 @@ export default class KbcHomePage extends Component{
         this.ifCurrentQuiz()
     }
 
-    submitResponse = async () => {
-
-        const {option} = this.state;
-
-        if (option === '') {
-            this.setState({
-                error: "Please select an answer."
-            })
-        } else {
-
-            const kbcresponse = new KBCResponses()
-            const timestamp = moment().format("DD/MM/YYYY HH:mm:ss")
-
-            await kbcresponse.getResponse(this.state.user.url)
-                .then((url) => {
-                    if (url === null) {
-                        kbcresponse.createResponse(this.state.course.passCode,this.state.user.url, this.state.user.email, option, timestamp)
-                            .then(r => {
-                                console.log("update")
-                            })
-                    } else {
-                        kbcresponse.setResponse(this.state.course.passCode,this.state.user.url, this.state.user.email, option, timestamp, url)
-                            .then(r => {
-                                console.log("create")
-                            })
-
-                    }
-                    this.setState({
-                        option: "",
-                        icona: 'alpha-a',
-                        iconb: 'alpha-b',
-                        iconc: 'alpha-c',
-                        icond: 'alpha-d',
-                        error: null
-                    })
-
-                })
-
-        }
-
-
-    }
-
-    startKBC = async () => {
-
-        const {option, time} = this.state;
-
-        if (option === '') {
-            this.setState({
-                error: "Please select correct answer."
-            })
-        }
-        else {
-            const kbc = new KBC()
-            const startTime = moment().format("DD/MM/YYYY HH:mm:ss")
-            const endTime = moment().add(time, 'minutes').format("DD/MM/YYYY HH:mm:ss")
-
-            await kbc.getQuestion(this.state.course.passCode)
-                .then((url)=>{
-                    if (url===null){
-                        kbc.createQuestion(this.state.course.passCode, startTime, endTime, time, option, this.state.user.email)
-                            .then(r => {
-                                console.log("update")
-                            })
-                    }
-                    else{
-                         kbc.setQuestion(this.state.course.passCode, startTime, endTime, time, option, this.state.user.email, url)
-                            .then(r => {
-                                console.log("create")
-                            })
-
-                    }
-                    this.setState({
-                        time: 2,
-                        option: "",
-                        icona: 'alpha-a',
-                        iconb: 'alpha-b',
-                        iconc: 'alpha-c',
-                        icond: 'alpha-d',
-                        error: null
-                    })
-
-                })
-
-
-        }
-
-    }
-
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>
                 {this.state.type === "faculty" ?
-                    this.state.currentQuiz === false ?
-                    <ScrollView>
-                        <Text h2 style={styles.heading}> In-Class Quiz!</Text>
-
-                        <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
-                                 iconc={this.state.iconc} icond={this.state.icond}/>
-
-                        <View style={styles.container}>
-                            <View style={styles.slider}>
-
-                                <Text> Timer: {this.state.time} min</Text>
-
-                                <Slider
-                                    value={this.state.time}
-                                    minimumValue={2}
-                                    step={2}
-                                    maximumValue={20}
-                                    // thumbTouchSize={{width: 100, height: 100}}
-                                    thumbTintColor='#2697BF'
-                                    minimumTrackTintColor="#2697BF"
-                                    maximumTrackTintColor="#000000"
-                                    onValueChange={(value) => this.setState({time: value})}
-                                />
-                            </View>
-
-                            {this.state.error ?
-                                <Text style={styles.errorMessage}>
-                                    {this.state.error}
-                                </Text> : <Text/>}
-
-                            <Button style={styles.buttonMessage} title="BEGIN" onPress={this.startKBC}/>
-                        </View>
-                    </ScrollView>
-                        :
-                        <ScrollView>
-                            <Text style={styles.or}> Quiz in Progress</Text>
-                            <CountDown
-                                until={this.state.currentDuration}
-                                size={30}
-                                onFinish={() => alert('Quiz Over!')}
-                                digitStyle={{backgroundColor: '#FFF'}}
-                                digitTxtStyle={{color: '#2697BF'}}
-                                timeToShow={['M', 'S']}
-                                timeLabels={{m: 'Min', s: 'Sec'}}
-                            />
-                        </ScrollView>
-
+                    <KbcFacultyPage
+                        currentQuiz = {this.state.currentQuiz}
+                        currentDuration = {this.state.currentDuration}
+                        user = {this.state.user}
+                        course = {this.state.course}
+                    />
                 :
-                    this.state.currentQuiz===false ?
-                    <ScrollView>
-                        <Text style={styles.or}> Wohoo! No current quiz!</Text>
-                    </ScrollView>
-                    :
-                    <ScrollView>
-
-                        <Text h2 style={styles.heading}> In-Class Quiz</Text>
-
-                        <CountDown
-                            until={this.state.currentDuration}
-                            size={30}
-                            onFinish={() => alert('Quiz Over!')}
-                            digitStyle={{backgroundColor: '#FFF'}}
-                            digitTxtStyle={{color: '#2697BF'}}
-                            timeToShow={['M', 'S']}
-                            timeLabels={{m: 'Min', s: 'Sec'}}
-                        />
-
-                        <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
-                                 iconc={this.state.iconc} icond={this.state.icond}/>
-
-                        <View style={styles.container}>
-
-                            {this.state.error ?
-                                <Text style={styles.errorMessage}>
-                                    {this.state.error}
-                                </Text> : <Text/>}
-
-                            <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
-                        </View>
-
-                    </ScrollView>
+                    <KbcStudentPage
+                        currentQuiz = {this.state.currentQuiz}
+                        currentDuration = {this.state.currentDuration}
+                        user = {this.state.user}
+                        course = {this.state.course}
+                    />
                 }
             </SafeAreaView>
 
@@ -262,47 +83,5 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'transparent',
     },
-    heading : {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: 35,
-        fontSize : 22,
-        color: '#2697BF',
-        marginTop: 5,
-        textAlign: 'center'
-    },
-    container: {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: 35,
-    },
-
-    errorMessage: {
-        color: 'red',
-        marginBottom: 15,
-        paddingTop : 20,
-        paddingBottom: 10,
-    },
-    buttonMessage: {
-        paddingTop : 20,
-        marginTop: 40
-    },
-    or: {
-        marginTop: 200,
-        color: 'grey',
-        alignSelf: "center",
-        fontSize: 22,
-        paddingBottom: 20,
-        fontWeight : "bold"
-    },
-    slider: {
-        display: "flex",
-        justifyContent: 'center',
-        alignItems: 'stretch',
-    }
 
 })

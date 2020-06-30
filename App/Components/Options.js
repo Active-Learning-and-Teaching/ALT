@@ -12,7 +12,7 @@ export default class Options extends Component{
 
                 <Avatar
                     size="large"
-                    icon={{name: this.props.icona, color: 'orange', type: 'material-community'}}
+                    icon={{name: this.props.icona, color: 'white', type: 'material-community'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("A",'check','alpha-b','alpha-c','alpha-d')
                     }}
@@ -23,7 +23,7 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={{name: this.props.iconb, color: 'orange', type: 'material-community'}}
+                    icon={{name: this.props.iconb, color: 'white', type: 'material-community'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("B",'alpha-a','check','alpha-c','alpha-d')
                     }}
@@ -34,7 +34,7 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={{name: this.props.iconc, color: 'orange', type: 'material-community'}}
+                    icon={{name: this.props.iconc, color: 'white', type: 'material-community'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("C",'alpha-a','alpha-b','check','alpha-d')
                     }}
@@ -45,7 +45,7 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={{name: this.props.icond, color: 'orange', type: 'material-community'}}
+                    icon={{name: this.props.icond, color: 'white', type: 'material-community'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("D",'alpha-a','alpha-b','alpha-c','check')
                     }}
