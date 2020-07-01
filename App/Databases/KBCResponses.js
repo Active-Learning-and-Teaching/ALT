@@ -15,11 +15,11 @@ class KBCResponses {
 
     reference = database().ref(config['internalDb']+'/KBCResponse/')
 
-    getResponse  = async (userID)=> {
+    getResponse  = async (userID, passCode)=> {
         let ans = null
         await this.reference
-            .orderByChild("userID")
-            .equalTo(userID)
+            .orderByChild("userID_passCode")
+            .equalTo( userID+"_"+passCode)
             .once('value')
             .then(snapshot => {
                 if (snapshot.val()){
@@ -37,6 +37,7 @@ class KBCResponses {
                 passCode: passCode,
                 userID: userID,
                 userName: userName,
+                userID_passCode : userID+"_"+passCode,
                 answer: answer,
                 timestamp:timestamp
             })
@@ -52,12 +53,32 @@ class KBCResponses {
                 passCode: passCode,
                 userID: userID,
                 userName: userName,
+                userID_passCode : userID+"_"+passCode,
                 answer: answer,
                 timestamp: timestamp
             })
             .then(() => {
                 console.log('Response Created')
             })
+    }
+
+    getAllResponse = async (passCode, startTime, endTime)=> {
+        let ans = null
+        await this.reference
+            .orderByChild("passCode")
+            .equalTo(passCode)
+            .once('value')
+            .then(snapshot => {
+                const list = {'A':0,'B':0,'C':0,'D':0}
+                snapshot.forEach( (data) => {
+                    const keys = Object(data.val())
+                    if (keys["timestamp"]<=endTime && keys["timestamp"]>=startTime){
+                        list[keys["answer"]] += 1
+                    }
+                })
+                ans = list
+            })
+        return ans
     }
 
 }

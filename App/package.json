@@ -26,6 +26,7 @@
     "react-dom": "^16.13.1",
     "react-firebase-hooks": "^2.2.0",
     "react-native": "^0.62.2",
+    "react-native-chart-kit": "^6.2.2",
     "react-native-countdown-component": "^2.7.1",
     "react-native-elements": "^2.0.0",
     "react-native-gesture-handler": "^1.6.1",
@@ -34,6 +35,8 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.7.0",
     "react-native-simple-toast": "^1.1.2",
+    "react-native-svg": "^12.1.0",
+    "react-native-svg-charts": "^5.4.0",
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "^0.12.2"
   },

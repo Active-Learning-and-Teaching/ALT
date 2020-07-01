@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import {Slider, Text, Button} from 'react-native-elements';
+import {Text, Button} from 'react-native-elements';
 import moment from 'moment';
 import Options from './Options';
 import KBCResponses from '../Databases/KBCResponses';
 import CountDown from 'react-native-countdown-component';
-
-
+import QuizResultGraph from './QuizResultGraph';
+import KBC from '../Databases/KBC';
 
 export default class KbcStudentPage extends Component {
     constructor(props) {
@@ -20,6 +20,8 @@ export default class KbcStudentPage extends Component {
             iconc : 'alpha-c',
             icond : 'alpha-d',
             error : null,
+            correctAnswer : "",
+            quizResults : false
         };
         this.setOption = this.setOption.bind(this);
     }
@@ -31,6 +33,19 @@ export default class KbcStudentPage extends Component {
             iconc : c,
             icond : d,
         })
+    }
+
+    getCorrectAnswer = async () =>{
+        const Kbc = new KBC()
+        Kbc.getTiming(this.state.course.passCode).then(value => {
+            this.setState({
+                correctAnswer : value["correctAnswer"]
+            })
+        })
+    }
+
+    componentDidMount() {
+        this.getCorrectAnswer().then(r=>{console.log("")})
     }
 
     submitResponse = async () => {
@@ -46,7 +61,7 @@ export default class KbcStudentPage extends Component {
             const kbcresponse = new KBCResponses()
             const timestamp = moment().format("DD/MM/YYYY HH:mm:ss")
 
-            await kbcresponse.getResponse(this.state.user.url)
+            await kbcresponse.getResponse(this.state.user.url, this.state.course.passCode)
                 .then((url) => {
                     if (url === null) {
                         kbcresponse.createResponse(this.state.course.passCode,this.state.user.url, this.state.user.email, option, timestamp)
@@ -80,18 +95,29 @@ export default class KbcStudentPage extends Component {
             <SafeAreaView style={styles.safeContainer}>
             {   this.props.currentQuiz === false
                     ?
-                    <ScrollView>
-                        <Text style={styles.or}> Wohoo! No current quiz!</Text>
-                    </ScrollView>
+                    this.props.quizResults === false
+                    ?
+                        <ScrollView>
+                            <Text style={styles.or}> Wohoo! No current quiz!</Text>
+                        </ScrollView>
+                    :
+                        <ScrollView>
+                            <QuizResultGraph passCode={this.state.course.passCode} correctAnswer={this.state.correctAnswer}/>
+                        </ScrollView>
                     :
                     <ScrollView>
 
-                        <Text h2 style={styles.heading}> In-Class Quiz</Text>
+                        <Text style={styles.heading}> In-Class Quiz</Text>
 
                         <CountDown
                             until={this.props.currentDuration}
                             size={30}
-                            onFinish={() => alert('Quiz Over!')}
+                            onFinish={() => {
+                                this.setState({
+                                    quizResults : true
+                                })
+                                this.props.setQuizState()
+                            }}
                             digitStyle={{backgroundColor: '#FFF'}}
                             digitTxtStyle={{color: '#2697BF'}}
                             timeToShow={['M', 'S']}
@@ -127,11 +153,13 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: 35,
-        fontSize : 16,
+        paddingTop : 25,
+        padding: 15,
+        fontSize : 25,
+        fontWeight: "bold",
         color: 'black',
         marginTop: 5,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     container: {
         flex: 1,
