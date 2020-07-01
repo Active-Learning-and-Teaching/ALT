@@ -31,7 +31,23 @@ class KBC {
         return ans
     }
 
-    setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, instructor, url) =>{
+    getTiming  = async (passCode)=> {
+        let ans = null
+        await this.reference
+            .orderByChild("passCode")
+            .equalTo(passCode)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const keys = Object.values(snapshot.val());
+                    ans = keys[0]
+                }
+            })
+        return ans
+    }
+
+
+    setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, instructor, url, emailResponse) =>{
         await database()
             .ref(config['internalDb']+'/KBC/'+url)
             .set({
@@ -40,7 +56,8 @@ class KBC {
                 endTime: endTime,
                 duration: duration,
                 correctAnswer: correctAnswer,
-                instructor: instructor
+                instructor: instructor,
+                emailResponse: emailResponse,
             })
             .then(()=>{
                 console.log("Question modified")
@@ -56,7 +73,8 @@ class KBC {
                 endTime: endTime,
                 duration: duration,
                 correctAnswer: correctAnswer,
-                instructor: instructor
+                instructor: instructor,
+                emailResponse: false,
             })
             .then(() => {
                 console.log('Question created')
