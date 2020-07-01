@@ -51,6 +51,37 @@ export default class KbcFacultyPage extends Component{
         })
     }
 
+    dbUpdateEmailStatus = async () =>{
+        const Kbc = new KBC()
+        Kbc.getTiming(this.state.course.passCode)
+            .then(value => {
+                Kbc.getQuestion(this.state.course.passCode)
+                    .then(url => {
+                        Kbc.setQuestion(
+                            this.state.course.passCode,
+                            value["startTime"],
+                            value["endTime"],
+                            value["duration"],
+                            value["correctAnswer"],
+                            value["instructor"],
+                            url,
+                            true
+                        )
+                    })
+            })
+    }
+
+    mailQuizResult = () =>{
+        this.setState({
+            emailPage : false
+        })
+
+
+        this.dbUpdateEmailStatus()
+            .then(()=>{console.log("Updated email")})
+
+    }
+
     startKBC = async () => {
 
         const {option, time} = this.state;
@@ -70,13 +101,13 @@ export default class KbcFacultyPage extends Component{
                     if (url===null){
                         kbc.createQuestion(this.state.course.passCode, startTime, endTime, time, option, this.state.user.email)
                             .then(r => {
-                                console.log("update")
+                                console.log("create")
                             })
                     }
                     else{
-                        kbc.setQuestion(this.state.course.passCode, startTime, endTime, time, option, this.state.user.email, url)
+                        kbc.setQuestion(this.state.course.passCode, startTime, endTime, time, option, this.state.user.email, url, false)
                             .then(r => {
-                                console.log("create")
+                                console.log("update")
                             })
 
                     }
@@ -143,10 +174,7 @@ export default class KbcFacultyPage extends Component{
                                 <Button style={styles.buttonMessage}
                                         title="Email Results"
                                         onPress={()=>{
-                                            console.log("email")
-                                            this.setState({
-                                                emailPage : false
-                                            })
+                                            this.mailQuizResult()
                                         }}/>
                                 <Button style={styles.buttonMessage}
                                         title="Start Another Quiz"
