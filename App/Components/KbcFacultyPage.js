@@ -5,6 +5,7 @@ import KBC from '../Databases/KBC';
 import moment from 'moment';
 import Options from './Options';
 import CountDown from 'react-native-countdown-component';
+import QuizResultGraph from './QuizResultGraph';
 
 export default class KbcFacultyPage extends Component{
     constructor(props) {
@@ -18,9 +19,26 @@ export default class KbcFacultyPage extends Component{
             iconb : 'alpha-b',
             iconc : 'alpha-c',
             icond : 'alpha-d',
+            correctAnswer : "",
+            emailPage : false,
             error : null,
         };
         this.setOption = this.setOption.bind(this);
+    }
+
+    checkEmailSent = async () =>{
+        const Kbc = new KBC()
+        Kbc.getTiming(this.state.course.passCode).then(value => {
+            console.log(value["emailResponse"])
+            this.setState({
+                emailPage : !value["emailResponse"],
+                correctAnswer : value["correctAnswer"]
+            })
+        })
+    }
+
+    componentDidMount() {
+        this.checkEmailSent().then(r=>{console.log("")})
     }
 
     setOption(value,a,b,c,d){
@@ -81,10 +99,13 @@ export default class KbcFacultyPage extends Component{
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>
+
                 { this.props.currentQuiz === false
                 ?
+                    this.state.emailPage === false
+                    ?
                 <ScrollView>
-                    <Text h2 style={styles.heading}> In-Class Quiz!</Text>
+                    <Text style={styles.heading}> In-Class Quiz!</Text>
 
                     <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
                              iconc={this.state.iconc} icond={this.state.icond}/>
@@ -115,13 +136,39 @@ export default class KbcFacultyPage extends Component{
                         <Button style={styles.buttonMessage} title="BEGIN" onPress={this.startKBC}/>
                     </View>
                 </ScrollView>
+                        :
+                        <ScrollView>
+                            <QuizResultGraph passCode={this.state.course.passCode} correctAnswer={this.state.correctAnswer}/>
+                            <View style={styles.buttonContainer}>
+                                <Button style={styles.buttonMessage}
+                                        title="Email Results"
+                                        onPress={()=>{
+                                            console.log("email")
+                                            this.setState({
+                                                emailPage : false
+                                            })
+                                        }}/>
+                                <Button style={styles.buttonMessage}
+                                        title="Start Another Quiz"
+                                        onPress={()=>{
+                                            this.setState({
+                                                emailPage : false
+                                            })
+                                        }}/>
+                            </View>
+                        </ScrollView>
                 :
                 <ScrollView>
                     <Text style={styles.or}> Quiz in Progress</Text>
                     <CountDown
                         until={this.props.currentDuration}
                         size={30}
-                        onFinish={() => alert('Quiz Over!')}
+                        onFinish={() =>  {
+                            this.setState({
+                                emailPage : true
+                            })
+                            this.props.setQuizState()
+                        }}
                         digitStyle={{backgroundColor: '#FFF'}}
                         digitTxtStyle={{color: '#2697BF'}}
                         timeToShow={['M', 'S']}
@@ -144,11 +191,13 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: 35,
-        fontSize : 16,
+        paddingTop : 25,
+        padding: 15,
+        fontSize : 25,
+        fontWeight: "bold",
         color: 'black',
         marginTop: 5,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     container: {
         flex: 1,
@@ -165,8 +214,21 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     buttonMessage: {
+        marginTop : 30,
         paddingTop : 20,
-        marginTop: 40
+        marginBottom: 30,
+        paddingBottom : 20
+    },
+    buttonContainer: {
+        flex: 1,
+        display: "flex",
+        flexWrap: "wrap",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingTop: 20,
+        paddingBottom:20,
+        paddingLeft : 30,
+        paddingRight : 30
     },
     or: {
         marginTop: 200,
