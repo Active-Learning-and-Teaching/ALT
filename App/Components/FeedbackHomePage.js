@@ -1,14 +1,33 @@
 import React, {Component} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import FeedbackFacultyPage from './FeedbackFacultyPage';
+import FeedbackStudentPage from './FeedbackStudentPage';
 
 export default class FeedbackHomePage extends Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            type : this.props.route.params.type,
+            course : this.props.route.params.course,
+            user : this.props.route.params.user,
+        };
+    }
 
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>
-                <ScrollView>
-                    <Text>FEEDBACK</Text>
-                </ScrollView>
+                {this.state.type === "faculty" ?
+                    <FeedbackFacultyPage
+                        user = {this.state.user}
+                        course = {this.state.course}
+                    />
+                    :
+                    <FeedbackStudentPage
+                        user = {this.state.user}
+                        course = {this.state.course}
+                    />
+                }
             </SafeAreaView>
 
         )
@@ -20,5 +39,7 @@ const styles = StyleSheet.create({
     safeContainer: {
         flex: 1,
         backgroundColor: 'transparent',
-    }
+    },
+
 })
+

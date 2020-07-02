@@ -7,6 +7,7 @@ import KBCResponses from '../Databases/KBCResponses';
 import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
 import KBC from '../Databases/KBC';
+import Toast from 'react-native-simple-toast';
 
 export default class KbcStudentPage extends Component {
     constructor(props) {
@@ -44,10 +45,6 @@ export default class KbcStudentPage extends Component {
         })
     }
 
-    componentDidMount() {
-        this.getCorrectAnswer().then(r=>{console.log("")})
-    }
-
     submitResponse = async () => {
 
         const {option} = this.state;
@@ -57,7 +54,7 @@ export default class KbcStudentPage extends Component {
                 error: "Please select an answer."
             })
         } else {
-
+            Toast.show('Answer has been recorded!');
             const kbcresponse = new KBCResponses()
             const timestamp = moment().format("DD/MM/YYYY HH:mm:ss")
 
@@ -75,15 +72,6 @@ export default class KbcStudentPage extends Component {
                             })
 
                     }
-                    this.setState({
-                        option: "",
-                        icona: 'alpha-a',
-                        iconb: 'alpha-b',
-                        iconc: 'alpha-c',
-                        icond: 'alpha-d',
-                        error: null
-                    })
-
                 })
 
         }
@@ -95,7 +83,7 @@ export default class KbcStudentPage extends Component {
             <SafeAreaView style={styles.safeContainer}>
             {   this.props.currentQuiz === false
                     ?
-                    this.props.quizResults === false
+                    this.state.quizResults === false
                     ?
                         <ScrollView>
                             <Text style={styles.or}> Wohoo! No current quiz!</Text>
@@ -114,9 +102,16 @@ export default class KbcStudentPage extends Component {
                             size={30}
                             onFinish={() => {
                                 this.setState({
-                                    quizResults : true
+                                    quizResults : true,
+                                    option: "",
+                                    icona: 'alpha-a',
+                                    iconb: 'alpha-b',
+                                    iconc: 'alpha-c',
+                                    icond: 'alpha-d',
+                                    error: null
                                 })
                                 this.props.setQuizState()
+                                this.getCorrectAnswer().then(r=>{console.log("")})
                             }}
                             digitStyle={{backgroundColor: '#FFF'}}
                             digitTxtStyle={{color: '#2697BF'}}
@@ -157,7 +152,7 @@ const styles = StyleSheet.create({
         padding: 15,
         fontSize : 25,
         fontWeight: "bold",
-        color: 'black',
+        color: 'grey',
         marginTop: 5,
         textAlign: 'center',
     },
@@ -177,7 +172,7 @@ const styles = StyleSheet.create({
     },
     buttonMessage: {
         paddingTop : 20,
-        marginTop: 40
+        marginTop: 40,
     },
     or: {
         marginTop: 200,

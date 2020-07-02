@@ -29,7 +29,6 @@ export default class KbcFacultyPage extends Component{
     checkEmailSent = async () =>{
         const Kbc = new KBC()
         Kbc.getTiming(this.state.course.passCode).then(value => {
-            console.log(value["emailResponse"])
             this.setState({
                 emailPage : !value["emailResponse"],
                 correctAnswer : value["correctAnswer"]
@@ -195,6 +194,7 @@ export default class KbcFacultyPage extends Component{
                             this.setState({
                                 emailPage : true
                             })
+                            this.checkEmailSent().then(r=>{console.log("")})
                             this.props.setQuizState()
                         }}
                         digitStyle={{backgroundColor: '#FFF'}}
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
         padding: 15,
         fontSize : 25,
         fontWeight: "bold",
-        color: 'black',
+        color: 'grey',
         marginTop: 5,
         textAlign: 'center',
     },
@@ -234,7 +234,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         padding: 35,
     },
-
     errorMessage: {
         color: 'red',
         marginBottom: 15,
