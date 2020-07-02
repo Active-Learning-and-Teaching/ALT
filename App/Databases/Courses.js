@@ -1,6 +1,5 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
-import Faculty from './Faculty';
 
 class Courses {
 
@@ -122,5 +121,4 @@ class Courses {
 
 }
 
-// const courses = new Courses()
 export default Courses;
