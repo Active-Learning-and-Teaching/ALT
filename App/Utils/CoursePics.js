@@ -26,6 +26,9 @@ export const CoursePics = (imageNumber) => {
             break;
         case 8:
             url = require('../Assets/8.jpeg');
+            break;
+        default:
+            url = require('../Assets/8.jpeg');
     }
 
     return url
