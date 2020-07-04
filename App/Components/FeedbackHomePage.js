@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import FeedbackFacultyPage from './FeedbackFacultyPage';
 import FeedbackStudentPage from './FeedbackStudentPage';
+import FeedbackFacultyPage from './FeedbackFacultyPage';
 
 export default class FeedbackHomePage extends Component{
 

@@ -143,13 +143,13 @@ export default class KbcFacultyPage extends Component{
                     <View style={styles.container}>
                         <View style={styles.slider}>
 
-                            <Text> Timer: {this.state.time} min</Text>
+                            <Text style={styles.sliderText}> Timer: {this.state.time} min</Text>
 
                             <Slider
                                 value={this.state.time}
-                                minimumValue={2}
-                                step={2}
-                                maximumValue={20}
+                                minimumValue={0}
+                                step={1}
+                                maximumValue={15}
                                 // thumbTouchSize={{width: 100, height: 100}}
                                 thumbTintColor='#2697BF'
                                 minimumTrackTintColor="#2697BF"
@@ -213,6 +213,14 @@ const styles = StyleSheet.create({
     safeContainer: {
         flex: 1,
         backgroundColor: 'transparent',
+    },
+    sliderText : {
+        flex: 1,
+        display: "flex",
+        padding: 10,
+        fontSize : 18,
+        color: 'grey',
+        marginTop: 5,
     },
     heading : {
         flex: 1,

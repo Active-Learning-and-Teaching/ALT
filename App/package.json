@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/clipboard": "^1.2.2",
+    "@react-native-community/datetimepicker": "^2.5.0",
     "@react-native-community/google-signin": "^4.0.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/picker": "^1.5.0",
@@ -31,6 +32,7 @@
     "react-native-elements": "^2.0.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-modal": "^11.5.6",
+    "react-native-modal-datetime-picker": "^8.7.1",
     "react-native-reanimated": "^1.8.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.7.0",

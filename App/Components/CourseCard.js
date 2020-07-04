@@ -7,6 +7,7 @@ import {CoursePics} from '../Utils/CoursePics';
 export default class  CourseCard extends Component{
 
     getImage = () =>{
+        console.log(CoursePics(this.props.course.imageURL))
         return CoursePics(this.props.course.imageURL)
     }
 
