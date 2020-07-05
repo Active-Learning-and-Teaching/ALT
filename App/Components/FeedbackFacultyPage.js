@@ -70,7 +70,7 @@ export default class FeedbackFacultyPage extends Component {
                         :
                         <ScrollView>
                             <View style={styles.container}>
-                                <Text style={styles.heading}> Feedback Topics</Text>
+                                <Text style={styles.heading}> Topics</Text>
                                 {this.state.topics.map((value, i) => (
                                     <ListItem
                                         key = {i}
@@ -81,7 +81,7 @@ export default class FeedbackFacultyPage extends Component {
                                     />
                                 ))}
                                 <View style={styles.container}>
-                                    <Text style={styles.text1}> Feedback to go live in</Text>
+                                    <Text style={styles.text1}> Minute paper to go live in</Text>
                                     <CountDown
                                         until={this.props.beforeDuration}
                                         size={24}
@@ -103,7 +103,7 @@ export default class FeedbackFacultyPage extends Component {
                         </ScrollView>
                     :
                     <ScrollView>
-                        <Text style={styles.or}> Feedback in Progress</Text>
+                        <Text style={styles.or}> Minute Paper in Progress</Text>
                         <CountDown
                             until={this.props.currentDuration}
                             size={30}
