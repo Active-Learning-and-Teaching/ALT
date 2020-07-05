@@ -19,7 +19,8 @@ export default class FeedbackForm extends Component {
             showTime : false,
             time : null,
             error : null,
-            topics : []
+            topics : [],
+            duration : 1
         }
     }
 
@@ -59,7 +60,12 @@ export default class FeedbackForm extends Component {
 
         if (this.state.inputData.length === 0) {
             this.setState({
-                error: "Please enter at least one topic!"
+                error: "Please enter at least one topic."
+            })
+        }
+        else if(this.state.date == null || this.state.time == null){
+            this.setState({
+                error: "Please schedule feedback."
             })
         }
         else {
@@ -69,19 +75,22 @@ export default class FeedbackForm extends Component {
 
             if (this.state.date != null && this.state.time != null) {
                 startTime = this.state.date + " " + this.state.time
-                endTime = moment(startTime, "DD/MM/YYYY HH:mm:ss").add(15, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+                endTime = moment(startTime, "DD/MM/YYYY HH:mm:ss").add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
             }
 
-            await this.updateTopics()
+            await this.updateTopics().then(r=>{console.log()})
 
             await feedback.getFeedback(this.state.course.passCode)
                 .then((url) => {
+                    console.log(url)
                     if (url === null) {
+                        console.log("hello")
                         feedback.createFeedback(this.state.course.passCode, startTime, endTime, this.state.topics, this.state.user.email)
                             .then(r => {
                                 console.log("create")
                             })
                     } else {
+                        console.log("hello")
                         feedback.setFeedback(this.state.course.passCode, startTime, endTime, this.state.topics, this.state.user.email, url, false)
                             .then(r => {
                                 console.log("update")
@@ -95,7 +104,8 @@ export default class FeedbackForm extends Component {
                         showDate : false,
                         showTime : false,
                         time : null,
-                        error : null
+                        error : null,
+                        topics : [],
                     })
 
                 })
@@ -165,7 +175,7 @@ export default class FeedbackForm extends Component {
                 <ScrollView>
                     <Text style={styles.heading}> New Minute Paper</Text>
 
-                    <View style={styles.buttonRowContainer}>
+                    <View style={styles.rowContainer}>
                         <Text style={styles.topic}> Topics </Text>
                         <Icon
                             name='plus-circle'
@@ -291,8 +301,9 @@ const styles = StyleSheet.create({
         display: "flex",
         flexWrap: "wrap",
         flexDirection: "row",
-        paddingTop: 20,
-        paddingBottom:20,
+        justifyContent : "flex-start",
+        // paddingTop: 20,
+        // paddingBottom:20,
         paddingLeft : 30,
         paddingRight : 30
     },
@@ -320,6 +331,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: 5,
+        paddingLeft : 30,
+        paddingRight : 30
     },
 })

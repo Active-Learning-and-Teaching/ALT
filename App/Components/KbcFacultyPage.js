@@ -163,7 +163,7 @@ export default class KbcFacultyPage extends Component{
                                 {this.state.error}
                             </Text> : <Text/>}
 
-                        <Button style={styles.buttonMessage} title="BEGIN" onPress={this.startKBC}/>
+                        <Button title="BEGIN" onPress={this.startKBC}/>
                     </View>
                 </ScrollView>
                         :

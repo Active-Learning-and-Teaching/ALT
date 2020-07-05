@@ -30,21 +30,20 @@ class Feedback {
         return ans
     }
 
-    // getTiming  = async (passCode)=> {
-    //     let ans = null
-    //     await this.reference
-    //         .orderByChild("passCode")
-    //         .equalTo(passCode)
-    //         .once('value')
-    //         .then(snapshot => {
-    //             if (snapshot.val()){
-    //                 const keys = Object.values(snapshot.val());
-    //                 ans = keys[0]
-    //             }
-    //         })
-    //     return ans
-    // }
-
+    getFeedbackDetails  = async (passCode)=> {
+        let ans = null
+        await this.reference
+            .orderByChild("passCode")
+            .equalTo(passCode)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const keys = Object.values(snapshot.val());
+                    ans = keys[0]
+                }
+            })
+        return ans
+    }
 
     setFeedback = async (passCode, startTime, endTime, topics, instructor, url, emailResponse) =>{
         await database()
