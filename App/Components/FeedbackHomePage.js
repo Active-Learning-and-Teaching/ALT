@@ -93,8 +93,11 @@ export default class FeedbackHomePage extends Component{
                     <FeedbackStudentPage
                         user = {this.state.user}
                         course = {this.state.course}
+                        beforeFeedback = {this.state.beforeFeedback}
                         currentFeedback ={this.state.currentFeedback}
                         currentDuration = {this.state.currentDuration}
+                        beforeDuration = {this.state.beforeDuration}
+                        setFeedbackState = {this.setFeedbackState}
                     />
                 }
             </SafeAreaView>

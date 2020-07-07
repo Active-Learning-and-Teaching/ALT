@@ -83,7 +83,7 @@ export default class FeedbackFacultyPage extends Component {
                                 <View style={styles.container}>
                                     <Text style={styles.text1}> Minute paper to go live in</Text>
                                     <CountDown
-                                        until={this.props.beforeDuration}
+                                        until={this.props.beforeDuration + 5}
                                         size={24}
                                         onFinish={() =>  {
                                             this.checkEmailSent().then(r=>{console.log("")})
@@ -105,7 +105,7 @@ export default class FeedbackFacultyPage extends Component {
                     <ScrollView>
                         <Text style={styles.or}> Minute Paper in Progress</Text>
                         <CountDown
-                            until={this.props.currentDuration}
+                            until={this.props.currentDuration + 5}
                             size={30}
                             onFinish={() =>  {
                                 this.setState({

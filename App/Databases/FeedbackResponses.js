@@ -15,52 +15,72 @@ class FeedbackResponses {
 
     reference = database().ref(config['internalDb']+'/FeedbackResponse/')
 
-    // getResponse  = async (userID, passCode)=> {
-    //     let ans = null
-    //     await this.reference
-    //         .orderByChild("userID_passCode")
-    //         .equalTo( userID+"_"+passCode)
-    //         .once('value')
-    //         .then(snapshot => {
-    //             if (snapshot.val()){
-    //                 const keys = Object.keys(snapshot.val());
-    //                 ans = keys[0]
-    //             }
-    //         })
-    //     return ans
-    // }
-    //
-    // setResponse = async (passCode, userID, userName, answer, timestamp, url) =>{
-    //     await database()
-    //         .ref(config['internalDb']+'/FeedbackResponse/'+url)
-    //         .set({
-    //             passCode: passCode,
-    //             userID: userID,
-    //             userName: userName,
-    //             userID_passCode : userID+"_"+passCode,
-    //             answer: answer,
-    //             timestamp:timestamp
-    //         })
-    //         .then(()=>{
-    //             console.log("Response modified")
-    //         })
-    // }
-    //
-    // createResponse =  async (passCode, userID, userName, answer, timestamp) => {
-    //     await this.reference
-    //         .push()
-    //         .set({
-    //             passCode: passCode,
-    //             userID: userID,
-    //             userName: userName,
-    //             userID_passCode : userID+"_"+passCode,
-    //             answer: answer,
-    //             timestamp: timestamp
-    //         })
-    //         .then(() => {
-    //             console.log('Response Created')
-    //         })
-    // }
+    getFeedbackResponse  = async (userID, passCode)=> {
+        let ans = null
+        await this.reference
+            .orderByChild("userID_passCode")
+            .equalTo( userID+"_"+passCode)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const keys = Object.keys(snapshot.val());
+                    ans = keys[0]
+                }
+            })
+        return ans
+    }
+
+    getFeedbackResponseForOneStudent = async (userID, passCode, startTime, endTime)=> {
+        let ans = null
+        await this.reference
+            .orderByChild("userID_passCode")
+            .equalTo( userID+"_"+passCode)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const keys = Object.values(snapshot.val())[0];
+                    if (keys["timestamp"]<=endTime && keys["timestamp"]>=startTime) {
+                        ans = true
+                    }
+                    else {
+                        ans = false
+                    }
+                }
+            })
+        return ans
+    }
+
+    setFeedbackResponse = async (passCode, userID, userName, responses, timestamp, url) =>{
+        await database()
+            .ref(config['internalDb']+'/FeedbackResponse/'+url)
+            .set({
+                passCode: passCode,
+                userID: userID,
+                userName: userName,
+                userID_passCode : userID+"_"+passCode,
+                responses: responses,
+                timestamp:timestamp
+            })
+            .then(()=>{
+                console.log("Response modified")
+            })
+    }
+
+    createFeedbackResponse =  async (passCode, userID, userName, responses, timestamp) => {
+        await this.reference
+            .push()
+            .set({
+                passCode: passCode,
+                userID: userID,
+                userName: userName,
+                userID_passCode : userID+"_"+passCode,
+                responses: responses,
+                timestamp: timestamp
+            })
+            .then(() => {
+                console.log('Response Created')
+            })
+    }
     //
     // getAllResponse = async (passCode, startTime, endTime)=> {
     //     let ans = null

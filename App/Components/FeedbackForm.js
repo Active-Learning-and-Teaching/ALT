@@ -46,9 +46,9 @@ export default class FeedbackForm extends Component {
     updateTopics = async () => {
         let arr = []
         const t = this.state.inputData
-        for (let i=0; i<t.length; i++){
-            if (t[i]['text'].length!==0) {
-                arr.push(t[i]['text']);
+        for await (const item of t){
+            if (item['text'].length!==0) {
+                arr.push(item['text']);
             }
         }
         await this.setState({
@@ -85,14 +85,26 @@ export default class FeedbackForm extends Component {
                     console.log(url)
                     if (url === null) {
                         console.log("hello")
-                        feedback.createFeedback(this.state.course.passCode, startTime, endTime, this.state.topics, this.state.user.email)
-                            .then(r => {
+                        feedback.createFeedback(
+                            this.state.course.passCode,
+                            startTime,
+                            endTime,
+                            this.state.topics,
+                            this.state.user.email
+                        ).then(r => {
                                 console.log("create")
                             })
                     } else {
                         console.log("hello")
-                        feedback.setFeedback(this.state.course.passCode, startTime, endTime, this.state.topics, this.state.user.email, url, false)
-                            .then(r => {
+                        feedback.setFeedback(
+                            this.state.course.passCode,
+                            startTime,
+                            endTime,
+                            this.state.topics,
+                            this.state.user.email,
+                            url,
+                            false
+                        ).then(r => {
                                 console.log("update")
                             })
 
