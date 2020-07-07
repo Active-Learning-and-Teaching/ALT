@@ -44,9 +44,16 @@ export default class  CourseAdd extends Component {
                     onBackButtonPress= {this.toggleModal}
                     avoidKeyboard>
                     <View style={{flex: 1}}>
-                        { this.props.type==="faculty" ? <FormAddCourse toggle={this.toggleModal} instructor = {this.props.instructor} />
-                        : this.props.type==="student" ? <StudentAddCourseForm student = {this.props.student} toggle={this.toggleModal}/>
-                        : <AnnouncementsAdd course = {this.props.course} toggle={this.toggleModal}/>}
+                        { this.props.type==="faculty"
+                            ?
+                            <FormAddCourse toggle={this.toggleModal} instructor = {this.props.instructor} />
+                        :
+                            this.props.type==="student"
+                                ?
+                                <StudentAddCourseForm student = {this.props.student} toggle={this.toggleModal}/>
+                        :
+                                <AnnouncementsAdd course = {this.props.course} toggle={this.toggleModal}/>
+                        }
 
                     </View>
                 </Modal>

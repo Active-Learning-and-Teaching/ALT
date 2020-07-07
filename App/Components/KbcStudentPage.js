@@ -61,13 +61,24 @@ export default class KbcStudentPage extends Component {
             await kbcresponse.getResponse(this.state.user.url, this.state.course.passCode)
                 .then((url) => {
                     if (url === null) {
-                        kbcresponse.createResponse(this.state.course.passCode,this.state.user.url, this.state.user.email, option, timestamp)
-                            .then(r => {
+                        kbcresponse.createResponse(
+                            this.state.course.passCode,
+                            this.state.user.url,
+                            this.state.user.email,
+                            option,
+                            timestamp
+                        ).then(r => {
                                 console.log("update")
                             })
                     } else {
-                        kbcresponse.setResponse(this.state.course.passCode,this.state.user.url, this.state.user.email, option, timestamp, url)
-                            .then(r => {
+                        kbcresponse.setResponse(
+                            this.state.course.passCode,
+                            this.state.user.url,
+                            this.state.user.email,
+                            option,
+                            timestamp,
+                            url
+                        ).then(r => {
                                 console.log("create")
                             })
 
