@@ -195,6 +195,8 @@ export default class KbcFacultyPage extends Component{
                                             this.setState({
                                                 emailPage : false
                                             })
+                                            this.dbUpdateEmailStatus()
+                                                .then(()=>{console.log("Updated email")})
                                         }}/>
                             </View>
                         </ScrollView>

@@ -166,7 +166,6 @@ export default class FeedbackStudentPage extends Component {
                                     ))}
                                 </View>
 
-                                <Text>{this.state.gender}</Text>
                                 <View style={styles.buttonContainer}>
                                     <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.submitFeedback} />
                                 </View>
