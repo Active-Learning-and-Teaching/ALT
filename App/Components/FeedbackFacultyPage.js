@@ -6,6 +6,7 @@ import CountDown from 'react-native-countdown-component';
 import {Button, ListItem} from 'react-native-elements';
 import Dimensions from '../Utils/Dimensions';
 import moment from 'moment';
+import FeedbackResultsList from './FeedbackResultsList';
 
 export default class FeedbackFacultyPage extends Component {
     constructor(props) {
@@ -27,6 +28,34 @@ export default class FeedbackFacultyPage extends Component {
                 topics : value["topics"]
             })
         })
+    }
+
+    dbUpdateEmailStatus = async () =>{
+        const feedback = new Feedback()
+        feedback.getFeedbackDetails(this.state.course.passCode)
+            .then(value => {
+                feedback.getFeedback(this.state.course.passCode)
+                    .then(url => {
+                        feedback.setFeedback(
+                            this.state.course.passCode,
+                            value["startTime"],
+                            value["endTime"],
+                            value["topics"],
+                            value["instructor"],
+                            url,
+                            true
+                        )
+                    })
+            })
+    }
+
+    mailFeedbackResponses = () =>{
+        this.setState({
+            emailPage : false
+        })
+
+        this.dbUpdateEmailStatus()
+            .then(()=>{console.log("Updated email")})
     }
 
     startFeedback = async()=>{
@@ -66,7 +95,25 @@ export default class FeedbackFacultyPage extends Component {
                             ?
                             <FeedbackForm course={this.state.course} user={this.state.user}/>
                             :
-                            <Text> Results </Text>
+                            <ScrollView>
+                                <FeedbackResultsList course = {this.state.course} topics = {this.state.topics}/>
+                                <View style={styles.buttonRowContainer}>
+                                    <Button style={styles.buttonMessage}
+                                            title={'Email \n Responses'}
+                                            onPress={()=>{
+                                                this.mailFeedbackResponses()
+                                            }}/>
+                                    <Button style={styles.buttonMessage}
+                                            title={'Start New \n Minute Paper'}
+                                            onPress={()=>{
+                                                this.setState({
+                                                    emailPage : false
+                                                })
+                                                this.dbUpdateEmailStatus()
+                                                    .then(()=>{console.log("Updated email")})
+                                            }}/>
+                                </View>
+                            </ScrollView>
                         :
                         <ScrollView>
                             <View style={styles.container}>
@@ -228,5 +275,16 @@ const styles = StyleSheet.create({
         paddingTop : 15,
         paddingLeft : 30,
         paddingRight : 30
+    },
+    buttonRowContainer: {
+        flex: 1,
+        display: "flex",
+        flexWrap: "wrap",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingTop: 20,
+        paddingBottom:20,
+        paddingLeft : 40,
+        paddingRight : 40
     },
 })
