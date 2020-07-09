@@ -57,7 +57,7 @@ export default class TabNavigator extends Component{
                                 course: this.state.course
                             }}
                             options={{
-                                tabBarLabel: 'Feedback',
+                                tabBarLabel: 'Minute Paper',
                                 tabBarIcon: ({focused}) =>(
                                     <Icon name='comments' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                                 ),

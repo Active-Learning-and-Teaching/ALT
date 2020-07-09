@@ -30,7 +30,8 @@ export default class StudentAddCourseForm extends Component {
             await courses.getCourse(passCode)
                 .then(async value => {
                     if (value){
-                        await this.props.student.addCourseStudent(value).then(r => console.log("Added Course to Student"))
+                        await this.props.student.addCourseStudent(value)
+                            .then(r => console.log("Added Course to Student"))
                         this.props.toggle()
                     }
                     else {

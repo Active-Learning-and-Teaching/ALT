@@ -98,14 +98,28 @@ export default class KbcFacultyPage extends Component{
             await kbc.getQuestion(this.state.course.passCode)
                 .then((url)=>{
                     if (url===null){
-                        kbc.createQuestion(this.state.course.passCode, startTime, endTime, time, option, this.state.user.email)
-                            .then(r => {
+                        kbc.createQuestion(
+                            this.state.course.passCode,
+                            startTime,
+                            endTime,
+                            time,
+                            option,
+                            this.state.user.email
+                        ).then(r => {
                                 console.log("create")
                             })
                     }
                     else{
-                        kbc.setQuestion(this.state.course.passCode, startTime, endTime, time, option, this.state.user.email, url, false)
-                            .then(r => {
+                        kbc.setQuestion(
+                            this.state.course.passCode,
+                            startTime,
+                            endTime,
+                            time,
+                            option,
+                            this.state.user.email,
+                            url,
+                            false
+                        ).then(r => {
                                 console.log("update")
                             })
 
@@ -181,6 +195,8 @@ export default class KbcFacultyPage extends Component{
                                             this.setState({
                                                 emailPage : false
                                             })
+                                            this.dbUpdateEmailStatus()
+                                                .then(()=>{console.log("Updated email")})
                                         }}/>
                             </View>
                         </ScrollView>
