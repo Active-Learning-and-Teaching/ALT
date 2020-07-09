@@ -101,7 +101,13 @@ export default class FacultyDashBoard extends Component {
                     {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} />*/}
                     <View style={styles.grid}>
                         {this.state.courseList.map((item,i)=> (
-                            <CourseCard course = {item} type = {"faculty"}  user = {this.state.currentUser} navigation ={this.props.navigation}  key={i}/>
+                            <CourseCard
+                                course = {item}
+                                type = {"faculty"}
+                                user = {this.state.currentUser}
+                                navigation ={this.props.navigation}
+                                key={i}
+                            />
                         ))}
                     </View>
 
