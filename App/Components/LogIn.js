@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
 import ErrorMessages from "../Utils/ErrorMessages"
+import {Button} from 'react-native-elements';
 import {
     StyleSheet,
     Text,
     View,
     TextInput,
-    Button
 } from 'react-native';
 import {
     GoogleSignin,

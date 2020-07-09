@@ -4,7 +4,7 @@ import {Icon, Text, Button} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Feedback from '../Databases/Feedback';
-
+import {Button as IosButton } from 'react-native';
 export default class FeedbackForm extends Component {
 
     constructor(props) {
@@ -205,11 +205,21 @@ export default class FeedbackForm extends Component {
 
                     <View style={styles.buttonRowContainer}>
                         <View style={styles.container}>
-                            <Button onPress={this.showDatePicker} title="Select Date" />
+                            { Platform.OS==='ios'?
+                                <IosButton onPress={this.showDatePicker} title="Select Date" />
+                            :
+                                <Button onPress={this.showDatePicker} title="Select Date" />
+                            }
+
                             <Text style={styles.dateTime}> {this.state.date!=null ? this.state.date:""}</Text>
                         </View>
                         <View style={styles.container}>
-                            <Button onPress={this.showTimePicker} title="Select Time" />
+                            {  Platform.OS === 'ios' ?
+                                <IosButton onPress={this.showTimePicker} title="Select Time" />
+                                :
+                                <Button onPress={this.showTimePicker} title="Select Time" />
+                            }
+
                             <Text style={styles.dateTime}> {this.state.time!=null ? this.state.time:""}</Text>
                         </View>
                     </View>
@@ -217,26 +227,65 @@ export default class FeedbackForm extends Component {
                     <View>
                         { this.state.showDate
                             ?
-                            <DateTimePicker
-                                testID="datePicker"
-                                value={moment().toDate()}
-                                mode={'date'}
-                                is24Hour={true}
-                                display="default"
-                                minimumDate = {moment().toDate()}
-                                onChange={this.onChangeDate}
-                            />
+                            <View>
+
+                                { Platform.OS==='ios'?
+                                    <View>
+                                        <DateTimePicker
+                                            testID="datePicker"
+                                            value={moment().toDate()}
+                                            mode={'date'}
+                                            is24Hour={true}
+                                            display="default"
+                                            minimumDate = {moment().toDate()}
+                                        />
+                                        <View style={styles.iosButton}>
+                                            <IosButton  onPress={this.onChangeDate} title="Done"/>
+                                        </View>
+                                    </View>
+                                    :
+                                    <DateTimePicker
+                                        testID="datePicker"
+                                        value={moment().toDate()}
+                                        mode={'date'}
+                                        is24Hour={true}
+                                        display="default"
+                                        minimumDate = {moment().toDate()}
+                                        onChange={this.onChangeDate}
+                                    />
+                                }
+                            </View>
                             : this.state.showTime
                             ?
-                            <DateTimePicker
-                                testID="timePicker"
-                                value={moment().toDate()}
-                                mode={'time'}
-                                is24Hour={true}
-                                display="default"
-                                minimumDate = {moment().toDate()}
-                                onChange={this.onChangeTime}
-                            />
+                            <View>
+                                { Platform.OS==='ios'?
+                                    <View>
+                                        <DateTimePicker
+                                            testID="timePicker"
+                                            value={moment().toDate()}
+                                            mode={'time'}
+                                            is24Hour={true}
+                                            display="default"
+                                            minimumDate = {moment().toDate()}//check with date and remove
+                                        />
+                                        <View style={styles.iosButton}>
+                                            <IosButton onPress={this.onChangeTime} title="Done"/>
+                                        </View>
+                                    </View>
+                                    :
+                                    <DateTimePicker
+                                    testID="timePicker"
+                                    value={moment().toDate()}
+                                    mode={'time'}
+                                    is24Hour={true}
+                                    display="default"
+                                    minimumDate = {moment().toDate()}//check with date and remove
+                                    onChange={this.onChangeTime}
+                                    />
+                                }
+
+                            </View>
+
                             :<Text/>
                         }
                     </View>
@@ -294,13 +343,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     topic : {
-        flex: 1,
-        display: "flex",
         padding: 10,
         fontSize : 18,
         fontWeight: "bold",
         color: 'grey',
-        marginTop: 5,
+        paddingLeft :20
     },
     container: {
         flex: 1,
@@ -310,15 +357,16 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     rowContainer: {
-        flex: 1,
-        display: "flex",
-        flexWrap: "wrap",
+
+        paddingVertical: 15,
+        paddingHorizontal: 10,
         flexDirection: "row",
-        justifyContent : "flex-start",
-        // paddingTop: 20,
-        // paddingBottom:20,
-        paddingLeft : 30,
-        paddingRight : 30
+        alignItems: "center"
+    },
+    iosButton :{
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingRight :30,
     },
     buttonRowContainer: {
         flex: 1,
