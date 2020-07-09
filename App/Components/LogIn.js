@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
 import ErrorMessages from "../Utils/ErrorMessages"
-import database from '@react-native-firebase/database';
 import {
     StyleSheet,
     Text,
@@ -13,7 +12,6 @@ import {
     GoogleSignin,
     GoogleSigninButton,
 } from '@react-native-community/google-signin';
-import * as config from '../config'
 import Faculty from '../Databases/Faculty';
 import Student from '../Databases/Student';
 
@@ -189,8 +187,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     googleSigninButton: {
-        width: 192,
-        height: 48,
+        width: Platform.OS === 'ios' ? 192: '80%',
+        height: Platform.OS === 'ios' ? 48: '10%',
         alignSelf: "center",
     }
 
