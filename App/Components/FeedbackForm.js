@@ -109,6 +109,7 @@ export default class FeedbackForm extends Component {
                             })
 
                     }
+                    this.props.setTopics(this.state.topics)
                     this.setState({
                         textInput : [],
                         inputData : [],

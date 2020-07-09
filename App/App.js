@@ -9,9 +9,12 @@ import {GoogleSignin} from '@react-native-community/google-signin';
 import * as config from './config'
 import FacultyDashBoard from './Components/FacultyDashBoard';
 import TabNavigator from './Components/TabNavigator';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
-Icon.loadFont();
+import IconF from 'react-native-vector-icons/FontAwesome';
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconI from 'react-native-vector-icons/MaterialIcons';
+IconF.loadFont();
+IconM.loadFont();
+IconI.loadFont();
 
 const Stack = createStackNavigator();
 

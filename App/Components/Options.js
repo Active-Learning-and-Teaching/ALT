@@ -12,7 +12,10 @@ export default class Options extends Component{
 
                 <Avatar
                     size="large"
-                    icon={{name: this.props.icona, color: 'white', type: 'material-community'}}
+                    icon={ this.props.icona == 'check'
+                        ? {name: this.props.icona, color: 'white', type: 'font-awesome'}
+                        : {name: this.props.icona, color: 'white', type: 'material-community'}
+                    }
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("A",'check','alpha-b','alpha-c','alpha-d')
                     }}
@@ -23,7 +26,10 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={{name: this.props.iconb, color: 'white', type: 'material-community'}}
+                    icon={this.props.iconb == 'check'
+                        ? {name: this.props.iconb, color: 'white', type: 'font-awesome'}
+                        : {name: this.props.iconb, color: 'white', type: 'material-community'}
+                    }
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("B",'alpha-a','check','alpha-c','alpha-d')
                     }}
@@ -34,7 +40,10 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={{name: this.props.iconc, color: 'white', type: 'material-community'}}
+                    icon={this.props.iconc == 'check'
+                        ? {name: this.props.iconc, color: 'white', type: 'font-awesome'}
+                        : {name: this.props.iconc, color: 'white', type: 'material-community'}
+                    }
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("C",'alpha-a','alpha-b','check','alpha-d')
                     }}
@@ -45,7 +54,10 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={{name: this.props.icond, color: 'white', type: 'material-community'}}
+                    icon={this.props.icond == 'check'
+                        ? {name: this.props.icond, color: 'white', type: 'font-awesome'}
+                        : {name: this.props.icond, color: 'white', type: 'material-community'}
+                    }
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("D",'alpha-a','alpha-b','alpha-c','check')
                     }}
@@ -87,8 +99,8 @@ const styles = StyleSheet.create({
             width: 0,
             height: 12,
         },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
+        shadowOpacity: 0.30,
+        shadowRadius: 10.00,
         elevation: 24,
     },
 

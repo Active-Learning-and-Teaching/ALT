@@ -18,6 +18,13 @@ export default class FeedbackFacultyPage extends Component {
             topics : [],
             duration : 1
         }
+        this.setTopics = this.setTopics.bind(this);
+    }
+
+    setTopics(topics){
+        this.setState({
+            topics : topics
+        })
     }
 
     checkEmailSent = async () =>{
@@ -51,7 +58,8 @@ export default class FeedbackFacultyPage extends Component {
 
     mailFeedbackResponses = () =>{
         this.setState({
-            emailPage : false
+            emailPage : false,
+            topics : [],
         })
 
         this.dbUpdateEmailStatus()
@@ -93,7 +101,7 @@ export default class FeedbackFacultyPage extends Component {
                     ? this.props.beforeFeedback === false
                         ? this.state.emailPage === false
                             ?
-                            <FeedbackForm course={this.state.course} user={this.state.user}/>
+                            <FeedbackForm course={this.state.course} user={this.state.user} setTopics={this.setTopics}/>
                             :
                             <ScrollView>
                                 <FeedbackResultsList course = {this.state.course} topics = {this.state.topics}/>
@@ -107,7 +115,8 @@ export default class FeedbackFacultyPage extends Component {
                                             title={'Start New \n Minute Paper'}
                                             onPress={()=>{
                                                 this.setState({
-                                                    emailPage : false
+                                                    emailPage : false,
+                                                    topics : [],
                                                 })
                                                 this.dbUpdateEmailStatus()
                                                     .then(()=>{console.log("Updated email")})

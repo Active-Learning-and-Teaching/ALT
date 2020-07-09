@@ -6,7 +6,6 @@ import {
     TextInput,
     Button,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
 import Courses from '../Databases/Courses';
 
 export default class FormAddCourse extends Component {
@@ -16,48 +15,24 @@ export default class FormAddCourse extends Component {
             courseName: '',
             courseCode: '',
             room: '',
-            days : [],
-            day1 : '',
-            day2 : '',
-            day3 : '',
-            weekdays : ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
             error: null,
         };
     }
 
-    addDays = async (day1, day2, day3) => {
-        const days = []
-        if (day1!='' && day1 != 'Select')
-            days.push(day1)
-
-        if (day2!='' && day2 != 'Select')
-            days.push(day2)
-
-        if (day3!='' && day3 != 'Select')
-            days.push(day3)
-
-        this.setState({
-            days : days
-        })
-
-    }
-
     CreateCourse = async () => {
 
-        const {courseName, courseCode, room, error, day1, day2, day3} = this.state;
+        const {courseName, courseCode, room} = this.state;
 
         if (courseName === '' || courseCode === '') {
             this.setState({
                 error: "Please Enter details."
             })
         } else {
-            await this.addDays(day1, day2, day3)
             const courses = new Courses()
 
             courses.setcourseName(courseName)
             courses.setcourseCode(courseCode)
             courses.setRoom(room)
-            courses.setDays(this.state.days)
             courses.setPassCode()
             await courses.setImage()
             //Passing Faculty object to add his Url (Signature)
@@ -77,10 +52,6 @@ export default class FormAddCourse extends Component {
                 courseName: '',
                 courseCode: '',
                 room: '',
-                days : [],
-                day1 : '',
-                day2 : '',
-                day3 : '',
                 error: null,
             })
             this.props.toggle()
@@ -115,33 +86,6 @@ export default class FormAddCourse extends Component {
                     onChangeText={room => this.setState({ room })}
                     value={this.state.room}
                 />
-                <Text style={styles.textTime}>
-                    Timings
-                </Text>
-                <Picker
-                    selectedValue={this.state.day1}
-                    mode="dialog"
-                    itemStyle={styles.textPicker}
-                    onValueChange={(itemValue, itemIndex)=>this.setState({day1 : itemValue})}>
-                    <Picker.Item color='grey' label={"Select"} value={"Select"}/>
-                    {this.state.weekdays.map((day, i) => <Picker.Item color='grey' key= {i} label={day} value={day} />)}
-                </Picker>
-                <Picker
-                    selectedValue={this.state.day2}
-                    mode="dialog"
-                    itemStyle={styles.textPicker}
-                    onValueChange={(itemValue, itemIndex)=>this.setState({day2 : itemValue})}>
-                    <Picker.Item color='grey' label={"Select"} value={"Select"}/>
-                    {this.state.weekdays.map((day, i) => <Picker.Item color='grey' key= {i} label={day} value={day} />)}
-                </Picker>
-                <Picker
-                    selectedValue={this.state.day3}
-                    mode="dialog"
-                    itemStyle={styles.textPicker}
-                    onValueChange={(itemValue, itemIndex)=>this.setState({day3 : itemValue})}>
-                    <Picker.Item color='grey' label={"Select"} value={"Select"}/>
-                    {this.state.weekdays.map((day, i) => <Picker.Item color='grey' key= {i} label={day} value={day} />)}
-                </Picker>
 
                 { this.state.error ?
                     <Text style={styles.errorMessage}>
@@ -181,22 +125,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         color : "grey",
         fontSize : 18,
-    },
-    textPicker : {
-        color : "grey",
-        fontSize : 14,
-    },
-    textTime: {
-        width: '100%',
-        justifyContent: 'center',
-        fontWeight: "bold",
-        marginTop: 5,
-        paddingTop: 5,
-        marginBottom: 5,
-        paddingBottom: 5,
-        alignSelf: "center",
-        color : "grey",
-        fontSize : 16,
     },
     errorMessage: {
         color: 'red',

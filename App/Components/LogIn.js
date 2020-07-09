@@ -189,8 +189,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     googleSigninButton: {
-        width: '80%',
-        height: '10%',
+        width: 192,
+        height: 48,
         alignSelf: "center",
     }
 
