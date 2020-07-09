@@ -6,7 +6,6 @@ class Courses {
     courseName :string
     courseCode :string
     room : string
-    days : []
     passCode : string
     instructors = []
     imageURL : string
@@ -38,14 +37,6 @@ class Courses {
 
     setRoom(room) {
         this.room = room;
-    }
-
-    getDays() {
-        return this.days;
-    }
-
-    setDays(days) {
-        this.days = days;
     }
 
     getPassCode(){
@@ -94,7 +85,6 @@ class Courses {
                 courseName : this.courseName,
                 courseCode : this.courseCode,
                 room : this.room,
-                days : this.days,
                 passCode : this.passCode,
                 instructors : this.instructors,
                 imageURL : this.imageURL,

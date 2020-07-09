@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {Linking, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {Linking, Platform, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Dimensions from '../Utils/Dimensions';
 import {ListItem} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import * as config from '../config.json';
 import Courses from '../Databases/Courses';
+import Clipboard from '@react-native-community/clipboard';
+import Toast from 'react-native-simple-toast';
 
 export default class StudentList extends Component{
 
@@ -93,7 +95,14 @@ export default class StudentList extends Component{
                                     type : 'font-awesome',
                                     size : 24,
                                     color : 'grey',
-                                    onPress : () =>{Linking.openURL('mailto:'+student.email)}
+                                    onPress : () =>{
+                                        Platform.OS==='android'
+                                            ?
+                                        Linking.openURL('mailto:' + student.email).then(r  => console.log(r))
+                                            :
+                                        Clipboard.setString(student.email)
+                                        Toast.show('Email Copied to Clipboard');
+                                    }
                                 }}
                                 title={student.name}
                                 titleStyle={styles.title}
