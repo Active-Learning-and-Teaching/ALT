@@ -31,7 +31,7 @@ export default class TabNavigator extends Component{
                                 course: this.state.course
                             }}
                             options={{
-                                tabBarLabel: 'Home',
+                                tabBarLabel: 'Announcements',
                                 tabBarIcon: ({focused}) =>(
                                     <Icon name='home' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                                 ),

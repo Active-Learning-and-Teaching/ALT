@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import { PieChart } from "react-native-chart-kit";
-import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import Dimensions from '../Utils/Dimensions';
 import KBCResponses from '../Databases/KBCResponses';
 import KBC from '../Databases/KBC';
 import {Text} from 'react-native-elements';
-const screenWidth = Dimensions.get("window").width;
 
 export default class QuizResultGraph extends Component {
     constructor(props) {
@@ -83,7 +83,7 @@ export default class QuizResultGraph extends Component {
                 <Text style={styles.body}> Quiz Results</Text>
                 <PieChart
                     data={data}
-                    width={screenWidth}
+                    width={Dimensions.window.width}
                     height={220}
                     chartConfig={chartConfig}
                     accessor="responses"
