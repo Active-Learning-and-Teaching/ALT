@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.3.0):
-    - AppAuth/Core (= 1.3.0)
-    - AppAuth/ExternalUserAgent (= 1.3.0)
-  - AppAuth/Core (1.3.0)
-  - AppAuth/ExternalUserAgent (1.3.0)
+  - AppAuth (1.4.0):
+    - AppAuth/Core (= 1.4.0)
+    - AppAuth/ExternalUserAgent (= 1.4.0)
+  - AppAuth/Core (1.4.0)
+  - AppAuth/ExternalUserAgent (1.4.0)
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.4)
   - CocoaLibEvent (1.0.0)
@@ -125,7 +125,7 @@ PODS:
     - GoogleUtilities/Network (~> 6.0)
     - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (= 0.3.9011)
-  - GoogleDataTransport (6.1.0)
+  - GoogleDataTransport (6.2.1)
   - GoogleDataTransportCCTSupport (3.0.0):
     - GoogleDataTransport (~> 6.0)
     - nanopb (~> 0.3.901)
@@ -170,7 +170,7 @@ PODS:
   - OpenSSL-Universal (1.0.2.19):
     - OpenSSL-Universal/Static (= 1.0.2.19)
   - OpenSSL-Universal/Static (1.0.2.19)
-  - PromisesObjC (1.2.8)
+  - PromisesObjC (1.2.9)
   - RCTRequired (0.62.2)
   - RCTTypeSafety (0.62.2):
     - FBLazyVector (= 0.62.2)
@@ -433,7 +433,7 @@ PODS:
     - React
   - RNSVG (12.1.0):
     - React
-  - RNVectorIcons (6.6.0):
+  - RNVectorIcons (6.7.0):
     - React
   - Toast (4.0.0)
   - Yoga (1.14.0)
@@ -627,7 +627,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
+  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
@@ -653,7 +653,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
-  GoogleDataTransport: f6f8eba931df03ebd2232ff4645aa85f8f47b5ab
+  GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
   GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
@@ -663,7 +663,7 @@ SPEC CHECKSUMS:
   mailcore2-ios: 3ff0be2fa553d4da9c11d39c11d51863c768f24f
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
-  PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
+  PromisesObjC: b48e0338dbbac2207e611750777895f7a5811b75
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   React: 29a8b1a02bd764fb7644ef04019270849b9a7ac3
@@ -698,11 +698,11 @@ SPEC CHECKSUMS:
   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
   RNSmtpMailer: f8654a7cd1a25b0009e2f28c70bc34bb9e4040e6
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: ec6747029a318f589cd2f64a1632f0355dc1ffd7
+PODFILE CHECKSUM: 0e8cec6cd0aa98f5649cb4ee816a2b3562d15667
 
 COCOAPODS: 1.9.1
