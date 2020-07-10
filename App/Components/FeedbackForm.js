@@ -231,6 +231,9 @@ export default class FeedbackForm extends Component {
 
                                 { Platform.OS==='ios'?
                                     <View>
+                                        <View style={styles.iosButton}>
+                                            <IosButton  onPress={this.onChangeDate} title="Done"/>
+                                        </View>
                                         <DateTimePicker
                                             testID="datePicker"
                                             value={moment().toDate()}
@@ -238,10 +241,9 @@ export default class FeedbackForm extends Component {
                                             is24Hour={true}
                                             display="default"
                                             minimumDate = {moment().toDate()}
+                                            //maxDate
+                                            onChange={this.onChangeDate}//remove
                                         />
-                                        <View style={styles.iosButton}>
-                                            <IosButton  onPress={this.onChangeDate} title="Done"/>
-                                        </View>
                                     </View>
                                     :
                                     <DateTimePicker
@@ -251,6 +253,7 @@ export default class FeedbackForm extends Component {
                                         is24Hour={true}
                                         display="default"
                                         minimumDate = {moment().toDate()}
+                                        //maxDate
                                         onChange={this.onChangeDate}
                                     />
                                 }
@@ -260,6 +263,9 @@ export default class FeedbackForm extends Component {
                             <View>
                                 { Platform.OS==='ios'?
                                     <View>
+                                        <View style={styles.iosButton}>
+                                            <IosButton onPress={this.onChangeTime} title="Done"/>
+                                        </View>
                                         <DateTimePicker
                                             testID="timePicker"
                                             value={moment().toDate()}
@@ -267,20 +273,18 @@ export default class FeedbackForm extends Component {
                                             is24Hour={true}
                                             display="default"
                                             minimumDate = {moment().toDate()}//check with date and remove
+                                            onChange={this.onChangeTime}//remove
                                         />
-                                        <View style={styles.iosButton}>
-                                            <IosButton onPress={this.onChangeTime} title="Done"/>
-                                        </View>
                                     </View>
                                     :
                                     <DateTimePicker
-                                    testID="timePicker"
-                                    value={moment().toDate()}
-                                    mode={'time'}
-                                    is24Hour={true}
-                                    display="default"
-                                    minimumDate = {moment().toDate()}//check with date and remove
-                                    onChange={this.onChangeTime}
+                                        testID="timePicker"
+                                        value={moment().toDate()}
+                                        mode={'time'}
+                                        is24Hour={true}
+                                        display="default"
+                                        minimumDate = {moment().toDate()}//check with date and remove
+                                        onChange={this.onChangeTime}
                                     />
                                 }
 
