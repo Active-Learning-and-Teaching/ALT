@@ -436,6 +436,8 @@ PODS:
   - RNVectorIcons (6.7.0):
     - React
   - Toast (4.0.0)
+  - toolbar-android (0.1.0-rc.2):
+    - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -503,6 +505,7 @@ DEPENDENCIES:
   - RNSmtpMailer (from `../node_modules/react-native-smtp-mailer/ios`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - "toolbar-android (from `../node_modules/@react-native-community/toolbar-android`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -623,6 +626,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  toolbar-android:
+    :path: "../node_modules/@react-native-community/toolbar-android"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -700,9 +705,10 @@ SPEC CHECKSUMS:
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  toolbar-android: 404f4450b203597e7b417f714ff417bed562a1be
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 0e8cec6cd0aa98f5649cb4ee816a2b3562d15667
+PODFILE CHECKSUM: 1a95fb8eb845fee35ce9f2011171c120178ef421
 
 COCOAPODS: 1.9.1
