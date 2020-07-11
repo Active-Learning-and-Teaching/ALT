@@ -1,5 +1,6 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
+import moment from 'moment';
 
 class KBCResponses {
 
@@ -72,7 +73,11 @@ class KBCResponses {
                 const list = {'A':0,'B':0,'C':0,'D':0}
                 snapshot.forEach( (data) => {
                     const keys = Object(data.val())
-                    if (keys["timestamp"]<=endTime && keys["timestamp"]>=startTime){
+                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+
+                    if (temp1<=temp2 && temp1>=temp){
                         list[keys["answer"]] += 1
                     }
                 })

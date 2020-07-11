@@ -36,7 +36,7 @@ export default class FeedbackHomePage extends Component{
                     const values = Object.values(snapshot.val())[0]
                     const starttime = values['startTime']
                     const endtime = values['endTime']
-                    const curr = moment().format("DD/MM/YYYY HH:mm:ss")
+                    const curr = moment()
 
                     const temp = moment(endtime, "DD/MM/YYYY HH:mm:ss")
                     const duration = Math.abs(moment().diff(temp, "seconds"))
@@ -44,7 +44,7 @@ export default class FeedbackHomePage extends Component{
                     const temp2 = moment(starttime, "DD/MM/YYYY HH:mm:ss")
                     const beforeduration = Math.abs(moment().diff(temp2, "seconds"))
 
-                    if (curr >= starttime && curr <= endtime){
+                    if (curr >= temp2 && curr <= temp){
                         this.setState({
                             beforeFeedback : false,
                             currentFeedback : true,
@@ -52,7 +52,7 @@ export default class FeedbackHomePage extends Component{
                             beforeDuration : 0
                         })
                     }
-                    else if (curr<starttime){
+                    else if (curr<temp2){
                         this.setState({
                             beforeFeedback : true,
                             currentFeedback : false,
@@ -61,6 +61,7 @@ export default class FeedbackHomePage extends Component{
                         })
                     }
                     else{
+                        console.log("here")
                         this.setState({
                             beforeFeedback : false,
                             currentFeedback : false,

@@ -15,12 +15,14 @@ export default class FeedbackForm extends Component {
             textInput : [],
             inputData : [],
             date : null,
+            iosdate : moment().format("DD/MM/YYYY"),
             showDate : false,
             showTime : false,
             time : null,
+            iostime : moment().format("HH:mm:ss"),
             error : null,
             topics : [],
-            duration : 1
+            duration : 1,
         }
     }
 
@@ -28,17 +30,11 @@ export default class FeedbackForm extends Component {
     addTextInput = (index) => {
         let textInput = this.state.textInput;
         textInput.push(
-                // <View key = {index} style={styles.rowContainer}>
-                //     <Text>
-                //         {index + 1}
-                //     </Text>
-                    <TextInput
-                        style={styles.textInput}
-                        key = {index}
-                        onChangeText={(text) => this.addValues(text, index)}
-                    />
-                // </View>
-
+                <TextInput
+                    style={styles.textInput}
+                    key = {index}
+                    onChangeText={(text) => this.addValues(text, index)}
+                />
             );
         this.setState({ textInput });
     }
@@ -63,7 +59,8 @@ export default class FeedbackForm extends Component {
                 error: "Please enter at least one topic."
             })
         }
-        else if(this.state.date == null || this.state.time == null){
+        else if(Platform.OS==='android'&& (this.state.date == null || this.state.time == null)){
+
             this.setState({
                 error: "Please schedule feedback."
             })
@@ -71,57 +68,71 @@ export default class FeedbackForm extends Component {
         else {
             const feedback = new Feedback()
             let startTime = "0"
-            let endTime = "0"
 
-            if (this.state.date != null && this.state.time != null) {
+            if(Platform.OS==='android')
                 startTime = this.state.date + " " + this.state.time
-                endTime = moment(startTime, "DD/MM/YYYY HH:mm:ss").add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+           else
+                startTime = this.state.iosdate + " " + this.state.iostime
+
+            let endTime = moment(startTime, "DD/MM/YYYY HH:mm:ss").add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+
+            const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
+            const curr = moment()
+
+            if(curr>temp)
+            {
+                this.setState({
+                    error: "Please schedule correct time."
+                })
             }
+           else
+            {
+                await this.updateTopics().then(r=>{console.log()})
 
-            await this.updateTopics().then(r=>{console.log()})
-
-            await feedback.getFeedback(this.state.course.passCode)
-                .then((url) => {
-                    console.log(url)
-                    if (url === null) {
-                        console.log("hello")
-                        feedback.createFeedback(
-                            this.state.course.passCode,
-                            startTime,
-                            endTime,
-                            this.state.topics,
-                            this.state.user.email
-                        ).then(r => {
+                await feedback.getFeedback(this.state.course.passCode)
+                    .then((url) => {
+                        console.log(url)
+                        if (url === null) {
+                            console.log("hello")
+                            feedback.createFeedback(
+                                this.state.course.passCode,
+                                startTime,
+                                endTime,
+                                this.state.topics,
+                                this.state.user.email
+                            ).then(r => {
                                 console.log("create")
                             })
-                    } else {
-                        console.log("hello")
-                        feedback.setFeedback(
-                            this.state.course.passCode,
-                            startTime,
-                            endTime,
-                            this.state.topics,
-                            this.state.user.email,
-                            url,
-                            false
-                        ).then(r => {
+                        } else {
+                            console.log("hello")
+                            feedback.setFeedback(
+                                this.state.course.passCode,
+                                startTime,
+                                endTime,
+                                this.state.topics,
+                                this.state.user.email,
+                                url,
+                                false
+                            ).then(r => {
                                 console.log("update")
                             })
 
-                    }
-                    this.props.setTopics(this.state.topics)
-                    this.setState({
-                        textInput : [],
-                        inputData : [],
-                        date : null,
-                        showDate : false,
-                        showTime : false,
-                        time : null,
-                        error : null,
-                        topics : [],
-                    })
+                        }
+                        this.props.setTopics(this.state.topics)
+                        this.setState({
+                            textInput : [],
+                            inputData : [],
+                            date : null,
+                            showDate : false,
+                            showTime : false,
+                            time : null,
+                            error : null,
+                            topics : [],
+                        })
 
-                })
+                    })
+            }
+
         }
     }
 
@@ -166,6 +177,25 @@ export default class FeedbackForm extends Component {
             showTime : false
         })
     }
+    iOSonChangeDate = (event, selectedDate) => {
+        const currentDate = moment(selectedDate).format("DD/MM/YYYY")
+        this.setState({
+            iosdate : currentDate,
+        })
+    }
+
+    iOSonChangeTime = (event, selectedDate) => {
+        const currentDate = moment(selectedDate).format("HH:mm:ss")
+        this.setState({
+            iostime : currentDate,
+        })
+    }
+    doneButton = () =>{
+        this.setState({
+            showDate : false,
+            showTime : false,
+        })
+    }
 
     showDatePicker = ()=>{
         this.setState({
@@ -206,21 +236,31 @@ export default class FeedbackForm extends Component {
                     <View style={styles.buttonRowContainer}>
                         <View style={styles.container}>
                             { Platform.OS==='ios'?
-                                <IosButton onPress={this.showDatePicker} title="Select Date" />
+                                <View>
+                                    <IosButton onPress={this.showDatePicker} title="Select Date" />
+                                    <Text style={styles.dateTime}> {this.state.iosdate!=null ? this.state.iosdate:""}</Text>
+                                </View>
                             :
-                                <Button onPress={this.showDatePicker} title="Select Date" />
+                                <View>
+                                    <Button onPress={this.showDatePicker} title="Select Date" />
+                                    <Text style={styles.dateTime}> {this.state.date!=null ? this.state.date:""}</Text>
+                                </View>
                             }
 
-                            <Text style={styles.dateTime}> {this.state.date!=null ? this.state.date:""}</Text>
                         </View>
                         <View style={styles.container}>
                             {  Platform.OS === 'ios' ?
-                                <IosButton onPress={this.showTimePicker} title="Select Time" />
+                                <View>
+                                    <IosButton onPress={this.showTimePicker} title="Select Time" />
+                                    <Text style={styles.dateTime}> {this.state.iostime!=null ? this.state.iostime:""}</Text>
+                                </View>
                                 :
-                                <Button onPress={this.showTimePicker} title="Select Time" />
+                                <View>
+                                    <Button onPress={this.showTimePicker} title="Select Time" />
+                                    <Text style={styles.dateTime}> {this.state.time!=null ? this.state.time:""}</Text>
+                                </View>
                             }
 
-                            <Text style={styles.dateTime}> {this.state.time!=null ? this.state.time:""}</Text>
                         </View>
                     </View>
 
@@ -232,17 +272,17 @@ export default class FeedbackForm extends Component {
                                 { Platform.OS==='ios'?
                                     <View>
                                         <View style={styles.iosButton}>
-                                            <IosButton  onPress={this.onChangeDate} title="Done"/>
+                                            <IosButton  onPress={this.doneButton} title="Done"/>
                                         </View>
                                         <DateTimePicker
                                             testID="datePicker"
-                                            value={moment().toDate()}
+                                            value={moment(this.state.iosdate,"DD/MM/YYYY").toDate()}
                                             mode={'date'}
                                             is24Hour={true}
                                             display="default"
                                             minimumDate = {moment().toDate()}
-                                            //maxDate
-                                            onChange={this.onChangeDate}//remove
+                                            maximumDate = {moment().add(30,'days').toDate()}
+                                            onChange={this.iOSonChangeDate}
                                         />
                                     </View>
                                     :
@@ -253,7 +293,7 @@ export default class FeedbackForm extends Component {
                                         is24Hour={true}
                                         display="default"
                                         minimumDate = {moment().toDate()}
-                                        //maxDate
+                                        maximumDate = {moment().add(30,'days').toDate()}
                                         onChange={this.onChangeDate}
                                     />
                                 }
@@ -264,16 +304,15 @@ export default class FeedbackForm extends Component {
                                 { Platform.OS==='ios'?
                                     <View>
                                         <View style={styles.iosButton}>
-                                            <IosButton onPress={this.onChangeTime} title="Done"/>
+                                            <IosButton onPress={this.doneButton} title="Done"/>
                                         </View>
                                         <DateTimePicker
                                             testID="timePicker"
-                                            value={moment().toDate()}
+                                            value={moment(this.state.iostime,"HH:mm:ss").toDate()}
                                             mode={'time'}
                                             is24Hour={true}
                                             display="default"
-                                            minimumDate = {moment().toDate()}//check with date and remove
-                                            onChange={this.onChangeTime}//remove
+                                            onChange={this.iOSonChangeTime}
                                         />
                                     </View>
                                     :
@@ -283,7 +322,6 @@ export default class FeedbackForm extends Component {
                                         mode={'time'}
                                         is24Hour={true}
                                         display="default"
-                                        minimumDate = {moment().toDate()}//check with date and remove
                                         onChange={this.onChangeTime}
                                     />
                                 }
