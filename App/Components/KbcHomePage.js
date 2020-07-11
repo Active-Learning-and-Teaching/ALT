@@ -35,10 +35,12 @@ export default class KbcHomePage extends Component{
                     const values = Object.values(snapshot.val())[0]
                     const starttime = values['startTime']
                     const endtime = values['endTime']
-                    const curr = moment().format("DD/MM/YYYY HH:mm:ss")
+                    const curr = moment()
                     const temp = moment(endtime, "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment(starttime, "DD/MM/YYYY HH:mm:ss")
                     const duration = Math.abs(moment().diff(temp, "seconds"))
-                    if (curr >= starttime && curr <= endtime){
+
+                    if (curr >= temp2 && curr <= temp){
                         this.setState({
                             currentQuiz : true,
                             currentDuration : duration,
