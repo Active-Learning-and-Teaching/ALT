@@ -61,7 +61,6 @@ export default class FeedbackHomePage extends Component{
                         })
                     }
                     else{
-                        console.log("here")
                         this.setState({
                             beforeFeedback : false,
                             currentFeedback : false,

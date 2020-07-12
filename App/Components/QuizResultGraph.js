@@ -91,7 +91,7 @@ export default class QuizResultGraph extends Component {
                     paddingLeft="25"
                     absolute
                 />
-                <Text style={styles.ca}> Correct Answer  : {this.props.correctAnswer}</Text>
+                {this.props.correctAnswer!=="0" ?<Text style={styles.ca}> Correct Answer  : {this.props.correctAnswer}</Text> :<View/>}
             </ScrollView>
 
         )
