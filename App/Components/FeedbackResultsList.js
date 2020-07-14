@@ -34,6 +34,7 @@ export default class FeedbackResultsList extends Component {
                     await this.setState({
                         responses : values
                     })
+                    this.props.feedbackresultData(values)
                 })
         })
     }

@@ -8,6 +8,7 @@ import Dimensions from '../Utils/Dimensions';
 import moment from 'moment';
 import FeedbackResultsList from './FeedbackResultsList';
 import Toast from 'react-native-simple-toast';
+import {Mailer} from '../Utils/Mailer';
 
 export default class FeedbackFacultyPage extends Component {
     constructor(props) {
@@ -18,9 +19,17 @@ export default class FeedbackFacultyPage extends Component {
             emailPage : false,
             topics : [],
             duration : 1,
-            date :""
+            date :"",
+            results : ""
         }
         this.setTopics = this.setTopics.bind(this);
+        this.feedbackresultData = this.feedbackresultData.bind(this);
+    }
+
+    feedbackresultData(resultData){
+        this.setState({
+            results: resultData
+        })
     }
 
     setTopics(topics){
@@ -107,13 +116,19 @@ export default class FeedbackFacultyPage extends Component {
                             <FeedbackForm course={this.state.course} user={this.state.user} setTopics={this.setTopics}/>
                             :
                             <ScrollView>
-                                <FeedbackResultsList course = {this.state.course} topics = {this.state.topics} date={this.state.date}/>
+                                <FeedbackResultsList
+                                    course = {this.state.course}
+                                    topics = {this.state.topics}
+                                    date={this.state.date}
+                                    feedbackresultData={this.feedbackresultData}/>
+
                                 <View style={styles.buttonRowContainer}>
                                     <Button style={styles.buttonMessage}
                                             title={'Email \n Responses'}
                                             onPress={()=>{
+                                                Mailer(this.state.course.courseName,this.state.user.email,this.state.user.name,this.state.date,this.state.topics,this.state.results,"Minute paper")
                                                 this.mailFeedbackResponses()
-                                                Toast.show('Email Sent!');
+                                                Toast.show('Sending Email...');
                                             }}/>
                                     <Button style={styles.buttonMessage}
                                             title={'Start New \n Minute Paper'}
