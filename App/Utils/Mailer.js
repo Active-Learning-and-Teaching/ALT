@@ -1,7 +1,8 @@
 import RNSmtpMailer from "react-native-smtp-mailer";
 import {emailTemplate} from './MailTemplate';
+import Toast from 'react-native-simple-toast';
 
-export const Mailer = (email,name,date,results,type) => {
+export const Mailer = (courseName,email,name,date,topics,results,type) => {
 
     RNSmtpMailer.sendMail({
         mailhost: "smtp.gmail.com",
@@ -11,28 +12,15 @@ export const Mailer = (email,name,date,results,type) => {
         password: "teaching2020!",
         from: "tlsauth2020@gmail.com",
         recipients: email,
-        subject: "Results for " + type + " on " + date,
-        htmlBody : emailTemplate(name,date,results,type)
-        // attachmentPaths: [
-        //     RNFS.ExternalDirectoryPath + "/image.jpg",
-        //     RNFS.DocumentDirectoryPath + "/test.txt",
-        //     RNFS.DocumentDirectoryPath + "/test2.csv",
-        //     RNFS.DocumentDirectoryPath + "/pdfFile.pdf",
-        //     RNFS.DocumentDirectoryPath + "/zipFile.zip",
-        //     RNFS.DocumentDirectoryPath + "/image.png"
-        // ],
-        // attachmentNames: [
-        //     "image.jpg",
-        //     "firstFile.txt",
-        //     "secondFile.csv",
-        //     "pdfFile.pdf",
-        //     "zipExample.zip",
-        //     "pngImage.png"
-        // ], //only used in android, these are renames of original files. in ios filenames will be same as specified in path. In ios-only application, leave it empty: attachmentNames:[]
-        // attachmentTypes: ["img", "txt", "csv", "pdf", "zip", "img"] //needed for android, in ios-only application, leave it empty: attachmentTypes:[]. Generally every img(either jpg, png, jpeg or whatever) file should have "img", and every other file should have its corresponding type.
+        subject: courseName + " " + type + " results " +"("+date+")",
+        htmlBody : emailTemplate(name,date,topics,results,type)
     })
         .then(success => {
+            Toast.show('Email Sent!');
             console.log(success)
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            Toast.show('Sending Failed');
+            console.log(err)
+        });
 }

@@ -172,7 +172,7 @@ export default class KbcFacultyPage extends Component{
 
                             <Slider
                                 value={this.state.time}
-                                minimumValue={0}
+                                minimumValue={1}
                                 step={1}
                                 maximumValue={15}
                                 // thumbTouchSize={{width: 100, height: 100}}
@@ -201,9 +201,9 @@ export default class KbcFacultyPage extends Component{
                                 <Button style={styles.buttonMessage}
                                         title="Email Results"
                                         onPress={()=>{
-                                            Mailer(this.state.user.email,this.state.user.name,this.state.date,this.state.results,"In-Class Quiz")
+                                            Mailer(this.state.course.courseName,this.state.user.email,this.state.user.name,this.state.date,"",this.state.results,"In-Class Quiz")
                                             this.mailQuizResult()
-                                            Toast.show('Email Sent!');
+                                            Toast.show('Sending Email...');
                                         }}/>
                                 <Button style={styles.buttonMessage}
                                         title="Start Another Quiz"
