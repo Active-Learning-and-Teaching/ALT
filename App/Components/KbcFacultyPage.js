@@ -6,6 +6,8 @@ import moment from 'moment';
 import Options from './Options';
 import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
+import {Mailer} from '../Utils/Mailer';
+import Toast from 'react-native-simple-toast';
 
 export default class KbcFacultyPage extends Component{
     constructor(props) {
@@ -22,16 +24,25 @@ export default class KbcFacultyPage extends Component{
             correctAnswer : "0",
             emailPage : false,
             error : null,
+            date : "",
+            results :"",
         };
         this.setOption = this.setOption.bind(this);
+        this.quizresultData = this.quizresultData.bind(this);
     }
 
+    quizresultData(resultData){
+        this.setState({
+            results: resultData
+        })
+    }
     checkEmailSent = async () =>{
         const Kbc = new KBC()
         Kbc.getTiming(this.state.course.passCode).then(value => {
             this.setState({
                 emailPage : !value["emailResponse"],
-                correctAnswer : value["correctAnswer"]
+                correctAnswer : value["correctAnswer"],
+                date : value["startTime"]
             })
         })
     }
@@ -182,12 +193,17 @@ export default class KbcFacultyPage extends Component{
                 </ScrollView>
                         :
                         <ScrollView>
-                            <QuizResultGraph passCode={this.state.course.passCode} correctAnswer={this.state.correctAnswer}/>
+                            <QuizResultGraph passCode={this.state.course.passCode}
+                                             correctAnswer={this.state.correctAnswer}
+                                             date={this.state.date}
+                                             quizresultData={this.quizresultData} />
                             <View style={styles.buttonContainer}>
                                 <Button style={styles.buttonMessage}
                                         title="Email Results"
                                         onPress={()=>{
+                                            Mailer(this.state.user.email,this.state.user.name,this.state.date,this.state.results,"In-Class Quiz")
                                             this.mailQuizResult()
+                                            Toast.show('Email Sent!');
                                         }}/>
                                 <Button style={styles.buttonMessage}
                                         title="Start Another Quiz"
@@ -195,8 +211,8 @@ export default class KbcFacultyPage extends Component{
                                             this.setState({
                                                 emailPage : false
                                             })
-                                            this.dbUpdateEmailStatus()
-                                                .then(()=>{console.log("Updated email")})
+                                            // this.dbUpdateEmailStatus()
+                                            //     .then(()=>{console.log("Updated email")})
                                         }}/>
                             </View>
                         </ScrollView>
