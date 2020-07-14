@@ -7,6 +7,7 @@ import {Button, ListItem} from 'react-native-elements';
 import Dimensions from '../Utils/Dimensions';
 import moment from 'moment';
 import FeedbackResultsList from './FeedbackResultsList';
+import Toast from 'react-native-simple-toast';
 
 export default class FeedbackFacultyPage extends Component {
     constructor(props) {
@@ -16,7 +17,8 @@ export default class FeedbackFacultyPage extends Component {
             user : this.props.user,
             emailPage : false,
             topics : [],
-            duration : 1
+            duration : 1,
+            date :""
         }
         this.setTopics = this.setTopics.bind(this);
     }
@@ -32,7 +34,8 @@ export default class FeedbackFacultyPage extends Component {
         feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
             this.setState({
                 emailPage : !value["emailResponse"],
-                topics : value["topics"]
+                topics : value["topics"],
+                date: value["startTime"]
             })
         })
     }
@@ -104,12 +107,13 @@ export default class FeedbackFacultyPage extends Component {
                             <FeedbackForm course={this.state.course} user={this.state.user} setTopics={this.setTopics}/>
                             :
                             <ScrollView>
-                                <FeedbackResultsList course = {this.state.course} topics = {this.state.topics}/>
+                                <FeedbackResultsList course = {this.state.course} topics = {this.state.topics} date={this.state.date}/>
                                 <View style={styles.buttonRowContainer}>
                                     <Button style={styles.buttonMessage}
                                             title={'Email \n Responses'}
                                             onPress={()=>{
                                                 this.mailFeedbackResponses()
+                                                Toast.show('Email Sent!');
                                             }}/>
                                     <Button style={styles.buttonMessage}
                                             title={'Start New \n Minute Paper'}
@@ -118,15 +122,15 @@ export default class FeedbackFacultyPage extends Component {
                                                     emailPage : false,
                                                     topics : [],
                                                 })
-                                                this.dbUpdateEmailStatus()
-                                                    .then(()=>{console.log("Updated email")})
+                                                // this.dbUpdateEmailStatus()
+                                                //     .then(()=>{console.log("Updated email")})
                                             }}/>
                                 </View>
                             </ScrollView>
                         :
                         <ScrollView>
                             <View style={styles.container}>
-                                <Text style={styles.heading}> Topics</Text>
+                                <Text style={styles.heading}> Upcoming minute paper</Text>
                                 {this.state.topics.map((value, i) => (
                                     <ListItem
                                         key = {i}

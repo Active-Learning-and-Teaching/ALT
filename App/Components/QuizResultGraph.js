@@ -30,7 +30,7 @@ export default class QuizResultGraph extends Component {
                     this.setState({
                         values : values
                     })
-                    console.log(this.state.values)
+                    this.props.quizresultData(values)
             })
         })
     }
@@ -40,28 +40,28 @@ export default class QuizResultGraph extends Component {
             {
                 name: "A",
                 responses: this.state.values['A'],
-                color: "rgba(131, 167, 234, 1)",
+                color: "rgb(77, 137, 249)",
                 legendFontColor: "#7F7F7F",
                 legendFontSize: 15
             },
             {
                 name: "B",
                 responses: this.state.values['B'],
-                color: "#FF5451",
+                color: "rgb(0, 184, 138)",
                 legendFontColor: "#7F7F7F",
                 legendFontSize: 15
             },
             {
                 name: "C",
                 responses: this.state.values['C'],
-                color: "#8B0000",
+                color: "rgb(255, 159, 64)",
                 legendFontColor: "#7F7F7F",
                 legendFontSize: 15
             },
             {
                 name: "D",
                 responses: this.state.values['D'],
-                color: "#14376E",
+                color: "rgb(255, 99, 132)",
                 legendFontColor: "#7F7F7F",
                 legendFontSize: 15
             },
@@ -80,7 +80,7 @@ export default class QuizResultGraph extends Component {
 
         return (
             <ScrollView>
-                <Text style={styles.body}> Quiz Results</Text>
+                <Text style={styles.body}> Quiz Results ({this.props.date.split(" ")[0]})</Text>
                 <PieChart
                     data={data}
                     width={Dimensions.window.width}

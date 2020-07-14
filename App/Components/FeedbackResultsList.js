@@ -53,7 +53,7 @@ export default class FeedbackResultsList extends Component {
         return(
 
             <View style={styles.container}>
-                <Text style={styles.heading}> Student Responses</Text>
+                <Text style={styles.heading}> Student Responses ({this.props.date.split(" ")[0]})</Text>
                 <View style={styles.grid}>
                     {this.props.topics.map((value, i) => (
 

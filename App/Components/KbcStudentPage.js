@@ -22,11 +22,20 @@ export default class KbcStudentPage extends Component {
             icond : 'alpha-d',
             error : null,
             correctAnswer : "",
-            quizResults : false
+            quizResults : false,
+            date : "",
+            results :"",
         };
         this.setOption = this.setOption.bind(this);
+        this.quizresultData = this.quizresultData.bind(this);
     }
-    setOption(value,a,b,c,d){
+
+    quizresultData(resultData) {
+        this.setState({
+            results: resultData
+        })
+    }
+        setOption(value,a,b,c,d){
         this.setState({
             option : value,
             icona : a,
@@ -40,7 +49,8 @@ export default class KbcStudentPage extends Component {
         const Kbc = new KBC()
         Kbc.getTiming(this.state.course.passCode).then(value => {
             this.setState({
-                correctAnswer : value["correctAnswer"]
+                correctAnswer : value["correctAnswer"],
+                date : value["startTime"]
             })
         })
     }
@@ -101,7 +111,10 @@ export default class KbcStudentPage extends Component {
                         </ScrollView>
                     :
                         <ScrollView>
-                            <QuizResultGraph passCode={this.state.course.passCode} correctAnswer={this.state.correctAnswer}/>
+                            <QuizResultGraph passCode={this.state.course.passCode}
+                                             correctAnswer={this.state.correctAnswer}
+                                             date={this.state.date}
+                                             quizresultData={this.quizresultData} />
                         </ScrollView>
                     :
                     <ScrollView>
