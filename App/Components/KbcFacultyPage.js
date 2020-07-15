@@ -201,7 +201,15 @@ export default class KbcFacultyPage extends Component{
                                 <Button style={styles.buttonMessage}
                                         title="Email Results"
                                         onPress={()=>{
-                                            Mailer(this.state.course.courseName,this.state.user.email,this.state.user.name,this.state.date,"",this.state.results,"In-Class Quiz")
+                                            Mailer(
+                                                this.state.course.courseName,
+                                                this.state.user.email,
+                                                this.state.user.name,
+                                                this.state.date,
+                                                "",
+                                                this.state.results,
+                                                "In-Class Quiz"
+                                            )
                                             this.mailQuizResult()
                                             Toast.show('Sending Email...');
                                         }}/>

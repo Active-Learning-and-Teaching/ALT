@@ -65,13 +65,6 @@ export default class  CoursePage extends Component{
 
                     </View>
 
-                    {this.state.type==="faculty"
-                        ?
-                        <CourseAdd course = {this.state.course} type = {"Faculty Announcement"} />
-                        :
-                        <Text/>
-                    }
-
                     <View style={styles.grid}>
                         {this.state.announcementList.map((item,i)=> (
                             <AnnouncementCard announcement = {item} key={i}/>
