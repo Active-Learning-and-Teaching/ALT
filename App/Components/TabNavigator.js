@@ -36,6 +36,7 @@ export default class TabNavigator extends Component{
                         options={{
                             headerTitle : null,
                             headerShown : true,
+                            headerBackTitle: '',
                             headerRight : ()=>(
                                 this.state.type==='faculty' ?
                                 <CourseAdd
@@ -62,7 +63,8 @@ export default class TabNavigator extends Component{
                            component={KbcHomePage}
                            options={{
                                headerShown : true,
-                               headerTitle : this.state.course.courseName
+                               headerTitle : this.state.course.courseName,
+                               headerBackTitle: '',
                            }}
                            initialParams={{
                                type : this.state.type,
@@ -81,7 +83,8 @@ export default class TabNavigator extends Component{
                            component={FeedbackHomePage}
                            options={{
                                headerShown : true,
-                               headerTitle : this.state.course.courseName
+                               headerTitle : this.state.course.courseName,
+                               headerBackTitle: '',
                            }}
                            initialParams={{
                                type : this.state.type,
@@ -101,6 +104,7 @@ export default class TabNavigator extends Component{
                            options={{
                                headerShown : true,
                                headerTitle : this.state.course.courseName,
+                               headerBackTitle: '',
                                headerRight : ()=>(
                                    this.state.type==='faculty' ?
                                        <Icon

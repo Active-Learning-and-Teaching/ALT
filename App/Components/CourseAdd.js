@@ -34,8 +34,12 @@ export default class  CourseAdd extends Component {
             <View>
 
                 <View style={{padding:10}}>
-
+                    {Platform.OS==='ios'
+                    ?
+                    <Icon name='plus' type='font-awesome' style={{borderRadius:1}} onPress={this.toggleModal} />
+                    :
                     <Icon name='plus' type='font-awesome' style={{borderRadius:1, padding:10}} onPress={this.toggleModal} />
+                    }
                 </View>
 
                 <Modal

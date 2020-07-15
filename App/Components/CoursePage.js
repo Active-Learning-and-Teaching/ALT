@@ -21,6 +21,7 @@ export default class  CoursePage extends Component{
         };
     }
     getImage = () =>{
+        console.log(CoursePics(this.state.course.imageURL))
         return CoursePics(this.state.course.imageURL)
     }
 

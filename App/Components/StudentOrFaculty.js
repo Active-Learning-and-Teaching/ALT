@@ -10,40 +10,6 @@ export default class StudentOrFaculty extends Component {
             error: null,
         };
     }
-    stylesForFaculty = ()=>{
-        return {
-            marginTop: 50,
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 12,
-            },
-            shadowOpacity: 0.38,
-            shadowRadius: 10.00,
-            elevation: 24,
-
-            borderColor: '#2697BF',
-            borderWidth: this.state.selected==='faculty'?8:0,
-            borderRadius: 80,
-        }
-    }
-    stylesForStudent = ()=>{
-        return {
-            marginTop: 50,
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 12,
-            },
-            shadowOpacity: 0.38,
-            shadowRadius: 10.00,
-            elevation: 24,
-
-            borderColor: '#2697BF',
-            borderWidth: this.state.selected==='student'?8:0,
-            borderRadius: 80,
-        }
-    }
     RegisterTypeOfUser = ()=>{
         const { selected} = this.state;
 
@@ -54,6 +20,7 @@ export default class StudentOrFaculty extends Component {
             })
         }
         else {
+            console.log(this.state.selected)
             //firebasewrite
             //navigate
         }
@@ -75,7 +42,7 @@ export default class StudentOrFaculty extends Component {
                         })}
                         activeOpacity={0.7}
                         avatarStyle={styles.avatarStyle}
-                        containerStyle={this.stylesForFaculty()}
+                        containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='faculty'?8:0}]}
                     />
                     <Text style={styles.text}>Faculty</Text>
                     <Avatar
@@ -89,7 +56,7 @@ export default class StudentOrFaculty extends Component {
                         })}
                         activeOpacity={0.7}
                         avatarStyle={styles.avatarStyle}
-                        containerStyle={this.stylesForStudent()}
+                        containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='student'?8:0}]}
                     />
                     <Text style={styles.text}>Student</Text>
 
@@ -137,7 +104,21 @@ const styles = StyleSheet.create({
     },
     buttonMessage: {
         marginTop: 15
-    }
+    },
+    avatarContainer:{
+        marginTop: 50,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.38,
+        shadowRadius: 10.00,
+        elevation: 24,
 
+        borderColor: '#2697BF',
+
+        borderRadius: 80,
+    }
 
 });
