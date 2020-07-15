@@ -25,15 +25,18 @@ export default class  CourseAdd extends Component {
         this.setState({
             visible : !this.state.visible
         })
+        console.log(this.props.instructor)
+        // console.log(this.props.route.params.instructor)
     };
 
     render(){
         return (
             <View>
-                {/*{Platform.OS==='android' ? :}*/}
-                <Icon name='plus-circle' type='font-awesome' style={{borderRadius:1}} onPress={this.toggleModal} />
-                {/*<Button style={styles.buttonMessage} title="Add Course" onPress={this.toggleModal} />*/}
-                {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} onPress={this.toggleModal} />*/}
+
+                <View style={{padding:10}}>
+
+                    <Icon name='plus' type='font-awesome' style={{borderRadius:1, padding:10}} onPress={this.toggleModal} />
+                </View>
 
                 <Modal
                     animationIn="slideInUp"

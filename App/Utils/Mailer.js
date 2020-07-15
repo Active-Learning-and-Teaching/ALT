@@ -13,7 +13,10 @@ export const Mailer = (courseName,email,name,date,topics,results,type) => {
         from: "tlsauth2020@gmail.com",
         recipients: email,
         subject: courseName + " " + type + " results " +"("+date+")",
-        htmlBody : emailTemplate(name,date,topics,results,type)
+        htmlBody : emailTemplate(name,date,topics,results,type),
+        attachmentNames : [],
+        attachmentTypes : [],
+        attachmentPaths : []
     })
         .then(success => {
             Toast.show('Email Sent!');

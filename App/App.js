@@ -13,67 +13,26 @@ import IconF from 'react-native-vector-icons/FontAwesome';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconI from 'react-native-vector-icons/MaterialIcons';
 import StudentOrFaculty from './Components/StudentOrFaculty';
+import CourseAdd from './Components/CourseAdd';
 IconF.loadFont();
 IconM.loadFont();
 IconI.loadFont();
 
-const Stack = createStackNavigator();
-
-function MyStack(){
-    return (
-        <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName="CheckUserLoggedIn"
-                screenOptions={{
-                    headerStyle: {
-                        backgroundColor: 'white',
-                    },
-                }}>
-                <Stack.Screen name = "Loading" component={CheckUserLoggedIn}
-                        options={{
-                            headerTitle : "Loading",
-                            headerLeft : null,
-                            gestureEnabled: false
-                        }}/>
-                <Stack.Screen name = "Login" component={LogIn}
-                          options={{
-                              headerTitle : "Login",
-                              headerLeft : null,
-                              gestureEnabled: false
-                          }}/>
-                <Stack.Screen name = "Register User" component={RegisterUser}
-                          options={{
-                              headerTitle : "Register",
-                          }}/>
-                <Stack.Screen name = "User Type" component={StudentOrFaculty}
-                              options={{
-                                  headerTitle : "Register",
-                              }}/>
-                <Stack.Screen name = "Student DashBoard" component={StudentDashBoard}
-                          options={{
-                              headerTitle : "Dashboard",
-                              headerLeft : null,
-                              gestureEnabled: false
-                              // headerRight : {CourseAdd}
-                          }}/>
-                <Stack.Screen name = "Faculty DashBoard" component={FacultyDashBoard}
-                              options={{
-                                  headerTitle : "Dashboard",
-                                  headerLeft : null,
-                                  gestureEnabled: false
-                                  // headerRight : {CourseAdd}
-                              }}/>
-                <Stack.Screen name = "Course" component={TabNavigator}
-                              options={{
-                                  headerTitle : null,
-                                  // headerRight : {CourseAdd}
-                              }}/>
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
-}
-
 export default class App extends Component{
+
+    constructor() {
+        super();
+        this.state = {
+            user : null
+        }
+        this.setUser = this.setUser.bind(this)
+    }
+
+    async setUser(user) {
+        await this.setState({
+            user : user
+        })
+    }
 
     componentDidMount(): void {
         GoogleSignin.configure({
@@ -84,8 +43,73 @@ export default class App extends Component{
     }
 
     render() {
+
+        const Stack = createStackNavigator();
+
         return (
-            <MyStack/>
+            <NavigationContainer>
+                <Stack.Navigator
+                    initialRouteName="CheckUserLoggedIn"
+                    screenOptions={{
+                        headerStyle: {
+                            backgroundColor: 'white',
+                        },
+                    }}>
+                    <Stack.Screen name = "Loading" component={CheckUserLoggedIn}
+                                  options={{
+                                      headerTitle : "Loading",
+                                      headerLeft : null,
+                                      gestureEnabled: false
+                                  }}/>
+                    <Stack.Screen name = "Login" component={LogIn}
+                                  options={{
+                                      headerTitle : "Login",
+                                      headerLeft : null,
+                                      gestureEnabled: false
+                                  }}/>
+                    <Stack.Screen name = "Register User" component={RegisterUser}
+                                  options={{
+                                      headerTitle : "Register",
+                                  }}/>
+                    <Stack.Screen name = "User Type" component={StudentOrFaculty}
+                                  options={{
+                                      headerTitle : "Register",
+                                  }}/>
+                    <Stack.Screen name = "Student DashBoard" component={StudentDashBoard}
+                                  initialParams={{
+                                      setUser : this.setUser
+                                  }}
+                                  options={{
+                                      headerTitle : "Dashboard",
+                                      headerLeft : null,
+                                      gestureEnabled: false,
+                                      headerRight : ()=>(
+                                          <CourseAdd
+                                              type = {"student"}
+                                              student ={this.state.user}
+                                          />
+                                      )
+                                  }}/>
+                    <Stack.Screen name = "Faculty DashBoard" component={FacultyDashBoard}
+                                  initialParams={{
+                                      setUser : this.setUser
+                                  }}
+                                  options={{
+                                      headerTitle : "Dashboard",
+                                      headerLeft : null,
+                                      gestureEnabled: false,
+                                      headerRight : ()=>(
+                                          <CourseAdd
+                                              type = {"faculty"}
+                                              instructor = {this.state.user}
+                                          />)
+                                  }}/>
+                    <Stack.Screen name = "Course" component={TabNavigator}
+                                  options={{
+                                      headerShown : false
+                                  }}/>
+                </Stack.Navigator>
+            </NavigationContainer>
         );
     }
 

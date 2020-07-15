@@ -87,6 +87,7 @@ export default class FacultyDashBoard extends Component {
 
             }
             this.getAllCourses()
+            this.props.route.params.setUser(this.state.currentUser).then(()=>console.log())
         })
     }
 
@@ -95,10 +96,6 @@ export default class FacultyDashBoard extends Component {
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
 
-                    <CourseAdd instructor = {this.state.currentUser} type = {"faculty"} />
-
-
-                    {/*<Icon name='plus' type='font-awesome' style={{borderRadius:1}} />*/}
                     <View style={styles.grid}>
                         {this.state.courseList.map((item,i)=> (
                             <CourseCard

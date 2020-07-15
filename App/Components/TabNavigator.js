@@ -5,8 +5,15 @@ import CoursePage from './CoursePage';
 import KbcHomePage from './KbcHomePage';
 import FeedbackHomePage from './FeedbackHomePage';
 import StudentList from './StudentList';
+import {createStackNavigator} from '@react-navigation/stack';
+import {Button} from 'react-native';
+import CourseAdd from './CourseAdd';
 
 const Tab = createBottomTabNavigator();
+const Stack1 = createStackNavigator();
+const Stack2 = createStackNavigator();
+const Stack3 = createStackNavigator();
+const Stack4 = createStackNavigator();
 
 export default class TabNavigator extends Component{
 
@@ -21,15 +28,106 @@ export default class TabNavigator extends Component{
 
     render() {
 
+        const AnnouncementStack = () => {
+            return (
+                <Stack1.Navigator>
+                    <Stack1.Screen name='Announcements'
+                        component={CoursePage}
+                        options={{
+                            headerTitle : null,
+                            headerShown : true,
+                            headerRight : ()=>(
+                                this.state.type==='faculty' ?
+                                <CourseAdd
+                                    course ={this.state.course}
+                                />
+                                :
+                                    null
+                            )
+                        }}
+                        initialParams={{
+                            type : this.state.type,
+                            user: this.state.user,
+                            course: this.state.course
+                        }}
+                    />
+                </Stack1.Navigator>
+            );
+        };
+
+        const QuizStack = () => {
+            return (
+                <Stack2.Navigator>
+                    <Stack2.Screen name='Quiz'
+                           component={KbcHomePage}
+                           options={{
+                               headerShown : true,
+                               headerTitle : this.state.course.courseName
+                           }}
+                           initialParams={{
+                               type : this.state.type,
+                               user: this.state.user,
+                               course: this.state.course
+                           }}
+                    />
+                </Stack2.Navigator>
+            );
+        };
+
+        const FeedbackStack = () => {
+            return (
+                <Stack3.Navigator>
+                    <Stack3.Screen name='Feedback'
+                           component={FeedbackHomePage}
+                           options={{
+                               headerShown : true,
+                               headerTitle : this.state.course.courseName
+                           }}
+                           initialParams={{
+                               type : this.state.type,
+                               user: this.state.user,
+                               course: this.state.course
+                           }}
+                    />
+                </Stack3.Navigator>
+            );
+        };
+
+        const StudentStack = () => {
+            return (
+                <Stack4.Navigator>
+                    <Stack4.Screen name='StudentList'
+                           component={StudentList}
+                           options={{
+                               headerShown : true,
+                               headerTitle : this.state.course.courseName,
+                               headerRight : ()=>(
+                                   this.state.type==='faculty' ?
+                                       <Icon
+                                           name='ellipsis-v'
+                                           type='font-awesome'
+                                           style={{borderRadius:1, padding:10}}
+                                           // onPress={alert("Mail Student list?")}
+                                       />
+                                       :
+                                       null
+                               )
+                           }}
+                           initialParams={{
+                               type : this.state.type,
+                               user: this.state.user,
+                               course: this.state.course
+                           }}
+                    />
+                </Stack4.Navigator>
+            );
+        };
+
+
         return (
             <Tab.Navigator initialRouteName = "Course DashBoard">
                 <Tab.Screen name = "Course DashBoard"
-                            component={CoursePage}
-                            initialParams={{
-                                type : this.state.type,
-                                user: this.state.user,
-                                course: this.state.course
-                            }}
+                            component={AnnouncementStack}
                             options={{
                                 tabBarLabel: 'Announcements',
                                 tabBarIcon: ({focused}) =>(
@@ -37,12 +135,7 @@ export default class TabNavigator extends Component{
                                 ),
                             }}/>
                 <Tab.Screen name = "Quiz DashBoard"
-                            component={KbcHomePage}
-                            initialParams={{
-                                type : this.state.type,
-                                user: this.state.user,
-                                course: this.state.course
-                            }}
+                            component={QuizStack}
                             options={{
                                 tabBarLabel: 'Quiz',
                                 tabBarIcon: ({focused}) =>(
@@ -50,12 +143,7 @@ export default class TabNavigator extends Component{
                                 ),
                             }} />
                 <Tab.Screen name = "Feedback DashBoard"
-                            component={FeedbackHomePage}
-                            initialParams={{
-                                type : this.state.type,
-                                user: this.state.user,
-                                course: this.state.course
-                            }}
+                            component={FeedbackStack}
                             options={{
                                 tabBarLabel: 'Minute Paper',
                                 tabBarIcon: ({focused}) =>(
@@ -63,12 +151,7 @@ export default class TabNavigator extends Component{
                                 ),
                             }}/>
                 <Tab.Screen name = "Student List"
-                            component={StudentList}
-                            initialParams={{
-                                type : this.state.type,
-                                user: this.state.user,
-                                course: this.state.course
-                            }}
+                            component={StudentStack}
                             options={{
                                 tabBarLabel: 'Students',
                                 tabBarIcon: ({focused}) =>(
