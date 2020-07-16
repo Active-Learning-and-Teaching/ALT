@@ -96,12 +96,7 @@ export default class StudentList extends Component{
                                     size : 24,
                                     color : 'grey',
                                     onPress : () =>{
-                                        Platform.OS==='android'
-                                            ?
                                         Linking.openURL('mailto:' + student.email).then(r  => console.log(r))
-                                            :
-                                        Clipboard.setString(student.email)
-                                        Toast.show('Email Copied to Clipboard');
                                     }
                                 }}
                                 title={student.name}
