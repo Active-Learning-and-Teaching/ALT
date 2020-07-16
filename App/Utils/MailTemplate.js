@@ -65,24 +65,47 @@ export const emailTemplate=(name,date,topics,results,type)=>{
         :
         `
         <html>
-        <body>
-        <div>
+            <head>
+            <style>
+            body {
+              font-family: Arial, Helvetica, sans-serif;
+            }
+            .column{
+             padding-left: 10%;
+             padding-right: 10%;
+             margin: 3%;
+            }
+            .card {
+              box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+              padding: 16px;
+              text-align: center;
+              background-color: #f1f1f1;
+            }
+            </style>
+            </head>
+            <body>
+            <div>
             <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                 Respected Faculty ${name},
                 <br/> 
                 <br/>     
                 Following is the results of ${type} on ${date} 
                 <br/> 
-                <br/>      
-                ${results.map((value, i) => (
-                    `
-                        <div>
-                            <h3>${i+1}. ${value[0]} : ${value[1]}</h3>
-                            <br/>
-                        </div>
-                    `
-                ))}  
+                <br/>
             </p>
+            <div>
+                ${results.map((value, i) => (
+                `
+                    <div class="column">
+                        <div class="card">
+                          <h3>${i+1}. Answer- ${value[0]}</h3>
+                          <p>${value[1]} Students</p>
+                        </div>
+                    </div> 
+                    <br/> 
+                `
+                ))}
+            </div>
             <br/><br/><br/><br/>
             <p>
                 Regards,
