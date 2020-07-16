@@ -19,10 +19,7 @@ export default class KbcFacultyPage extends Component{
             user : this.props.user,
             time : 2,
             option : "0",
-            icona : 'alpha-a',
-            iconb : 'alpha-b',
-            iconc : 'alpha-c',
-            icond : 'alpha-d',
+            icon : "",
             correctAnswer : "0",
             emailPage : false,
             error : null,
@@ -54,13 +51,10 @@ export default class KbcFacultyPage extends Component{
         this.checkEmailSent().then(r=>{console.log("")})
     }
 
-    setOption(value,a,b,c,d){
+    setOption(value){
         this.setState({
             option : value,
-            icona : a,
-            iconb : b,
-            iconc : c,
-            icond : d,
+            icon : value,
         })
     }
 
@@ -89,10 +83,7 @@ export default class KbcFacultyPage extends Component{
         this.setState({
             time : 2,
             option : "0",
-            icona : 'alpha-a',
-            iconb : 'alpha-b',
-            iconc : 'alpha-c',
-            icond : 'alpha-d',
+            icon : "",
             correctAnswer : "0",
             emailPage : false,
             error : null,
@@ -155,10 +146,7 @@ export default class KbcFacultyPage extends Component{
                     this.setState({
                         time: 2,
                         option: "",
-                        icona: 'alpha-a',
-                        iconb: 'alpha-b',
-                        iconc: 'alpha-c',
-                        icond: 'alpha-d',
+                        icon: "",
                         error: null
                     })
 
@@ -200,8 +188,7 @@ export default class KbcFacultyPage extends Component{
                     {this.state.typeofQuiz === "mcq"
                     ?
                     <View>
-                        <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
-                                 iconc={this.state.iconc} icond={this.state.icond}/>
+                        <Options optionValue={this.setOption} icon={this.state.icon}/>
                     </View>
                     :
                     <Text/>
@@ -272,10 +259,7 @@ export default class KbcFacultyPage extends Component{
                                             this.setState({
                                                 time : 2,
                                                 option : "0",
-                                                icona : 'alpha-a',
-                                                iconb : 'alpha-b',
-                                                iconc : 'alpha-c',
-                                                icond : 'alpha-d',
+                                                icon : "",
                                                 correctAnswer : "0",
                                                 emailPage : false,
                                                 error : null,
@@ -335,7 +319,6 @@ const styles = StyleSheet.create({
         padding: 15,
         marginTop: 5,
         textAlign: 'center',
-        backgroundColor: "white",
     },
     heading : {
         flex: 1,
