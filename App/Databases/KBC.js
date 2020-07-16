@@ -9,6 +9,7 @@ class KBC {
     duration : string
     correctAnswer : string
     instructor : string
+    quizType : string
 
     constructor() {
     }
@@ -47,7 +48,7 @@ class KBC {
     }
 
 
-    setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, instructor, url, emailResponse) =>{
+    setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, instructor, quizType, url, emailResponse) =>{
         await database()
             .ref(config['internalDb']+'/KBC/'+url)
             .set({
@@ -57,14 +58,16 @@ class KBC {
                 duration: duration,
                 correctAnswer: correctAnswer,
                 instructor: instructor,
+                quizType: quizType,
                 emailResponse: emailResponse,
+
             })
             .then(()=>{
                 console.log("Question modified")
             })
     }
 
-    createQuestion =  async (passCode, startTime, endTime, duration, correctAnswer, instructor) => {
+    createQuestion =  async (passCode, startTime, endTime, duration, correctAnswer, instructor, quizType) => {
         await this.reference
             .push()
             .set({
@@ -74,6 +77,7 @@ class KBC {
                 duration: duration,
                 correctAnswer: correctAnswer,
                 instructor: instructor,
+                quizType: quizType,
                 emailResponse: false,
             })
             .then(() => {

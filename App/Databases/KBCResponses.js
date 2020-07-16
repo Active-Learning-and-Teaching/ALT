@@ -63,7 +63,7 @@ class KBCResponses {
             })
     }
 
-    getAllResponse = async (passCode, startTime, endTime)=> {
+    getAllMcqResponse = async (passCode, startTime, endTime)=> {
         let ans = null
         await this.reference
             .orderByChild("passCode")
@@ -85,6 +85,37 @@ class KBCResponses {
             })
         return ans
     }
+
+    getAllNumericalResponse = async (passCode, startTime, endTime)=> {
+        let ans = null
+        await this.reference
+            .orderByChild("passCode")
+            .equalTo(passCode)
+            .once('value')
+            .then(snapshot => {
+                const dict = {}
+                snapshot.forEach( (data) => {
+                    const keys = Object(data.val())
+                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+
+                    if (temp1<=temp2 && temp1>=temp){
+                        let answer = keys["answer"].trim().toUpperCase()
+                        console.log(answer)
+                        if(answer in dict){
+                            dict[answer]+=1
+                        }
+                        else{
+                            dict[answer] = 1
+                        }
+                    }
+                })
+                ans = dict
+            })
+        return ans
+    }
+
 
 }
 

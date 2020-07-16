@@ -8,6 +8,7 @@ import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
 import {Mailer} from '../Utils/Mailer';
 import Toast from 'react-native-simple-toast';
+import SwitchSelector from "react-native-switch-selector";
 
 export default class KbcFacultyPage extends Component{
     constructor(props) {
@@ -26,6 +27,7 @@ export default class KbcFacultyPage extends Component{
             error : null,
             date : "",
             results :"",
+            typeofQuiz : "mcq",
         };
         this.setOption = this.setOption.bind(this);
         this.quizresultData = this.quizresultData.bind(this);
@@ -74,6 +76,7 @@ export default class KbcFacultyPage extends Component{
                             value["duration"],
                             value["correctAnswer"],
                             value["instructor"],
+                            value["quizType"],
                             url,
                             true
                         )
@@ -83,7 +86,9 @@ export default class KbcFacultyPage extends Component{
 
     mailQuizResult = () =>{
         this.setState({
-            emailPage : false
+            emailPage : false,
+            typeofQuiz : "mcq",
+            option : "0",
         })
 
 
@@ -115,7 +120,8 @@ export default class KbcFacultyPage extends Component{
                             endTime,
                             time,
                             option,
-                            this.state.user.email
+                            this.state.user.email,
+                            this.state.typeofQuiz
                         ).then(r => {
                                 console.log("create")
                             })
@@ -128,6 +134,7 @@ export default class KbcFacultyPage extends Component{
                             time,
                             option,
                             this.state.user.email,
+                            this.state.typeofQuiz,
                             url,
                             false
                         ).then(r => {
@@ -161,9 +168,33 @@ export default class KbcFacultyPage extends Component{
                     ?
                 <ScrollView>
                     <Text style={styles.heading}> In-Class Quiz!</Text>
-
-                    <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
-                             iconc={this.state.iconc} icond={this.state.icond}/>
+                    <View style={styles.selector}>
+                        <SwitchSelector
+                            initial={0}
+                            onPress={value => {
+                                this.setState({
+                                    typeofQuiz : value
+                                })
+                            }}
+                            textColor={'#383030'}
+                            selectedColor={'white'}
+                            borderColor={'#383030'}
+                            hasPadding
+                            options={[
+                                { label: "MCQ", value: "mcq", activeColor: 'orange'},
+                                { label: "Numerical", value: "numerical" ,activeColor: 'orange'},
+                            ]}
+                        />
+                    </View>
+                    {this.state.typeofQuiz === "mcq"
+                    ?
+                    <View>
+                        <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
+                                 iconc={this.state.iconc} icond={this.state.icond}/>
+                    </View>
+                    :
+                    <Text style={styles.heading}>Numerical</Text>
+                    }
 
                     <View style={styles.container}>
                         <View style={styles.slider}>
@@ -196,28 +227,40 @@ export default class KbcFacultyPage extends Component{
                             <QuizResultGraph passCode={this.state.course.passCode}
                                              correctAnswer={this.state.correctAnswer}
                                              date={this.state.date}
+                                             quizType={this.props.quizType}
                                              quizresultData={this.quizresultData} />
                             <View style={styles.buttonContainer}>
                                 <Button style={styles.buttonMessage}
                                         title="Email Results"
                                         onPress={()=>{
-                                            Mailer(
-                                                this.state.course.courseName,
-                                                this.state.user.email,
-                                                this.state.user.name,
-                                                this.state.date,
-                                                "",
-                                                this.state.results,
-                                                "In-Class Quiz"
-                                            )
-                                            this.mailQuizResult()
-                                            Toast.show('Sending Email...');
+                                            let type = ""
+                                            if(this.props.quizType==='mcq'){
+                                                type = "In-Class MCQ Quiz"
+                                            }
+                                            else if(this.props.quizType==='numerical'){
+                                                type = "In-Class Quiz"
+                                            }
+                                            if(type!=""){
+                                                Mailer(
+                                                    this.state.course.courseName,
+                                                    this.state.user.email,
+                                                    this.state.user.name,
+                                                    this.state.date,
+                                                    "",
+                                                    this.state.results,
+                                                    type
+                                                )
+                                                this.mailQuizResult()
+                                                Toast.show('Sending Email...');
+                                            }
                                         }}/>
                                 <Button style={styles.buttonMessage}
                                         title="Start Another Quiz"
                                         onPress={()=>{
                                             this.setState({
-                                                emailPage : false
+                                                emailPage : false,
+                                                typeofQuiz : "mcq",
+                                                option : "0",
                                             })
                                             // this.dbUpdateEmailStatus()
                                             //     .then(()=>{console.log("Updated email")})
@@ -261,6 +304,17 @@ const styles = StyleSheet.create({
         fontSize : 18,
         color: 'grey',
         marginTop: 5,
+    },
+    selector:{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        paddingTop : 25,
+        padding: 15,
+        marginTop: 5,
+        textAlign: 'center',
+        backgroundColor: "white",
     },
     heading : {
         flex: 1,

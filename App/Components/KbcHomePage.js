@@ -15,6 +15,7 @@ export default class KbcHomePage extends Component{
             user : this.props.route.params.user,
             currentQuiz : false,
             currentDuration : 0,
+            quizType:"",
         };
         this.setQuizState = this.setQuizState.bind(this);
     }
@@ -44,12 +45,14 @@ export default class KbcHomePage extends Component{
                         this.setState({
                             currentQuiz : true,
                             currentDuration : duration,
+                            quizType: values['quizType'],
                         })
                     }
                     else{
                         this.setState({
                             currentQuiz : false,
                             currentDuration : 0,
+                            quizType: values['quizType'],
                         })
                     }
                 }
@@ -70,6 +73,7 @@ export default class KbcHomePage extends Component{
                         user = {this.state.user}
                         course = {this.state.course}
                         setQuizState = {this.setQuizState}
+                        quizType = {this.state.quizType}
                     />
                 :
                     <KbcStudentPage
@@ -78,6 +82,7 @@ export default class KbcHomePage extends Component{
                         user = {this.state.user}
                         course = {this.state.course}
                         setQuizState = {this.setQuizState}
+                        quizType = {this.state.quizType}
                     />
                 }
             </SafeAreaView>
