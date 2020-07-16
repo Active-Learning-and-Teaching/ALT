@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, View, TextInput} from 'react-native';
 import {Text, Button} from 'react-native-elements';
 import moment from 'moment';
 import Options from './Options';
@@ -61,7 +61,7 @@ export default class KbcStudentPage extends Component {
 
         if (option === '') {
             this.setState({
-                error: "Please select an answer."
+                error: "Please answer"
             })
         } else {
             Toast.show('Answer has been recorded!');
@@ -114,6 +114,7 @@ export default class KbcStudentPage extends Component {
                             <QuizResultGraph passCode={this.state.course.passCode}
                                              correctAnswer={this.state.correctAnswer}
                                              date={this.state.date}
+                                             quizType={this.props.quizType}
                                              quizresultData={this.quizresultData} />
                         </ScrollView>
                     :
@@ -142,19 +143,47 @@ export default class KbcStudentPage extends Component {
                             timeToShow={['M', 'S']}
                             timeLabels={{m: 'Min', s: 'Sec'}}
                         />
+                        {this.props.quizType==="mcq"
+                        ?
+                            <View>
+                                <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
+                                         iconc={this.state.iconc} icond={this.state.icond}/>
 
-                        <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
-                                 iconc={this.state.iconc} icond={this.state.icond}/>
+                                <View style={styles.container}>
 
-                        <View style={styles.container}>
+                                    {this.state.error ?
+                                        <Text style={styles.errorMessage}>
+                                            {this.state.error}
+                                        </Text> : <Text/>}
 
-                            {this.state.error ?
-                                <Text style={styles.errorMessage}>
-                                    {this.state.error}
-                                </Text> : <Text/>}
+                                    <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
+                                </View>
+                            </View>
+                            :
+                            this.props.quizType==="numerical"
+                            ?
+                            <View>
+                                <TextInput
+                                    style={styles.textInput}
+                                    onChangeText={text => {this.setState({
+                                        option : text
+                                    })}}
+                                    value={this.state.option}
+                                />
+                                <View style={styles.container}>
 
-                            <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
-                        </View>
+                                    {this.state.error ?
+                                        <Text style={styles.errorMessage}>
+                                            {this.state.error}
+                                        </Text> : <Text/>}
+
+                                    <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
+                                </View></View>
+                            :
+                            <Text></Text>
+                        }
+
+
 
                     </ScrollView>
             }
@@ -166,6 +195,14 @@ const styles = StyleSheet.create({
     safeContainer: {
         flex: 1,
         backgroundColor: 'transparent',
+    },
+    textInput: {
+        width: '100%',
+        paddingTop: 55,
+        paddingBottom: 15,
+        alignSelf: "center",
+        borderColor: "#ccc",
+        borderBottomWidth: 1,
     },
     heading : {
         flex: 1,

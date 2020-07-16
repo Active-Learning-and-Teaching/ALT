@@ -35,7 +35,7 @@ export const emailTemplate=(name,date,topics,results,type)=>{
         </html> 
             `
         :
-
+        type==="In-Class MCQ Quiz"?
         `
         <html>
         <body>
@@ -59,6 +59,40 @@ export const emailTemplate=(name,date,topics,results,type)=>{
                 
             </p>    
         </div>	
+        </body>
+        </html>
+        `
+        :
+        `
+        <html>
+        <body>
+        <div>
+            <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
+                Respected Faculty ${name},
+                <br/> 
+                <br/>     
+                Following is the results of ${type} on ${date} 
+                <br/> 
+                <br/>      
+                ${results.map((value, i) => (
+                    `
+                        <div>
+                            <h3>${i+1}. ${value[0]} : ${value[1]}</h3>
+                            <br/>
+                        </div>
+                    `
+                ))}  
+            </p>
+            <br/><br/><br/><br/>
+            <p>
+                Regards,
+                <br/>
+                Team TLS
+                <br/>
+                <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
+                
+            </p>    
+        </div>
         </body>
         </html>
         `
