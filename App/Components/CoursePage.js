@@ -32,16 +32,16 @@ export default class  CoursePage extends Component{
             .orderByChild("passCode")
             .equalTo(this.state.course.passCode)
             .on('value', snapshot => {
-                var list = Object.values(snapshot.val())
-                list.sort(function(a, b) {
-                    var keyA = moment(a.date, "DD/MM/YYYY HH:mm")
-                    var keyB = moment(b.date, "DD/MM/YYYY HH:mm")
-                    if (keyA < keyB) return 1;
-                    if (keyA > keyB) return -1;
-                    return 0;
-                });
 
                 if (snapshot.val()){
+                    const list = Object.values(snapshot.val());
+                    list.sort(function(a, b) {
+                        const keyA = moment(a.date, 'DD/MM/YYYY HH:mm');
+                        const keyB = moment(b.date, 'DD/MM/YYYY HH:mm');
+                        if (keyA < keyB) return 1;
+                        if (keyA > keyB) return -1;
+                        return 0;
+                    });
                     this.setState({
                         announcementList : list
                     })
