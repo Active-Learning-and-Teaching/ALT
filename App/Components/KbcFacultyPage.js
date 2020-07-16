@@ -9,6 +9,7 @@ import QuizResultGraph from './QuizResultGraph';
 import {Mailer} from '../Utils/Mailer';
 import Toast from 'react-native-simple-toast';
 import SwitchSelector from "react-native-switch-selector";
+import Dimensions from '../Utils/Dimensions';
 
 export default class KbcFacultyPage extends Component{
     constructor(props) {
@@ -86,9 +87,18 @@ export default class KbcFacultyPage extends Component{
 
     mailQuizResult = () =>{
         this.setState({
-            emailPage : false,
-            typeofQuiz : "mcq",
+            time : 2,
             option : "0",
+            icona : 'alpha-a',
+            iconb : 'alpha-b',
+            iconc : 'alpha-c',
+            icond : 'alpha-d',
+            correctAnswer : "0",
+            emailPage : false,
+            error : null,
+            date : "",
+            results :"",
+            typeofQuiz : "mcq",
         })
 
 
@@ -167,6 +177,7 @@ export default class KbcFacultyPage extends Component{
                     this.state.emailPage === false
                     ?
                 <ScrollView>
+                    <View style={{padding:20}}>
                     <Text style={styles.heading}> In-Class Quiz!</Text>
                     <View style={styles.selector}>
                         <SwitchSelector
@@ -181,8 +192,8 @@ export default class KbcFacultyPage extends Component{
                             borderColor={'#383030'}
                             hasPadding
                             options={[
-                                { label: "MCQ", value: "mcq", activeColor: 'orange'},
-                                { label: "Numerical", value: "numerical" ,activeColor: 'orange'},
+                                { label: "MCQ", value: "mcq", activeColor: '#60CA24'},
+                                { label: "Numerical", value: "numerical" ,activeColor: '#60CA24'},
                             ]}
                         />
                     </View>
@@ -193,7 +204,7 @@ export default class KbcFacultyPage extends Component{
                                  iconc={this.state.iconc} icond={this.state.icond}/>
                     </View>
                     :
-                    <Text style={styles.heading}>Numerical</Text>
+                    <Text/>
                     }
 
                     <View style={styles.container}>
@@ -220,6 +231,7 @@ export default class KbcFacultyPage extends Component{
                             </Text> : <Text/>}
 
                         <Button title="BEGIN" onPress={this.startKBC}/>
+                    </View>
                     </View>
                 </ScrollView>
                         :
@@ -258,9 +270,18 @@ export default class KbcFacultyPage extends Component{
                                         title="Start Another Quiz"
                                         onPress={()=>{
                                             this.setState({
-                                                emailPage : false,
-                                                typeofQuiz : "mcq",
+                                                time : 2,
                                                 option : "0",
+                                                icona : 'alpha-a',
+                                                iconb : 'alpha-b',
+                                                iconc : 'alpha-c',
+                                                icond : 'alpha-d',
+                                                correctAnswer : "0",
+                                                emailPage : false,
+                                                error : null,
+                                                date : "",
+                                                results :"",
+                                                typeofQuiz : "mcq",
                                             })
                                             // this.dbUpdateEmailStatus()
                                             //     .then(()=>{console.log("Updated email")})
@@ -335,6 +356,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         padding: 35,
+        alignItems: 'center',
     },
     errorMessage: {
         color: 'red',
@@ -371,6 +393,7 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: 'center',
         alignItems: 'stretch',
+        width : Dimensions.window.width-60
     }
 
 })

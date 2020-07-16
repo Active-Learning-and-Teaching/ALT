@@ -72,6 +72,9 @@ export default class FeedbackFacultyPage extends Component {
         this.setState({
             emailPage : false,
             topics : [],
+            duration : 1,
+            date :"",
+            results : ""
         })
 
         this.dbUpdateEmailStatus()
@@ -136,6 +139,9 @@ export default class FeedbackFacultyPage extends Component {
                                                 this.setState({
                                                     emailPage : false,
                                                     topics : [],
+                                                    duration : 1,
+                                                    date :"",
+                                                    results : ""
                                                 })
                                                 // this.dbUpdateEmailStatus()
                                                 //     .then(()=>{console.log("Updated email")})

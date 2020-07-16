@@ -12,10 +12,16 @@ export default class Options extends Component{
 
                 <Avatar
                     size="large"
+
                     icon={ this.props.icona == 'check'
                         ? {name: this.props.icona, color: 'white', type: 'font-awesome'}
-                        : {name: this.props.icona, color: 'white', type: 'material-community'}
+                        : {}
                     }
+                    title={this.props.icona == 'check'
+                        ? ''
+                        : 'A'
+                    }
+                    titleStyle={{fontSize:24, fontWeight:'bold'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("A",'check','alpha-b','alpha-c','alpha-d')
                     }}
@@ -26,10 +32,15 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={this.props.iconb == 'check'
+                    icon={ this.props.iconb == 'check'
                         ? {name: this.props.iconb, color: 'white', type: 'font-awesome'}
-                        : {name: this.props.iconb, color: 'white', type: 'material-community'}
+                        : {}
                     }
+                    title={this.props.iconb == 'check'
+                        ? ''
+                        : 'B'
+                    }
+                    titleStyle={{fontSize:24, fontWeight:'bold'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("B",'alpha-a','check','alpha-c','alpha-d')
                     }}
@@ -40,10 +51,15 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={this.props.iconc == 'check'
+                    icon={ this.props.iconc == 'check'
                         ? {name: this.props.iconc, color: 'white', type: 'font-awesome'}
-                        : {name: this.props.iconc, color: 'white', type: 'material-community'}
+                        : {}
                     }
+                    title={this.props.iconc == 'check'
+                        ? ''
+                        : 'C'
+                    }
+                    titleStyle={{fontSize:24, fontWeight:'bold'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("C",'alpha-a','alpha-b','check','alpha-d')
                     }}
@@ -54,10 +70,15 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={this.props.icond == 'check'
+                    icon={ this.props.icond == 'check'
                         ? {name: this.props.icond, color: 'white', type: 'font-awesome'}
-                        : {name: this.props.icond, color: 'white', type: 'material-community'}
+                        : {}
                     }
+                    title={this.props.icond == 'check'
+                        ? ''
+                        : 'D'
+                    }
+                    titleStyle={{fontSize:24, fontWeight:'bold'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
                     onPress={() => { this.props.optionValue("D",'alpha-a','alpha-b','alpha-c','check')
                     }}
@@ -82,8 +103,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingTop: 10,
         paddingBottom:10,
-        paddingLeft : 30,
-        paddingRight : 30
+        paddingLeft : 15,
+        paddingRight : 15
     },
     avatarStyle : {
         flex: 2,

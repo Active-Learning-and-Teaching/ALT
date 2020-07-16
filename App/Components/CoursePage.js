@@ -9,6 +9,7 @@ import CourseAdd from './CourseAdd';
 import database from '@react-native-firebase/database';
 import * as config from '../config';
 import AnnouncementCard from './AnnouncementCard';
+import moment from 'moment';
 
 export default class  CoursePage extends Component{
     constructor(props) {
@@ -31,9 +32,18 @@ export default class  CoursePage extends Component{
             .orderByChild("passCode")
             .equalTo(this.state.course.passCode)
             .on('value', snapshot => {
+                var list = Object.values(snapshot.val())
+                list.sort(function(a, b) {
+                    var keyA = moment(a.date, "DD/MM/YYYY HH:mm")
+                    var keyB = moment(b.date, "DD/MM/YYYY HH:mm")
+                    if (keyA < keyB) return 1;
+                    if (keyA > keyB) return -1;
+                    return 0;
+                });
+
                 if (snapshot.val()){
                     this.setState({
-                        announcementList : Object.values(snapshot.val())
+                        announcementList : list
                     })
                 }
             })
