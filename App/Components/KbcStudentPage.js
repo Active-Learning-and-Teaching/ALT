@@ -16,10 +16,7 @@ export default class KbcStudentPage extends Component {
             course : this.props.course,
             user : this.props.user,
             option : "",
-            icona : 'alpha-a',
-            iconb : 'alpha-b',
-            iconc : 'alpha-c',
-            icond : 'alpha-d',
+            icon : "",
             error : null,
             correctAnswer : "",
             quizResults : false,
@@ -35,13 +32,11 @@ export default class KbcStudentPage extends Component {
             results: resultData
         })
     }
-        setOption(value,a,b,c,d){
+
+    setOption(value){
         this.setState({
             option : value,
-            icona : a,
-            iconb : b,
-            iconc : c,
-            icond : d,
+            icon : value,
         })
     }
 
@@ -129,10 +124,7 @@ export default class KbcStudentPage extends Component {
                                 this.setState({
                                     quizResults : true,
                                     option: "",
-                                    icona: 'alpha-a',
-                                    iconb: 'alpha-b',
-                                    iconc: 'alpha-c',
-                                    icond: 'alpha-d',
+                                    icon: "",
                                     error: null
                                 })
                                 this.props.setQuizState()
@@ -146,8 +138,7 @@ export default class KbcStudentPage extends Component {
                         {this.props.quizType==="mcq"
                         ?
                             <View>
-                                <Options optionValue={this.setOption} icona={this.state.icona} iconb={this.state.iconb}
-                                         iconc={this.state.iconc} icond={this.state.icond}/>
+                                <Options optionValue={this.setOption} icon={this.state.icon}/>
 
                                 <View style={styles.container}>
 

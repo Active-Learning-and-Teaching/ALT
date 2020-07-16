@@ -13,17 +13,17 @@ export default class Options extends Component{
                 <Avatar
                     size="large"
 
-                    icon={ this.props.icona == 'check'
-                        ? {name: this.props.icona, color: 'white', type: 'font-awesome'}
+                    icon={ this.props.icon == 'A'
+                        ? {name: "check", color: 'white', type: 'font-awesome'}
                         : {}
                     }
-                    title={this.props.icona == 'check'
+                    title={this.props.icon == 'A'
                         ? ''
                         : 'A'
                     }
                     titleStyle={{fontSize:24, fontWeight:'bold'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
-                    onPress={() => { this.props.optionValue("A",'check','alpha-b','alpha-c','alpha-d')
+                    onPress={() => { this.props.optionValue("A")
                     }}
                     rounded
                     activeOpacity={0.7}
@@ -32,17 +32,17 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={ this.props.iconb == 'check'
-                        ? {name: this.props.iconb, color: 'white', type: 'font-awesome'}
+                    icon={ this.props.icon == 'B'
+                        ? {name: "check", color: 'white', type: 'font-awesome'}
                         : {}
                     }
-                    title={this.props.iconb == 'check'
+                    title={this.props.icon == 'B'
                         ? ''
                         : 'B'
                     }
                     titleStyle={{fontSize:24, fontWeight:'bold'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
-                    onPress={() => { this.props.optionValue("B",'alpha-a','check','alpha-c','alpha-d')
+                    onPress={() => { this.props.optionValue("B")
                     }}
                     rounded
                     activeOpacity={0.7}
@@ -51,17 +51,17 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={ this.props.iconc == 'check'
-                        ? {name: this.props.iconc, color: 'white', type: 'font-awesome'}
+                    icon={ this.props.icon == 'C'
+                        ? {name: "check", color: 'white', type: 'font-awesome'}
                         : {}
                     }
-                    title={this.props.iconc == 'check'
+                    title={this.props.icon == 'C'
                         ? ''
                         : 'C'
                     }
                     titleStyle={{fontSize:24, fontWeight:'bold'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
-                    onPress={() => { this.props.optionValue("C",'alpha-a','alpha-b','check','alpha-d')
+                    onPress={() => { this.props.optionValue("C")
                     }}
                     rounded
                     activeOpacity={0.7}
@@ -70,17 +70,17 @@ export default class Options extends Component{
                 />
                 <Avatar
                     size="large"
-                    icon={ this.props.icond == 'check'
-                        ? {name: this.props.icond, color: 'white', type: 'font-awesome'}
+                    icon={ this.props.icon == 'D'
+                        ? {name: "check", color: 'white', type: 'font-awesome'}
                         : {}
                     }
-                    title={this.props.icond == 'check'
+                    title={this.props.icon == 'D'
                         ? ''
                         : 'D'
                     }
                     titleStyle={{fontSize:24, fontWeight:'bold'}}
                     overlayContainerStyle={{backgroundColor: '#2697BF'}}
-                    onPress={() => { this.props.optionValue("D",'alpha-a','alpha-b','alpha-c','check')
+                    onPress={() => { this.props.optionValue("D")
                     }}
                     rounded
                     activeOpacity={0.7}
