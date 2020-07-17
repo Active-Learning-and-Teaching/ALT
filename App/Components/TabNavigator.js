@@ -104,13 +104,23 @@ export default class TabNavigator extends Component{
                                headerTitle : this.state.course.courseName,
                                headerBackTitle: '',
                                headerRight : ()=>(
-                                   this.state.type==='faculty' ?
-                                       <Icon
-                                           name='ellipsis-v'
-                                           type='font-awesome'
-                                           style={{borderRadius:1, padding:20}}
-                                           // onPress={alert("Mail Student list?")}
-                                       />
+                                   this.state.type==='faculty'
+                                       ?
+                                           Platform.OS==="android"
+                                           ?
+                                           <Icon
+                                               name='ellipsis-v'
+                                               type='font-awesome'
+                                               style={{borderRadius:1, padding:20}}
+                                               // onPress={alert("Mail Student list?")}
+                                               />
+                                           :
+                                           <Icon
+                                               name='ellipsis-v'
+                                               type='font-awesome'
+                                               style={{borderRadius:1,paddingRight:10}}
+                                               // onPress={alert("Mail Student list?")}
+                                           />
                                        :
                                        null
                                )
