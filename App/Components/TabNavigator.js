@@ -110,7 +110,7 @@ export default class TabNavigator extends Component{
                                        <Icon
                                            name='ellipsis-v'
                                            type='font-awesome'
-                                           style={{borderRadius:1, padding:10}}
+                                           style={{borderRadius:1, padding:20}}
                                            // onPress={alert("Mail Student list?")}
                                        />
                                        :
