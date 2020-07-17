@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
-import ErrorMessages from "../Utils/ErrorMessages"
+import ErrorMessages from "../../Utils/ErrorMessages"
 import {Button} from 'react-native-elements';
 import {
     StyleSheet,
@@ -12,8 +12,8 @@ import {
     GoogleSignin,
     GoogleSigninButton,
 } from '@react-native-community/google-signin';
-import Faculty from '../Databases/Faculty';
-import Student from '../Databases/Student';
+import Faculty from '../../Databases/Faculty';
+import Student from '../../Databases/Student';
 
 export default class LogIn extends Component {
     constructor() {

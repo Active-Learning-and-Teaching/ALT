@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
+import database from '@react-native-firebase/database';
 import {
     Button,
     StyleSheet,
@@ -7,14 +8,14 @@ import {
     Alert, ScrollView, SafeAreaView,
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
-import CourseAdd from './CourseAdd';
-import Faculty from '../Databases/Faculty';
-import database from '@react-native-firebase/database';
-import * as config from '../config';
-import Courses from '../Databases/Courses';
 import CourseCard from './CourseCard';
+import {Icon} from 'react-native-elements';
+import Student from '../../Databases/Student';
+import CourseAdd from './CourseAdd';
+import * as config from '../../config.json';
+import Courses from '../../Databases/Courses';
 
-export default class FacultyDashBoard extends Component {
+export default class StudentDashBoard extends Component {
     constructor() {
         super();
         this.state = {
@@ -25,14 +26,14 @@ export default class FacultyDashBoard extends Component {
 
     getCurrentUser = async () => {
         const currentUser = await auth().currentUser;
-        const faculty = new Faculty()
-        await faculty.setID(currentUser.uid)
-        await faculty.setName(currentUser.displayName)
-        await faculty.setEmail(currentUser.email)
-        await faculty.setUrl().then(()=>{console.log()})
+        const student = new Student()
+        await student.setID(currentUser.uid)
+        await student.setName(currentUser.displayName)
+        await student.setEmail(currentUser.email)
+        await student.setUrl().then(()=>{console.log()})
 
         await this.setState({
-            currentUser : faculty
+            currentUser : student
         })
     };
 
@@ -56,7 +57,7 @@ export default class FacultyDashBoard extends Component {
 
     getAllCourses = ()=>{
         database()
-            .ref(config['internalDb']+'/Faculty/'+this.state.currentUser.url)
+            .ref(config['internalDb']+'/Student/'+this.state.currentUser.url)
             .on('value', snapshot => {
                 if (snapshot.val()){
                     const keys = Object(snapshot.val());
@@ -98,13 +99,7 @@ export default class FacultyDashBoard extends Component {
 
                     <View style={styles.grid}>
                         {this.state.courseList.map((item,i)=> (
-                            <CourseCard
-                                course = {item}
-                                type = {"faculty"}
-                                user = {this.state.currentUser}
-                                navigation ={this.props.navigation}
-                                key={i}
-                            />
+                            <CourseCard course = {item} type = {"student"}  user = {this.state.currentUser} navigation ={this.props.navigation}  key={i}/>
                         ))}
                     </View>
 
@@ -127,14 +122,6 @@ const styles = StyleSheet.create({
         paddingBottom : 10,
         alignItems: 'center',
     },
-    container: {
-        flex: 1,
-        display: "flex",
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 35,
-        backgroundColor: '#fff'
-    },
     textStyle: {
         fontSize: 15,
         marginBottom: 20
@@ -142,6 +129,6 @@ const styles = StyleSheet.create({
     buttonMessage: {
         paddingTop : 10,
         marginTop: 15
-    }
+    },
 });
 

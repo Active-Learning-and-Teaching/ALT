@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import database from '@react-native-firebase/database';
-import * as config from '../config'
+import * as config from '../../config.json'
 
 
 export default class CheckUserLoggedIn extends Component {

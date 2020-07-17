@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import { PieChart } from "react-native-chart-kit";
 import {ScrollView, StyleSheet, View} from 'react-native';
-import Dimensions from '../Utils/Dimensions';
-import KBCResponses from '../Databases/KBCResponses';
-import KBC from '../Databases/KBC';
+import Dimensions from '../../Utils/Dimensions';
+import QuizResponses from '../../Databases/QuizResponses';
+import Quiz from '../../Databases/Quiz';
 import {Text} from 'react-native-elements';
 
 export default class QuizResultGraph extends Component {
@@ -22,8 +22,8 @@ export default class QuizResultGraph extends Component {
 
 
     getGraphData = async ()=>{
-        const kbcResponse = new KBCResponses()
-        const Kbc = new KBC()
+        const kbcResponse = new QuizResponses()
+        const Kbc = new Quiz()
 
         await Kbc.getTiming(this.props.passCode).then(r =>{
             if(this.props.quizType==='mcq'){

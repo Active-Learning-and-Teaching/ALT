@@ -6,10 +6,10 @@ import {
     Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import Dimensions from '../Utils/Dimensions';
+import Dimensions from '../../Utils/Dimensions';
 import FormAddCourse from './FormAddCourse';
 import StudentAddCourseForm from './StudentAddCourseForm';
-import AnnouncementsAdd from './AnnouncementsAdd';
+import AnnouncementsAdd from '../Announcement/AnnouncementsAdd';
 
 export default class  CourseAdd extends Component {
 

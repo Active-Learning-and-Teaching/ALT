@@ -2,7 +2,7 @@ import database from '@react-native-firebase/database';
 import * as config from '../config';
 import moment from 'moment';
 
-class KBCResponses {
+class QuizResponses {
 
     coursePasscode :string
     userID :string
@@ -120,4 +120,4 @@ class KBCResponses {
 }
 
 
-export default KBCResponses;
+export default QuizResponses;

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 import { Tile } from 'react-native-elements'
-import Dimensions from '../Utils/Dimensions';
-import {CoursePics} from '../Utils/CoursePics';
+import Dimensions from '../../Utils/Dimensions';
+import {CoursePics} from '../../Utils/CoursePics';
 
 export default class  CourseCard extends Component{
 

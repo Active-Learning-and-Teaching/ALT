@@ -6,7 +6,7 @@ import {
     TextInput,
     Button,
 } from 'react-native';
-import Courses from '../Databases/Courses';
+import Courses from '../../Databases/Courses';
 
 export default class StudentAddCourseForm extends Component {
     constructor(props) {

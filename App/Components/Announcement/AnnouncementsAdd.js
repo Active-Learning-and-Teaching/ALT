@@ -7,7 +7,7 @@ import {
     Button,
 } from 'react-native';
 import moment from 'moment';
-import Announcement from '../Databases/Announcement';
+import Announcement from '../../Databases/Announcement';
 
 export default class AnnouncementsAdd extends Component {
     constructor(props) {

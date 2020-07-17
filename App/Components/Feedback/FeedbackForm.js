@@ -3,7 +3,7 @@ import {SafeAreaView, StyleSheet, View, ScrollView, TextInput} from 'react-nativ
 import {Icon, Text, Button} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import Feedback from '../Databases/Feedback';
+import Feedback from '../../Databases/Feedback';
 import {Button as IosButton } from 'react-native';
 export default class FeedbackForm extends Component {
 

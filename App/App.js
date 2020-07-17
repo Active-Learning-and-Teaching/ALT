@@ -4,7 +4,7 @@ import * as config from './config'
 import IconF from 'react-native-vector-icons/FontAwesome';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconI from 'react-native-vector-icons/MaterialIcons';
-import MainNavigator from './Components/MainNavigator';
+import MainNavigator from './Components/Navigation/MainNavigator';
 IconF.loadFont();
 IconM.loadFont();
 IconI.loadFont();

@@ -2,15 +2,15 @@ import React, {Component} from 'react';
 import {Button, SafeAreaView, ScrollView, StyleSheet, View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import Clipboard from "@react-native-community/clipboard";
-import Dimensions from '../Utils/Dimensions';
+import Dimensions from '../../Utils/Dimensions';
 import {Tile} from 'react-native-elements';
-import {CoursePics} from '../Utils/CoursePics';
+import {CoursePics} from '../../Utils/CoursePics';
 import database from '@react-native-firebase/database';
-import * as config from '../config';
+import * as config from '../../config.json';
 import AnnouncementCard from './AnnouncementCard';
 import moment from 'moment';
 
-export default class  CoursePage extends Component{
+export default class  Announcement extends Component{
     constructor(props) {
         super(props);
         this.state = {

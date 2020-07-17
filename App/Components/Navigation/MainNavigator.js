@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import CheckUserLoggedIn from './CheckUserLoggedIn';
-import LogIn from './LogIn';
-import RegisterUser from './RegisterUser';
-import StudentOrFaculty from './StudentOrFaculty';
-import StudentDashBoard from './StudentDashBoard';
-import CourseAdd from './CourseAdd';
-import FacultyDashBoard from './FacultyDashBoard';
+import CheckUserLoggedIn from '../Authentication/CheckUserLoggedIn';
+import LogIn from '../Authentication/LogIn';
+import RegisterUser from '../Authentication/RegisterUser';
+import StudentOrFaculty from '../Authentication/StudentOrFaculty';
+import StudentDashBoard from '../Dashboard/StudentDashBoard';
+import CourseAdd from '../Dashboard/CourseAdd';
+import FacultyDashBoard from '../Dashboard/FacultyDashBoard';
 import TabNavigator from './TabNavigator';
 
 export default class MainNavigator extends Component{

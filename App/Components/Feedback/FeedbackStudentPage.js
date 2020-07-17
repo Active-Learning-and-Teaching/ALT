@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import Feedback from '../Databases/Feedback';
+import Feedback from '../../Databases/Feedback';
 import {Button, Text} from 'react-native-elements';
 import CountDown from 'react-native-countdown-component';
 import StudentFeedbackCard from './StudentFeedbackCard';
 import Toast from 'react-native-simple-toast';
-import FeedbackResponses from '../Databases/FeedbackResponses';
+import FeedbackResponses from '../../Databases/FeedbackResponses';
 import moment from 'moment';
 
 export default class FeedbackStudentPage extends Component {
