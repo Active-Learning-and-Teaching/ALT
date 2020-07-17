@@ -5,7 +5,6 @@ import Clipboard from "@react-native-community/clipboard";
 import Dimensions from '../Utils/Dimensions';
 import {Tile} from 'react-native-elements';
 import {CoursePics} from '../Utils/CoursePics';
-import CourseAdd from './CourseAdd';
 import database from '@react-native-firebase/database';
 import * as config from '../config';
 import AnnouncementCard from './AnnouncementCard';

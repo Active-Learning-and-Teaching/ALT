@@ -6,7 +6,6 @@ import {
     TextInput,
     Button,
 } from 'react-native';
-import Courses from '../Databases/Courses';
 import moment from 'moment';
 import Announcement from '../Databases/Announcement';
 
@@ -31,7 +30,6 @@ export default class AnnouncementsAdd extends Component {
         } else {
             const announcement =  new Announcement()
             const dateAndTime= moment().format("DD/MM/YYYY HH:mm")
-            console.log(dateAndTime)
             await announcement.createAnnouncement(
                 this.props.course.passCode,
                 heading,
