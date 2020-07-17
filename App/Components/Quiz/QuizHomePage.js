@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import moment from 'moment';
 import database from '@react-native-firebase/database';
-import * as config from '../config';
-import KbcFacultyPage from './KbcFacultyPage';
-import KbcStudentPage from './KbcStudentPage';
+import * as config from '../../config.json';
+import QuizFacultyPage from './QuizFacultyPage';
+import QuizStudentPage from './QuizStudentPage';
 
-export default class KbcHomePage extends Component{
+export default class QuizHomePage extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -67,7 +67,7 @@ export default class KbcHomePage extends Component{
         return(
             <SafeAreaView style={styles.safeContainer}>
                 {this.state.type === "faculty" ?
-                    <KbcFacultyPage
+                    <QuizFacultyPage
                         currentQuiz = {this.state.currentQuiz}
                         currentDuration = {this.state.currentDuration}
                         user = {this.state.user}
@@ -76,7 +76,7 @@ export default class KbcHomePage extends Component{
                         quizType = {this.state.quizType}
                     />
                 :
-                    <KbcStudentPage
+                    <QuizStudentPage
                         currentQuiz = {this.state.currentQuiz}
                         currentDuration = {this.state.currentDuration}
                         user = {this.state.user}

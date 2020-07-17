@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import {Slider, Text, Button} from 'react-native-elements';
-import KBC from '../Databases/KBC';
+import Quiz from '../../Databases/Quiz';
 import moment from 'moment';
 import Options from './Options';
 import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
-import {Mailer} from '../Utils/Mailer';
+import {Mailer} from '../../Utils/Mailer';
 import Toast from 'react-native-simple-toast';
 import SwitchSelector from "react-native-switch-selector";
-import Dimensions from '../Utils/Dimensions';
+import Dimensions from '../../Utils/Dimensions';
 
-export default class KbcFacultyPage extends Component{
+export default class QuizFacultyPage extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -37,7 +37,7 @@ export default class KbcFacultyPage extends Component{
         })
     }
     checkEmailSent = async () =>{
-        const Kbc = new KBC()
+        const Kbc = new Quiz()
         Kbc.getTiming(this.state.course.passCode).then(value => {
             this.setState({
                 emailPage : !value["emailResponse"],
@@ -59,7 +59,7 @@ export default class KbcFacultyPage extends Component{
     }
 
     dbUpdateEmailStatus = async () =>{
-        const Kbc = new KBC()
+        const Kbc = new Quiz()
         Kbc.getTiming(this.state.course.passCode)
             .then(value => {
                 Kbc.getQuestion(this.state.course.passCode)
@@ -108,7 +108,7 @@ export default class KbcFacultyPage extends Component{
             })
         }
         else {
-            const kbc = new KBC()
+            const kbc = new Quiz()
             const startTime = moment().format("DD/MM/YYYY HH:mm:ss")
             const endTime = moment().add(time, 'minutes').format("DD/MM/YYYY HH:mm:ss")
 
@@ -178,7 +178,7 @@ export default class KbcFacultyPage extends Component{
                             textColor={'#383030'}
                             selectedColor={'white'}
                             borderColor={'#383030'}
-                            hasPadding
+                            // hasPadding
                             options={[
                                 { label: "MCQ", value: "mcq", activeColor: '#60CA24'},
                                 { label: "Numerical", value: "numerical" ,activeColor: '#60CA24'},

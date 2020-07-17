@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import createBottomTabNavigator from '@react-navigation/bottom-tabs/src/navigators/createBottomTabNavigator';
 import {Icon} from 'react-native-elements';
-import CoursePage from './CoursePage';
-import KbcHomePage from './KbcHomePage';
-import FeedbackHomePage from './FeedbackHomePage';
-import StudentList from './StudentList';
+import Announcement from '../Announcement/Announcement';
+import QuizHomePage from '../Quiz/QuizHomePage';
+import FeedbackHomePage from '../Feedback/FeedbackHomePage';
+import StudentList from '../StudentList/StudentList';
 import {createStackNavigator} from '@react-navigation/stack';
-import CourseAdd from './CourseAdd';
+import CourseAdd from '../Dashboard/CourseAdd';
 
 export default class TabNavigator extends Component{
 
@@ -31,7 +31,7 @@ export default class TabNavigator extends Component{
             return (
                 <Stack1.Navigator>
                     <Stack1.Screen name='Announcements'
-                        component={CoursePage}
+                        component={Announcement}
                         options={{
                             headerTitle : null,
                             headerShown : true,
@@ -58,7 +58,7 @@ export default class TabNavigator extends Component{
             return (
                 <Stack2.Navigator>
                     <Stack2.Screen name='Quiz'
-                           component={KbcHomePage}
+                           component={QuizHomePage}
                            options={{
                                headerShown : true,
                                headerTitle : this.state.course.courseName,

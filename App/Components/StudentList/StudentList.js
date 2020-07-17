@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import {Linking, Platform, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import Dimensions from '../Utils/Dimensions';
+import Dimensions from '../../Utils/Dimensions';
 import {ListItem} from 'react-native-elements';
 import database from '@react-native-firebase/database';
-import * as config from '../config.json';
-import Courses from '../Databases/Courses';
-import Clipboard from '@react-native-community/clipboard';
-import Toast from 'react-native-simple-toast';
+import * as config from '../../config.json';
+import Courses from '../../Databases/Courses';
 
 export default class StudentList extends Component{
 

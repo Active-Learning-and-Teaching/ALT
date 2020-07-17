@@ -3,7 +3,7 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import FeedbackStudentPage from './FeedbackStudentPage';
 import FeedbackFacultyPage from './FeedbackFacultyPage';
 import database from '@react-native-firebase/database';
-import * as config from '../config.json';
+import * as config from '../../config.json';
 import moment from 'moment';
 
 export default class FeedbackHomePage extends Component{

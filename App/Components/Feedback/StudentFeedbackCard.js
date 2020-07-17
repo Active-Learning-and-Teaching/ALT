@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ListItem} from 'react-native-elements';
-import Dimensions from '../Utils/Dimensions';
+import Dimensions from '../../Utils/Dimensions';
 import SwitchSelector from 'react-native-switch-selector';
 
 export default class StudentFeedbackCard extends Component{

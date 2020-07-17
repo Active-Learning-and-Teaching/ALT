@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import FeedbackForm from './FeedbackForm';
 import {SafeAreaView, ScrollView, StyleSheet, View, Text} from 'react-native';
-import Feedback from '../Databases/Feedback';
+import Feedback from '../../Databases/Feedback';
 import CountDown from 'react-native-countdown-component';
 import {Button, ListItem} from 'react-native-elements';
-import Dimensions from '../Utils/Dimensions';
+import Dimensions from '../../Utils/Dimensions';
 import moment from 'moment';
 import FeedbackResultsList from './FeedbackResultsList';
 import Toast from 'react-native-simple-toast';
-import {Mailer} from '../Utils/Mailer';
+import {Mailer} from '../../Utils/Mailer';
 
 export default class FeedbackFacultyPage extends Component {
     constructor(props) {

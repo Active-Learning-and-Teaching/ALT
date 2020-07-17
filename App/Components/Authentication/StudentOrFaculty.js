@@ -34,7 +34,7 @@ export default class StudentOrFaculty extends Component {
                     <Avatar
                         size="xlarge"
                         rounded
-                        source = {require('../Assets/Faculty.png')}
+                        source = {require('../../Assets/Faculty.png')}
                         overlayContainerStyle={{backgroundColor: 'white'}}
                         onPress={() => this.setState({
                             selected: 'faculty',
@@ -48,7 +48,7 @@ export default class StudentOrFaculty extends Component {
                     <Avatar
                         size="xlarge"
                         rounded
-                        source = {require('../Assets/Student.png')}
+                        source = {require('../../Assets/Student.png')}
                         overlayContainerStyle={{backgroundColor: 'white'}}
                         onPress={() => this.setState({
                             selected: 'student',

@@ -3,13 +3,13 @@ import {SafeAreaView, ScrollView, StyleSheet, View, TextInput} from 'react-nativ
 import {Text, Button} from 'react-native-elements';
 import moment from 'moment';
 import Options from './Options';
-import KBCResponses from '../Databases/KBCResponses';
+import QuizResponses from '../../Databases/QuizResponses';
 import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
-import KBC from '../Databases/KBC';
+import Quiz from '../../Databases/Quiz';
 import Toast from 'react-native-simple-toast';
 
-export default class KbcStudentPage extends Component {
+export default class QuizStudentPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,7 +41,7 @@ export default class KbcStudentPage extends Component {
     }
 
     getCorrectAnswer = async () =>{
-        const Kbc = new KBC()
+        const Kbc = new Quiz()
         Kbc.getTiming(this.state.course.passCode).then(value => {
             this.setState({
                 correctAnswer : value["correctAnswer"],
@@ -60,7 +60,7 @@ export default class KbcStudentPage extends Component {
             })
         } else {
             Toast.show('Answer has been recorded!');
-            const kbcresponse = new KBCResponses()
+            const kbcresponse = new QuizResponses()
             const timestamp = moment().format("DD/MM/YYYY HH:mm:ss")
 
             await kbcresponse.getResponse(this.state.user.url, this.state.course.passCode)

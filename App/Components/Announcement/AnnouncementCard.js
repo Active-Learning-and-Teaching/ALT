@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import { ListItem } from 'react-native-elements'
-import Dimensions from '../Utils/Dimensions';
+import Dimensions from '../../Utils/Dimensions';
 
 export default class AnnouncementCard extends Component{
 

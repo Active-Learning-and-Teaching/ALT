@@ -1,7 +1,7 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
 
-class KBC {
+class Quiz {
 
     coursePasscode :string
     startTime :string
@@ -88,4 +88,4 @@ class KBC {
 }
 
 
-export default KBC;
+export default Quiz;

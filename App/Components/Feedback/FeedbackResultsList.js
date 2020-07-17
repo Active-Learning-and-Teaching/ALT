@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import FeedbackResponses from '../Databases/FeedbackResponses';
-import Feedback from '../Databases/Feedback';
+import FeedbackResponses from '../../Databases/FeedbackResponses';
+import Feedback from '../../Databases/Feedback';
 import {StyleSheet, View} from 'react-native';
 import {ListItem, Text} from 'react-native-elements';
-import Dimensions from '../Utils/Dimensions';
+import Dimensions from '../../Utils/Dimensions';
 import {PieChart} from 'react-native-chart-kit';
 
 export default class FeedbackResultsList extends Component {
