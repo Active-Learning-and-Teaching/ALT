@@ -26,7 +26,6 @@ export default class  CourseAdd extends Component {
             visible : !this.state.visible
         })
         console.log(this.props.instructor)
-        // console.log(this.props.route.params.instructor)
     };
 
     render(){
@@ -54,11 +53,11 @@ export default class  CourseAdd extends Component {
                         { this.props.type==="faculty"
                             ?
                             <FormAddCourse toggle={this.toggleModal} instructor = {this.props.instructor} />
-                        :
+                            :
                             this.props.type==="student"
                                 ?
                                 <StudentAddCourseForm student = {this.props.student} toggle={this.toggleModal}/>
-                        :
+                                :
                                 <AnnouncementsAdd course = {this.props.course} toggle={this.toggleModal}/>
                         }
 
@@ -71,18 +70,17 @@ export default class  CourseAdd extends Component {
 };
 
 const styles = StyleSheet.create({
-
-    container: {
-        flex: 1,
-        display: "flex",
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 35,
-        backgroundColor: '#fff'
-    },
     modalStyle : {
+        flex: 1,
+        display: 'flex',
         backgroundColor:'white',
-        maxHeight : Dimensions.window.height/1.25,
+        maxHeight : Dimensions.window.height/1.6,
+        maxWidth : Dimensions.window.width-40,
+        marginTop: 100,
+        marginLeft: 20,
+        marginRight : 20,
+        marginBottom: 20,
+        borderRadius : 10
     },
     textStyle: {
         fontSize: 15,
