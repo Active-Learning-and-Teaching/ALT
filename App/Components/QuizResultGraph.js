@@ -104,34 +104,48 @@ export default class QuizResultGraph extends Component {
         return (
             <ScrollView>
                 <Text style={styles.body}> Quiz Results ({this.props.date.split(" ")[0]})</Text>
+                <View>
                 {this.props.quizType==="mcq"?
-                    <PieChart
-                        data={data}
-                        width={Dimensions.window.width}
-                        height={220}
-                        chartConfig={chartConfig}
-                        accessor="responses"
-                        backgroundColor="transparent"
-                        paddingLeft="25"
-                        absolute
-                    />
+                    <View style={styles.container}>
+                        <PieChart
+                            data={data}
+                            width={Dimensions.window.width}
+                            height={220}
+                            chartConfig={chartConfig}
+                            accessor="responses"
+                            backgroundColor="transparent"
+                            paddingLeft="25"
+                            absolute
+                        />
+                    </View>
                     :
                     this.props.quizType==="numerical"
                     ?
-                    <View>
-                        <Text style={styles.heading}>Top 5 Results</Text>
+                    <View style={styles.container}>
+                        <Text style={styles.body1}>Top 5 Answers</Text>
                         {this.state.top5answer.map((value, i) => (
-                            <View>
-                                <Text style={styles.heading}>{i+1+".   "}{value[0]} : {value[1]}</Text>
+                            <View key={i}>
+                                <Text style={styles.body2}>
+                                    {i+1+".   "}
+                                    {value[0] + " : "}
+                                    {value[1]}
+                                    {value[1]===1
+                                        ? " Student"
+                                        : " Students"
+                                    }
+                                </Text>
                             </View>
                         ))}
                     </View>
-
                     :
-                    <Text></Text>
+                    <Text/>
                 }
 
-                {this.props.correctAnswer!=="0" ?<Text style={styles.ca}> Correct Answer  : {this.props.correctAnswer}</Text> :<View/>}
+                {this.props.correctAnswer!=="0"
+                    ? <Text style={styles.ca}> Correct Answer  : {this.props.correctAnswer}</Text>
+                    :<View/>
+                }
+                </View>
             </ScrollView>
 
         )
@@ -147,6 +161,19 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         fontWeight : "bold"
     },
+    body1: {
+        color: 'grey',
+        alignSelf: "center",
+        fontSize: 20,
+        paddingBottom : 30,
+        fontWeight : "bold"
+    },
+    body2: {
+        color: 'grey',
+        alignSelf: "center",
+        fontSize: 18,
+        paddingBottom : 20,
+    },
     ca: {
         marginTop: 18,
         color: 'grey',
@@ -155,17 +182,13 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         fontWeight : "bold"
     },
-    heading : {
+    container: {
         flex: 1,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        paddingTop : 25,
-        padding: 15,
-        fontSize : 25,
-        fontWeight: "bold",
-        color: 'grey',
-        marginTop: 5,
-        textAlign: 'center',
+        alignItems: 'center',
+        padding:30,
+        backgroundColor : 'white'
     },
 })

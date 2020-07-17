@@ -137,23 +137,21 @@ export default class KbcStudentPage extends Component {
                         />
                         {this.props.quizType==="mcq"
                         ?
-                            <View>
+                            <View style={{paddingRight:20, paddingLeft:20}}>
                                 <Options optionValue={this.setOption} icon={this.state.icon}/>
-
-                                <View style={styles.container}>
-
+                                <View style={{padding:40}}>
                                     {this.state.error ?
                                         <Text style={styles.errorMessage}>
                                             {this.state.error}
-                                        </Text> : <Text/>}
-
-                                    <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
+                                        </Text> : <Text/>
+                                    }
+                                        <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
                                 </View>
                             </View>
                             :
                             this.props.quizType==="numerical"
                             ?
-                            <View>
+                            <View style={{paddingTop:30}}>
                                 <TextInput
                                     style={styles.textInput}
                                     onChangeText={text => {this.setState({
@@ -161,21 +159,18 @@ export default class KbcStudentPage extends Component {
                                     })}}
                                     value={this.state.option}
                                 />
-                                <View style={styles.container}>
-
-                                    {this.state.error ?
-                                        <Text style={styles.errorMessage}>
-                                            {this.state.error}
-                                        </Text> : <Text/>}
-
+                                {this.state.error ?
+                                    <Text style={styles.errorMessage}>
+                                        {this.state.error}
+                                    </Text> : <Text/>
+                                }
+                                <View style={{paddingTop:20}}>
                                     <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
-                                </View></View>
+                                </View>
+                            </View>
                             :
-                            <Text></Text>
+                            <Text/>
                         }
-
-
-
                     </ScrollView>
             }
             </SafeAreaView>

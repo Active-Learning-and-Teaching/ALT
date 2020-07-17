@@ -210,14 +210,15 @@ export default class KbcFacultyPage extends Component{
                                 maximumTrackTintColor="#000000"
                                 onValueChange={(value) => this.setState({time: value})}
                             />
-                        </View>
+
 
                         {this.state.error ?
                             <Text style={styles.errorMessage}>
                                 {this.state.error}
                             </Text> : <Text/>}
 
-                        <Button title="BEGIN" onPress={this.startKBC}/>
+                            <Button title="BEGIN" onPress={this.startKBC}/>
+                        </View>
                     </View>
                     </View>
                 </ScrollView>
@@ -361,8 +362,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingTop: 20,
         paddingBottom:20,
-        paddingLeft : 30,
-        paddingRight : 30
+        paddingLeft : 20,
+        paddingRight : 20
     },
     or: {
         marginTop: 200,
