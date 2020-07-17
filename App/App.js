@@ -18,6 +18,8 @@ IconF.loadFont();
 IconM.loadFont();
 IconI.loadFont();
 
+console.disableYellowBox = true;
+
 export default class App extends Component{
 
     constructor() {
