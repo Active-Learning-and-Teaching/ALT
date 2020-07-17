@@ -6,14 +6,7 @@ import KbcHomePage from './KbcHomePage';
 import FeedbackHomePage from './FeedbackHomePage';
 import StudentList from './StudentList';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Button} from 'react-native';
 import CourseAdd from './CourseAdd';
-
-const Tab = createBottomTabNavigator();
-const Stack1 = createStackNavigator();
-const Stack2 = createStackNavigator();
-const Stack3 = createStackNavigator();
-const Stack4 = createStackNavigator();
 
 export default class TabNavigator extends Component{
 
@@ -27,6 +20,12 @@ export default class TabNavigator extends Component{
     }
 
     render() {
+
+        const Tab = createBottomTabNavigator();
+        const Stack1 = createStackNavigator();
+        const Stack2 = createStackNavigator();
+        const Stack3 = createStackNavigator();
+        const Stack4 = createStackNavigator();
 
         const AnnouncementStack = () => {
             return (
@@ -42,8 +41,7 @@ export default class TabNavigator extends Component{
                                 <CourseAdd
                                     course ={this.state.course}
                                 />
-                                :
-                                    null
+                                : null
                             )
                         }}
                         initialParams={{

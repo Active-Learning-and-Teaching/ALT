@@ -25,7 +25,6 @@ export default class  CourseAdd extends Component {
         this.setState({
             visible : !this.state.visible
         })
-        console.log(this.props.instructor)
     };
 
     render(){
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         maxHeight : Dimensions.window.height/1.6,
         maxWidth : Dimensions.window.width-40,
-        marginTop: 100,
+        marginTop: 80,
         marginLeft: 20,
         marginRight : 20,
         marginBottom: 20,
