@@ -229,7 +229,12 @@ export default class KbcFacultyPage extends Component{
                                              date={this.state.date}
                                              quizType={this.props.quizType}
                                              quizresultData={this.quizresultData} />
-                            <View style={[styles.buttonContainer, { width: this.props.quizType==="numerical"? Dimensions.window.width-50:"100%"}]}>
+                            <View style={[
+                                styles.buttonContainer,
+                                { width: this.props.quizType==="numerical"
+                                        ? Dimensions.window.width-50
+                                        :"100%"
+                                }]}>
                                 <Button style={styles.buttonMessage}
                                         title="Email Results"
                                         onPress={()=>{

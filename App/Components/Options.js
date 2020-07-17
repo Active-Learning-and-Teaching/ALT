@@ -5,89 +5,31 @@ import {StyleSheet, View} from 'react-native';
 export default class Options extends Component{
     constructor(props) {
         super(props);
+        this.state = {
+            values: ['A', 'B', 'C', 'D'],
+        }
     }
     render(){
         return(
             <View style={styles.container}>
-
-                <Avatar
-                    size="large"
-
-                    icon={ this.props.icon == 'A'
-                        ? {name: "check", color: 'white', type: 'font-awesome'}
-                        : {}
-                    }
-                    title={this.props.icon == 'A'
-                        ? ''
-                        : 'A'
-                    }
-                    titleStyle={{fontSize:24, fontWeight:'bold'}}
-                    overlayContainerStyle={{backgroundColor: '#2697BF'}}
-                    onPress={() => { this.props.optionValue("A")
-                    }}
-                    rounded
-                    activeOpacity={0.7}
-                    avatarStyle={styles.avatarStyle}
-                    containerStyle={styles.avatarContainer}
-                />
-                <Avatar
-                    size="large"
-                    icon={ this.props.icon == 'B'
-                        ? {name: "check", color: 'white', type: 'font-awesome'}
-                        : {}
-                    }
-                    title={this.props.icon == 'B'
-                        ? ''
-                        : 'B'
-                    }
-                    titleStyle={{fontSize:24, fontWeight:'bold'}}
-                    overlayContainerStyle={{backgroundColor: '#2697BF'}}
-                    onPress={() => { this.props.optionValue("B")
-                    }}
-                    rounded
-                    activeOpacity={0.7}
-                    avatarStyle={styles.avatarStyle}
-                    containerStyle={styles.avatarContainer}
-                />
-                <Avatar
-                    size="large"
-                    icon={ this.props.icon == 'C'
-                        ? {name: "check", color: 'white', type: 'font-awesome'}
-                        : {}
-                    }
-                    title={this.props.icon == 'C'
-                        ? ''
-                        : 'C'
-                    }
-                    titleStyle={{fontSize:24, fontWeight:'bold'}}
-                    overlayContainerStyle={{backgroundColor: '#2697BF'}}
-                    onPress={() => { this.props.optionValue("C")
-                    }}
-                    rounded
-                    activeOpacity={0.7}
-                    avatarStyle={styles.avatarStyle}
-                    containerStyle={styles.avatarContainer}
-                />
-                <Avatar
-                    size="large"
-                    icon={ this.props.icon == 'D'
-                        ? {name: "check", color: 'white', type: 'font-awesome'}
-                        : {}
-                    }
-                    title={this.props.icon == 'D'
-                        ? ''
-                        : 'D'
-                    }
-                    titleStyle={{fontSize:24, fontWeight:'bold'}}
-                    overlayContainerStyle={{backgroundColor: '#2697BF'}}
-                    onPress={() => { this.props.optionValue("D")
-                    }}
-                    rounded
-                    activeOpacity={0.7}
-                    avatarStyle={styles.avatarStyle}
-                    containerStyle={styles.avatarContainer}
-                />
-
+                {this.state.values.map((value, i)=> (
+                    <Avatar
+                        key = {i}
+                        size="large"
+                        icon={ this.props.icon === value
+                            ? {name: "check", color: 'white', type: 'font-awesome'}
+                            : {}
+                        }
+                        title={this.props.icon === value ? '' : value}
+                        titleStyle={{fontSize:24, fontWeight:'bold'}}
+                        overlayContainerStyle={{backgroundColor: '#2697BF'}}
+                        onPress={() => { this.props.optionValue(value)}}
+                        rounded
+                        activeOpacity={0.7}
+                        avatarStyle={styles.avatarStyle}
+                        containerStyle={styles.avatarContainer}
+                    />
+                ))}
             </View>
         )
     }
