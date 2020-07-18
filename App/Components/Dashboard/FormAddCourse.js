@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
     },
     textInput: {
         width: '100%',
-        marginBottom: 15,
-        paddingBottom: 15,
+        marginBottom: 8,
+        paddingBottom: 8,
         alignSelf: "center",
         borderColor: "#ccc",
         borderBottomWidth: 1
@@ -120,20 +120,20 @@ const styles = StyleSheet.create({
         width: '100%',
         fontWeight: "bold",
         justifyContent: 'center',
-        marginBottom: 15,
-        paddingBottom: 15,
+        marginBottom: 8,
+        paddingBottom: 8,
         alignSelf: "center",
         color : "grey",
         fontSize : 18,
     },
     errorMessage: {
         color: 'red',
-        marginBottom: 15,
-        paddingTop : 10,
+        marginBottom: 5,
+        paddingTop : 5,
         paddingBottom: 10,
     },
     buttonMessage: {
-        marginTop: 15
+        marginTop: 5
     }
 });
 
