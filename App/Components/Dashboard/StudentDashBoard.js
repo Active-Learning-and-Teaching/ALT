@@ -9,9 +9,7 @@ import {
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import CourseCard from './CourseCard';
-import {Icon} from 'react-native-elements';
 import Student from '../../Databases/Student';
-import CourseAdd from './CourseAdd';
 import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
 

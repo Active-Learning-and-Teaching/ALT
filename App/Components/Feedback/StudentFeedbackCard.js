@@ -19,7 +19,6 @@ export default class StudentFeedbackCard extends Component{
                     bottomDivider
                 />
                 <SwitchSelector
-                    initial={1}
                     onPress={value => {
                         this.props.studentResponses(this.props.value, value)
                     }}
