@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import FeedbackForm from './FeedbackForm';
-import {SafeAreaView, ScrollView, StyleSheet, View, Text} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, View, Text, ActivityIndicator} from 'react-native';
 import Feedback from '../../Databases/Feedback';
 import CountDown from 'react-native-countdown-component';
 import {Button, ListItem} from 'react-native-elements';
@@ -20,7 +20,8 @@ export default class FeedbackFacultyPage extends Component {
             topics : [],
             duration : 1,
             date :"",
-            results : ""
+            results : "",
+            loading : true
         }
         this.setTopics = this.setTopics.bind(this);
         this.feedbackresultData = this.feedbackresultData.bind(this);
@@ -109,6 +110,7 @@ export default class FeedbackFacultyPage extends Component {
 
 
     render() {
+        if(!this.state.loading){
         return (
             <SafeAreaView style={styles.safeContainer}>
 
@@ -203,7 +205,16 @@ export default class FeedbackFacultyPage extends Component {
                     </ScrollView>
                 }
             </SafeAreaView>
-        )
+        )}
+        else{
+            let that = this;
+            setTimeout(function(){that.setState({loading: false})}, 1000);
+            return(
+                <View style={styles.preloader}>
+                    <ActivityIndicator size="large" color="#9E9E9E"/>
+                </View>
+            )
+        }
     }
 }
 
@@ -321,4 +332,14 @@ const styles = StyleSheet.create({
         paddingLeft : 40,
         paddingRight : 40
     },
+    preloader: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff'
+    }
 })
