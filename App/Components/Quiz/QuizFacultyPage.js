@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import {Slider, Text, Button} from 'react-native-elements';
 import Quiz from '../../Databases/Quiz';
 import moment from 'moment';
@@ -26,6 +26,7 @@ export default class QuizFacultyPage extends Component{
             date : "",
             results :"",
             typeofQuiz : "mcq",
+            loading : true
         };
         this.setOption = this.setOption.bind(this);
         this.quizresultData = this.quizresultData.bind(this);
@@ -157,6 +158,7 @@ export default class QuizFacultyPage extends Component{
     }
 
     render(){
+        if(!this.state.loading){
         return(
             <SafeAreaView style={styles.safeContainer}>
 
@@ -299,7 +301,16 @@ export default class QuizFacultyPage extends Component{
                 </ScrollView>
                 }
             </SafeAreaView>
-        )
+        )}
+        else{
+            let that = this;
+            setTimeout(function(){that.setState({loading: false})}, 1000);
+            return(
+                <View style={styles.preloader}>
+                    <ActivityIndicator size="large" color="#9E9E9E"/>
+                </View>
+            )
+        }
     }
 
 }
@@ -383,6 +394,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'stretch',
         width : Dimensions.window.width-60
+    },
+    preloader: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff'
     }
 
 })
