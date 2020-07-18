@@ -16,7 +16,8 @@ export default class FeedbackStudentPage extends Component {
             user: this.props.user,
             topics : [],
             responded : false,
-            responses : {}
+            responses : {},
+            error : null
         }
         this.getTopics = this.getTopics.bind(this);
         this.studentResponses = this.studentResponses.bind(this)
@@ -49,7 +50,7 @@ export default class FeedbackStudentPage extends Component {
                 })
 
             for await (const item of arr)
-                responses[item] = 1
+                responses[item] = -1
 
             await this.setState({
                 topics : value["topics"],
@@ -61,43 +62,65 @@ export default class FeedbackStudentPage extends Component {
 
     submitFeedback= async()=> {
 
-        Toast.show('Responses have been recorded!');
-        const feedbackResponse = new FeedbackResponses()
-        const timestamp = moment().format("DD/MM/YYYY HH:mm:ss")
+        const {responses} = this.state
+        var err = false
 
-        await feedbackResponse.getFeedbackResponse(this.state.user.url, this.state.course.passCode)
-            .then((url) => {
-                if (url === null) {
-                    feedbackResponse.createFeedbackResponse(
-                        this.state.course.passCode,
-                        this.state.user.url,
-                        this.state.user.email,
-                        this.state.responses,
-                        timestamp
-                    ).then(r => {
+        for await (let response of Object.values(responses)) {
+            if (response === -1) {
+                err = true
+                break
+            }
+        }
+
+        if (err){
+            await this.setState({
+                error: "Please enter all responses."
+            })
+        }
+        else{
+            await this.setState({
+                error : null
+            })
+        }
+
+        if (!err) {
+            Toast.show('Responses have been recorded!');
+            const feedbackResponse = new FeedbackResponses()
+            const timestamp = moment().format("DD/MM/YYYY HH:mm:ss")
+
+            await feedbackResponse.getFeedbackResponse(this.state.user.url, this.state.course.passCode)
+                .then((url) => {
+                    if (url === null) {
+                        feedbackResponse.createFeedbackResponse(
+                            this.state.course.passCode,
+                            this.state.user.url,
+                            this.state.user.email,
+                            this.state.responses,
+                            timestamp
+                        ).then(r => {
                             console.log("create")
                         })
-                } else {
-                    feedbackResponse.setFeedbackResponse(
-                        this.state.course.passCode,
-                        this.state.user.url,
-                        this.state.user.email,
-                        this.state.responses,
-                        timestamp,
-                        url
-                    ).then(r => {
+                    } else {
+                        feedbackResponse.setFeedbackResponse(
+                            this.state.course.passCode,
+                            this.state.user.url,
+                            this.state.user.email,
+                            this.state.responses,
+                            timestamp,
+                            url
+                        ).then(r => {
                             console.log("update")
                         })
 
-                }
+                    }
+                })
+            await this.setState({
+                responded: true,
+                topics: [],
+                responses: {},
+                error: null
             })
-        await this.setState({
-            responded : true,
-            topics : [],
-            responses : {}
-        })
-
-
+        }
     }
 
     componentDidMount() {
@@ -145,7 +168,8 @@ export default class FeedbackStudentPage extends Component {
                                         this.setState({
                                             topics : [],
                                             responded : false,
-                                            responses : {}
+                                            responses : {},
+                                            error : null
                                         })
                                         this.props.setFeedbackState()
                                     }}
@@ -167,6 +191,11 @@ export default class FeedbackStudentPage extends Component {
                                 </View>
 
                                 <View style={styles.buttonContainer}>
+                                    { this.state.error ?
+                                        <Text style={styles.errorMessage}>
+                                            {this.state.error}
+                                        </Text> : <Text/>}
+
                                     <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.submitFeedback} />
                                 </View>
                             </View>
@@ -245,5 +274,11 @@ const styles = StyleSheet.create({
         paddingTop : 10,
         paddingBottom : 10,
         alignItems: 'center',
+    },
+    errorMessage: {
+        color: 'red',
+        marginBottom: 5,
+        paddingTop : 5,
+        paddingBottom: 10,
     },
 })
