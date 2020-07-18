@@ -3,7 +3,7 @@ import { Icon } from 'react-native-elements';
 import {
     View,
     StyleSheet,
-    Platform,
+    Platform, ScrollView,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Dimensions from '../../Utils/Dimensions';
@@ -39,29 +39,30 @@ export default class  CourseAdd extends Component {
                     <Icon name='plus' type='font-awesome' style={{borderRadius:1, padding:10}} onPress={this.toggleModal} />
                     }
                 </View>
-
-                <Modal
-                    animationIn="slideInUp"
-                    animationOut="slideOutDown"
-                    isVisible={this.state.visible}
-                    style = {styles.modalStyle}
-                    onBackdropPress = {this.toggleModal}
-                    onBackButtonPress= {this.toggleModal}
-                    avoidKeyboard>
-                    <View style={{flex: 1}}>
-                        { this.props.type==="faculty"
-                            ?
-                            <FormAddCourse toggle={this.toggleModal} instructor = {this.props.instructor} />
-                            :
-                            this.props.type==="student"
+                <ScrollView keyboardShouldPersistTaps={'always'}>
+                    <Modal
+                        animationIn="slideInUp"
+                        animationOut="slideOutDown"
+                        isVisible={this.state.visible}
+                        style = {styles.modalStyle}
+                        onBackdropPress = {this.toggleModal}
+                        onBackButtonPress= {this.toggleModal}
+                        avoidKeyboard>
+                        <View style={{flex: 1}}>
+                            { this.props.type==="faculty"
                                 ?
-                                <StudentAddCourseForm student = {this.props.student} toggle={this.toggleModal}/>
+                                <FormAddCourse toggle={this.toggleModal} instructor = {this.props.instructor} />
                                 :
-                                <AnnouncementsAdd course = {this.props.course} toggle={this.toggleModal}/>
-                        }
+                                this.props.type==="student"
+                                    ?
+                                    <StudentAddCourseForm student = {this.props.student} toggle={this.toggleModal}/>
+                                    :
+                                    <AnnouncementsAdd course = {this.props.course} toggle={this.toggleModal}/>
+                            }
 
-                    </View>
-                </Modal>
+                        </View>
+                    </Modal>
+                </ScrollView>
             </View>
         )
     }
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         maxHeight : Dimensions.window.height/1.6,
         maxWidth : Dimensions.window.width-40,
-        marginTop: 80,
+        marginTop: 50,
         marginLeft: 20,
         marginRight : 20,
         marginBottom: 20,
