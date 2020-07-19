@@ -12,8 +12,6 @@ import {
     GoogleSignin,
     GoogleSigninButton,
 } from '@react-native-community/google-signin';
-import Faculty from '../../Databases/Faculty';
-import Student from '../../Databases/Student';
 
 export default class LogIn extends Component {
     constructor() {
@@ -38,13 +36,17 @@ export default class LogIn extends Component {
         {
             auth()
                 .signInWithEmailAndPassword(email, password)
-                .then(()=> {
-                    this.setState({
+                .then(async(res)=> {
+                    console.log(res)
+
+                    await this.props.route.params.getUserType(res.user.displayName, res.user.email)
+                        .then(r=>console.log())
+
+                    await this.setState({
                         email: '',
                         password: '',
                         error: null,
                     })
-                    this.props.navigation.navigate('Student DashBoard')
                 })
                 .catch( err => {
                     var errorMessages = new ErrorMessages()
@@ -60,35 +62,14 @@ export default class LogIn extends Component {
     signInWithGoogle = async () => {
         try
         {
-            const faculty = new Faculty();
-            const student = new Student();
-
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
             return auth()
                 .signInWithCredential(googleCredential)
-                .then(()=>{
-
-                    faculty.checkFaculty(userInfo.user.email)
-                        .then(isFaculty => {
-                            if (isFaculty) {
-                                faculty.getUser(userInfo.user.email)
-                                    .then(val => {
-                                        if (!val)
-                                            faculty.createUser(userInfo.user.id, userInfo.user.name, userInfo.user.email)
-                                    })
-                                this.props.navigation.navigate('Faculty DashBoard')
-                            }
-                            else{
-                                student.getUser(userInfo.user.email)
-                                    .then(val => {
-                                        if (!val)
-                                            student.createUser(userInfo.user.id, userInfo.user.name, userInfo.user.email)
-                                    })
-                                this.props.navigation.navigate('Student DashBoard')
-                            }
-                        })
+                .then(async ()=>{
+                    await this.props.route.params.getUserType(userInfo.user.name,userInfo.user.email )
+                        .then(r=>console.log())
                 });
         }
         catch (error)
@@ -141,7 +122,6 @@ export default class LogIn extends Component {
                     size={GoogleSigninButton.Size.Wide}
                     color={GoogleSigninButton.Color.Dark}
                     onPress={this.signInWithGoogle}/>
-
 
             </View>
         );

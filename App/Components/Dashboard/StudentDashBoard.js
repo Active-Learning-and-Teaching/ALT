@@ -23,11 +23,9 @@ export default class StudentDashBoard extends Component {
     }
 
     getCurrentUser = async () => {
-        const currentUser = await auth().currentUser;
         const student = new Student()
-        await student.setID(currentUser.uid)
-        await student.setName(currentUser.displayName)
-        await student.setEmail(currentUser.email)
+        await student.setName(this.props.route.params.name)
+        await student.setEmail(this.props.route.params.email)
         await student.setUrl().then(()=>{console.log()})
 
         await this.setState({
@@ -44,8 +42,9 @@ export default class StudentDashBoard extends Component {
         catch (error) {
             auth()
                 .signOut()
-                .then(
-                    this.props.navigation.navigate('Login')
+                .then(()=> {
+                        this.props.navigation.navigate('Login')
+                    },
                 )
                 .catch(err => {
                     Alert.alert(err.message)
@@ -88,6 +87,9 @@ export default class StudentDashBoard extends Component {
             this.getAllCourses()
             this.props.route.params.setUser(this.state.currentUser).then(()=>console.log())
         })
+        console.log("Student Dashboard")
+
+
     }
 
     render(){
@@ -97,7 +99,13 @@ export default class StudentDashBoard extends Component {
 
                     <View style={styles.grid}>
                         {this.state.courseList.map((item,i)=> (
-                            <CourseCard course = {item} type = {"student"}  user = {this.state.currentUser} navigation ={this.props.navigation}  key={i}/>
+                            <CourseCard
+                                course = {item}
+                                type = {"student"}
+                                user = {this.state.currentUser}
+                                navigation ={this.props.navigation}
+                                key={i}
+                            />
                         ))}
                     </View>
 

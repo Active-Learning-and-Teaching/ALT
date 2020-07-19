@@ -6,8 +6,8 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
-import database from '@react-native-firebase/database';
-import * as config from '../../config.json'
+import Faculty from '../../Databases/Faculty';
+import Student from '../../Databases/Student';
 
 
 export default class CheckUserLoggedIn extends Component {
@@ -15,51 +15,91 @@ export default class CheckUserLoggedIn extends Component {
     constructor() {
         super();
         this.isGoogleUser = this.isGoogleUser.bind(this)
+        this.getUserType = this.getUserType.bind(this)
     }
 
-    isGoogleUser = async ()=>{
-        try{
+    async getUserType (name, email) {
 
+        console.log(name, email)
+
+        const faculty = new Faculty()
+        await faculty.getUser(email)
+            .then(async val => {
+                if (val){
+                    this.props.navigation.navigate(
+                        'Faculty DashBoard', {
+                            name : name,
+                            email : email
+                        })
+                }
+                else{
+                    const student = new Student();
+                    await student.getUser(email)
+                        .then(async val => {
+                            if (val){
+                                this.props.navigation.navigate(
+                                    'Student DashBoard', {
+                                        name : name,
+                                        email : email
+                                    })
+                            }
+                            else{
+                                this.props.navigation.navigate(
+                                    'Login', {
+                                        getUserType : this.getUserType
+                                    })
+                            }
+                        })
+                }
+            })
+    }
+
+    isGoogleUser = async(name, email)=>{
+
+        try{
             const userInfo = await GoogleSignin.signInSilently();
             const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
             return auth()
                 .signInWithCredential(googleCredential)
-                .then(()=>{
-
-                    database()
-                        .ref(config['sheetFaculty'])
-                        .orderByChild("Email")
-                        .equalTo(userInfo.user.email)
-                        .once("value")
-                        .then(snapshot => {
-                            if (snapshot.val()) {
-                                this.props.navigation.navigate('Faculty DashBoard')
-                            }
-                            else{
-                                this.props.navigation.navigate('Student DashBoard')
-                            }
-                        })
+                .then(async ()=>{
+                    await this.getUserType(userInfo.user.name, userInfo.user.email)
+                        .then(r=>console.log(userInfo.user.email))
                 });
-
         }
+
         catch (error) {
             if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-                this.props.navigation.navigate('Student DashBoard')
+                await this.getUserType(name, email)
+                    .then(r=>console.log(email))
             }
-            else
-                this.props.navigation.navigate('Login')
+            else if (error.code !== 'ASYNC_OP_IN_PROGRESS') {
+                this.props.navigation.navigate(
+                    'Login', {
+                        getUserType: this.getUserType,
+                    })
+            }
         }
     }
 
-    componentDidMount() {
-        auth().onAuthStateChanged(user => {
+    logInUser = async () => {
+        auth().onAuthStateChanged(async user => {
             if (user) {
-                this.isGoogleUser()
+                await this.isGoogleUser(user.displayName, user.email)
+                    .then(async r=> {
+                        console.log(user.displayName)
+                })
             }
             else {
-                this.props.navigation.navigate('Login')
+                this.props.navigation.navigate(
+                    'Login', {
+                        getUserType : this.getUserType
+                    })
             }
         })
+    }
+
+    componentDidMount() {
+        this.logInUser().then(r => console.log())
     }
 
     render(){

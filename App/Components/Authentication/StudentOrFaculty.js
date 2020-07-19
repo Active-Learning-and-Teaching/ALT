@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import {Avatar, Button} from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
+import ErrorMessages from '../../Utils/ErrorMessages';
+import Faculty from '../../Databases/Faculty';
+import Student from '../../Databases/Student';
 
 export default class StudentOrFaculty extends Component {
     constructor() {
@@ -10,7 +14,72 @@ export default class StudentOrFaculty extends Component {
             error: null,
         };
     }
-    RegisterTypeOfUser = ()=>{
+
+    updateDatabase = async(email, name) => {
+
+        if (this.state.selected==='faculty'){
+            const faculty = new Faculty();
+            await faculty.getUser(email)
+                .then(async val => {
+                    if (!val) {
+                        await faculty.createUser(name, email)
+                            .then(r => {
+                                this.props.route.params.resetStates()
+                                this.props.navigation.navigate(
+                                    'Faculty DashBoard',{
+                                        name : name,
+                                        email : email
+                                    })
+                            })
+                    }
+                })
+        }
+        else if (this.state.selected==='student'){
+            const student = new Student();
+            await student.getUser(email)
+                .then(async val => {
+                    if (!val){
+                        await student.createUser(name, email)
+                            .then(r=>{
+                                this.props.route.params.resetStates()
+                                this.props.navigation.navigate(
+                                    'Student DashBoard', {
+                                        name : name,
+                                        email : email
+                                    })
+                            })
+                    }
+                })
+        }
+
+    }
+
+    CreateUserAccount = async () => {
+
+        const {email, password, name} = this.props.route.params
+        // console.log(email, password, name)
+
+        auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(async (res) =>{
+                await res.user.updateProfile({
+                    displayName: name
+                })
+                    .then(async r => {
+                        this.updateDatabase(email, name)
+                            .then(r=> console.log())
+                    })
+            })
+            .catch( err => {
+                var errorMessages = new ErrorMessages()
+                var message = errorMessages.getErrorMessage(err.code)
+                this.setState({
+                    error : message
+                })
+            })
+    }
+
+    RegisterTypeOfUser = async ()=>{
         const { selected} = this.state;
 
         if (selected==='')
@@ -20,9 +89,7 @@ export default class StudentOrFaculty extends Component {
             })
         }
         else {
-            console.log(this.state.selected)
-            //firebasewrite
-            //navigate
+            await this.CreateUserAccount().then(r=>console.log())
         }
     }
     render(){
@@ -106,7 +173,7 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     avatarContainer:{
-        marginTop: 50,
+        marginTop: 30,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
