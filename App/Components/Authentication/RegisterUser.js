@@ -26,7 +26,6 @@ export default class RegisterUser extends Component {
             password: '',
             error: null,
         })
-        console.log("efjfrj frf")
     }
 
     RegisterUserToFirebase = async() => {

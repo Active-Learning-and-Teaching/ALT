@@ -12,6 +12,8 @@ import {
     GoogleSignin,
     GoogleSigninButton,
 } from '@react-native-community/google-signin';
+import Faculty from '../../Databases/Faculty';
+import Student from '../../Databases/Student';
 
 export default class LogIn extends Component {
     constructor() {
@@ -23,7 +25,29 @@ export default class LogIn extends Component {
         };
     }
 
-    LoginUser = ()=>{
+    async getUserType (name, email) {
+
+        console.log('name, email')
+
+        const faculty = new Faculty()
+        await faculty.getUser(email)
+            .then(async val => {
+                if (val){
+                    this.props.navigation.navigate('Faculty DashBoard')
+                }
+                else{
+                    const student = new Student();
+                    await student.getUser(email)
+                        .then(async val => {
+                            if (val){
+                                this.props.navigation.navigate('Student DashBoard')
+                            }
+                        })
+                }
+            })
+    }
+
+    LoginUser = async ()=>{
         const { email, password } = this.state;
 
         if (email==='' || password==='')
@@ -39,7 +63,7 @@ export default class LogIn extends Component {
                 .then(async(res)=> {
                     console.log(res)
 
-                    await this.props.route.params.getUserType(res.user.displayName, res.user.email)
+                    await this.getUserType(res.user.displayName, res.user.email)
                         .then(r=>console.log())
 
                     await this.setState({
@@ -68,7 +92,7 @@ export default class LogIn extends Component {
             return auth()
                 .signInWithCredential(googleCredential)
                 .then(async ()=>{
-                    await this.props.route.params.getUserType(userInfo.user.name,userInfo.user.email )
+                    await this.getUserType(userInfo.user.name,userInfo.user.email )
                         .then(r=>console.log())
                 });
         }
