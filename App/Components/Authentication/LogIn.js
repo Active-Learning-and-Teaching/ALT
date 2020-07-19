@@ -25,28 +25,6 @@ export default class LogIn extends Component {
         };
     }
 
-    async getUserType (name, email) {
-
-        console.log('name, email')
-
-        const faculty = new Faculty()
-        await faculty.getUser(email)
-            .then(async val => {
-                if (val){
-                    this.props.navigation.navigate('Faculty DashBoard')
-                }
-                else{
-                    const student = new Student();
-                    await student.getUser(email)
-                        .then(async val => {
-                            if (val){
-                                this.props.navigation.navigate('Student DashBoard')
-                            }
-                        })
-                }
-            })
-    }
-
     LoginUser = async ()=>{
         const { email, password } = this.state;
 
@@ -63,7 +41,7 @@ export default class LogIn extends Component {
                 .then(async(res)=> {
                     console.log(res)
 
-                    await this.getUserType(res.user.displayName, res.user.email)
+                    await this.props.route.params.getUserType(res.user.displayName, res.user.email)
                         .then(r=>console.log())
 
                     await this.setState({
@@ -92,8 +70,33 @@ export default class LogIn extends Component {
             return auth()
                 .signInWithCredential(googleCredential)
                 .then(async ()=>{
-                    await this.getUserType(userInfo.user.name,userInfo.user.email )
-                        .then(r=>console.log())
+
+                    const faculty = new Faculty()
+                    await faculty.getUser(userInfo.user.email)
+                        .then(async val => {
+                            if (val){
+                                this.props.navigation.navigate('Faculty DashBoard')
+                            }
+                            else{
+                                const student = new Student();
+                                await student.getUser(userInfo.user.email)
+                                    .then(async val => {
+                                        if (val){
+                                            this.props.navigation.navigate('Student DashBoard')
+                                        }
+                                        else{
+                                            this.props.navigation.navigate(
+                                                'User Type', {
+                                                    email : userInfo.user.email,
+                                                    name : userInfo.user.name,
+                                                    google : true
+                                                }
+                                            )
+                                        }
+                                    })
+                            }
+                        })
+
                 });
         }
         catch (error)
