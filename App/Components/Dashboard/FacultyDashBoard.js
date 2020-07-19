@@ -7,12 +7,12 @@ import {
     Alert, ScrollView, SafeAreaView,
 } from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
-import CourseAdd from './CourseAdd';
 import Faculty from '../../Databases/Faculty';
 import database from '@react-native-firebase/database';
 import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
 import CourseCard from './CourseCard';
+import {CommonActions} from '@react-navigation/native';
 
 export default class FacultyDashBoard extends Component {
     constructor() {
@@ -24,9 +24,10 @@ export default class FacultyDashBoard extends Component {
     }
 
     getCurrentUser = async () => {
+        const curr = await auth().currentUser
         const faculty = new Faculty()
-        await faculty.setName(this.props.route.params.name)
-        await faculty.setEmail(this.props.route.params.email)
+        await faculty.setName(curr.name)
+        await faculty.setEmail(curr.email)
         await faculty.setUrl().then(()=>{console.log()})
 
         await this.setState({
@@ -38,13 +39,27 @@ export default class FacultyDashBoard extends Component {
         try {
             await GoogleSignin.revokeAccess();
             await GoogleSignin.signOut()
-            this.props.navigation.navigate('Login')
+            await this.props.navigation.dispatch(
+                CommonActions.reset({
+                    index: 1,
+                    routes: [
+                        { name: 'Login' },
+                    ]
+                })
+            )
         }
         catch (error) {
             auth()
                 .signOut()
-                .then(
-                    this.props.navigation.navigate('Login')
+                .then(async()=>{
+                    await this.props.navigation.dispatch(
+                        CommonActions.reset({
+                            index: 1,
+                            routes: [
+                                { name: 'Login' },
+                            ]
+                        })
+                    )}
                 )
                 .catch(err => {
                     Alert.alert(err.message)

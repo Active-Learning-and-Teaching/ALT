@@ -24,12 +24,8 @@ export default class StudentOrFaculty extends Component {
                     if (!val) {
                         await faculty.createUser(name, email)
                             .then(r => {
+                                this.props.navigation.navigate('Faculty DashBoard')
                                 this.props.route.params.resetStates()
-                                this.props.navigation.navigate(
-                                    'Faculty DashBoard',{
-                                        name : name,
-                                        email : email
-                                    })
                             })
                     }
                 })
@@ -41,12 +37,8 @@ export default class StudentOrFaculty extends Component {
                     if (!val){
                         await student.createUser(name, email)
                             .then(r=>{
+                                this.props.navigation.navigate('Student DashBoard')
                                 this.props.route.params.resetStates()
-                                this.props.navigation.navigate(
-                                    'Student DashBoard', {
-                                        name : name,
-                                        email : email
-                                    })
                             })
                     }
                 })

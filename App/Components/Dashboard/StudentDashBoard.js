@@ -12,6 +12,7 @@ import CourseCard from './CourseCard';
 import Student from '../../Databases/Student';
 import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
+import {CommonActions} from '@react-navigation/native';
 
 export default class StudentDashBoard extends Component {
     constructor() {
@@ -23,9 +24,10 @@ export default class StudentDashBoard extends Component {
     }
 
     getCurrentUser = async () => {
+        const curr = await auth().currentUser
         const student = new Student()
-        await student.setName(this.props.route.params.name)
-        await student.setEmail(this.props.route.params.email)
+        await student.setName(curr.displayName)
+        await student.setEmail(curr.email)
         await student.setUrl().then(()=>{console.log()})
 
         await this.setState({
@@ -37,13 +39,27 @@ export default class StudentDashBoard extends Component {
         try {
             await GoogleSignin.revokeAccess();
             await GoogleSignin.signOut()
-            this.props.navigation.navigate('Login')
+            await this.props.navigation.dispatch(
+                CommonActions.reset({
+                    index: 1,
+                    routes: [
+                        { name: 'Login' },
+                    ]
+                })
+            )
         }
         catch (error) {
             auth()
                 .signOut()
-                .then(()=> {
-                        this.props.navigation.navigate('Login')
+                .then(async()=> {
+                    await this.props.navigation.dispatch(
+                        CommonActions.reset({
+                            index: 1,
+                            routes: [
+                                { name: 'Login' },
+                            ]
+                        })
+                    )
                     },
                 )
                 .catch(err => {
@@ -88,12 +104,11 @@ export default class StudentDashBoard extends Component {
             this.props.route.params.setUser(this.state.currentUser).then(()=>console.log())
         })
         console.log("Student Dashboard")
-
-
     }
 
     render(){
         return(
+
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
 

@@ -26,28 +26,14 @@ export default class CheckUserLoggedIn extends Component {
         await faculty.getUser(email)
             .then(async val => {
                 if (val){
-                    this.props.navigation.navigate(
-                        'Faculty DashBoard', {
-                            name : name,
-                            email : email
-                        })
+                    this.props.navigation.navigate('Faculty DashBoard')
                 }
                 else{
                     const student = new Student();
                     await student.getUser(email)
                         .then(async val => {
                             if (val){
-                                this.props.navigation.navigate(
-                                    'Student DashBoard', {
-                                        name : name,
-                                        email : email
-                                    })
-                            }
-                            else{
-                                this.props.navigation.navigate(
-                                    'Login', {
-                                        getUserType : this.getUserType
-                                    })
+                                this.props.navigation.navigate('Student DashBoard')
                             }
                         })
                 }
@@ -63,14 +49,14 @@ export default class CheckUserLoggedIn extends Component {
                 .signInWithCredential(googleCredential)
                 .then(async ()=>{
                     await this.getUserType(userInfo.user.name, userInfo.user.email)
-                        .then(r=>console.log(userInfo.user.email))
+                        .then(r=>console.log())
                 });
         }
 
         catch (error) {
             if (error.code === statusCodes.SIGN_IN_REQUIRED) {
                 await this.getUserType(name, email)
-                    .then(r=>console.log(email))
+                    .then(r=>console.log())
             }
             else if (error.code !== 'ASYNC_OP_IN_PROGRESS') {
                 this.props.navigation.navigate(
@@ -86,7 +72,7 @@ export default class CheckUserLoggedIn extends Component {
             if (user) {
                 await this.isGoogleUser(user.displayName, user.email)
                     .then(async r=> {
-                        console.log(user.displayName)
+                        console.log()
                 })
             }
             else {
