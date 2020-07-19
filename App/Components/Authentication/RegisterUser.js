@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-import auth from '@react-native-firebase/auth'
-import ErrorMessages from "../../Utils/ErrorMessages"
 import {Button} from 'react-native-elements';
 import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
 } from 'react-native';
-import Student from '../../Databases/Student';
 
 export default class RegisterUser extends Component {
     constructor() {
@@ -18,11 +15,21 @@ export default class RegisterUser extends Component {
             email: '',
             password: '',
             error: null,
-            names :''
         };
+        this.resetStates = this.resetStates.bind(this)
     }
 
-    RegisterUserToFirebase = () => {
+    resetStates(){
+        this.setState({
+            name: '',
+            email: '',
+            password: '',
+            error: null,
+        })
+        console.log("efjfrj frf")
+    }
+
+    RegisterUserToFirebase = async() => {
 
         const { email, password, name } = this.state;
 
@@ -34,39 +41,14 @@ export default class RegisterUser extends Component {
         }
         else
         {
-            auth()
-                .createUserWithEmailAndPassword( email, password)
-                .then((res) =>{
-                    res.user.updateProfile({
-                        displayName: name
-                    })
-                    this.setState({
-                        names:this.state.name,
-                        name: '',
-                        email: '',
-                        password: '',
-                        error: null,
-                    })
-                    this.props.navigation.navigate('Login')
-                })
-                .catch( err => {
-                    var errorMessages = new ErrorMessages()
-                    var message = errorMessages.getErrorMessage(err.code)
-                    this.setState({
-                        error : message
-                    })
-                })
-
-            auth().onAuthStateChanged( user => {
-                if (user) {
-                    const student = new Student();
-                    student.getUser(user.email)
-                        .then(val => {
-                            if (!val)
-                                student.createUser(user.uid, this.state.names, user.email)
-                        })
+            this.props.navigation.navigate(
+                'User Type', {
+                    email : email,
+                    name : name,
+                    password : password,
+                    resetStates : this.resetStates
                 }
-            })
+            )
         }
 
     }
@@ -101,7 +83,7 @@ export default class RegisterUser extends Component {
                         {this.state.error}
                     </Text> : <Text/>}
 
-                <Button style={styles.buttonMessage} title="Register" onPress={this.RegisterUserToFirebase} />
+                <Button style={styles.buttonMessage} title="Continue" onPress={this.RegisterUserToFirebase} />
 
                 <Text
                     style = {styles.loginText}
@@ -111,7 +93,7 @@ export default class RegisterUser extends Component {
                 </Text>
 
             </View>
-        );
+        )
     }
 }
 

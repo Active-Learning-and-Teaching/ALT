@@ -24,11 +24,9 @@ export default class FacultyDashBoard extends Component {
     }
 
     getCurrentUser = async () => {
-        const currentUser = await auth().currentUser;
         const faculty = new Faculty()
-        await faculty.setID(currentUser.uid)
-        await faculty.setName(currentUser.displayName)
-        await faculty.setEmail(currentUser.email)
+        await faculty.setName(this.props.route.params.name)
+        await faculty.setEmail(this.props.route.params.email)
         await faculty.setUrl().then(()=>{console.log()})
 
         await this.setState({
@@ -89,6 +87,7 @@ export default class FacultyDashBoard extends Component {
             this.getAllCourses()
             this.props.route.params.setUser(this.state.currentUser).then(()=>console.log())
         })
+        console.log("Faculty Dashboard")
     }
 
     render(){

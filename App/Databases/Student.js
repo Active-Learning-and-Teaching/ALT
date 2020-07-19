@@ -3,7 +3,6 @@ import * as config from '../config';
 
 class Student {
 
-    id :string
     name :string
     email : string
     url : string
@@ -11,19 +10,11 @@ class Student {
     constructor() {
     }
 
-    setID(id){
-        this.id = id;
-    }
-
     setName(name){
         this.name = name;
     }
     setEmail(email){
         this.email = email;
-    }
-
-    getID(){
-        return this.id
     }
 
     getName(){
@@ -78,15 +69,13 @@ class Student {
         return ans
     }
 
-    createUser =  (id, name, email)=>{
-        console.log(id)
-        this.reference
+    createUser =  async (name, email)=>{
+        await this.reference
             .push()
             .set({
                 name : name,
                 email : email,
                 photo : "0",
-                id : id
             })
             .then(()=>{
                 console.log('Data added')
@@ -115,7 +104,6 @@ class Student {
                 name : this.getName(),
                 email : this.getEmail(),
                 photo : 0,
-                id : this.getID(),
                 courses : courses
             })
             .then(()=>{
