@@ -25,7 +25,8 @@ export default class StudentOrFaculty extends Component {
                         await faculty.createUser(name, email)
                             .then(r => {
                                 this.props.navigation.navigate('Faculty DashBoard')
-                                this.props.route.params.resetStates()
+                                if (!this.props.route.params.google)
+                                    this.props.route.params.resetStates()
                             })
                     }
                 })
@@ -38,7 +39,8 @@ export default class StudentOrFaculty extends Component {
                         await student.createUser(name, email)
                             .then(r=>{
                                 this.props.navigation.navigate('Student DashBoard')
-                                this.props.route.params.resetStates()
+                                if (!this.props.route.params.google)
+                                    this.props.route.params.resetStates()
                             })
                     }
                 })
@@ -49,7 +51,6 @@ export default class StudentOrFaculty extends Component {
     CreateUserAccount = async () => {
 
         const {email, password, name} = this.props.route.params
-        // console.log(email, password, name)
 
         auth()
             .createUserWithEmailAndPassword(email, password)
@@ -58,7 +59,7 @@ export default class StudentOrFaculty extends Component {
                     displayName: name
                 })
                     .then(async r => {
-                        this.updateDatabase(email, name)
+                        await this.updateDatabase(email, name)
                             .then(r=> console.log())
                     })
             })
@@ -81,9 +82,17 @@ export default class StudentOrFaculty extends Component {
             })
         }
         else {
-            await this.CreateUserAccount().then(r=>console.log())
+            const {email, google, name} = this.props.route.params
+            if (google===true){
+                await this.updateDatabase(email, name)
+                    .then(r=> console.log())
+            }
+            else {
+                await this.CreateUserAccount().then(r=>console.log())
+            }
         }
     }
+
     render(){
 
         return(
