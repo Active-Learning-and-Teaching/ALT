@@ -26,7 +26,7 @@ export default class FacultyDashBoard extends Component {
     getCurrentUser = async () => {
         const curr = await auth().currentUser
         const faculty = new Faculty()
-        await faculty.setName(curr.name)
+        await faculty.setName(curr.displayName)
         await faculty.setEmail(curr.email)
         await faculty.setUrl().then(()=>{console.log()})
 
@@ -39,31 +39,26 @@ export default class FacultyDashBoard extends Component {
         try {
             await GoogleSignin.revokeAccess();
             await GoogleSignin.signOut()
-            await this.props.navigation.dispatch(
-                CommonActions.reset({
-                    index: 1,
-                    routes: [
-                        { name: 'Login' },
-                    ]
-                })
-            )
-        }
-        catch (error) {
             auth()
                 .signOut()
-                .then(async()=>{
-                    await this.props.navigation.dispatch(
-                        CommonActions.reset({
-                            index: 1,
-                            routes: [
-                                { name: 'Login' },
-                            ]
-                        })
-                    )}
+                .then(async()=> {
+                    console.log("logout")
+                        await this.props.navigation.dispatch(
+                            CommonActions.reset({
+                                index: 1,
+                                routes: [
+                                    { name: 'Login' },
+                                ]
+                            })
+                        )
+                    },
                 )
                 .catch(err => {
                     Alert.alert(err.message)
                 })
+        }
+        catch (error) {
+            Alert.alert(error)
         }
     }
 
