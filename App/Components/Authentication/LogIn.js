@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
 import ErrorMessages from "../../Utils/ErrorMessages"
 import {Button} from 'react-native-elements';
+import {Image} from 'react-native';
 import {
     StyleSheet,
     Text,
@@ -112,6 +113,9 @@ export default class LogIn extends Component {
     render(){
         return(
             <View style = {styles.container}>
+                <View style={styles.logo}>
+                    <Image source={require('../../Assets/Logo.png')} />
+                </View>
                 <TextInput
                     style={styles.textInput}
                     autoCapitalize="none"
@@ -162,7 +166,11 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         padding: 35,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+    },
+    logo: {
+        alignItems : "center",
+        paddingBottom : 5,
     },
     textInput: {
         width: '100%',
