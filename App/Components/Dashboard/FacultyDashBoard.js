@@ -13,6 +13,7 @@ import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
 import CourseCard from './CourseCard';
 import {CommonActions} from '@react-navigation/native';
+import {Mailer} from '../../Utils/Mailer';
 
 export default class FacultyDashBoard extends Component {
     constructor() {
@@ -104,7 +105,18 @@ export default class FacultyDashBoard extends Component {
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-
+                    <Button style={styles.buttonMessage} title="Send Mail" onPress={()=>{
+                        const reactFile = require('react-native-fs');
+                        const path = reactFile.DocumentDirectoryPath + '/test.txt';
+                        reactFile.writeFile(path, 'Congratulations Dewangee!!! <3 ', 'utf8')
+                            .then((success) => {
+                                console.log('FILE WRITTEN!');
+                            })
+                            .catch((err) => {
+                                console.log(err.message);
+                            });
+                        Mailer("","suraj16101@iiitd.ac.in","Suraj16101","","","","")
+                    }}/>
                     <View style={styles.grid}>
                         {this.state.courseList.map((item,i)=> (
                             <CourseCard
