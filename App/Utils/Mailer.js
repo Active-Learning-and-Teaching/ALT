@@ -1,6 +1,7 @@
 import RNSmtpMailer from "react-native-smtp-mailer";
 import {emailTemplate} from './MailTemplate';
 import Toast from 'react-native-simple-toast';
+const RNFS = require('react-native-fs');
 
 export const Mailer = (courseName,email,name,date,topics,results,type) => {
 
@@ -14,9 +15,15 @@ export const Mailer = (courseName,email,name,date,topics,results,type) => {
         recipients: email,
         subject: courseName + " " + type + " results " +"("+date+")",
         htmlBody : emailTemplate(name,date,topics,results,type),
-        attachmentNames : [],
-        attachmentTypes : [],
-        attachmentPaths : []
+        attachmentPaths : [
+            RNFS.DocumentDirectoryPath + "/test.txt"
+        ],
+        attachmentNames : [
+            "firstFile.txt"
+        ],
+        attachmentTypes : [
+            "txt"
+        ]
     })
         .then(success => {
             Toast.show('Email Sent!');
