@@ -14,6 +14,7 @@ export default class RegisterUser extends Component {
             name: '',
             email: '',
             password: '',
+            confirmPassword : '',
             error: null,
         };
         this.resetStates = this.resetStates.bind(this)
@@ -24,13 +25,14 @@ export default class RegisterUser extends Component {
             name: '',
             email: '',
             password: '',
+            confirmPassword : '',
             error: null,
         })
     }
 
     RegisterUserToFirebase = async() => {
 
-        const { email, password, name } = this.state;
+        const { email, password, confirmPassword, name } = this.state;
 
         if (email==='' || password==='' || name==='')
         {
@@ -38,8 +40,17 @@ export default class RegisterUser extends Component {
                 error : "Enter details."
             })
         }
+        else if(password!==confirmPassword)
+        {
+            this.setState({
+                error : "Passwords Don't Match"
+            })
+        }
         else
         {
+            this.setState({
+                error : null
+            })
             this.props.navigation.navigate(
                 'User Type', {
                     email : email,
@@ -57,7 +68,7 @@ export default class RegisterUser extends Component {
             <View style = {styles.container}>
                 <TextInput
                     style={styles.textInput}
-                    autoCapitalize="none"
+                    autoCapitalize="words"
                     placeholder="Name"
                     onChangeText={name => this.setState({ name })}
                     value={this.state.name}
@@ -77,6 +88,15 @@ export default class RegisterUser extends Component {
                     onChangeText={password => this.setState({ password })}
                     value={this.state.password}
                 />
+                <TextInput
+                    secureTextEntry
+                    style={styles.textInput}
+                    autoCapitalize="none"
+                    placeholder="Confirm Password"
+                    onChangeText={confirmPassword => this.setState({ confirmPassword })}
+                    value={this.state.confirmPassword}
+                />
+
                 { this.state.error ?
                     <Text style={styles.errorMessage}>
                         {this.state.error}
