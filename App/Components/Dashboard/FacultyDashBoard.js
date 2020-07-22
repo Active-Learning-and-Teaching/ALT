@@ -37,30 +37,28 @@ export default class FacultyDashBoard extends Component {
     };
 
     signOut = async () => {
-        try {
-            await GoogleSignin.revokeAccess();
-            await GoogleSignin.signOut()
-            auth()
-                .signOut()
-                .then(async()=> {
-                    console.log("logout")
-                        await this.props.navigation.dispatch(
-                            CommonActions.reset({
-                                index: 1,
-                                routes: [
-                                    { name: 'Login' },
-                                ]
-                            })
-                        )
-                    },
+        auth()
+            .signOut()
+            .then(async r=>{
+                try{
+                    await GoogleSignin.revokeAccess()
+                    await GoogleSignin.signOut()
+                }
+                catch (err) {
+                    console.log(err)
+                }
+                await this.props.navigation.dispatch(
+                    CommonActions.reset({
+                        index: 1,
+                        routes: [
+                            { name: 'Login' },
+                        ]
+                    })
                 )
-                .catch(err => {
-                    Alert.alert(err.message)
-                })
-        }
-        catch (error) {
-            Alert.alert(error)
-        }
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
     }
 
     getAllCourses = ()=>{
