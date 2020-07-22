@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const emailTemplate=(name,date,topics,results,type)=>{
+export const emailTemplate=(courseName,name,date,topics,results,type)=>{
     return(
         type==="Minute paper" ?
             `
@@ -11,7 +11,7 @@ export const emailTemplate=(name,date,topics,results,type)=>{
                     Respected Faculty ${name},
                     <br/> 
                     <br/>     
-                    Following is the results of ${type} on ${date} 
+                    Following is the results of ${type} on ${date} for course ${courseName}
                     <br/> 
                     <br/>        
                 </p>
@@ -44,7 +44,7 @@ export const emailTemplate=(name,date,topics,results,type)=>{
                 Respected Faculty ${name},
                 <br/> 
                 <br/>     
-                Following is the results of ${type} on ${date} 
+                Following is the results of ${type} on ${date} for course ${courseName}
                 <br/> 
                 <br/>        
                 <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['A','B', 'C','D'], datasets:[{data:[${results['A']},${results['B']},${results['C']},${results['D']}]}]}}" height=50% width = 50%>
@@ -62,7 +62,7 @@ export const emailTemplate=(name,date,topics,results,type)=>{
         </body>
         </html>
         `
-        :
+        : type==="In-Class Quiz"?
         `
         <html>
             <head>
@@ -89,7 +89,7 @@ export const emailTemplate=(name,date,topics,results,type)=>{
                 Respected Faculty ${name},
                 <br/> 
                 <br/>     
-                Following is the results of ${type} on ${date} 
+                Following is the results of ${type} on ${date} for course ${courseName}
                 <br/> 
                 <br/>
             </p>
@@ -119,4 +119,33 @@ export const emailTemplate=(name,date,topics,results,type)=>{
         </body>
         </html>
         `
+        :
+        `
+        <html>
+        <head>
+        </head>
+        <body>
+            <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
+                    Respected Faculty ${name},
+                    <br/> 
+                    <br/>    
+                    <br/>
+                    <br/> 
+                    PFA the list of students for course ${courseName}
+                    <br/> 
+                    <br/>
+            </p>     
+            <br/><br/><br/><br/>
+            <p>
+                Regards,
+                <br/>
+                Team TLS
+                <br/>
+                <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
+                
+            </p>    
+        </body>
+        </html>
+        `
+
     )}
