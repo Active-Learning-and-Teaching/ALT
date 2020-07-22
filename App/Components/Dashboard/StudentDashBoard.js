@@ -39,13 +39,6 @@ export default class StudentDashBoard extends Component {
         auth()
             .signOut()
             .then(async r=>{
-                try{
-                    await GoogleSignin.revokeAccess()
-                    await GoogleSignin.signOut()
-                }
-                catch (err) {
-                    console.log(err)
-                }
                 await this.props.navigation.dispatch(
                     CommonActions.reset({
                         index: 1,
@@ -54,6 +47,15 @@ export default class StudentDashBoard extends Component {
                         ]
                     })
                 )
+
+                try{
+                    await GoogleSignin.revokeAccess()
+                    await GoogleSignin.signOut()
+                }
+                catch (err) {
+                    console.log(err)
+                }
+
             })
             .catch(err => {
                 console.log(err.message)
