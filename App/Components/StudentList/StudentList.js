@@ -56,6 +56,7 @@ export default class StudentList extends Component{
                 this.setState({
                     studentList : list
                 })
+                this.props.route.params.getStudentListData(list)
             })
     }
     createTitle = (value)=>{
