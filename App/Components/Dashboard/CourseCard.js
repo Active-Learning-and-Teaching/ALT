@@ -5,10 +5,21 @@ import Dimensions from '../../Utils/Dimensions';
 import {CoursePics} from '../../Utils/CoursePics';
 
 export default class  CourseCard extends Component{
+    constructor() {
+        super();
+        this.state = {
+            image : ""
+        };
+    }
 
     getImage = () =>{
-        // console.log(CoursePics(this.props.course.imageURL))
-        return CoursePics(this.props.course.imageURL)
+        this.setState({
+            image : CoursePics(this.props.course.imageURL)
+        })
+    }
+
+    componentDidMount() {
+        this.getImage()
     }
 
     render(){
@@ -20,7 +31,7 @@ export default class  CourseCard extends Component{
                         user : this.props.user,
                         course : this.props.course
                 })}}
-                imageSrc={this.getImage()}
+                imageSrc={this.state.image}
                 imageContainerStyle={styles.imageContainer}
                 activeOpacity={0.7}
                 title = {this.props.course.courseName}
