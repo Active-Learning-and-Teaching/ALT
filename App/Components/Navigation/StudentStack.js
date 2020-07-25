@@ -2,7 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React, {Component} from 'react';
 import StudentList from '../StudentList/StudentList';
 import {Icon} from 'react-native-elements';
-import {Alert} from 'react-native';
+import {Alert, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {Mailer} from '../../Utils/Mailer';
 const Stack = createStackNavigator();
@@ -28,7 +28,7 @@ export default class StudentStack extends Component {
 
     showAlert() {
         Alert.alert(
-            'Email Student list?',
+            'Email list of students?',
             '',
             [
                 {
@@ -44,14 +44,29 @@ export default class StudentStack extends Component {
                         const values = this.state.studentList;
 
                         const headerString = 'Student Name, EmailID," "," "," "\n';
-                        const rowString = values.map((student,i) => `${student.name},${student.email},${" "},${" "},${" "}\n`).join('');
+                        const rowString = values.map(
+                            (student,i) =>
+                                `${student.name},
+                                ${student.email},
+                                ${" "},
+                                ${" "},
+                                ${" "}\n`
+                            ).join('');
                         const csvString = `${headerString}${rowString}`;
 
                         reactFile.writeFile(path, csvString, 'utf8')
                             .then((success) => {
                                 console.log("File Written")
                                 Toast.show('Sending Email...');
-                                Mailer(this.state.course.courseName,this.state.user.email,this.state.user.name,"","","","StudentList")
+                                Mailer(
+                                    this.state.course.courseName,
+                                    this.state.user.email,
+                                    this.state.user.name,
+                                    "",
+                                    "",
+                                    "",
+                                    "StudentList"
+                                )
                             })
                             .catch((err) => {
                                 console.log(err.message);
@@ -77,15 +92,16 @@ export default class StudentStack extends Component {
                                    ?
                                    Platform.OS==="android"
                                        ?
-                                       <Icon
-                                           name='ellipsis-v'
-                                           type='font-awesome'
-                                           style={{borderRadius:1, padding:20}}
-                                           onPress={()=>{this.showAlert()}}
-                                       />
+                                       <View style={{padding: 10}}>
+                                           <Icon
+                                               name='envelope-o'
+                                               type='font-awesome'
+                                               onPress={()=>{this.showAlert()}}
+                                           />
+                                       </View>
                                        :
                                        <Icon
-                                           name='ellipsis-v'
+                                           name='envelope-o'
                                            type='font-awesome'
                                            style={{borderRadius:1,paddingRight:10}}
                                            onPress={()=>{this.showAlert()}}

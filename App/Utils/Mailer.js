@@ -18,7 +18,7 @@ export const Mailer = (courseName,email,name,date,topics,results,type) => {
             RNFS.DocumentDirectoryPath + `/${courseName}.csv`
         ]:[],
         attachmentNames : type==="StudentList"?[
-            `/${courseName}.csv`
+            `${courseName}.csv`
         ]:[],
         attachmentTypes : type==="StudentList"?[
             "csv"

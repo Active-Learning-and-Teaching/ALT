@@ -90,9 +90,9 @@ export default class StudentList extends Component{
                                     rounded : true
                                 }}
                                 rightIcon={{
-                                    name : 'envelope-o',
+                                    name : 'mail-forward',
                                     type : 'font-awesome',
-                                    size : 24,
+                                    size : 20,
                                     color : 'grey',
                                     onPress : () =>{
                                         Linking.openURL('mailto:' + student.email).then(r  => console.log(r))

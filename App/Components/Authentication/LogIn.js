@@ -15,6 +15,7 @@ import {
 } from '@react-native-community/google-signin';
 import Faculty from '../../Databases/Faculty';
 import Student from '../../Databases/Student';
+import Dimensions from '../../Utils/Dimensions';
 
 export default class LogIn extends Component {
     constructor() {
@@ -114,7 +115,7 @@ export default class LogIn extends Component {
         return(
             <View style = {styles.container}>
                 <View style={styles.logo}>
-                    <Image source={require('../../Assets/Logo.png')} />
+                    <Image style={styles.image} source={require('../../Assets/Logo.png')} />
                 </View>
                 <TextInput
                     style={styles.textInput}
@@ -168,7 +169,12 @@ const styles = StyleSheet.create({
         padding: 35,
         backgroundColor: '#fff',
     },
+    image : {
+        width : Dimensions.window.width/3,
+        height: Dimensions.window.width/3
+    },
     logo: {
+        marginTop : 0,
         alignItems : "center",
         paddingBottom : 5,
     },
