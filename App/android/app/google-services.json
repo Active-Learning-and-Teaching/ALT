@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "769962526895-n38eci2ukv1oo7htjsk31ckdk3dimd52.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tls",
+            "certificate_hash": "c0d753f3269ecfd0e7efcaf6b62097b644aed3b2"
+          }
+        },
+        {
           "client_id": "769962526895-91j2umvi0d9optiudb4vr98mlur65mgv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,6 +46,13 @@
             {
               "client_id": "769962526895-08kognjarhar35ife1q2r0gpvlh0kj3h.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "769962526895-34ctktpthp9pdecrvrob1gl0vb2a5qct.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.TLS"
+              }
             }
           ]
         }
