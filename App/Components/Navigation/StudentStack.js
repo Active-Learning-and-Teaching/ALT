@@ -43,15 +43,8 @@ export default class StudentStack extends Component {
                         const path = reactFile.DocumentDirectoryPath + `/${this.state.course.courseName}.csv`;
                         const values = this.state.studentList;
 
-                        const headerString = 'Student Name, EmailID," "," "," "\n';
-                        const rowString = values.map(
-                            (student,i) =>
-                                `${student.name},
-                                ${student.email},
-                                ${" "},
-                                ${" "},
-                                ${" "}\n`
-                            ).join('');
+                        const headerString = 'Student Name, EmailID\n';
+                        const rowString = values.map((student,i) => `${student.name},${student.email}\n`).join('');
                         const csvString = `${headerString}${rowString}`;
 
                         reactFile.writeFile(path, csvString, 'utf8')
