@@ -121,14 +121,14 @@ export default class QuizResultGraph extends Component {
                     :
                     this.props.quizType==="numerical"
                     ?
-                    <View style={styles.container}>
+                    <View style={styles.numContainer}>
                         <Text style={styles.body1}>Top 5 Answers</Text>
                         {this.state.top5answer.map((value, i) => (
                             <View key={i}>
                                 <Text style={styles.body2}>
                                     {i+1+".   "}
-                                    {value[0] + " : "}
-                                    {value[1]}
+                                    <Text style={{fontWeight:"bold"}}>{value[0]}</Text>
+                                    { " : " +value[1]}
                                     {value[1]===1
                                         ? " Student"
                                         : " Students"
@@ -188,6 +188,15 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: 'center',
+        padding:30,
+        backgroundColor : 'white'
+    },
+    numContainer: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: 'flex-start',
         padding:30,
         backgroundColor : 'white'
     },

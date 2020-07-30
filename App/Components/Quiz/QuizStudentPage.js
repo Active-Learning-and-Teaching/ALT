@@ -133,7 +133,7 @@ export default class QuizStudentPage extends Component {
                                 this.getCorrectAnswer().then(r=>{console.log("")})
                             }}
                             digitStyle={{backgroundColor: '#FFF'}}
-                            digitTxtStyle={{color: '#2697BF'}}
+                            digitTxtStyle={{fontFamily: 'arial',color: '#2697BF'}}
                             timeToShow={['M', 'S']}
                             timeLabels={{m: 'Min', s: 'Sec'}}
                         />
