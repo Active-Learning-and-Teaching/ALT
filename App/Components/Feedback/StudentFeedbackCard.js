@@ -22,6 +22,7 @@ export default class StudentFeedbackCard extends Component{
                     onPress={value => {
                         this.props.studentResponses(this.props.value, value)
                     }}
+                    textStyle={{fontFamily:"arial"}}
                     textColor={'#383030'}
                     selectedColor={'white'}
                     borderColor={'#383030'}

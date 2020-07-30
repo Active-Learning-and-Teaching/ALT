@@ -11,6 +11,10 @@ import Toast from 'react-native-simple-toast';
 import {Mailer} from '../../Utils/Mailer';
 
 export default class FeedbackFacultyPage extends Component {
+
+    // TODO change duration at deployment
+    duration=1;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -18,7 +22,7 @@ export default class FeedbackFacultyPage extends Component {
             user : this.props.user,
             emailPage : false,
             topics : [],
-            duration : 1,
+            duration : this.duration,
             date :"",
             results : "",
             loading : true
@@ -73,7 +77,7 @@ export default class FeedbackFacultyPage extends Component {
         this.setState({
             emailPage : false,
             topics : [],
-            duration : 1,
+            duration : this.duration,
             date :"",
             results : ""
         })
@@ -141,7 +145,7 @@ export default class FeedbackFacultyPage extends Component {
                                                 this.setState({
                                                     emailPage : false,
                                                     topics : [],
-                                                    duration : 1,
+                                                    duration : this.duration,
                                                     date :"",
                                                     results : ""
                                                 })
@@ -173,7 +177,7 @@ export default class FeedbackFacultyPage extends Component {
                                             this.props.setFeedbackState()
                                         }}
                                         digitStyle={{backgroundColor: '#FFF'}}
-                                        digitTxtStyle={{color: '#2697BF'}}
+                                        digitTxtStyle={{fontFamily: 'arial',color: '#2697BF'}}
                                         timeToShow={['D','H','M', 'S']}
                                         timeLabels={{d:'Day',h:'Hour',m: 'Min', s: 'Sec'}}
                                     />
@@ -198,7 +202,7 @@ export default class FeedbackFacultyPage extends Component {
                                 this.props.setFeedbackState()
                             }}
                             digitStyle={{backgroundColor: '#FFF'}}
-                            digitTxtStyle={{color: '#2697BF'}}
+                            digitTxtStyle={{fontFamily: 'arial',color: '#2697BF'}}
                             timeToShow={['M', 'S']}
                             timeLabels={{m: 'Min', s: 'Sec'}}
                         />

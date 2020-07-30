@@ -177,6 +177,7 @@ export default class QuizFacultyPage extends Component{
                                     typeofQuiz : value
                                 })
                             }}
+                            textStyle={{fontFamily:"arial"}}
                             textColor={'#383030'}
                             selectedColor={'white'}
                             borderColor={'#383030'}
@@ -294,7 +295,7 @@ export default class QuizFacultyPage extends Component{
                             this.props.setQuizState()
                         }}
                         digitStyle={{backgroundColor: '#FFF'}}
-                        digitTxtStyle={{color: '#2697BF'}}
+                        digitTxtStyle={{fontFamily: 'arial',color: '#2697BF'}}
                         timeToShow={['M', 'S']}
                         timeLabels={{m: 'Min', s: 'Sec'}}
                     />

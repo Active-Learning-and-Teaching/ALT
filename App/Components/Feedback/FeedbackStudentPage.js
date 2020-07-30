@@ -176,7 +176,7 @@ export default class FeedbackStudentPage extends Component {
                                         this.props.setFeedbackState()
                                     }}
                                     digitStyle={{backgroundColor: '#FFF'}}
-                                    digitTxtStyle={{color: '#2697BF'}}
+                                    digitTxtStyle={{fontFamily: 'arial',color: '#2697BF'}}
                                     timeToShow={['M', 'S']}
                                     timeLabels={{m: 'Min', s: 'Sec'}}
                                 />
