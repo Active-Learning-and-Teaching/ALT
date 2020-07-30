@@ -46,6 +46,11 @@ export default class RegisterUser extends Component {
                 error : "Passwords Don't Match"
             })
         }
+        else if (password.length<6){
+            this.setState({
+                error : "Password must be 6 or more characters long."
+            })
+        }
         else
         {
             this.setState({
