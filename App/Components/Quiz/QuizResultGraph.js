@@ -126,7 +126,6 @@ export default class QuizResultGraph extends Component {
                         {this.state.top5answer.map((value, i) => (
                             <View key={i}>
                                 <Text style={styles.body2}>
-                                    {i+1+".   "}
                                     <Text style={{fontWeight:"bold"}}>{value[0]}</Text>
                                     { " : " +value[1]}
                                     {value[1]===1
