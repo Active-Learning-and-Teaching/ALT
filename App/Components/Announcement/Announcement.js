@@ -17,12 +17,14 @@ export default class  Announcement extends Component{
             type : this.props.route.params.type,
             course : this.props.route.params.course,
             user : this.props.route.params.user,
+            image : "",
             announcementList : []
         };
     }
     getImage = () =>{
-        console.log(CoursePics(this.state.course.imageURL))
-        return CoursePics(this.state.course.imageURL)
+        this.setState({
+            image : CoursePics(this.state.course.imageURL)
+        })
     }
 
     getAnnouncements = () => {
@@ -50,6 +52,7 @@ export default class  Announcement extends Component{
 
     componentDidMount() {
         this.getAnnouncements()
+        this.getImage()
     }
 
     render(){
@@ -62,7 +65,7 @@ export default class  Announcement extends Component{
                                 Clipboard.setString(this.state.course.passCode)
                                 Toast.show('PassCode Copied to Clipboard');
                             }}
-                            imageSrc={this.getImage()}
+                            imageSrc={this.state.image}
                             imageContainerStyle={styles.imageContainer}
                             activeOpacity={0.7}
                             title = {this.state.course.courseName + " (" + this.state.course.passCode + ")"}
