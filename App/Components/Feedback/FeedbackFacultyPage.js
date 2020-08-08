@@ -86,10 +86,19 @@ export default class FeedbackFacultyPage extends Component {
             .then(()=>{console.log("Updated email")})
     }
 
-    startFeedback = async()=>{
+    startFeedback = async(action)=>{
         const feedback = new Feedback()
-        const startTime = moment().format("DD/MM/YYYY HH:mm:ss")
-        const endTime = moment().add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+        let startTime = moment().format("DD/MM/YYYY HH:mm:ss")
+        let endTime = moment().add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+        if(action==="stop")
+        {
+            startTime = moment(this.props.startTime, "DD/MM/YYYY HH:mm:ss")
+                .add(10, 'minutes')
+                .format("DD/MM/YYYY HH:mm:ss")
+            endTime = moment(this.props.startTime, "DD/MM/YYYY HH:mm:ss")
+                .add(10+this.state.duration, 'minutes')
+                .format("DD/MM/YYYY HH:mm:ss")
+        }
 
         feedback.getFeedbackDetails(this.state.course.passCode)
             .then(value => {
@@ -135,7 +144,14 @@ export default class FeedbackFacultyPage extends Component {
                                     <Button style={styles.buttonMessage}
                                             title={'Email \n Responses'}
                                             onPress={()=>{
-                                                Mailer(this.state.course.courseName,this.state.user.email,this.state.user.name,this.state.date,this.state.topics,this.state.results,"Minute paper")
+                                                Mailer(
+                                                    this.state.course.courseName,
+                                                    this.state.user.email,
+                                                    this.state.user.name,
+                                                    this.state.date,
+                                                    this.state.topics,
+                                                    this.state.results,
+                                                    "Minute paper")
                                                 this.mailFeedbackResponses()
                                                 Toast.show('Sending Email...');
                                             }}/>
@@ -184,7 +200,13 @@ export default class FeedbackFacultyPage extends Component {
                                 </View>
                                 <Text style={styles.text}> Or </Text>
                                 <View style={styles.buttonContainer}>
-                                    <Button style={styles.buttonMessage} title='START NOW!' onPress={this.startFeedback} />
+                                    <Button style={styles.buttonMessage} title='START NOW!' onPress={()=>{
+                                        this.startFeedback("start").then(r => "")}} />
+                                </View>
+                                <Text style={styles.text}> Or </Text>
+                                <View style={styles.buttonContainer}>
+                                    <Button style={styles.buttonMessage} title='Extend by 10 mins' onPress={()=>{
+                                        this.startFeedback("stop").then(r => "")}} />
                                 </View>
                             </View>
                         </ScrollView>
@@ -289,7 +311,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         fontSize : 16,
         color: 'grey',
-        marginTop: 5,
+        marginTop: 25,
         alignSelf: "center",
     },
     text1 : {
@@ -321,7 +343,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        paddingTop : 15,
+        paddingTop : 5,
         paddingLeft : 30,
         paddingRight : 30
     },

@@ -7,6 +7,9 @@ import Feedback from '../../Databases/Feedback';
 import {Button as IosButton } from 'react-native';
 export default class FeedbackForm extends Component {
 
+    // TODO change duration at deployment
+    duration=1;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -22,7 +25,7 @@ export default class FeedbackForm extends Component {
             iostime : moment().format("HH:mm:ss"),
             error : null,
             topics : [],
-            duration : 1,
+            duration : this.duration,
         }
     }
 
@@ -74,7 +77,9 @@ export default class FeedbackForm extends Component {
            else
                 startTime = this.state.iosdate + " " + this.state.iostime
 
-            let endTime = moment(startTime, "DD/MM/YYYY HH:mm:ss").add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+            let endTime = moment(startTime, "DD/MM/YYYY HH:mm:ss")
+                .add(this.state.duration, 'minutes')
+                .format("DD/MM/YYYY HH:mm:ss")
 
             const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
             const curr = moment()
