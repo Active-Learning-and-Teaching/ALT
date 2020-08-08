@@ -17,7 +17,8 @@ export default class FeedbackHomePage extends Component{
             beforeFeedback : false,
             currentFeedback : false,
             currentDuration : 0,
-            beforeDuration : 0
+            beforeDuration : 0,
+            startTime :'',
         }
         this.setFeedbackState = this.setFeedbackState.bind(this);
     }
@@ -57,7 +58,8 @@ export default class FeedbackHomePage extends Component{
                             beforeFeedback : true,
                             currentFeedback : false,
                             currentDuration : 0,
-                            beforeDuration : beforeduration
+                            beforeDuration : beforeduration,
+                            startTime : starttime
                         })
                     }
                     else{
@@ -88,6 +90,7 @@ export default class FeedbackHomePage extends Component{
                         currentDuration = {this.state.currentDuration}
                         beforeDuration = {this.state.beforeDuration}
                         setFeedbackState = {this.setFeedbackState}
+                        startTime = {this.state.startTime}
                     />
                     :
                     <FeedbackStudentPage
