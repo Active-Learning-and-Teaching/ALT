@@ -174,7 +174,10 @@ export default class QuizFacultyPage extends Component{
                             initial={0}
                             onPress={value => {
                                 this.setState({
-                                    typeofQuiz : value
+                                    typeofQuiz : value,
+                                    option : "0",
+                                    icon : "",
+                                    correctAnswer : "0",
                                 })
                             }}
                             textStyle={{fontFamily:"arial"}}
