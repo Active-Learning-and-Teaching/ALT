@@ -19,6 +19,7 @@ export default class FeedbackHomePage extends Component{
             currentDuration : 0,
             beforeDuration : 0,
             startTime :'',
+            topics : []
         }
         this.setFeedbackState = this.setFeedbackState.bind(this);
     }
@@ -37,7 +38,7 @@ export default class FeedbackHomePage extends Component{
                     const values = Object.values(snapshot.val())[0]
                     const starttime = values['startTime']
                     const endtime = values['endTime']
-                    const curr = moment()
+                    const curr = moment().add(1, "seconds")
 
                     const temp = moment(endtime, "DD/MM/YYYY HH:mm:ss")
                     const duration = Math.abs(moment().diff(temp, "seconds"))
@@ -50,7 +51,8 @@ export default class FeedbackHomePage extends Component{
                             beforeFeedback : false,
                             currentFeedback : true,
                             currentDuration : duration,
-                            beforeDuration : 0
+                            beforeDuration : 0,
+                            topics : values["topics"]
                         })
                     }
                     else if (curr<temp2){
@@ -59,7 +61,8 @@ export default class FeedbackHomePage extends Component{
                             currentFeedback : false,
                             currentDuration : 0,
                             beforeDuration : beforeduration,
-                            startTime : starttime
+                            startTime : starttime,
+                            topics : values["topics"]
                         })
                     }
                     else{
@@ -67,7 +70,8 @@ export default class FeedbackHomePage extends Component{
                             beforeFeedback : false,
                             currentFeedback : false,
                             currentDuration : 0,
-                            beforeDuration : 0
+                            beforeDuration : 0,
+                            topics : values["topics"]
                         })
                     }
                 }
@@ -101,6 +105,7 @@ export default class FeedbackHomePage extends Component{
                         currentDuration = {this.state.currentDuration}
                         beforeDuration = {this.state.beforeDuration}
                         setFeedbackState = {this.setFeedbackState}
+                        topics = {this.state.topics}
                     />
                 }
             </SafeAreaView>

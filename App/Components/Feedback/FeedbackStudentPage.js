@@ -128,6 +128,13 @@ export default class FeedbackStudentPage extends Component {
         this.getTopics().then(r=>{console.log(this.state.topics)})
     }
 
+    componentDidUpdate(prevProps) {
+        if(prevProps.topics!=this.props.topics)
+        {
+            this.getTopics().then(r=>{console.log(this.state.topics)})
+        }
+    }
+
     render(){
         if(!this.state.loading){
         return(
