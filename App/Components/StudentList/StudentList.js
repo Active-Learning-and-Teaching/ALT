@@ -51,20 +51,39 @@ export default class StudentList extends Component{
                     }
                 })
                 list.sort((a,b) =>
-                    (a.name.toUpperCase() > b.name.toUpperCase()) ? 1
-                        : ((b.name.toUpperCase()  > a.name.toUpperCase()) ? -1 : 0));
+                    a.name!==undefined && b.name!==undefined
+                    ? a.name.toUpperCase() > b.name.toUpperCase()
+                        ? 1
+                        : ((b.name.toUpperCase()  > a.name.toUpperCase())
+                            ? -1
+                            : 0)
+                    : a.email > b.email
+                        ? 1
+                        : b.email > a.email
+                            ? -1
+                            : 0
+                );
                 this.setState({
                     studentList : list
                 })
                 this.props.route.params.getStudentListData(list)
             })
     }
-    createTitle = (value)=>{
-        const res = value.split(" ");
-        if(res.length===1)
-            return res[0].charAt(0).toUpperCase();
-        else
-            return res[0].charAt(0).toUpperCase()+res[res.length-1].charAt(0).toUpperCase()
+
+    rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+
+    createTitle = (name,email)=>{
+        if(name!==undefined){
+            const val = name.replace(this.rtrim,"");
+            if(val.length==0)
+                return email.charAt(0).toUpperCase();
+            const res = val.split(" ");
+            if(res.length===1)
+                return res[0].charAt(0).toUpperCase();
+            else if(res.length>1)
+                return res[0].charAt(0).toUpperCase()+res[res.length-1].charAt(0).toUpperCase()
+        }
+        return email.charAt(0).toUpperCase();
     }
 
     componentDidMount() {
@@ -73,7 +92,6 @@ export default class StudentList extends Component{
         })
 
     }
-
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>
@@ -83,7 +101,7 @@ export default class StudentList extends Component{
                             <ListItem
                                 key = {i}
                                 leftAvatar= {{
-                                    title : this.createTitle(student.name),
+                                    title : this.createTitle(student.name, student.email),
                                     titleStyle : {color:"white", fontSize:20},
                                     overlayContainerStyle : {backgroundColor: '#2697BF'},
                                     size : "medium",
@@ -98,7 +116,7 @@ export default class StudentList extends Component{
                                         Linking.openURL('mailto:' + student.email).then(r  => console.log(r))
                                     }
                                 }}
-                                title={student.name}
+                                title={student.name!==undefined && student.name.replace(this.rtrim,"").length!==0 ? student.name.replace(this.rtrim,"") : student.email}
                                 titleStyle={styles.title}
                                 subtitle={student.email}
                                 subtitleStyle={styles.caption}
