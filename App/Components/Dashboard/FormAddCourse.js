@@ -21,13 +21,16 @@ export default class FormAddCourse extends Component {
 
     CreateCourse = async () => {
 
-        const {courseName, courseCode, room} = this.state;
+        let {courseName, courseCode, room} = this.state;
+        courseName = courseName.replace(/\s+/g,' ').trim();
+        courseCode = courseCode.replace(/\s+/g,' ').trim();
 
         if (courseName === '' || courseCode === '') {
             this.setState({
                 error: "Please Enter details."
             })
         } else {
+            courseName = courseName.charAt(0).toUpperCase() + courseName.slice(1);
             const courses = new Courses()
 
             courses.setcourseName(courseName)

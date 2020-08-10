@@ -21,13 +21,14 @@ export default class AnnouncementsAdd extends Component {
 
     addAnnouncement = async () => {
 
-        const {heading, description, error} = this.state;
-
+        let {heading, description, error} = this.state;
+        heading = heading.replace(/\s+/g,' ').trim();
         if (heading === '') {
             this.setState({
                 error: "Please Enter Heading."
             })
         } else {
+            heading = heading.charAt(0).toUpperCase() + heading.slice(1)
             const announcement =  new Announcement()
             const dateAndTime= moment().format("DD/MM/YYYY HH:mm")
             await announcement.createAnnouncement(
