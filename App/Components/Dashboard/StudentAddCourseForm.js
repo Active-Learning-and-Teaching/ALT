@@ -19,7 +19,8 @@ export default class StudentAddCourseForm extends Component {
 
     joinCourse = async () => {
 
-        const {passCode, error} = this.state;
+        let {passCode, error} = this.state;
+        passCode = passCode.replace(/\s+/g,' ').trim()
 
         if (passCode === '') {
             this.setState({

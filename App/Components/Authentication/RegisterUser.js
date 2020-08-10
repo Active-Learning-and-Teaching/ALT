@@ -32,8 +32,9 @@ export default class RegisterUser extends Component {
 
     RegisterUserToFirebase = async() => {
 
-        const { email, password, confirmPassword, name } = this.state;
+        let { email, password, confirmPassword, name } = this.state;
 
+        name = name.replace(/[^A-Za-z" "]/ig, '').replace(/\s+/g,' ').trim();
         if (email==='' || password==='' || name==='')
         {
             this.setState({
@@ -53,6 +54,8 @@ export default class RegisterUser extends Component {
         }
         else
         {
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+
             this.setState({
                 error : null
             })

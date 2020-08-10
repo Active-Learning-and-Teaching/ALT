@@ -70,14 +70,12 @@ export default class StudentList extends Component{
             })
     }
 
-    rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-
     createTitle = (name,email)=>{
         if(name!==undefined){
-            const val = name.replace(this.rtrim,"");
-            if(val.length==0)
+            name = name.replace(/\s+/g,' ').trim();
+            if(name.length==0)
                 return email.charAt(0).toUpperCase();
-            const res = val.split(" ");
+            const res = name.split(" ");
             if(res.length===1)
                 return res[0].charAt(0).toUpperCase();
             else if(res.length>1)
@@ -116,7 +114,9 @@ export default class StudentList extends Component{
                                         Linking.openURL('mailto:' + student.email).then(r  => console.log(r))
                                     }
                                 }}
-                                title={student.name!==undefined && student.name.replace(this.rtrim,"").length!==0 ? student.name.replace(this.rtrim,"") : student.email}
+                                title={student.name!==undefined && student.name.replace(/\s+/g,' ').trim().length!==0
+                                        ? student.name.replace(/\s+/g,' ').trim()
+                                        : student.email}
                                 titleStyle={styles.title}
                                 subtitle={student.email}
                                 subtitleStyle={styles.caption}
