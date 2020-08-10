@@ -16,7 +16,7 @@ export default class App extends Component{
 
     componentDidMount(): void {
         GoogleSignin.configure({
-            scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+            // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
             webClientId: config.webClientId,
             offlineAccess: true
         })
