@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {StyleSheet, View, Text, ScrollView, SafeAreaView} from 'react-native';
 import {Avatar, Button} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import ErrorMessages from '../../Utils/ErrorMessages';
@@ -96,46 +96,48 @@ export default class StudentOrFaculty extends Component {
     render(){
 
         return(
-            <ScrollView style = {styles.container}>
-                <View style = {styles.viewContainer}>
+            <SafeAreaView style = {styles.container}>
+                <ScrollView>
+                    <View style = {styles.viewContainer}>
 
-                    <Avatar
-                        size="xlarge"
-                        rounded
-                        source = {require('../../Assets/Faculty.png')}
-                        overlayContainerStyle={{backgroundColor: 'white'}}
-                        onPress={() => this.setState({
-                            selected: 'faculty',
-                            error :null
-                        })}
-                        activeOpacity={0.7}
-                        avatarStyle={styles.avatarStyle}
-                        containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='faculty'?8:0}]}
-                    />
-                    <Text style={styles.text}>Faculty</Text>
-                    <Avatar
-                        size="xlarge"
-                        rounded
-                        source = {require('../../Assets/Student.png')}
-                        overlayContainerStyle={{backgroundColor: 'white'}}
-                        onPress={() => this.setState({
-                            selected: 'student',
-                            error :null
-                        })}
-                        activeOpacity={0.7}
-                        avatarStyle={styles.avatarStyle}
-                        containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='student'?8:0}]}
-                    />
-                    <Text style={styles.text}>Student</Text>
+                        <Avatar
+                            size="xlarge"
+                            rounded
+                            source = {require('../../Assets/Faculty.png')}
+                            overlayContainerStyle={{backgroundColor: 'white'}}
+                            onPress={() => this.setState({
+                                selected: 'faculty',
+                                error :null
+                            })}
+                            activeOpacity={0.7}
+                            avatarStyle={styles.avatarStyle}
+                            containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='faculty'?8:0}]}
+                        />
+                        <Text style={styles.text}>Faculty</Text>
+                        <Avatar
+                            size="xlarge"
+                            rounded
+                            source = {require('../../Assets/Student.png')}
+                            overlayContainerStyle={{backgroundColor: 'white'}}
+                            onPress={() => this.setState({
+                                selected: 'student',
+                                error :null
+                            })}
+                            activeOpacity={0.7}
+                            avatarStyle={styles.avatarStyle}
+                            containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='student'?8:0}]}
+                        />
+                        <Text style={styles.text}>Student</Text>
 
-                </View>
-                { this.state.error ?
-                    <Text style={styles.errorMessage}>
-                        {this.state.error}
-                    </Text> : <Text/>}
+                    </View>
+                    { this.state.error ?
+                        <Text style={styles.errorMessage}>
+                            {this.state.error}
+                        </Text> : <Text/>}
 
-                <Button style={styles.buttonMessage} title="Register" onPress={this.RegisterTypeOfUser} />
-            </ScrollView>
+                    <Button style={styles.buttonMessage} title="Register" onPress={this.RegisterTypeOfUser} />
+                </ScrollView>
+            </SafeAreaView>
         )
     }
 }
@@ -155,6 +157,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         padding: 35,
+        marginTop :20,
         backgroundColor: '#fff'
     },
     avatarStyle : {
@@ -171,7 +174,8 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     buttonMessage: {
-        marginTop: 15
+        marginTop: 15,
+        padding : 35,
     },
     avatarContainer:{
         marginTop: 30,

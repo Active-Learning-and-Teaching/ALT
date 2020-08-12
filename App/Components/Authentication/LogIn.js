@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
 import ErrorMessages from "../../Utils/ErrorMessages"
 import {Button} from 'react-native-elements';
-import {Image} from 'react-native';
 import {
     StyleSheet,
     Text,
     View,
     TextInput,
+    Image,
+    ScrollView,
+    SafeAreaView
 } from 'react-native';
 import {
     GoogleSignin,
@@ -113,54 +115,65 @@ export default class LogIn extends Component {
 
     render(){
         return(
-            <View style = {styles.container}>
-                <View style={styles.logo}>
-                    <Image style={styles.image} source={require('../../Assets/Logo.png')} />
-                </View>
-                <TextInput
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Email"
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
-                <TextInput
-                    secureTextEntry
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Password"
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                />
-                { this.state.error ?
-                <Text style={styles.errorMessage}>
-                    {this.state.error}
-                </Text> : <Text/>}
+            <SafeAreaView style={styles.safeContainer}>
+                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                    <View style = {styles.container}>
+                        <View style={styles.logo}>
+                            <Image style={styles.image} source={require('../../Assets/Logo.png')} />
+                        </View>
+                        <View style = {styles.styleContainer}>
+                            <TextInput
+                                style={styles.textInput}
+                                autoCapitalize="none"
+                                placeholder="Email"
+                                onChangeText={email => this.setState({ email })}
+                                value={this.state.email}
+                            />
+                            <TextInput
+                                secureTextEntry
+                                style={styles.textInput}
+                                autoCapitalize="none"
+                                placeholder="Password"
+                                onChangeText={password => this.setState({ password })}
+                                value={this.state.password}
+                            />
 
-                <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser} />
+                        { this.state.error ?
+                            <Text style={styles.errorMessage}>
+                                {this.state.error}
+                            </Text> : <Text/>}
 
-                <Text
-                    style = {styles.signupText}
-                    onPress={() => this.props.navigation.navigate('Register User')}
-                >
-                    Don't have an account? Register Now
-                </Text>
+                        <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser} />
 
-                <Text style = {styles.or}> Or
-                </Text>
+                        <Text
+                            style = {styles.signupText}
+                            onPress={() => this.props.navigation.navigate('Register User')}
+                        >
+                            Don't have an account? Register Now
+                        </Text>
 
-                <GoogleSigninButton
-                    style={styles.googleSigninButton}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={this.signInWithGoogle}/>
+                        <Text style = {styles.or}> Or
+                        </Text>
 
-            </View>
+                        <GoogleSigninButton
+                            style={styles.googleSigninButton}
+                            size={GoogleSigninButton.Size.Wide}
+                            color={GoogleSigninButton.Color.Dark}
+                            onPress={this.signInWithGoogle}/>
+                        </View>
+                    </View>
+
+                </ScrollView>
+            </SafeAreaView>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    safeContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
     container: {
         flex: 1,
         display: "flex",
@@ -169,12 +182,14 @@ const styles = StyleSheet.create({
         padding: 35,
         backgroundColor: '#fff',
     },
+    styleContainer:{
+        paddingTop:25,
+    },
     image : {
-        width : Dimensions.window.width/3,
-        height: Dimensions.window.width/3
+        width : Dimensions.window.width/2.5,
+        height: Dimensions.window.width/2.5
     },
     logo: {
-        marginTop : 0,
         alignItems : "center",
         paddingBottom : 5,
     },
@@ -198,13 +213,14 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     buttonMessage: {
-        marginTop: 15
+        marginTop: 15,
     },
     or: {
         color: 'grey',
+        marginTop: 15,
         marginBottom: 15,
-        paddingTop : 13,
-        paddingBottom: 13,
+        paddingTop : 20,
+        paddingBottom: 20,
         alignSelf: "center",
     },
     googleSigninButton: {
