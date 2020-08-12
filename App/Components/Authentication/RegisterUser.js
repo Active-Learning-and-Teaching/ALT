@@ -5,6 +5,8 @@ import {
     Text,
     View,
     TextInput,
+    ScrollView,
+    SafeAreaView
 } from 'react-native';
 
 export default class RegisterUser extends Component {
@@ -73,65 +75,75 @@ export default class RegisterUser extends Component {
 
     render(){
         return(
-            <View style = {styles.container}>
-                <TextInput
-                    style={styles.textInput}
-                    autoCapitalize="words"
-                    placeholder="Name"
-                    onChangeText={name => this.setState({ name })}
-                    value={this.state.name}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Email"
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
-                <TextInput
-                    secureTextEntry
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Password"
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                />
-                <TextInput
-                    secureTextEntry
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Confirm Password"
-                    onChangeText={confirmPassword => this.setState({ confirmPassword })}
-                    value={this.state.confirmPassword}
-                />
+            <SafeAreaView style={styles.safeContainer}>
+                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
 
-                { this.state.error ?
-                    <Text style={styles.errorMessage}>
-                        {this.state.error}
-                    </Text> : <Text/>}
+                <View style = {styles.container}>
+                        <TextInput
+                            style={styles.textInput}
+                            autoCapitalize="words"
+                            placeholder="Name"
+                            onChangeText={name => this.setState({ name })}
+                            value={this.state.name}
+                        />
+                        <TextInput
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            placeholder="Email"
+                            onChangeText={email => this.setState({ email })}
+                            value={this.state.email}
+                        />
+                        <TextInput
+                            secureTextEntry
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            placeholder="Password"
+                            onChangeText={password => this.setState({ password })}
+                            value={this.state.password}
+                        />
+                        <TextInput
+                            secureTextEntry
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            placeholder="Confirm Password"
+                            onChangeText={confirmPassword => this.setState({ confirmPassword })}
+                            value={this.state.confirmPassword}
+                        />
 
-                <Button style={styles.buttonMessage} title="Continue" onPress={this.RegisterUserToFirebase} />
+                        { this.state.error ?
+                            <Text style={styles.errorMessage}>
+                                {this.state.error}
+                            </Text> : <Text/>}
 
-                <Text
-                    style = {styles.loginText}
-                    onPress={() => this.props.navigation.navigate('Login')}
-                >
-                    Already have an account? Login
-                </Text>
+                        <Button style={styles.buttonMessage} title="Continue" onPress={this.RegisterUserToFirebase} />
 
-            </View>
+                        <Text
+                            style = {styles.loginText}
+                            onPress={() => this.props.navigation.navigate('Login')}
+                        >
+                            Already have an account? Login
+                        </Text>
+
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    safeContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
     container: {
         flex: 1,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         padding: 35,
-        backgroundColor: '#fff'
+        marginTop : 35,
+        backgroundColor: '#fff',
     },
     textInput: {
         width: '100%',
