@@ -63,7 +63,6 @@ export default class FeedbackResultsList extends Component {
                                 title={(i+1)+". " +value}
                                 titleStyle={styles.title}
                                 containerStyle={styles.listContainer}
-                                bottomDivider
                             />
                             {value in this.state.responses
                             ?
@@ -71,21 +70,21 @@ export default class FeedbackResultsList extends Component {
                                     data={
                                         [
                                             {
-                                                name: "Not Very Clear",
+                                                name: "Not Much",
                                                 responses: this.state.responses[value][0],
                                                 color: "#F3460A",
                                                 legendFontColor: "#7F7F7F",
                                                 legendFontSize: 15
                                             },
                                             {
-                                                name: "Somewhat Clear",
+                                                name: "Somewhat",
                                                 responses: this.state.responses[value][1],
                                                 color: 'orange',
                                                 legendFontColor: "#7F7F7F",
                                                 legendFontSize: 15
                                             },
                                             {
-                                                name: "Completely Clear",
+                                                name: "Completely",
                                                 responses: this.state.responses[value][2],
                                                 color: "#60CA24",
                                                 legendFontColor: "#7F7F7F",
@@ -131,6 +130,16 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         paddingBottom : 2,
     },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 2.0,
+        elevation: 10,
+    },
     heading : {
         flex: 1,
         display: "flex",
@@ -150,11 +159,22 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: 'center',
-        padding : 10
+        padding : 10,
     },
     listContainer: {
         width : Dimensions.window.width-10,
         height : Dimensions.window.height/(11),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 14,
+        },
+        shadowOpacity: 0.18,
+        shadowRadius: 2.50,
+        elevation: 24,
+
+        borderColor: '#2697BF',
+        borderRadius: 8,
         marginTop: 2,
         marginBottom: 2,
         paddingTop : 2,

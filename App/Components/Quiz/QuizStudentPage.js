@@ -108,11 +108,13 @@ export default class QuizStudentPage extends Component {
                         </ScrollView>
                     :
                         <ScrollView>
+                            <View style={styles.shadow}>
                             <QuizResultGraph passCode={this.state.course.passCode}
                                              correctAnswer={this.state.correctAnswer}
                                              date={this.state.date}
                                              quizType={this.props.quizType}
                                              quizresultData={this.quizresultData} />
+                            </View>
                         </ScrollView>
                     :
                     <ScrollView>
@@ -147,7 +149,9 @@ export default class QuizStudentPage extends Component {
                                             {this.state.error}
                                         </Text> : <Text/>
                                     }
+                                    <View style={styles.shadow}>
                                         <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
+                                    </View>
                                 </View>
                             </View>
                             :
@@ -168,7 +172,7 @@ export default class QuizStudentPage extends Component {
                                         {this.state.error}
                                     </Text> : <Text/>
                                 }
-                                <View style={{paddingTop:20}}>
+                                <View style={[{paddingTop:20},styles.shadow]}>
                                     <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
                                 </View>
                             </View>
@@ -202,6 +206,16 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderColor: "#ccc",
         borderBottomWidth: 1,
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 10,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2.50,
+        elevation: 10,
     },
     heading : {
         flex: 1,

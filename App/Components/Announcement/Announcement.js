@@ -37,8 +37,8 @@ export default class  Announcement extends Component{
                 if (snapshot.val()){
                     const list = Object.values(snapshot.val());
                     list.sort(function(a, b) {
-                        const keyA = moment(a.date, 'DD/MM/YYYY HH:mm');
-                        const keyB = moment(b.date, 'DD/MM/YYYY HH:mm');
+                        const keyA = moment(a.date, 'DD/MM/YYYY HH:mm:ss');
+                        const keyB = moment(b.date, 'DD/MM/YYYY HH:mm:ss');
                         if (keyA < keyB) return 1;
                         if (keyA > keyB) return -1;
                         return 0;
@@ -115,7 +115,15 @@ const styles = StyleSheet.create({
         width : Dimensions.window.width-20,
         height : Dimensions.window.height/(5),
         marginBottom: 8,
-        paddingBottom : 8
+        paddingBottom : 8,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 2.00,
+        elevation: 24,
     },
     imageContainer: {
         width : Dimensions.window.width-20,

@@ -30,7 +30,7 @@ export default class AnnouncementsAdd extends Component {
         } else {
             heading = heading.charAt(0).toUpperCase() + heading.slice(1)
             const announcement =  new Announcement()
-            const dateAndTime= moment().format("DD/MM/YYYY HH:mm")
+            const dateAndTime= moment().format("DD/MM/YYYY HH:mm:ss")
             await announcement.createAnnouncement(
                 this.props.course.passCode,
                 heading,

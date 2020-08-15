@@ -222,14 +222,16 @@ export default class QuizFacultyPage extends Component{
                             <Text style={styles.errorMessage}>
                                 {this.state.error}
                             </Text> : <Text/>}
-
-                            <Button title="BEGIN" onPress={this.startKBC}/>
+                            <View style = {styles.shadow}>
+                                <Button title="BEGIN" onPress={this.startKBC}/>
+                            </View>
                         </View>
                     </View>
                     </View>
                 </ScrollView>
                         :
                         <ScrollView>
+                            <View style = {styles.shadow}>
                             <QuizResultGraph passCode={this.state.course.passCode}
                                              correctAnswer={this.state.correctAnswer}
                                              date={this.state.date}
@@ -282,6 +284,7 @@ export default class QuizFacultyPage extends Component{
                                             // this.dbUpdateEmailStatus()
                                             //     .then(()=>{console.log("Updated email")})
                                         }}/>
+                            </View>
                             </View>
                         </ScrollView>
                 :
@@ -340,6 +343,16 @@ const styles = StyleSheet.create({
         padding: 15,
         marginTop: 5,
         textAlign: 'center',
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 10,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2.50,
+        elevation: 10,
     },
     heading : {
         flex: 1,

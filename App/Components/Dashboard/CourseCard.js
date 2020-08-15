@@ -51,10 +51,19 @@ const styles = StyleSheet.create({
         flex: 1,
         width : Dimensions.window.width-20,
         height : Dimensions.window.height/(3.5),
-        marginTop: 8,
-        marginBottom: 8,
-        paddingTop : 8,
-        paddingBottom : 8
+        marginTop: 10,
+        marginBottom: 10,
+        paddingTop : 10,
+        paddingBottom : 10,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 2.00,
+        elevation: 24,
     },
     imageContainer: {
         width : Dimensions.window.width-20,

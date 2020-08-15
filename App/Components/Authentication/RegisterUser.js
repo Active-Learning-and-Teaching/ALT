@@ -79,6 +79,7 @@ export default class RegisterUser extends Component {
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
 
                 <View style = {styles.container}>
+
                         <TextInput
                             style={styles.textInput}
                             autoCapitalize="words"
@@ -114,16 +115,15 @@ export default class RegisterUser extends Component {
                             <Text style={styles.errorMessage}>
                                 {this.state.error}
                             </Text> : <Text/>}
-
-                        <Button style={styles.buttonMessage} title="Continue" onPress={this.RegisterUserToFirebase} />
-
-                        <Text
-                            style = {styles.loginText}
-                            onPress={() => this.props.navigation.navigate('Login')}
-                        >
-                            Already have an account? Login
-                        </Text>
-
+                        <View style = {styles.shadow}>
+                            <Button style={styles.buttonMessage} title="Continue" onPress={this.RegisterUserToFirebase} />
+                            <Text
+                                style = {styles.loginText}
+                                onPress={() => this.props.navigation.navigate('Login')}
+                            >
+                                Already have an account? Login
+                            </Text>
+                        </View>
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -144,6 +144,16 @@ const styles = StyleSheet.create({
         padding: 35,
         marginTop : 35,
         backgroundColor: '#fff',
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.23,
+        shadowRadius: 5.00,
+        elevation: 14,
     },
     textInput: {
         width: '100%',

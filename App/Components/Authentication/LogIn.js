@@ -119,7 +119,7 @@ export default class LogIn extends Component {
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                     <View style = {styles.container}>
                         <View style={styles.logo}>
-                            <Image style={styles.image} source={require('../../Assets/Logo.png')} />
+                            <Image style={[styles.image,styles.shadow]} source={require('../../Assets/Logo.png')} />
                         </View>
                         <View style = {styles.styleContainer}>
                             <TextInput
@@ -142,24 +142,25 @@ export default class LogIn extends Component {
                             <Text style={styles.errorMessage}>
                                 {this.state.error}
                             </Text> : <Text/>}
+                        <View style={styles.shadow}>
+                            <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser} />
 
-                        <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser} />
+                            <Text
+                                style = {styles.signupText}
+                                onPress={() => this.props.navigation.navigate('Register User')}
+                            >
+                                Don't have an account? Register Now
+                            </Text>
 
-                        <Text
-                            style = {styles.signupText}
-                            onPress={() => this.props.navigation.navigate('Register User')}
-                        >
-                            Don't have an account? Register Now
-                        </Text>
+                            <Text style = {styles.or}> Or
+                            </Text>
 
-                        <Text style = {styles.or}> Or
-                        </Text>
-
-                        <GoogleSigninButton
-                            style={styles.googleSigninButton}
-                            size={GoogleSigninButton.Size.Wide}
-                            color={GoogleSigninButton.Color.Dark}
-                            onPress={this.signInWithGoogle}/>
+                            <GoogleSigninButton
+                                style={styles.googleSigninButton}
+                                size={GoogleSigninButton.Size.Wide}
+                                color={GoogleSigninButton.Color.Dark}
+                                onPress={this.signInWithGoogle}/>
+                            </View>
                         </View>
                     </View>
 
@@ -181,6 +182,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         padding: 35,
         backgroundColor: '#fff',
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.23,
+        shadowRadius: 5.00,
+        elevation: 14,
     },
     styleContainer:{
         paddingTop:25,
