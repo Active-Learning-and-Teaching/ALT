@@ -9,7 +9,7 @@ import {
     TextInput,
     Image,
     ScrollView,
-    SafeAreaView
+    SafeAreaView, Platform
 } from 'react-native';
 import {
     GoogleSignin,
@@ -116,7 +116,7 @@ export default class LogIn extends Component {
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                <ScrollView>
                     <View style = {styles.container}>
                         <View style={styles.logo}>
                             <Image style={[styles.image,styles.shadow]} source={require('../../Assets/Logo.png')} />
@@ -142,24 +142,32 @@ export default class LogIn extends Component {
                             <Text style={styles.errorMessage}>
                                 {this.state.error}
                             </Text> : <Text/>}
-                        <View style={styles.shadow}>
-                            <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser} />
+                            <View style={styles.shadow}>
+                                <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser}/>
 
-                            <Text
-                                style = {styles.signupText}
-                                onPress={() => this.props.navigation.navigate('Register User')}
-                            >
-                                Don't have an account? Register Now
-                            </Text>
+                                <Text
+                                    style={styles.signupText}
+                                    onPress={() => this.props.navigation.navigate('Register User')}
+                                >
+                                    Don't have an account? Register Now
+                                </Text>
 
-                            <Text style = {styles.or}> Or
-                            </Text>
-
-                            <GoogleSigninButton
-                                style={styles.googleSigninButton}
-                                size={GoogleSigninButton.Size.Wide}
-                                color={GoogleSigninButton.Color.Dark}
-                                onPress={this.signInWithGoogle}/>
+                                <Text style={styles.or}> Or
+                                </Text>
+                                {Platform.OS==='ios'
+                                    ?
+                                    <GoogleSigninButton
+                                        style={styles.googleSigninButton}
+                                        size={GoogleSigninButton.Size.Wide}
+                                        color={GoogleSigninButton.Color.Dark}
+                                        onPress={this.signInWithGoogle}/>
+                                        :
+                                    <GoogleSigninButton
+                                        style={{alignSelf:'center'}}
+                                        size={GoogleSigninButton.Size.Wide}
+                                        color={GoogleSigninButton.Color.Dark}
+                                        onPress={this.signInWithGoogle}/>
+                                }
                             </View>
                         </View>
                     </View>
@@ -235,8 +243,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     googleSigninButton: {
-        width: Platform.OS === 'ios' ? 192: '80%',
-        height: Platform.OS === 'ios' ? 48: '10%',
+        width: 192,
+        height: 48,
         alignSelf: "center",
     }
 
