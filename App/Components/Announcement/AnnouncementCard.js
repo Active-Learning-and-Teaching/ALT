@@ -31,7 +31,16 @@ const styles = StyleSheet.create({
         marginTop: 6,
         marginBottom: 6,
         paddingTop : 6,
-        paddingBottom : 6
+        paddingBottom : 6,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 2.50,
+        elevation: 1,
+        borderRadius: 15,
     },
     title: {
         alignSelf:'flex-start',

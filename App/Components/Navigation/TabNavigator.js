@@ -27,6 +27,7 @@ export default class TabNavigator extends Component{
                         component={AnnouncementStack}
                         options={{
                             tabBarLabel: 'Announcements',
+                            fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
                                 <Icon name='home' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                             ),
@@ -41,6 +42,7 @@ export default class TabNavigator extends Component{
                         component={QuizStack}
                         options={{
                             tabBarLabel: 'Quiz',
+                            fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
                                 <Icon name='gamepad' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                             ),
@@ -55,6 +57,7 @@ export default class TabNavigator extends Component{
                         component={FeedbackStack}
                         options={{
                             tabBarLabel: 'Minute Paper',
+                            fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
                                 <Icon name='comments' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                             ),
@@ -69,6 +72,7 @@ export default class TabNavigator extends Component{
                         component={StudentStack}
                         options={{
                             tabBarLabel: 'Students',
+                            fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
                                 <Icon name='users' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
                             ),

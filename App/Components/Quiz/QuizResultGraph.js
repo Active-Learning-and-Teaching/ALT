@@ -188,7 +188,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: 'center',
         padding:30,
-        backgroundColor : 'white'
+        backgroundColor : 'white',
+        borderRadius :20
     },
     numContainer: {
         flex: 1,
@@ -197,6 +198,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: 'flex-start',
         padding:30,
-        backgroundColor : 'white'
+        backgroundColor : 'white',
+        borderRadius :20
     },
 })

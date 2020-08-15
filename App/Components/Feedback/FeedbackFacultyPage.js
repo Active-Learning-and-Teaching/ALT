@@ -134,13 +134,14 @@ export default class FeedbackFacultyPage extends Component {
                             <FeedbackForm course={this.state.course} user={this.state.user} setTopics={this.setTopics}/>
                             :
                             <ScrollView>
-                                <FeedbackResultsList
-                                    course = {this.state.course}
-                                    topics = {this.state.topics}
-                                    date={this.state.date}
-                                    feedbackresultData={this.feedbackresultData}/>
-
-                                <View style={styles.buttonRowContainer}>
+                                <View style={styles.result}>
+                                    <FeedbackResultsList
+                                        course = {this.state.course}
+                                        topics = {this.state.topics}
+                                        date={this.state.date}
+                                        feedbackresultData={this.feedbackresultData}/>
+                                </View>
+                                <View style={[styles.buttonRowContainer,styles.shadow]}>
                                     <Button style={styles.buttonMessage}
                                             title={'Email \n Responses'}
                                             onPress={()=>{
@@ -174,15 +175,16 @@ export default class FeedbackFacultyPage extends Component {
                         <ScrollView>
                             <View style={styles.container}>
                                 <Text style={styles.heading}> Upcoming minute paper</Text>
+                                <View style={[styles.shadow]}>
                                 {this.state.topics.map((value, i) => (
                                     <ListItem
                                         key = {i}
                                         title={(i+1)+". " +value}
                                         titleStyle={styles.title}
                                         containerStyle={styles.listContainer}
-                                        bottomDivider
                                     />
                                 ))}
+                                </View>
                                 <View style={styles.container}>
                                     <Text style={styles.text1}> Minute paper to go live in</Text>
                                     <CountDown
@@ -199,12 +201,12 @@ export default class FeedbackFacultyPage extends Component {
                                     />
                                 </View>
                                 <Text style={styles.text}> Or </Text>
-                                <View style={styles.buttonContainer}>
+                                <View style={[styles.buttonContainer,styles.shadow]}>
                                     <Button style={styles.buttonMessage} title='START NOW!' onPress={()=>{
                                         this.startFeedback("start").then(r => "")}} />
                                 </View>
                                 <Text style={styles.text}> Or </Text>
-                                <View style={styles.buttonContainer}>
+                                <View style={[styles.buttonContainer,styles.shadow]}>
                                     <Button style={styles.buttonMessage} title='Extend by 10 mins' onPress={()=>{
                                         this.startFeedback("stop").then(r => "")}} />
                                 </View>
@@ -259,11 +261,20 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         width : Dimensions.window.width-10,
-        height : Dimensions.window.height/(10),
+        height : Dimensions.window.height/(11),
         marginTop: 2,
         marginBottom: 2,
         paddingTop : 2,
         paddingBottom : 2,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        shadowOpacity: 0.10,
+        shadowRadius: 5.00,
+        elevation: 4,
+        borderRadius: 8,
     },
     heading : {
         flex: 1,
@@ -278,6 +289,21 @@ const styles = StyleSheet.create({
         color: 'grey',
         marginTop: 5,
         textAlign: 'center',
+    },
+    result: {
+        padding: 10,
+        paddingLeft :30,
+        paddingRight:20
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 10,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2.50,
+        elevation: 10,
     },
     container: {
         flex: 1,

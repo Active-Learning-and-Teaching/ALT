@@ -204,7 +204,8 @@ export default class FeedbackStudentPage extends Component {
                                         <Text style={styles.errorMessage}>
                                             {this.state.error}
                                         </Text> : <Text/>}
-
+                                </View>
+                                <View style={styles.shadow}>
                                     <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.submitFeedback} />
                                 </View>
                             </View>
@@ -252,6 +253,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: 'center',
         padding : 10
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 10,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2.50,
+        elevation: 10,
     },
     or: {
         marginTop: 200,

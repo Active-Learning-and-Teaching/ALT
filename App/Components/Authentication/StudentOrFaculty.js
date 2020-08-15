@@ -134,8 +134,9 @@ export default class StudentOrFaculty extends Component {
                         <Text style={styles.errorMessage}>
                             {this.state.error}
                         </Text> : <Text/>}
-
-                    <Button style={styles.buttonMessage} title="Register" onPress={this.RegisterTypeOfUser} />
+                    <View style = {styles.shadow}>
+                        <Button style={styles.buttonMessage} title="Register" onPress={this.RegisterTypeOfUser} />
+                    </View>
                 </ScrollView>
             </SafeAreaView>
         )
@@ -160,6 +161,16 @@ const styles = StyleSheet.create({
         marginTop :20,
         backgroundColor: '#fff'
     },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.23,
+        shadowRadius: 5.00,
+        elevation: 14,
+    },
     avatarStyle : {
         flex: 2,
         borderTopLeftRadius: 1,
@@ -182,7 +193,7 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 12,
+            height: 16,
         },
         shadowOpacity: 0.38,
         shadowRadius: 10.00,

@@ -343,7 +343,9 @@ export default class FeedbackForm extends Component {
                         <Text style={styles.errorMessage}>
                             {this.state.error}
                         </Text> : <Text/>}
-                        <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.addFeedback} />
+                        <View style={styles.shadow}>
+                            <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.addFeedback} />
+                        </View>
                     </View>
 
                 </ScrollView>
@@ -377,6 +379,16 @@ const styles = StyleSheet.create({
         color: 'grey',
         marginTop: 5,
         textAlign: 'center',
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 10,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2.50,
+        elevation: 10,
     },
     dateTime : {
         flex: 1,

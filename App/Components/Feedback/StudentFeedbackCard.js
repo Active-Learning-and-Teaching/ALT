@@ -16,17 +16,18 @@ export default class StudentFeedbackCard extends Component{
                     title={(this.props.index+1)+". " +this.props.value}
                     titleStyle={styles.title}
                     containerStyle={styles.listContainer}
-                    bottomDivider
+                    // bottomDivider
                 />
                 <SwitchSelector
                     onPress={value => {
                         this.props.studentResponses(this.props.value, value)
                     }}
+                    style={styles.shadow}
                     textStyle={{fontFamily:"arial"}}
                     textColor={'#383030'}
                     selectedColor={'white'}
                     borderColor={'#383030'}
-                    hasPadding
+                    // hasPadding
                     options={[
                         { label: "Not Much", value: "0", activeColor: '#F3460A'},
                         { label: "Somewhat", value: "1" ,activeColor: 'orange'},
@@ -55,10 +56,32 @@ const styles = StyleSheet.create({
         paddingTop : 1,
         marginBottom: 2,
         paddingBottom : 2,
+        fontWeight: 'bold',
+    },
+    shadow:{
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.18,
+        shadowRadius: 10.00,
+        elevation: 24,
     },
     listContainer: {
         width : Dimensions.window.width-10,
         height : Dimensions.window.height/(11),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 16,
+        },
+        shadowOpacity: 0.18,
+        shadowRadius: 5.00,
+        elevation: 24,
+
+        borderColor: '#2697BF',
+        borderRadius: 8,
         marginTop: 2,
         marginBottom: 2,
         paddingTop : 2,

@@ -144,10 +144,19 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginBottom: 2,
         paddingTop : 2,
-        paddingBottom : 2
+        paddingBottom : 2,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        shadowOpacity: 0.10,
+        shadowRadius: 5.00,
+        elevation: 4,
+        borderRadius: 15,
     },
     grid: {
-        marginBottom: 10,
+        marginTop : 10,
         paddingBottom : 10,
         alignItems: 'center',
     },
