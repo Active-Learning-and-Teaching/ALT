@@ -116,7 +116,7 @@ export default class LogIn extends Component {
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>
-                <ScrollView>
+                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                     <View style = {styles.container}>
                         <View style={styles.logo}>
                             <Image style={[styles.image,styles.shadow]} source={require('../../Assets/Logo.png')} />
