@@ -117,12 +117,13 @@ export default class RegisterUser extends Component {
                             </Text> : <Text/>}
                         <View style = {styles.shadow}>
                             <Button style={styles.buttonMessage} title="Continue" onPress={this.RegisterUserToFirebase} />
-                            <Text
-                                style = {styles.loginText}
+                            <Button
+                                buttonStyle= {{borderColor: 'white'}}
+                                type="clear"
+                                title="Already have an account? Login"
+                                titleStyle={styles.loginText}
                                 onPress={() => this.props.navigation.navigate('Login')}
-                            >
-                                Already have an account? Login
-                            </Text>
+                            />
                         </View>
                     </View>
                 </ScrollView>
@@ -164,8 +165,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     loginText: {
-        color: '#3740FE',
-        marginTop: 25,
+        fontSize : 14,
+        color: 'blue',
+        marginTop: 15,
         textAlign: 'center'
     },
     errorMessage: {

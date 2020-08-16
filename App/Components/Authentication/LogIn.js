@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
 import ErrorMessages from "../../Utils/ErrorMessages"
-import {Button} from 'react-native-elements';
+import {Button, Text} from 'react-native-elements';
 import {
     StyleSheet,
-    Text,
     View,
     TextInput,
     Image,
@@ -145,12 +144,13 @@ export default class LogIn extends Component {
                             <View style={styles.shadow}>
                                 <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser}/>
 
-                                <Text
-                                    style={styles.signupText}
+                                <Button
+                                    buttonStyle= {{borderColor: 'white'}}
+                                    type="clear"
+                                    title="Don't have an account? Register Now"
+                                    titleStyle={styles.loginText}
                                     onPress={() => this.props.navigation.navigate('Register User')}
-                                >
-                                    Don't have an account? Register Now
-                                </Text>
+                                />
 
                                 <Text style={styles.or}> Or
                                 </Text>
@@ -220,9 +220,10 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         borderBottomWidth: 1
     },
-    signupText: {
-        color: '#3740FE',
-        marginTop: 25,
+    loginText: {
+        fontSize : 14,
+        color: 'blue',
+        marginTop: 15,
         textAlign: 'center'
     },
     errorMessage: {
@@ -236,10 +237,10 @@ const styles = StyleSheet.create({
     },
     or: {
         color: 'grey',
-        marginTop: 15,
-        marginBottom: 15,
-        paddingTop : 20,
-        paddingBottom: 20,
+        marginTop: 10,
+        marginBottom: 10,
+        paddingTop : 10,
+        paddingBottom: 10,
         alignSelf: "center",
     },
     googleSigninButton: {
