@@ -4,6 +4,7 @@ import {Avatar} from 'react-native-elements';
 import Dimensions from '../../Utils/Dimensions';
 import {CoursePics} from '../../Utils/CoursePics';
 import ActionSheet from 'react-native-actionsheet';
+import Courses from '../../Databases/Courses';
 
 export default class  CourseCard extends Component{
     constructor() {
@@ -33,8 +34,17 @@ export default class  CourseCard extends Component{
                 },
                 {
                     text: 'Confirm',
-                    onPress: () => {
-                       console.log("email & remove")
+                    onPress: async () => {
+                        const courses = new Courses()
+                        await courses.getCourse(this.props.course.passCode)
+                            .then(async value => {
+                                await this.props.user.deleteCourse(value)
+                                    .then(r => console.log("Deleted Course"))
+                            })
+                        if(this.props.type==="faculty"){
+                            console.log("email faculty")
+                        }
+
                     }
                 },
             ]

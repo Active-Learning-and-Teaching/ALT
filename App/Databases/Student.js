@@ -107,7 +107,7 @@ class Student {
                 courses : courses
             })
             .then(()=>{
-                console.log("Courses added")
+                console.log("Courses set")
             })
     }
 
@@ -116,6 +116,19 @@ class Student {
             value => {
                 if (!value.includes(courseUrl)){
                     value.push(courseUrl)
+                    this.setCourseStudent(value)
+                }
+            }
+        )
+    }
+
+    deleteCourse = async (courseUrl) => {
+        await this.getCourseStudent().then(
+            value => {
+                if (value.includes(courseUrl)){
+                    const index = value.indexOf(courseUrl);
+                    value.splice(index, 1);
+
                     this.setCourseStudent(value)
                 }
             }
