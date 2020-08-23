@@ -61,7 +61,7 @@ export default class  CourseCard extends Component{
             'Cancel',
         ];
         return(
-            <ImageBackground source={this.state.image} borderRadius={20} style={styles.container}>
+            <ImageBackground source={this.state.image} borderRadius={20} blurRadius={5} style={styles.container}>
                 <Avatar
                     onPress={()=>{
                         this.props.navigation.navigate('Course', {
@@ -75,7 +75,7 @@ export default class  CourseCard extends Component{
                     containerStyle={styles.container}
                     activeOpacity={0.2}
                 />
-                <Text style={styles.caption}>{this.props.course.instructor}</Text>
+                <Text style={styles.name}>{this.props.course.instructor}</Text>
                 <ActionSheet
                     ref={o => (this.ActionSheet = o)}
                     title={'Do you want to remove the course ?'}
@@ -122,14 +122,17 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         position: 'absolute',
         left: 15,
+        right: 15,
         fontSize: 22,
         top: 0,
+        color:'white',
+        fontWeight : "bold"
     },
-    caption: {
+    name: {
         position: 'absolute',
         left: 15,
         bottom: 25,
         fontSize: 18,
-        color:'white'
+        color:'white',
     },
 })
