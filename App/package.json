@@ -28,6 +28,7 @@
     "react-dom": "^16.13.1",
     "react-firebase-hooks": "^2.2.0",
     "react-native": "^0.62.2",
+    "react-native-actionsheet": "^2.4.2",
     "react-native-chart-kit": "^6.2.2",
     "react-native-countdown-component": "^2.7.1",
     "react-native-elements": "^2.0.4",

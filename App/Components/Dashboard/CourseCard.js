@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import { Tile } from 'react-native-elements'
+import {StyleSheet, ImageBackground, Text, Alert} from 'react-native';
+import {Avatar} from 'react-native-elements';
 import Dimensions from '../../Utils/Dimensions';
 import {CoursePics} from '../../Utils/CoursePics';
+import ActionSheet from 'react-native-actionsheet';
 
 export default class  CourseCard extends Component{
     constructor() {
@@ -11,11 +12,33 @@ export default class  CourseCard extends Component{
             image : ""
         };
     }
+    showActionSheet = () => {
+        this.ActionSheet.show();
+    };
 
     getImage = () =>{
         this.setState({
             image : CoursePics(this.props.course.imageURL)
         })
+    }
+    showAlert() {
+        Alert.alert(
+            'Remove course - '+this.props.course.courseName,
+            'This action is irreversible',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => {console.log('Cancel Pressed')},
+                    style: 'cancel',
+                },
+                {
+                    text: 'Confirm',
+                    onPress: () => {
+                       console.log("email & remove")
+                    }
+                },
+            ]
+        );
     }
 
     componentDidMount() {
@@ -23,24 +46,38 @@ export default class  CourseCard extends Component{
     }
 
     render(){
+        const optionArray = [
+            'Remove Course',
+            'Cancel',
+        ];
         return(
-            <Tile
-                onPress={()=>{
-                    this.props.navigation.navigate('Course', {
-                        type : this.props.type,
-                        user : this.props.user,
-                        course : this.props.course
-                })}}
-                imageSrc={this.state.image}
-                imageContainerStyle={styles.imageContainer}
-                activeOpacity={0.7}
-                title = {this.props.course.courseName}
-                titleStyle={styles.title}
-                caption={this.props.course.instructor}
-                captionStyle={styles.caption}
-                containerStyle={styles.container}
-                featured
-            />
+            <ImageBackground source={this.state.image} borderRadius={20} style={styles.container}>
+                <Avatar
+                    onPress={()=>{
+                        this.props.navigation.navigate('Course', {
+                            type : this.props.type,
+                            user : this.props.user,
+                            course : this.props.course
+                    })}}
+                    onLongPress={()=>{this.showActionSheet()}}
+                    title = {this.props.course.courseName}
+                    titleStyle={styles.title}
+                    containerStyle={styles.container}
+                    activeOpacity={0.2}
+                />
+                <Text style={styles.caption}>{this.props.course.instructor}</Text>
+                <ActionSheet
+                    ref={o => (this.ActionSheet = o)}
+                    title={'Do you want to remove the course ?'}
+                    options={optionArray}
+                    cancelButtonIndex={1}
+                    destructiveButtonIndex={0}
+                    onPress={index => {
+                        if(index==0)
+                            this.showAlert();
+                    }}
+                />
+            </ImageBackground>
         )
     }
 
@@ -55,7 +92,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         paddingTop : 10,
         paddingBottom : 10,
-
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -77,13 +113,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 15,
         fontSize: 22,
-        top: 15,
-        color:'white'
+        top: 0,
     },
     caption: {
         position: 'absolute',
         left: 15,
-        bottom: 15,
+        bottom: 25,
         fontSize: 18,
         color:'white'
     },
