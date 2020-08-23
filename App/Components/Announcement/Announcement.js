@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Button, SafeAreaView, ScrollView, StyleSheet, View, Text} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, View, Text, ImageBackground} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import Clipboard from "@react-native-community/clipboard";
 import Dimensions from '../../Utils/Dimensions';
-import {Tile} from 'react-native-elements';
+import {Avatar} from 'react-native-elements';
 import {CoursePics} from '../../Utils/CoursePics';
 import database from '@react-native-firebase/database';
 import * as config from '../../config.json';
@@ -60,22 +60,20 @@ export default class  Announcement extends Component{
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
                     <View style ={styles.grid}>
-                        <Tile
-                            onPress={()=>{
-                                Clipboard.setString(this.state.course.passCode)
-                                Toast.show('PassCode Copied to Clipboard');
-                            }}
-                            imageSrc={this.state.image}
-                            imageContainerStyle={styles.imageContainer}
-                            activeOpacity={0.7}
-                            title = {this.state.course.courseName + " (" + this.state.course.passCode + ")"}
-                            titleStyle={styles.title}
-                            caption={this.state.course.instructor}
-                            captionStyle={styles.caption}
-                            containerStyle={styles.container}
-                            featured
-                        />
-
+                        <ImageBackground source={this.state.image} borderRadius={20} blurRadius={5} style={styles.container}>
+                            <Avatar
+                                onPress={()=>{
+                                    Clipboard.setString(this.state.course.passCode)
+                                    Toast.show('PassCode Copied to Clipboard');
+                                }}
+                                title = {this.state.course.courseName + " (" + this.state.course.passCode + ")"}
+                                titleStyle={styles.title}
+                                containerStyle={styles.container}
+                                activeOpacity={0.7}
+                            />
+                            <Text style={styles.name}>{this.state.course.instructor}</Text>
+                            <Text style={styles.courseCode}>{this.state.course.courseCode}</Text>
+                        </ImageBackground>
                     </View>
 
                     <View style={styles.grid}>
@@ -98,7 +96,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     grid: {
-        marginBottom: 10,
+        marginTop: 10,
         paddingBottom : 10,
         alignItems: 'center',
     },
@@ -130,21 +128,44 @@ const styles = StyleSheet.create({
         height : Dimensions.window.height/(5),
         borderRadius: 20,
         overflow: 'hidden',
+        flex: 1,
+        marginTop: 10,
+        marginBottom: 10,
+        paddingTop : 10,
+        paddingBottom : 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 2.00,
+        elevation: 24,
     },
     title: {
         alignSelf:'flex-start',
         textAlign: 'left',
         position: 'absolute',
         left: 15,
+        right: 5,
         fontSize: 22,
         top: 15,
-        color:'white'
+        color:'white',
+        fontWeight : "bold"
     },
-    caption: {
+    name: {
         position: 'absolute',
         left: 15,
         bottom: 15,
         fontSize: 18,
         color:'white'
     },
+    courseCode:{
+        alignSelf: "flex-end",
+        right: 15,
+        bottom: 7,
+        fontSize: 18,
+        color:'white',
+        fontWeight : "bold"
+    }
 })
