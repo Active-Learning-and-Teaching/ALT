@@ -11,7 +11,8 @@ export default class QuizResultGraph extends Component {
         super(props);
         this.state = {
             values: {'A':0, 'B':0, 'C':0, 'D':0},
-            top5answer:[]
+            top5answer:[],
+            quizNumber : "",
         };
     }
 
@@ -30,7 +31,8 @@ export default class QuizResultGraph extends Component {
                 kbcResponse.getAllMcqResponse(this.props.passCode, r["startTime"], r["endTime"] )
                     .then( values  =>{
                         this.setState({
-                            values : values
+                            values : values,
+                            quizNumber : r["questionCount"]
                         })
                         console.log(values)
                         this.props.quizresultData(values)
@@ -47,7 +49,8 @@ export default class QuizResultGraph extends Component {
                             return second[1] - first[1];
                         });
                         this.setState({
-                            top5answer : items.slice(0, 5)
+                            top5answer : items.slice(0, 5),
+                            quizNumber : r["questionCount"]
                         })
                         console.log(this.state.top5answer)
                         console.log(values);
@@ -104,6 +107,9 @@ export default class QuizResultGraph extends Component {
         return (
             <ScrollView>
                 <Text style={styles.body}> Quiz Results ({this.props.date.split(" ")[0]})</Text>
+                <Text style={[styles.body,{fontSize: 16,marginTop : 5}]}>
+                    Quiz Number- {this.state.quizNumber}
+                </Text>
                 <View>
                 {this.props.quizType==="mcq"?
                     <View style={styles.container}>
