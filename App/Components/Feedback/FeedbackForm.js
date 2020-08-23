@@ -8,7 +8,7 @@ import {Button as IosButton } from 'react-native';
 export default class FeedbackForm extends Component {
 
     // TODO change duration at deployment
-    duration=1;
+    duration=5;
 
     constructor(props) {
         super(props);
