@@ -95,10 +95,8 @@ export default class FeedbackForm extends Component {
                 await this.updateTopics().then(r=>{console.log()})
 
                 await feedback.getFeedback(this.state.course.passCode)
-                    .then((url) => {
-                        console.log(url)
-                        if (url === null) {
-                            console.log("hello")
+                    .then((values) => {
+                        if (values === null) {
                             feedback.createFeedback(
                                 this.state.course.passCode,
                                 startTime,
@@ -109,7 +107,8 @@ export default class FeedbackForm extends Component {
                                 console.log("create")
                             })
                         } else {
-                            console.log("hello")
+                            const url = Object.keys(values)[0];
+                            const feedbackCount = Object.values(values)[0].feedbackCount
                             feedback.setFeedback(
                                 this.state.course.passCode,
                                 startTime,
@@ -117,7 +116,9 @@ export default class FeedbackForm extends Component {
                                 this.state.topics,
                                 this.state.user.email,
                                 url,
-                                false
+                                false,
+                                feedbackCount+1
+
                             ).then(r => {
                                 console.log("update")
                             })

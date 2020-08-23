@@ -59,7 +59,8 @@ export default class FeedbackFacultyPage extends Component {
         feedback.getFeedbackDetails(this.state.course.passCode)
             .then(value => {
                 feedback.getFeedback(this.state.course.passCode)
-                    .then(url => {
+                    .then(values => {
+                        const url = Object.keys(values)[0];
                         feedback.setFeedback(
                             this.state.course.passCode,
                             value["startTime"],
@@ -67,7 +68,8 @@ export default class FeedbackFacultyPage extends Component {
                             value["topics"],
                             value["instructor"],
                             url,
-                            true
+                            true,
+                            value["feedbackCount"]
                         )
                     })
             })
@@ -103,7 +105,8 @@ export default class FeedbackFacultyPage extends Component {
         feedback.getFeedbackDetails(this.state.course.passCode)
             .then(value => {
                 feedback.getFeedback(this.state.course.passCode)
-                    .then(url => {
+                    .then(values => {
+                        const url = Object.keys(values)[0];
                         feedback.setFeedback(
                             this.state.course.passCode,
                             startTime,
@@ -111,7 +114,8 @@ export default class FeedbackFacultyPage extends Component {
                             value["topics"],
                             value["instructor"],
                             url,
-                            false
+                            false,
+                            value["feedbackCount"]
                         )
                     })
             })

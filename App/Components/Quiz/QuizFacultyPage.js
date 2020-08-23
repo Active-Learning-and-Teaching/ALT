@@ -64,7 +64,8 @@ export default class QuizFacultyPage extends Component{
         Kbc.getTiming(this.state.course.passCode)
             .then(value => {
                 Kbc.getQuestion(this.state.course.passCode)
-                    .then(url => {
+                    .then(values => {
+                        const url = Object.keys(values)[0];
                         Kbc.setQuestion(
                             this.state.course.passCode,
                             value["startTime"],
@@ -74,7 +75,8 @@ export default class QuizFacultyPage extends Component{
                             value["instructor"],
                             value["quizType"],
                             url,
-                            true
+                            true,
+                            value["questionCount"]
                         )
                     })
             })
@@ -114,8 +116,8 @@ export default class QuizFacultyPage extends Component{
             const endTime = moment().add(time, 'minutes').format("DD/MM/YYYY HH:mm:ss")
 
             await kbc.getQuestion(this.state.course.passCode)
-                .then((url)=>{
-                    if (url===null){
+                .then((values)=>{
+                    if (values===null){
                         kbc.createQuestion(
                             this.state.course.passCode,
                             startTime,
@@ -129,6 +131,8 @@ export default class QuizFacultyPage extends Component{
                             })
                     }
                     else{
+                        const url = Object.keys(values)[0];
+                        const questionCount = Object.values(values)[0].questionCount
                         kbc.setQuestion(
                             this.state.course.passCode,
                             startTime,
@@ -138,7 +142,8 @@ export default class QuizFacultyPage extends Component{
                             this.state.user.email,
                             this.state.typeofQuiz,
                             url,
-                            false
+                            false,
+                            questionCount+1
                         ).then(r => {
                                 console.log("update")
                             })

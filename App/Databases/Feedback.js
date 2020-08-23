@@ -23,8 +23,7 @@ class Feedback {
             .once('value')
             .then(snapshot => {
                 if (snapshot.val()){
-                    const keys = Object.keys(snapshot.val());
-                    ans = keys[0]
+                    ans = snapshot.val()
                 }
             })
         return ans
@@ -45,7 +44,7 @@ class Feedback {
         return ans
     }
 
-    setFeedback = async (passCode, startTime, endTime, topics, instructor, url, emailResponse) =>{
+    setFeedback = async (passCode, startTime, endTime, topics, instructor, url, emailResponse, feedbackCount) =>{
         await database()
             .ref(config['internalDb']+'/Feedback/'+url)
             .set({
@@ -55,6 +54,7 @@ class Feedback {
                 topics: topics,
                 instructor: instructor,
                 emailResponse: emailResponse,
+                feedbackCount: feedbackCount
             })
             .then(()=>{
                 console.log("Feedback modified")
@@ -71,6 +71,7 @@ class Feedback {
                 topics: topics,
                 instructor: instructor,
                 emailResponse: false,
+                feedbackCount: 1
             })
             .then(() => {
                 console.log('Feedback created')

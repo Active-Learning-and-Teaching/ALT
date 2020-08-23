@@ -25,8 +25,7 @@ class Quiz {
             .once('value')
             .then(snapshot => {
                 if (snapshot.val()){
-                    const keys = Object.keys(snapshot.val());
-                    ans = keys[0]
+                    ans = snapshot.val()
                 }
             })
         return ans
@@ -48,7 +47,7 @@ class Quiz {
     }
 
 
-    setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, instructor, quizType, url, emailResponse) =>{
+    setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, instructor, quizType, url, emailResponse,questionCount) =>{
         await database()
             .ref(config['internalDb']+'/KBC/'+url)
             .set({
@@ -60,6 +59,7 @@ class Quiz {
                 instructor: instructor,
                 quizType: quizType,
                 emailResponse: emailResponse,
+                questionCount: questionCount
 
             })
             .then(()=>{
@@ -79,6 +79,7 @@ class Quiz {
                 instructor: instructor,
                 quizType: quizType,
                 emailResponse: false,
+                questionCount : 1,
             })
             .then(() => {
                 console.log('Question created')
