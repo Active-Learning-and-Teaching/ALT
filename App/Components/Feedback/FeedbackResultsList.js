@@ -11,7 +11,8 @@ export default class FeedbackResultsList extends Component {
         super(props);
         this.state = {
             course : this.props.course,
-            responses : {}
+            responses : {},
+            feedbackNumber : "",
         };
     }
 
@@ -32,7 +33,8 @@ export default class FeedbackResultsList extends Component {
                     r["topics"]
                 ).then( async values  =>{
                     await this.setState({
-                        responses : values
+                        responses : values,
+                        feedbackNumber : r["feedbackCount"]
                     })
                     this.props.feedbackresultData(values)
                 })
@@ -55,6 +57,9 @@ export default class FeedbackResultsList extends Component {
 
             <View style={styles.container}>
                 <Text style={styles.heading}> Student Responses ({this.props.date.split(" ")[0]})</Text>
+                <Text style={[styles.heading,{fontSize: 16,paddingTop : 5}]}>
+                    Feedback Number- {this.state.feedbackNumber}
+                </Text>
                 <View style={styles.grid}>
                     {this.props.topics.map((value, i) => (
 
