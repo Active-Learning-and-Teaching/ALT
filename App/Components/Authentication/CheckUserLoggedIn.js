@@ -8,6 +8,7 @@ import {
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import Faculty from '../../Databases/Faculty';
 import Student from '../../Databases/Student';
+import {CommonActions} from "@react-navigation/native";
 
 
 export default class CheckUserLoggedIn extends Component {
@@ -16,6 +17,33 @@ export default class CheckUserLoggedIn extends Component {
         super();
         this.isGoogleUser = this.isGoogleUser.bind(this)
         this.getUserType = this.getUserType.bind(this)
+    }
+
+    signOut = async () => {
+        auth()
+            .signOut()
+            .then(async r=>{
+                await this.props.navigation.dispatch(
+                    CommonActions.reset({
+                        index: 1,
+                        routes: [
+                            { name: 'Login' },
+                        ]
+                    })
+                )
+
+                try{
+                    await GoogleSignin.revokeAccess()
+                    await GoogleSignin.signOut()
+                }
+                catch (err) {
+                    console.log(err)
+                }
+
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
     }
 
     async getUserType (name, email) {
@@ -34,6 +62,9 @@ export default class CheckUserLoggedIn extends Component {
                         .then(async val => {
                             if (val){
                                 this.props.navigation.navigate('Student DashBoard')
+                            }
+                            else{
+                                await this.signOut()
                             }
                         })
                 }
