@@ -126,7 +126,7 @@ class Faculty {
                 courses : courses
             })
             .then(()=>{
-                console.log("Courses added")
+                console.log("Courses set")
             })
     }
 
@@ -139,12 +139,18 @@ class Faculty {
         )
     }
 
+    deleteCourse = async (courseUrl) => {
+        await this.getCourseFaculty().then(
+            value => {
+                if (value.includes(courseUrl)){
+                    const index = value.indexOf(courseUrl);
+                    value.splice(index, 1);
 
-
-
-
-
-
+                    this.setCourseFaculty(value)
+                }
+            }
+        )
+    }
 
 
 }
