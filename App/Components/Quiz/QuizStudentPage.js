@@ -29,7 +29,7 @@ export default class QuizStudentPage extends Component {
         this.quizresultData = this.quizresultData.bind(this);
     }
 
-    quizresultData(resultData) {
+    quizresultData(resultData, quizNumber) {
         this.setState({
             results: resultData
         })

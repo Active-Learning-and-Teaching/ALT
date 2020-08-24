@@ -27,15 +27,17 @@ export default class QuizFacultyPage extends Component{
             date : "",
             results :"",
             typeofQuiz : "mcq",
-            loading : true
+            loading : true,
+            quizNumber : "",
         };
         this.setOption = this.setOption.bind(this);
         this.quizresultData = this.quizresultData.bind(this);
     }
 
-    quizresultData(resultData){
+    quizresultData(resultData, quizNumber){
         this.setState({
-            results: resultData
+            results: resultData,
+            quizNumber: quizNumber
         })
     }
     checkEmailSent = async () =>{
@@ -265,6 +267,7 @@ export default class QuizFacultyPage extends Component{
                                                     this.state.course.courseName,
                                                     this.state.user.email,
                                                     this.state.user.name,
+                                                    this.state.quizNumber,
                                                     this.state.date,
                                                     "",
                                                     this.state.results,

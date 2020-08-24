@@ -35,7 +35,7 @@ export default class QuizResultGraph extends Component {
                             quizNumber : r["questionCount"]
                         })
                         console.log(values)
-                        this.props.quizresultData(values)
+                        this.props.quizresultData(values,this.state.quizNumber)
                     })
             }
             else if(this.props.quizType==='numerical'){
@@ -54,7 +54,7 @@ export default class QuizResultGraph extends Component {
                         })
                         console.log(this.state.top5answer)
                         console.log(values);
-                        this.props.quizresultData(this.state.top5answer)
+                        this.props.quizresultData(this.state.top5answer,this.state.quizNumber)
                     })
             }
 
