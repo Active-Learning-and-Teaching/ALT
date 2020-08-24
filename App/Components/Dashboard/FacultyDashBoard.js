@@ -68,6 +68,10 @@ export default class FacultyDashBoard extends Component {
             .on('value', snapshot => {
                 if (snapshot.val()){
                     const keys = Object(snapshot.val());
+
+                    this.setState({
+                        courseList : []
+                    })
                     if ("courses" in keys) {
                         const arr = snapshot.val()["courses"].filter(n=>n)
                         const course = new Courses()
