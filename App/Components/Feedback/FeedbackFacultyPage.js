@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import FeedbackForm from './FeedbackForm';
+import database from '@react-native-firebase/database';
 import {SafeAreaView, ScrollView, StyleSheet, View, Text, ActivityIndicator} from 'react-native';
 import Feedback from '../../Databases/Feedback';
 import CountDown from 'react-native-countdown-component';
@@ -90,8 +91,9 @@ export default class FeedbackFacultyPage extends Component {
 
     startFeedback = async(action)=>{
         const feedback = new Feedback()
-        let startTime = moment().format("DD/MM/YYYY HH:mm:ss")
-        let endTime = moment().add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+        let curr = database().getServerTime()
+        let startTime = moment(curr).format("DD/MM/YYYY HH:mm:ss")
+        let endTime = moment(curr).add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
         if(action==="stop")
         {
             startTime = moment(this.props.startTime, "DD/MM/YYYY HH:mm:ss")

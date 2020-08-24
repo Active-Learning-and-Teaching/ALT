@@ -37,17 +37,13 @@ export default class FeedbackHomePage extends Component{
             .on('value', snapshot => {
                 if (snapshot.val()){
                     const values = Object.values(snapshot.val())[0]
-                    const starttime = values['startTime']
-                    const endtime = values['endTime']
-                    const curr = moment().add(1, "seconds")
+                    const curr = moment(database().getServerTime())
+                    const startTime = moment(values['startTime'], "DD/MM/YYYY HH:mm:ss")
+                    const endTime = moment(values['endTime'], "DD/MM/YYYY HH:mm:ss")
+                    const beforeDuration = Math.abs(moment(curr).diff(startTime, "seconds"))
+                    const duration = Math.abs(moment(curr).diff(endTime, "seconds"))
 
-                    const temp = moment(endtime, "DD/MM/YYYY HH:mm:ss")
-                    const duration = Math.abs(moment().diff(temp, "seconds"))
-
-                    const temp2 = moment(starttime, "DD/MM/YYYY HH:mm:ss")
-                    const beforeduration = Math.abs(moment().diff(temp2, "seconds"))
-
-                    if (curr >= temp2 && curr <= temp){
+                    if (curr >= startTime && curr <= endTime){
                         this.setState({
                             beforeFeedback : false,
                             currentFeedback : true,
@@ -57,13 +53,13 @@ export default class FeedbackHomePage extends Component{
                             feedbackCount : values["feedbackCount"]
                         })
                     }
-                    else if (curr<temp2){
+                    else if (curr<startTime){
                         this.setState({
                             beforeFeedback : true,
                             currentFeedback : false,
                             currentDuration : 0,
-                            beforeDuration : beforeduration,
-                            startTime : starttime,
+                            beforeDuration : beforeDuration,
+                            startTime : startTime,
                             topics : values["topics"],
                             feedbackCount : values["feedbackCount"]
                         })

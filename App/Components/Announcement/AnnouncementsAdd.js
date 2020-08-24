@@ -7,6 +7,7 @@ import {
     Button,
 } from 'react-native';
 import moment from 'moment';
+import database from '@react-native-firebase/database';
 import Announcement from '../../Databases/Announcement';
 
 export default class AnnouncementsAdd extends Component {
@@ -30,7 +31,7 @@ export default class AnnouncementsAdd extends Component {
         } else {
             heading = heading.charAt(0).toUpperCase() + heading.slice(1)
             const announcement =  new Announcement()
-            const dateAndTime= moment().format("DD/MM/YYYY HH:mm:ss")
+            const dateAndTime= moment(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
             await announcement.createAnnouncement(
                 this.props.course.passCode,
                 heading,

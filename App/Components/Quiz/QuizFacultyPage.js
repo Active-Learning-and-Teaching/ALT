@@ -10,6 +10,7 @@ import {Mailer} from '../../Utils/Mailer';
 import Toast from 'react-native-simple-toast';
 import SwitchSelector from "react-native-switch-selector";
 import Dimensions from '../../Utils/Dimensions';
+import database from "@react-native-firebase/database";
 
 export default class QuizFacultyPage extends Component{
     constructor(props) {
@@ -112,8 +113,9 @@ export default class QuizFacultyPage extends Component{
         }
         else {
             const kbc = new Quiz()
-            const startTime = moment().format("DD/MM/YYYY HH:mm:ss")
-            const endTime = moment().add(time, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+            const curr = database().getServerTime()
+            const startTime = moment(curr).format("DD/MM/YYYY HH:mm:ss")
+            const endTime = moment(curr).add(time, 'minutes').format("DD/MM/YYYY HH:mm:ss")
 
             await kbc.getQuestion(this.state.course.passCode)
                 .then((values)=>{
