@@ -173,7 +173,7 @@ export default class QuizFacultyPage extends Component{
                     ?
                 <ScrollView>
                     <View style={{padding:20}}>
-                    <Text style={styles.heading}> In-Class Quiz!</Text>
+                    <Text style={styles.heading}> In-Class Quiz {this.props.questionCount + 1} </Text>
                     <View style={styles.selector}>
                         <SwitchSelector
                             initial={0}
@@ -294,7 +294,7 @@ export default class QuizFacultyPage extends Component{
                         </ScrollView>
                 :
                 <ScrollView>
-                    <Text style={styles.or}> Quiz in Progress</Text>
+                    <Text style={styles.or}> Quiz {this.props.questionCount} in Progress</Text>
                     <CountDown
                         until={this.props.currentDuration}
                         size={30}

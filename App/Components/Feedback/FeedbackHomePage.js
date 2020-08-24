@@ -18,6 +18,7 @@ export default class FeedbackHomePage extends Component{
             currentFeedback : false,
             currentDuration : 0,
             beforeDuration : 0,
+            feedbackCount : 0,
             startTime :'',
             topics : []
         }
@@ -52,7 +53,8 @@ export default class FeedbackHomePage extends Component{
                             currentFeedback : true,
                             currentDuration : duration,
                             beforeDuration : 0,
-                            topics : values["topics"]
+                            topics : values["topics"],
+                            feedbackCount : values["feedbackCount"]
                         })
                     }
                     else if (curr<temp2){
@@ -62,7 +64,8 @@ export default class FeedbackHomePage extends Component{
                             currentDuration : 0,
                             beforeDuration : beforeduration,
                             startTime : starttime,
-                            topics : values["topics"]
+                            topics : values["topics"],
+                            feedbackCount : values["feedbackCount"]
                         })
                     }
                     else{
@@ -71,7 +74,8 @@ export default class FeedbackHomePage extends Component{
                             currentFeedback : false,
                             currentDuration : 0,
                             beforeDuration : 0,
-                            topics : values["topics"]
+                            topics : values["topics"],
+                            feedbackCount : values["feedbackCount"]
                         })
                     }
                 }
@@ -95,6 +99,7 @@ export default class FeedbackHomePage extends Component{
                         beforeDuration = {this.state.beforeDuration}
                         setFeedbackState = {this.setFeedbackState}
                         startTime = {this.state.startTime}
+                        feedbackCount = {this.state.feedbackCount}
                     />
                     :
                     <FeedbackStudentPage

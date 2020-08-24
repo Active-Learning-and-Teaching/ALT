@@ -16,6 +16,7 @@ export default class QuizHomePage extends Component{
             currentQuiz : false,
             currentDuration : 0,
             quizType:"",
+            questionCount : 0
         };
         this.setQuizState = this.setQuizState.bind(this);
     }
@@ -46,6 +47,7 @@ export default class QuizHomePage extends Component{
                             currentQuiz : true,
                             currentDuration : duration,
                             quizType: values['quizType'],
+                            questionCount : values['questionCount']
                         })
                     }
                     else{
@@ -53,6 +55,7 @@ export default class QuizHomePage extends Component{
                             currentQuiz : false,
                             currentDuration : 0,
                             quizType: values['quizType'],
+                            questionCount : values['questionCount']
                         })
                     }
                 }
@@ -74,6 +77,7 @@ export default class QuizHomePage extends Component{
                         course = {this.state.course}
                         setQuizState = {this.setQuizState}
                         quizType = {this.state.quizType}
+                        questionCount = {this.state.questionCount}
                     />
                 :
                     <QuizStudentPage

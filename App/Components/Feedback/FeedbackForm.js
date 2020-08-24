@@ -222,7 +222,7 @@ export default class FeedbackForm extends Component {
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-                    <Text style={styles.heading}> New Minute Paper</Text>
+                    <Text style={styles.heading}> Minute Paper {this.props.feedbackCount + 1}</Text>
 
                     <View style={styles.rowContainer}>
                         <Text style={styles.topic}> Topics </Text>
