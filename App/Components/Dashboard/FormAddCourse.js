@@ -31,6 +31,7 @@ export default class FormAddCourse extends Component {
             })
         } else {
             courseName = courseName.charAt(0).toUpperCase() + courseName.slice(1);
+            courseCode = courseCode.toUpperCase()
             const courses = new Courses()
 
             courses.setcourseName(courseName)
