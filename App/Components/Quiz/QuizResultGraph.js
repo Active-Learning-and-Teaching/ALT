@@ -106,9 +106,8 @@ export default class QuizResultGraph extends Component {
 
         return (
             <ScrollView>
-                <Text style={styles.body}> Quiz Results ({this.props.date.split(" ")[0]})</Text>
-                <Text style={[styles.body,{fontSize: 16,marginTop : 5}]}>
-                    Quiz Number- {this.state.quizNumber}
+                <Text style={styles.body}>
+                    Results - Quiz {this.state.quizNumber} ({this.props.date.split(" ")[0]})
                 </Text>
                 <View>
                 {this.props.quizType==="mcq"?
