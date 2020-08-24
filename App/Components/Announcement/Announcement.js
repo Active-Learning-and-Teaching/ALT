@@ -60,19 +60,26 @@ export default class  Announcement extends Component{
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
                     <View style ={styles.grid}>
-                        <ImageBackground source={this.state.image} borderRadius={20} blurRadius={5} style={styles.container}>
+                        <ImageBackground
+                            source={this.state.image}
+                            borderRadius={20}
+                            style={styles.container}
+                        >
                             <Avatar
                                 onPress={()=>{
                                     Clipboard.setString(this.state.course.passCode)
                                     Toast.show('PassCode Copied to Clipboard');
                                 }}
-                                title = {this.state.course.courseName + " (" + this.state.course.passCode + ")"}
+                                title = {
+                                    this.state.course.courseCode + " " +
+                                    this.state.course.courseName + " (" +
+                                    this.state.course.passCode + ")"
+                                }
                                 titleStyle={styles.title}
                                 containerStyle={styles.container}
                                 activeOpacity={0.7}
                             />
                             <Text style={styles.name}>{this.state.course.instructor}</Text>
-                            <Text style={styles.courseCode}>{this.state.course.courseCode}</Text>
                         </ImageBackground>
                     </View>
 
@@ -148,10 +155,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 15,
         right: 5,
-        fontSize: 22,
+        fontSize: 20,
         top: 15,
         color:'white',
-        fontWeight : "bold"
     },
     name: {
         position: 'absolute',
@@ -160,12 +166,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color:'white'
     },
-    courseCode:{
-        alignSelf: "flex-end",
-        right: 15,
-        bottom: 7,
-        fontSize: 18,
-        color:'white',
-        fontWeight : "bold"
-    }
 })
