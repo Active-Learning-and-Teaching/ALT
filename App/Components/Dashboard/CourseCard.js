@@ -22,33 +22,58 @@ export default class  CourseCard extends Component{
             image : CoursePics(this.props.course.imageURL)
         })
     }
-    showAlert() {
-        Alert.alert(
-            'Remove course - '+this.props.course.courseName,
-            'This action is irreversible',
-            [
-                {
-                    text: 'Cancel',
-                    onPress: () => {console.log('Cancel Pressed')},
-                    style: 'cancel',
-                },
-                {
-                    text: 'Confirm',
-                    onPress: async () => {
-                        const courses = new Courses()
-                        await courses.getCourse(this.props.course.passCode)
-                            .then(async value => {
-                                await this.props.user.deleteCourse(value)
-                                    .then(r => console.log("Deleted Course"))
-                            })
-                        if(this.props.type==="faculty"){
-                            console.log("email faculty")
-                        }
 
-                    }
-                },
-            ]
-        );
+    showAlert() {
+
+        if (this.props.type==="faculty"){
+            Alert.alert(
+                'Are you sure you want to remove course '+this.props.course.courseName + " ?",
+                'This action is irreversible!',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => {console.log('Cancel Pressed')},
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Confirm',
+                        onPress: async () => {
+                            const courses = new Courses()
+                            await courses.getCourse(this.props.course.passCode)
+                                .then(async value => {
+                                    await this.props.user.deleteCourse(value)
+                                        .then(r => console.log("Deleted Course"))
+                                })
+                            // TODO Email course details
+                        }
+                    },
+                ]
+            )
+        }
+        else{
+            Alert.alert(
+                'Are you sure you want to leave course '+this.props.course.courseName + " ?",
+                '',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => {console.log('Cancel Pressed')},
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Confirm',
+                        onPress: async () => {
+                            const courses = new Courses()
+                            await courses.getCourse(this.props.course.passCode)
+                                .then(async value => {
+                                    await this.props.user.deleteCourse(value)
+                                        .then(r => console.log("Deleted Course"))
+                                })
+                        }
+                    },
+                ]
+            )
+        }
     }
 
     componentDidMount() {
@@ -56,10 +81,6 @@ export default class  CourseCard extends Component{
     }
 
     render(){
-        const optionArray = [
-            'Remove Course',
-            'Cancel',
-        ];
         return(
             <ImageBackground
                 source={this.state.image}
@@ -82,8 +103,16 @@ export default class  CourseCard extends Component{
                 <Text style={styles.name}>{this.props.course.instructor}</Text>
                 <ActionSheet
                     ref={o => (this.ActionSheet = o)}
-                    title={'Do you want to remove the course ?'}
-                    options={optionArray}
+                    title={
+                        this.props.type==="faculty" ?
+                            'Do you want to remove this course ?' :
+                            'Do you want to leave this course ?'
+                    }
+                    options={
+                        this.props.type==="faculty" ?
+                            ['Remove Course', 'Cancel'] :
+                            ['Leave Course', 'Cancel']
+                    }
                     cancelButtonIndex={1}
                     destructiveButtonIndex={0}
                     onPress={index => {
