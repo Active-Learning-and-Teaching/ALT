@@ -56,9 +56,11 @@ export default class FeedbackResultsList extends Component {
         return(
 
             <View style={styles.container}>
-                <Text style={styles.heading}> Student Responses ({this.props.date.split(" ")[0]})</Text>
-                <Text style={[styles.heading,{fontSize: 16,paddingTop : 5}]}>
-                    Feedback Number- {this.state.feedbackNumber}
+                <Text style={styles.heading}>
+                    Student Responses ({this.props.date.split(" ")[0]})
+                </Text>
+                <Text style={[styles.heading,{fontSize: 18,paddingTop : 5}]}>
+                    Minute Paper {this.state.feedbackNumber}
                 </Text>
                 <View style={styles.grid}>
                     {this.props.topics.map((value, i) => (
