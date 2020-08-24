@@ -3,7 +3,7 @@ import {emailTemplate} from './MailTemplate';
 import Toast from 'react-native-simple-toast';
 const RNFS = require('react-native-fs');
 import * as config from '../config.json';
-export const Mailer = (courseName,email,name,date,topics,results,type) => {
+export const Mailer = (courseName,email,name,count,date,topics,results,type) => {
     RNSmtpMailer.sendMail({
         mailhost: "smtp.gmail.com",
         port: "465",
@@ -12,7 +12,13 @@ export const Mailer = (courseName,email,name,date,topics,results,type) => {
         password: config['passwordEmail'],
         from: "tlsauth2020@gmail.com",
         recipients: email,
-        subject: type==="StudentList"?courseName+" list of Students" : courseName + " " + type + " results " +"("+date+")",
+
+        subject: type==="StudentList"
+            ?
+            courseName+" list of Students"
+            :
+            courseName + " " + type + " " + count + " results " +"("+date+")",
+
         htmlBody : emailTemplate(courseName,name,date,topics,results,type),
         attachmentPaths : type==="StudentList"?[
             RNFS.DocumentDirectoryPath + `/${courseName}.csv`

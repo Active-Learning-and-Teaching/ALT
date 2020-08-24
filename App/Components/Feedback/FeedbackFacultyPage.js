@@ -26,15 +26,17 @@ export default class FeedbackFacultyPage extends Component {
             duration : this.duration,
             date :"",
             results : "",
-            loading : true
+            loading : true,
+            feedbackNumber :"",
         }
         this.setTopics = this.setTopics.bind(this);
         this.feedbackresultData = this.feedbackresultData.bind(this);
     }
 
-    feedbackresultData(resultData){
+    feedbackresultData(resultData,feedbackNumber){
         this.setState({
-            results: resultData
+            results: resultData,
+            feedbackNumber: feedbackNumber
         })
     }
 
@@ -160,6 +162,7 @@ export default class FeedbackFacultyPage extends Component {
                                                     this.state.course.courseName,
                                                     this.state.user.email,
                                                     this.state.user.name,
+                                                    this.state.feedbackNumber,
                                                     this.state.date,
                                                     this.state.topics,
                                                     this.state.results,

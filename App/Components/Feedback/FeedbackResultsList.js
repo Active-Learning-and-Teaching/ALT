@@ -36,7 +36,7 @@ export default class FeedbackResultsList extends Component {
                         responses : values,
                         feedbackNumber : r["feedbackCount"]
                     })
-                    this.props.feedbackresultData(values)
+                    this.props.feedbackresultData(values,this.state.feedbackNumber)
                 })
         })
     }
