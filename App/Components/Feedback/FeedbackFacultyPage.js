@@ -135,7 +135,12 @@ export default class FeedbackFacultyPage extends Component {
                     ? this.props.beforeFeedback === false
                         ? this.state.emailPage === false
                             ?
-                            <FeedbackForm course={this.state.course} user={this.state.user} setTopics={this.setTopics}/>
+                            <FeedbackForm
+                                feedbackCount = {this.props.feedbackCount}
+                                course={this.state.course}
+                                user={this.state.user}
+                                setTopics={this.setTopics}
+                            />
                             :
                             <ScrollView>
                                 <View style={styles.result}>
@@ -178,7 +183,9 @@ export default class FeedbackFacultyPage extends Component {
                         :
                         <ScrollView>
                             <View style={styles.container}>
-                                <Text style={styles.heading}> Upcoming minute paper</Text>
+                                <Text style={styles.heading}>
+                                    Upcoming minute paper {this.props.feedbackCount}
+                                </Text>
                                 <View style={[styles.shadow]}>
                                 {this.state.topics.map((value, i) => (
                                     <ListItem
@@ -190,7 +197,9 @@ export default class FeedbackFacultyPage extends Component {
                                 ))}
                                 </View>
                                 <View style={styles.container}>
-                                    <Text style={styles.text1}> Minute paper to go live in</Text>
+                                    <Text style={styles.text1}>
+                                        Minute paper to go live in
+                                    </Text>
                                     <CountDown
                                         until={this.props.beforeDuration + 5}
                                         size={24}
@@ -218,7 +227,9 @@ export default class FeedbackFacultyPage extends Component {
                         </ScrollView>
                     :
                     <ScrollView>
-                        <Text style={styles.or}> Minute Paper in Progress</Text>
+                        <Text style={styles.or}>
+                            Minute Paper {this.props.feedbackCount} in Progress
+                        </Text>
                         <CountDown
                             until={this.props.currentDuration + 5}
                             size={30}
