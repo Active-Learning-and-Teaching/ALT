@@ -61,7 +61,11 @@ export default class  CourseCard extends Component{
             'Cancel',
         ];
         return(
-            <ImageBackground source={this.state.image} borderRadius={20} blurRadius={5} style={styles.container}>
+            <ImageBackground
+                source={this.state.image}
+                borderRadius={20}
+                style={styles.container}
+            >
                 <Avatar
                     onPress={()=>{
                         this.props.navigation.navigate('Course', {
@@ -70,7 +74,7 @@ export default class  CourseCard extends Component{
                             course : this.props.course
                     })}}
                     onLongPress={()=>{this.showActionSheet()}}
-                    title = {this.props.course.courseName}
+                    title = {this.props.course.courseCode + " "+ this.props.course.courseName}
                     titleStyle={styles.title}
                     containerStyle={styles.container}
                     activeOpacity={0.2}
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 15,
         right: 15,
-        fontSize: 22,
+        fontSize: 20,
         top: 0,
         color:'white',
         fontWeight : "bold"

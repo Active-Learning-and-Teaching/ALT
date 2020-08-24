@@ -15,7 +15,10 @@ export default class AnnouncementCard extends Component{
                     subtitle={this.props.announcement.description}
                     subtitleStyle={styles.caption}
                     containerStyle={styles.container}
-                    badge = {{value : <Text style={{color:"white", fontSize:10}}>{"  "+this.props.announcement.date+"  "}</Text>, containerStyle : styles.date}}
+                    badge = {{
+                        value : <Text style={{color:"white", fontSize:10}}>
+                            {"  "+this.props.announcement.date+"  "}
+                        </Text>, containerStyle : styles.date}}
                     bottomDivider
                 />
             </View>
