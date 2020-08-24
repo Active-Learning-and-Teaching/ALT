@@ -7,6 +7,7 @@ import StudentFeedbackCard from './StudentFeedbackCard';
 import Toast from 'react-native-simple-toast';
 import FeedbackResponses from '../../Databases/FeedbackResponses';
 import moment from 'moment';
+import database from '@react-native-firebase/database';
 
 export default class FeedbackStudentPage extends Component {
     constructor(props) {
@@ -87,7 +88,8 @@ export default class FeedbackStudentPage extends Component {
         if (!err) {
             Toast.show('Responses have been recorded!');
             const feedbackResponse = new FeedbackResponses()
-            const timestamp = moment().format("DD/MM/YYYY HH:mm:ss")
+            const timestamp = moment(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
+            console.log(timestamp)
 
             await feedbackResponse.getFeedbackResponse(this.state.user.url, this.state.course.passCode)
                 .then((url) => {

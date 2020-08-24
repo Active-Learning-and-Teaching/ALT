@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {SafeAreaView, StyleSheet, View, ScrollView, TextInput} from 'react-native';
 import {Icon, Text, Button} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import database from '@react-native-firebase/database';
 import moment from 'moment';
 import Feedback from '../../Databases/Feedback';
 import {Button as IosButton } from 'react-native';
@@ -18,11 +19,11 @@ export default class FeedbackForm extends Component {
             textInput : [],
             inputData : [],
             date : null,
-            iosdate : moment().format("DD/MM/YYYY"),
+            iosdate : moment(database().getServerTime()).format("DD/MM/YYYY"),
             showDate : false,
             showTime : false,
             time : null,
-            iostime : moment().format("HH:mm:ss"),
+            iostime : moment(database().getServerTime()).format("HH:mm:ss"),
             error : null,
             topics : [],
             duration : this.duration,
@@ -82,7 +83,7 @@ export default class FeedbackForm extends Component {
                 .format("DD/MM/YYYY HH:mm:ss")
 
             const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-            const curr = moment()
+            const curr = moment(database().getServerTime())
 
             if(curr>temp)
             {
@@ -286,20 +287,26 @@ export default class FeedbackForm extends Component {
                                             mode={'date'}
                                             is24Hour={true}
                                             display="default"
-                                            minimumDate = {moment().toDate()}
-                                            maximumDate = {moment().add(30,'days').toDate()}
+                                            minimumDate = {moment(database().getServerTime()).toDate()}
+                                            maximumDate = {
+                                                moment(database().getServerTime()).add(30,'days')
+                                                    .toDate()
+                                            }
                                             onChange={this.iOSonChangeDate}
                                         />
                                     </View>
                                     :
                                     <DateTimePicker
                                         testID="datePicker"
-                                        value={moment().toDate()}
+                                        value={moment(database().getServerTime()).toDate()}
                                         mode={'date'}
                                         is24Hour={true}
                                         display="default"
-                                        minimumDate = {moment().toDate()}
-                                        maximumDate = {moment().add(30,'days').toDate()}
+                                        minimumDate = {moment(database().getServerTime()).toDate()}
+                                        maximumDate = {
+                                            moment(database().getServerTime()).add(30,'days')
+                                                .toDate()
+                                        }
                                         onChange={this.onChangeDate}
                                     />
                                 }
@@ -324,7 +331,7 @@ export default class FeedbackForm extends Component {
                                     :
                                     <DateTimePicker
                                         testID="timePicker"
-                                        value={moment().toDate()}
+                                        value={moment(database().getServerTime()).toDate()}
                                         mode={'time'}
                                         is24Hour={true}
                                         display="default"

@@ -8,6 +8,7 @@ import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
 import Quiz from '../../Databases/Quiz';
 import Toast from 'react-native-simple-toast';
+import database from "@react-native-firebase/database";
 
 export default class QuizStudentPage extends Component {
     constructor(props) {
@@ -62,7 +63,7 @@ export default class QuizStudentPage extends Component {
         } else {
             Toast.show('Answer has been recorded!');
             const kbcresponse = new QuizResponses()
-            const timestamp = moment().format("DD/MM/YYYY HH:mm:ss")
+            const timestamp = moment(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
 
             await kbcresponse.getResponse(this.state.user.url, this.state.course.passCode)
                 .then((url) => {
