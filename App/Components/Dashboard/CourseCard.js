@@ -84,6 +84,7 @@ export default class  CourseCard extends Component{
         return(
             <ImageBackground
                 source={this.state.image}
+                loadingIndicatorSource={require('../../Assets/LoadingImage.jpg')}
                 borderRadius={20}
                 style={styles.container}
             >

@@ -62,6 +62,7 @@ export default class  Announcement extends Component{
                     <View style ={styles.grid}>
                         <ImageBackground
                             source={this.state.image}
+                            loadingIndicatorSource={require('../../Assets/LoadingImage.jpg')}
                             borderRadius={20}
                             style={styles.container}
                         >
