@@ -98,7 +98,7 @@ export default class StudentList extends Component{
                         <Text style={styles.text}>
                             {this.state.studentList.length===0
                             ?""
-                            :"Total Students "+this.state.studentList.length}
+                            :"Students Enrolled : "+this.state.studentList.length}
                         </Text>
                         {this.state.studentList.map((student,i)=> (
                             <ListItem
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     text: {
         color: 'grey',
         alignSelf: "center",
-        fontSize: 18,
+        fontSize: 16,
         paddingTop : 5,
         paddingBottom : 5,
         fontWeight : "bold"
