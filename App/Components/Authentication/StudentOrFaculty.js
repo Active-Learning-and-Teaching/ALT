@@ -12,6 +12,7 @@ export default class StudentOrFaculty extends Component {
         this.state = {
             selected: '',
             error: null,
+            buttonEnabled : true
         };
     }
 
@@ -67,7 +68,8 @@ export default class StudentOrFaculty extends Component {
                 var errorMessages = new ErrorMessages()
                 var message = errorMessages.getErrorMessage(err.code)
                 this.setState({
-                    error : message
+                    error : message,
+                    buttonEnabled :true,
                 })
             })
     }
@@ -75,10 +77,15 @@ export default class StudentOrFaculty extends Component {
     RegisterTypeOfUser = async ()=>{
         const { selected} = this.state;
 
+        this.setState({
+            buttonEnabled :false
+        })
+
         if (selected==='')
         {
             this.setState({
-                error : "Select the type of user."
+                error : "Select the type of user.",
+                buttonEnabled :true,
             })
         }
         else {
@@ -135,7 +142,13 @@ export default class StudentOrFaculty extends Component {
                             {this.state.error}
                         </Text> : <Text/>}
                     <View style = {styles.shadow}>
-                        <Button style={styles.buttonMessage} title="Register" onPress={this.RegisterTypeOfUser} />
+                        <Button
+                            style={styles.buttonMessage}
+                            title="Register"
+                            onPress={()=>{
+                                if(this.state.buttonEnabled)
+                                    this.RegisterTypeOfUser().then(r => console.log())
+                            }} />
                     </View>
                 </ScrollView>
             </SafeAreaView>
