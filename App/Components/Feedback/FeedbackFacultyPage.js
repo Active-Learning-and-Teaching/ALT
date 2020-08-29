@@ -189,7 +189,7 @@ export default class FeedbackFacultyPage extends Component {
                         <ScrollView>
                             <View style={styles.container}>
                                 <Text style={styles.heading}>
-                                    Upcoming minute paper {this.props.feedbackCount}
+                                    Minute Paper {this.props.feedbackCount}
                                 </Text>
                                 <View style={[styles.shadow]}>
                                 {this.state.topics.map((value, i) => (
@@ -203,7 +203,7 @@ export default class FeedbackFacultyPage extends Component {
                                 </View>
                                 <View style={styles.container}>
                                     <Text style={styles.text1}>
-                                        Minute paper to go live in
+                                        Scheduled to go live in
                                     </Text>
                                     <CountDown
                                         until={this.props.beforeDuration + 5}
@@ -220,7 +220,7 @@ export default class FeedbackFacultyPage extends Component {
                                 </View>
                                 <Text style={styles.text}> Or </Text>
                                 <View style={[styles.buttonContainer,styles.shadow]}>
-                                    <Button style={styles.buttonMessage} title='START NOW!' onPress={()=>{
+                                    <Button style={styles.buttonMessage} title='START NOW?' onPress={()=>{
                                         this.startFeedback("start").then(r => "")}} />
                                 </View>
                                 <Text style={styles.text}> Or </Text>
@@ -364,7 +364,8 @@ const styles = StyleSheet.create({
         flex: 1,
         display: "flex",
         padding: 8,
-        fontSize : 16,
+        fontSize : 18,
+        fontWeight : 'bold',
         color: 'grey',
         marginTop: 5,
         alignSelf: "center",

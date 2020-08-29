@@ -37,6 +37,7 @@ export default class FeedbackForm extends Component {
                 <TextInput
                     style={styles.textInput}
                     key = {index}
+                    autoCapitalize="words"
                     onChangeText={(text) => this.addValues(text, index)}
                 />
             );
@@ -48,7 +49,9 @@ export default class FeedbackForm extends Component {
         const t = this.state.inputData
         for await (const item of t){
             if (item['text'].length!==0) {
-                arr.push(item['text']);
+                let topic = item["text"];
+                topic = topic.charAt(0).toUpperCase() + topic.slice(1)
+                arr.push(topic);
             }
         }
         await this.setState({
