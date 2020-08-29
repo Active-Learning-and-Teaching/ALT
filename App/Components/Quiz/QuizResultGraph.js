@@ -40,15 +40,15 @@ export default class QuizResultGraph extends Component {
             }
             else if(this.props.quizType==='numerical'){
                 kbcResponse.getAllNumericalResponse(this.props.passCode, r["startTime"], r["endTime"] )
-                    .then( values  =>{
+                    .then( async values  =>{
                         //https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
-                        const items = Object.keys(values).map(function (key) {
+                        const items = await Object.keys(values).map(function (key) {
                             return [key, values[key]];
                         });
-                        items.sort(function(first, second) {
+                        await items.sort(function(first, second) {
                             return second[1] - first[1];
                         });
-                        this.setState({
+                        await this.setState({
                             top5answer : items.slice(0, 5),
                             quizNumber : r["questionCount"]
                         })
