@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Linking, Platform, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {Linking, Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Dimensions from '../../Utils/Dimensions';
 import {ListItem} from 'react-native-elements';
 import database from '@react-native-firebase/database';
@@ -95,6 +95,11 @@ export default class StudentList extends Component{
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
                     <View style={styles.grid}>
+                        <Text style={styles.text}>
+                            {this.state.studentList.length===0
+                            ?""
+                            :"Total Students "+this.state.studentList.length}
+                        </Text>
                         {this.state.studentList.map((student,i)=> (
                             <ListItem
                                 key = {i}
@@ -154,6 +159,14 @@ const styles = StyleSheet.create({
         shadowRadius: 5.00,
         elevation: 4,
         borderRadius: 15,
+    },
+    text: {
+        color: 'grey',
+        alignSelf: "center",
+        fontSize: 18,
+        paddingTop : 5,
+        paddingBottom : 5,
+        fontWeight : "bold"
     },
     grid: {
         marginTop : 10,
