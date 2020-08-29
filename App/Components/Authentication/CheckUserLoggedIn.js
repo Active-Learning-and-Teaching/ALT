@@ -63,9 +63,6 @@ export default class CheckUserLoggedIn extends Component {
                             if (val){
                                 this.props.navigation.navigate('Student DashBoard')
                             }
-                            else{
-                                await this.signOut()
-                            }
                         })
                 }
             })
