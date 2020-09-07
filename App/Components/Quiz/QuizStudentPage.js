@@ -73,7 +73,8 @@ export default class QuizStudentPage extends Component {
                             this.state.user.url,
                             this.state.user.email,
                             option,
-                            timestamp
+                            timestamp,
+                            this.state.user.name
                         ).then(r => {
                                 console.log("update")
                             })
@@ -84,6 +85,7 @@ export default class QuizStudentPage extends Component {
                             this.state.user.email,
                             option,
                             timestamp,
+                            this.state.user.name,
                             url
                         ).then(r => {
                                 console.log("create")

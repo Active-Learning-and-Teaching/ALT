@@ -145,8 +145,8 @@ export default class QuizResultGraph extends Component {
                     <Text/>
                 }
 
-                {this.props.correctAnswer!=="0"
-                    ? <Text style={styles.ca}> Correct Answer  : {this.props.correctAnswer}</Text>
+                {this.props.correctAnswer!=="*"
+                    ? <Text style={styles.ca}> Correct Answer  : {this.props.correctAnswer.trim().toUpperCase()}</Text>
                     :<View/>
                 }
                 </View>

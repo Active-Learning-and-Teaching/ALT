@@ -8,7 +8,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
             <body>
             <div>
                 <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-                    Respected Faculty ${name},
+                    Respected Professor ${name},
                     <br/> 
                     <br/>     
                     Following is the results of ${type} on ${date} for course ${courseName}
@@ -41,7 +41,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
         <body>
         <div>
             <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-                Respected Faculty ${name},
+                Respected Professor ${name},
                 <br/> 
                 <br/>     
                 Following is the results of ${type} on ${date} for course ${courseName}
@@ -86,7 +86,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
             <body>
             <div>
             <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-                Respected Faculty ${name},
+                Respected Professor ${name},
                 <br/> 
                 <br/>     
                 Following is the results of ${type} on ${date} for course ${courseName}
@@ -126,7 +126,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
         </head>
         <body>
             <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-                    Respected Faculty ${name},
+                    Respected Professor ${name},
                     <br/> 
                     <br/>    
                     <br/>

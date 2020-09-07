@@ -160,6 +160,7 @@ export default class FeedbackFacultyPage extends Component {
                                             onPress={()=>{
                                                 Mailer(
                                                     this.state.course.courseName,
+                                                    this.state.course.courseCode,
                                                     this.state.user.email,
                                                     this.state.user.name,
                                                     this.state.feedbackNumber,

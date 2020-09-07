@@ -31,7 +31,7 @@ class QuizResponses {
         return ans
     }
 
-    setResponse = async (passCode, userID, userName, answer, timestamp, url) =>{
+    setResponse = async (passCode, userID, userName, answer, timestamp, name, url) =>{
         await database()
             .ref(config['internalDb']+'/KBCResponse/'+url)
             .set({
@@ -40,14 +40,15 @@ class QuizResponses {
                 userName: userName,
                 userID_passCode : userID+"_"+passCode,
                 answer: answer,
-                timestamp:timestamp
+                timestamp:timestamp,
+                name: name
             })
             .then(()=>{
                 console.log("Response modified")
             })
     }
 
-    createResponse =  async (passCode, userID, userName, answer, timestamp) => {
+    createResponse =  async (passCode, userID, userName, answer, timestamp, name) => {
         await this.reference
             .push()
             .set({
@@ -56,11 +57,39 @@ class QuizResponses {
                 userName: userName,
                 userID_passCode : userID+"_"+passCode,
                 answer: answer,
-                timestamp: timestamp
+                timestamp: timestamp,
+                name: name
             })
             .then(() => {
                 console.log('Response Created')
             })
+    }
+
+    getAllStudentsforMail = async (passCode, startTime, endTime)=> {
+        let ans = null
+        await this.reference
+            .orderByChild("passCode")
+            .equalTo(passCode)
+            .once('value')
+            .then(snapshot => {
+                const list = []
+                snapshot.forEach( (data) => {
+                    const keys = Object(data.val())
+                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+
+                    if (temp1<=temp2 && temp1>=temp){
+                        let answer = keys['answer'].trim().toUpperCase()
+                        let email = keys['userName']
+                        let name = keys['name']===undefined? "N/A": keys["name"]
+                        const val={"Name":name,"Email":email,"Answer":answer}
+                        list.push(val)
+                    }
+                })
+                ans = list
+            })
+        return ans
     }
 
     getAllMcqResponse = async (passCode, startTime, endTime)=> {
