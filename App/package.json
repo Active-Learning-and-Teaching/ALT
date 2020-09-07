@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/clipboard": "^1.2.2",
+    "@react-native-community/clipboard": "^1.2.3",
     "@react-native-community/datetimepicker": "^2.5.0",
     "@react-native-community/google-signin": "^4.0.1",
     "@react-native-community/masked-view": "^0.1.10",
@@ -31,7 +31,7 @@
     "react-native-actionsheet": "^2.4.2",
     "react-native-chart-kit": "^6.2.2",
     "react-native-countdown-component": "^2.7.1",
-    "react-native-elements": "^2.0.4",
+    "react-native-elements": "^2.3.2",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-modal": "^11.5.6",
