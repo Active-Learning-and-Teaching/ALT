@@ -53,6 +53,7 @@ export default class StudentStack extends Component {
                                 Toast.show('Sending Email...');
                                 Mailer(
                                     this.state.course.courseName,
+                                    this.state.course.courseCode,
                                     this.state.user.email,
                                     this.state.user.name,
                                     "",

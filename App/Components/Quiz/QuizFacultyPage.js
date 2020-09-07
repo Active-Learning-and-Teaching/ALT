@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, View, TextInput} from 'react-native';
 import {Slider, Text, Button} from 'react-native-elements';
 import Quiz from '../../Databases/Quiz';
 import moment from 'moment';
@@ -11,6 +11,7 @@ import Toast from 'react-native-simple-toast';
 import SwitchSelector from "react-native-switch-selector";
 import Dimensions from '../../Utils/Dimensions';
 import database from "@react-native-firebase/database";
+import QuizResponses from '../../Databases/QuizResponses';
 
 export default class QuizFacultyPage extends Component{
     constructor(props) {
@@ -19,9 +20,9 @@ export default class QuizFacultyPage extends Component{
             course : this.props.course,
             user : this.props.user,
             time : 2,
-            option : "0",
+            option : "*",
             icon : "",
-            correctAnswer : "0",
+            correctAnswer : "*",
             emailPage : false,
             error : null,
             date : "",
@@ -88,9 +89,9 @@ export default class QuizFacultyPage extends Component{
     mailQuizResult = () =>{
         this.setState({
             time : 2,
-            option : "0",
+            option : "*",
             icon : "",
-            correctAnswer : "0",
+            correctAnswer : "*",
             emailPage : false,
             error : null,
             date : "",
@@ -155,7 +156,7 @@ export default class QuizFacultyPage extends Component{
                     }
                     this.setState({
                         time: 2,
-                        option: "",
+                        option: "*",
                         icon: "",
                         error: null
                     })
@@ -164,6 +165,86 @@ export default class QuizFacultyPage extends Component{
 
         }
 
+    }
+
+    dbUpdateCorrectAnswer = async () => {
+        const option = this.state.option
+
+        if (option === "" || option === "*") {
+            this.setState({
+                error : "Please type Correct Answer"
+            })
+        }
+        else{
+            this.setState({
+                error: null,
+            })
+            const Kbc = new Quiz()
+            Kbc.getTiming(this.state.course.passCode)
+                .then(value => {
+                    Kbc.getQuestion(this.state.course.passCode)
+                        .then(values => {
+                            const url = Object.keys(values)[0];
+                            Kbc.setQuestion(
+                                this.state.course.passCode,
+                                value["startTime"],
+                                value["endTime"],
+                                value["duration"],
+                                this.state.option,
+                                value["instructor"],
+                                value["quizType"],
+                                url,
+                                value["emailResponse"],
+                                value["questionCount"]
+                            )
+                            Toast.show('Correct Answer has been recorded!');
+                        })
+                })
+        }
+    }
+
+    async studentsResponseCsv(list, answer,type){
+        const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase();
+        const date = this.state.date.replace(/\//g,"-").split(" ")[0]
+        const quizNumber = this.state.quizNumber
+        const fileName = this.state.course.courseCode+"_"+date+"_"+"Quiz-"+quizNumber
+
+        await list.sort((a,b) =>
+            a.Email > b.Email
+            ? 1
+            : b.Email > a.Email
+                ? -1
+                : 0
+        );
+
+        const reactFile = require('react-native-fs');
+        const path = reactFile.DocumentDirectoryPath + `/${fileName}.csv`;
+
+        const aboutQuiz =  `${"Date- "+this.state.date},${"Quiz- "+quizNumber},${"Correct Ans- "+correctAnswer}\n\n`
+        const headerString = 'Student Name, EmailID, Response, Auto-grade Marks\n';
+        const rowString = await list.map((student,i) => `${student.Name},${student.Email},${student.Answer},${answer === "*" ? 'N/A': student.Answer===correctAnswer? 1:0 }\n`).join('');
+        const csvString = `${aboutQuiz}${headerString}${rowString}`;
+
+        return await reactFile.writeFile(path, csvString, 'utf8')
+            .then(async (success) => {
+                console.log("File Written")
+                await Mailer(
+                    this.state.course.courseName,
+                    this.state.course.courseCode,
+                    this.state.user.email,
+                    this.state.user.name,
+                    quizNumber,
+                    this.state.date,
+                    "",
+                    this.state.results,
+                    type
+                )
+                this.mailQuizResult()
+                await Toast.show('Sending Email...');
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
     }
 
     render(){
@@ -184,9 +265,9 @@ export default class QuizFacultyPage extends Component{
                             onPress={value => {
                                 this.setState({
                                     typeofQuiz : value,
-                                    option : "0",
+                                    option : "*",
                                     icon : "",
-                                    correctAnswer : "0",
+                                    correctAnswer : "*",
                                 })
                             }}
                             textStyle={{fontFamily:"arial"}}
@@ -196,17 +277,22 @@ export default class QuizFacultyPage extends Component{
                             // hasPadding
                             options={[
                                 { label: "MCQ", value: "mcq", activeColor: '#60CA24'},
-                                { label: "Numerical", value: "numerical" ,activeColor: '#60CA24'},
+                                { label: "AlphaNumeric", value: "numerical" ,activeColor: '#60CA24'},
+                                // { label: "MultiCorrect", value: "multicorrect" ,activeColor: '#60CA24'},
                             ]}
                         />
                     </View>
                     {this.state.typeofQuiz === "mcq"
                     ?
-                    <View>
-                        <Options optionValue={this.setOption} icon={this.state.icon}/>
-                    </View>
+                        <View>
+                            <Options optionValue={this.setOption} icon={this.state.icon}/>
+                        </View>
                     :
-                    <Text/>
+                        this.state.typeofQuiz ==="numerical"
+                        ?
+                        <Text/>
+                        :
+                        <Text>Multi</Text>
                     }
 
                     <View style={styles.container}>
@@ -227,10 +313,6 @@ export default class QuizFacultyPage extends Component{
                             />
 
 
-                        {this.state.error ?
-                            <Text style={styles.errorMessage}>
-                                {this.state.error}
-                            </Text> : <Text/>}
                             <View style = {styles.shadow}>
                                 <Button title="BEGIN" onPress={this.startKBC}/>
                             </View>
@@ -254,7 +336,7 @@ export default class QuizFacultyPage extends Component{
                                 }]}>
                                 <Button style={styles.buttonMessage}
                                         title="Email Results"
-                                        onPress={()=>{
+                                        onPress={async ()=>{
                                             let type = ""
                                             if(this.props.quizType==='mcq'){
                                                 type = "In-Class MCQ Quiz"
@@ -263,18 +345,16 @@ export default class QuizFacultyPage extends Component{
                                                 type = "In-Class Quiz"
                                             }
                                             if(type!=""){
-                                                Mailer(
-                                                    this.state.course.courseName,
-                                                    this.state.user.email,
-                                                    this.state.user.name,
-                                                    this.state.quizNumber,
-                                                    this.state.date,
-                                                    "",
-                                                    this.state.results,
-                                                    type
-                                                )
-                                                this.mailQuizResult()
-                                                Toast.show('Sending Email...');
+                                                const kbcResponse = new QuizResponses()
+                                                const Kbc = new Quiz()
+
+                                                await Kbc.getTiming(this.state.course.passCode).then(r =>{
+                                                    kbcResponse.getAllStudentsforMail(this.state.course.passCode, r["startTime"], r["endTime"]).then(list=>{
+                                                        this.studentsResponseCsv(list,r["correctAnswer"],type).then(()=>{
+                                                            console.log("Email Sent")
+                                                        })
+                                                    })
+                                                })
                                             }
                                         }}/>
                                 <Button style={styles.buttonMessage}
@@ -282,9 +362,9 @@ export default class QuizFacultyPage extends Component{
                                         onPress={()=>{
                                             this.setState({
                                                 time : 2,
-                                                option : "0",
+                                                option : "*",
                                                 icon : "",
-                                                correctAnswer : "0",
+                                                correctAnswer : "*",
                                                 emailPage : false,
                                                 error : null,
                                                 date : "",
@@ -315,6 +395,34 @@ export default class QuizFacultyPage extends Component{
                         timeToShow={['M', 'S']}
                         timeLabels={{m: 'Min', s: 'Sec'}}
                     />
+                    {this.props.quizType==="numerical"
+                        ?
+                        <View>
+                            <Text style={[styles.heading,{fontSize : 19, marginTop:25}]}>
+                                Provide Answer for Auto-grading
+                            </Text>
+                            <TextInput
+                                style={styles.textInput}
+                                maxLength={15}
+                                textAlign={'center'}
+                                onChangeText={text => {this.setState({
+                                    option : text
+                                })}}
+                                value={this.state.option==="*"?"":this.state.option}
+                            />
+                            {this.state.error ? <Text style={styles.errorMessage}>{this.state.error}</Text> : <Text/>}
+
+                            <Button style={styles.buttonMessage}
+                                title="Submit"
+                                onPress={()=>{
+                                    this.dbUpdateCorrectAnswer()
+                                        .then(r => console.log("Answer Updated"))
+                                }}
+                            />
+                        </View>
+                        :
+                        <Text/>
+                    }
                 </ScrollView>
                 }
             </SafeAreaView>
@@ -354,6 +462,14 @@ const styles = StyleSheet.create({
         marginTop: 5,
         textAlign: 'center',
     },
+    textInput: {
+        width: '100%',
+        paddingTop: 55,
+        paddingBottom: 15,
+        alignSelf: "center",
+        borderColor: "#ccc",
+        borderBottomWidth: 1,
+    },
     shadow: {
         shadowColor: "#000",
         shadowOffset: {
@@ -387,9 +503,10 @@ const styles = StyleSheet.create({
     },
     errorMessage: {
         color: 'red',
-        marginBottom: 15,
-        paddingTop : 20,
-        paddingBottom: 10,
+        marginBottom: 5,
+        paddingTop : 5,
+        paddingBottom: 5,
+        marginTop: 5
     },
     buttonMessage: {
         marginTop : 30,
