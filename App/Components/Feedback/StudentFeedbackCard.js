@@ -13,11 +13,16 @@ export default class StudentFeedbackCard extends Component{
         return(
             <View style={styles.grid}>
                 <ListItem
-                    title={(this.props.index+1)+". " +this.props.value}
-                    titleStyle={styles.title}
                     containerStyle={styles.listContainer}
                     // bottomDivider
-                />
+                >
+                    <ListItem.Content>
+                        <ListItem.Title style={styles.title}>
+                            {(this.props.index+1)+". " +this.props.value}
+                        </ListItem.Title>
+                    </ListItem.Content>
+                </ListItem>
+
                 <SwitchSelector
                     onPress={value => {
                         this.props.studentResponses(this.props.value, value)

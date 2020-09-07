@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import { ListItem } from 'react-native-elements'
+import { ListItem, Badge } from 'react-native-elements'
 import Dimensions from '../../Utils/Dimensions';
 
 export default class AnnouncementCard extends Component{
@@ -10,17 +10,23 @@ export default class AnnouncementCard extends Component{
 
             <View>
                 <ListItem
-                    title = {this.props.announcement.heading}
-                    titleStyle={styles.title}
-                    subtitle={this.props.announcement.description}
-                    subtitleStyle={styles.caption}
                     containerStyle={styles.container}
-                    badge = {{
-                        value : <Text style={{color:"white", fontSize:10}}>
-                            {"  "+this.props.announcement.date+"  "}
-                        </Text>, containerStyle : styles.date}}
                     bottomDivider
-                />
+                >
+                    <ListItem.Content>
+                        <ListItem.Title style={styles.title}>
+                            {this.props.announcement.heading}
+                        </ListItem.Title>
+                        <ListItem.Subtitle style={styles.caption}>
+                            {this.props.announcement.description}
+                        </ListItem.Subtitle>
+                    </ListItem.Content>
+                    <Badge
+                        value = {"  "+this.props.announcement.date+"  "}
+                        containerStyle = {styles.date}
+                        textStyle={{color:"white", fontSize:11}}
+                    />
+                </ListItem>
             </View>
         )
     }

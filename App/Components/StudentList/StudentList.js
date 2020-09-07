@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Linking, Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Dimensions from '../../Utils/Dimensions';
-import {ListItem} from 'react-native-elements';
+import {ListItem,Icon,Avatar} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
@@ -103,31 +103,36 @@ export default class StudentList extends Component{
                         {this.state.studentList.map((student,i)=> (
                             <ListItem
                                 key = {i}
-                                leftAvatar= {{
-                                    title : this.createTitle(student.name, student.email),
-                                    titleStyle : {color:"white", fontSize:20},
-                                    overlayContainerStyle : {backgroundColor: '#2697BF'},
-                                    size : "medium",
-                                    rounded : true
-                                }}
-                                rightIcon={{
-                                    name : 'mail-forward',
-                                    type : 'font-awesome',
-                                    size : 20,
-                                    color : 'grey',
-                                    onPress : () =>{
-                                        Linking.openURL('mailto:' + student.email).then(r  => console.log(r))
-                                    }
-                                }}
-                                title={student.name!==undefined && student.name.replace(/\s+/g,' ').trim().length!==0
-                                        ? student.name.replace(/\s+/g,' ').trim()
-                                        : student.email}
-                                titleStyle={styles.title}
-                                subtitle={student.email}
-                                subtitleStyle={styles.caption}
                                 containerStyle={styles.container}
                                 bottomDivider
-                            />
+                            >
+                                <Avatar
+                                    title = {this.createTitle(student.name, student.email)}
+                                    titleStyle = {{color:"white", fontSize:20}}
+                                    overlayContainerStyle = {{backgroundColor: '#2697BF'}}
+                                    size = "medium"
+                                    rounded
+                                />
+                                <ListItem.Content>
+                                    <ListItem.Title style={styles.title}>
+                                        {student.name!==undefined && student.name.replace(/\s+/g,' ').trim().length!==0
+                                            ? student.name.replace(/\s+/g,' ').trim()
+                                            : student.email}
+                                    </ListItem.Title>
+                                    <ListItem.Subtitle style={styles.caption}>
+                                        {student.email}
+                                    </ListItem.Subtitle>
+                                </ListItem.Content>
+                                <Icon
+                                    name = 'mail-forward'
+                                    type = 'font-awesome'
+                                    size = {20}
+                                    color = 'grey'
+                                    onPress = {() =>{
+                                        Linking.openURL('mailto:' + student.email).then(r  => console.log(r))
+                                    }}
+                                />
+                            </ListItem>
                         ))}
                     </View>
                 </ScrollView>

@@ -67,10 +67,14 @@ export default class FeedbackResultsList extends Component {
 
                         <View key={i}>
                             <ListItem
-                                title={(i+1)+". " +value}
-                                titleStyle={styles.title}
                                 containerStyle={styles.listContainer}
-                            />
+                            >
+                                <ListItem.Content>
+                                    <ListItem.Title style={styles.title}>
+                                        {(i+1)+". " +value}
+                                    </ListItem.Title>
+                                </ListItem.Content>
+                            </ListItem>
                             {value in this.state.responses
                             ?
                                 <PieChart

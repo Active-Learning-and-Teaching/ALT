@@ -196,10 +196,14 @@ export default class FeedbackFacultyPage extends Component {
                                 {this.state.topics.map((value, i) => (
                                     <ListItem
                                         key = {i}
-                                        title={(i+1)+". " +value}
-                                        titleStyle={styles.title}
                                         containerStyle={styles.listContainer}
-                                    />
+                                    >
+                                        <ListItem.Content>
+                                            <ListItem.Title style={styles.title}>
+                                                {(i+1)+". " +value}
+                                            </ListItem.Title>
+                                        </ListItem.Content>
+                                    </ListItem>
                                 ))}
                                 </View>
                                 <View style={styles.container}>
