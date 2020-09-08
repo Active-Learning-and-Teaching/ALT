@@ -44,11 +44,13 @@ export default class QuizFacultyPage extends Component{
     checkEmailSent = async () =>{
         const Kbc = new Quiz()
         Kbc.getTiming(this.state.course.passCode).then(value => {
-            this.setState({
-                emailPage : !value["emailResponse"],
-                correctAnswer : value["correctAnswer"],
-                date : value["startTime"]
-            })
+            if(value!=null){
+                this.setState({
+                    emailPage : !value["emailResponse"],
+                    correctAnswer : value["correctAnswer"],
+                    date : value["startTime"]
+                })
+            }
         })
     }
 

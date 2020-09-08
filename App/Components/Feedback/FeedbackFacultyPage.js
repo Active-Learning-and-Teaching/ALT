@@ -49,11 +49,14 @@ export default class FeedbackFacultyPage extends Component {
     checkEmailSent = async () =>{
         const feedback = new Feedback()
         feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
-            this.setState({
-                emailPage : !value["emailResponse"],
-                topics : value["topics"],
-                date: value["startTime"]
-            })
+            if(value!=null){
+                this.setState({
+                    emailPage : !value["emailResponse"],
+                    topics : value["topics"],
+                    date: value["startTime"]
+                })
+            }
+
         })
     }
 
