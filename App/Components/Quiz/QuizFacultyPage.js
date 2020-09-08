@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, View, TextInput} from 'react-native';
-import {Slider, Text, Button} from 'react-native-elements';
+import {ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, View, TextInput, Animated} from 'react-native';
+import {Slider, Text, Button,Icon} from 'react-native-elements';
 import Quiz from '../../Databases/Quiz';
 import moment from 'moment';
 import Options from './Options';
@@ -294,7 +294,11 @@ export default class QuizFacultyPage extends Component{
                         ?
                         <Text/>
                         :
-                        <Text>Multi</Text>
+                            this.state.typeofQuiz ==="multicorrect"
+                            ?
+                            <Text>Multi</Text>
+                            :
+                            <Text/>
                     }
 
                     <View style={styles.container}>
@@ -308,15 +312,23 @@ export default class QuizFacultyPage extends Component{
                                 step={1}
                                 maximumValue={15}
                                 // thumbTouchSize={{width: 100, height: 100}}
-                                thumbTintColor='#2697BF'
+                                // thumbTintColor='#2697BF'
                                 minimumTrackTintColor="#2697BF"
-                                maximumTrackTintColor="#000000"
+                                // maximumTrackTintColor="#000000"
+                                trackStyle={{ height: 10, backgroundColor: 'transparent' }}
+                                thumbStyle={{ height: 35, width: 35, backgroundColor: 'transparent' }}
+                                thumbProps={{
+                                    Component: Animated.Image,
+                                    source: {
+                                        uri: 'https://i.ibb.co/Qn6nGyx/Clock.png',
+                                    },
+                                }}
                                 onValueChange={(value) => this.setState({time: value})}
                             />
 
 
                             <View style = {styles.shadow}>
-                                <Button title="BEGIN" onPress={this.startKBC}/>
+                                <Button style={{paddingTop:10}} title="BEGIN" onPress={this.startKBC}/>
                             </View>
                         </View>
                     </View>
