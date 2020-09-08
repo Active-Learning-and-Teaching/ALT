@@ -38,7 +38,7 @@ export default class QuizResultGraph extends Component {
                         this.props.quizresultData(values,this.state.quizNumber)
                     })
             }
-            else if(this.props.quizType==='numerical'){
+            else if(this.props.quizType==='numerical' || this.props.quizType=="multicorrect"){
                 kbcResponse.getAllNumericalResponse(this.props.passCode, r["startTime"], r["endTime"] )
                     .then( async values  =>{
                         //https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
@@ -124,7 +124,7 @@ export default class QuizResultGraph extends Component {
                         />
                     </View>
                     :
-                    this.props.quizType==="numerical"
+                    this.props.quizType==="numerical" || this.props.quizType=="multicorrect"
                     ?
                     <View style={styles.numContainer}>
                         <Text style={styles.body1}>Top 5 Answers</Text>
