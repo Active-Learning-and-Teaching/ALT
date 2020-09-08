@@ -12,6 +12,7 @@ import SwitchSelector from "react-native-switch-selector";
 import Dimensions from '../../Utils/Dimensions';
 import database from "@react-native-firebase/database";
 import QuizResponses from '../../Databases/QuizResponses';
+import MultiCorrectOptions from './MultiCorrectOptions';
 
 export default class QuizFacultyPage extends Component{
     constructor(props) {
@@ -58,11 +59,14 @@ export default class QuizFacultyPage extends Component{
         this.checkEmailSent().then(r=>{console.log("")})
     }
 
-    setOption(value){
-        this.setState({
+    async setOption(value){
+        if(value==="")
+            value="*"
+        await this.setState({
             option : value,
             icon : value,
         })
+        console.log(this.state.option)
     }
 
     dbUpdateEmailStatus = async () =>{
@@ -222,9 +226,9 @@ export default class QuizFacultyPage extends Component{
         const reactFile = require('react-native-fs');
         const path = reactFile.DocumentDirectoryPath + `/${fileName}.csv`;
 
-        const aboutQuiz =  `${"Date- "+this.state.date},${"Quiz- "+quizNumber},${"Correct Ans- "+correctAnswer}\n\n`
+        const aboutQuiz =  `${"Date- "+this.state.date},${"Quiz- "+quizNumber},${"Correct Ans- "+correctAnswer.replace(/,/g,"")}\n\n`
         const headerString = 'Student Name, EmailID, Response, Auto-grade Marks\n';
-        const rowString = await list.map((student,i) => `${student.Name},${student.Email},${student.Answer},${answer === "*" ? 'N/A': student.Answer===correctAnswer? 1:0 }\n`).join('');
+        const rowString = await list.map((student,i) => `${student.Name},${student.Email},${student.Answer.replace(/,/g,"")},${answer === "*" ? 'N/A': student.Answer.replace(/,/g,"")===correctAnswer.replace(/,/g,"")? 1:0 }\n`).join('');
         const csvString = `${aboutQuiz}${headerString}${rowString}`;
 
         return await reactFile.writeFile(path, csvString, 'utf8')
@@ -278,9 +282,9 @@ export default class QuizFacultyPage extends Component{
                             borderColor={'#383030'}
                             // hasPadding
                             options={[
-                                { label: "MCQ", value: "mcq", activeColor: '#60CA24'},
+                                { label: "Single Correct", value: "mcq", activeColor: '#60CA24'},
                                 { label: "AlphaNumeric", value: "numerical" ,activeColor: '#60CA24'},
-                                // { label: "MultiCorrect", value: "multicorrect" ,activeColor: '#60CA24'},
+                                { label: "Multi Correct", value: "multicorrect" ,activeColor: '#60CA24'},
                             ]}
                         />
                     </View>
@@ -296,7 +300,9 @@ export default class QuizFacultyPage extends Component{
                         :
                             this.state.typeofQuiz ==="multicorrect"
                             ?
-                            <Text>Multi</Text>
+                            <View>
+                                <MultiCorrectOptions optionValue={this.setOption}/>
+                            </View>
                             :
                             <Text/>
                     }
@@ -355,7 +361,7 @@ export default class QuizFacultyPage extends Component{
                                             if(this.props.quizType==='mcq'){
                                                 type = "In-Class MCQ Quiz"
                                             }
-                                            else if(this.props.quizType==='numerical'){
+                                            else if(this.props.quizType==='numerical' || this.props.quizType=="multicorrect"){
                                                 type = "In-Class Quiz"
                                             }
                                             if(type!=""){

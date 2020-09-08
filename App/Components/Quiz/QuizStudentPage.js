@@ -9,6 +9,7 @@ import QuizResultGraph from './QuizResultGraph';
 import Quiz from '../../Databases/Quiz';
 import Toast from 'react-native-simple-toast';
 import database from "@react-native-firebase/database";
+import MultiCorrectOptions from './MultiCorrectOptions';
 
 export default class QuizStudentPage extends Component {
     constructor(props) {
@@ -61,6 +62,9 @@ export default class QuizStudentPage extends Component {
                 error: "Please answer"
             })
         } else {
+            this.setState({
+                error:null
+            })
             Toast.show('Answer has been recorded!');
             const kbcresponse = new QuizResponses()
             const timestamp = moment(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
@@ -180,7 +184,23 @@ export default class QuizStudentPage extends Component {
                                 </View>
                             </View>
                             :
-                            <Text/>
+                                this.props.quizType==="multicorrect"
+                                ?
+                                    <View style={{paddingRight:20, paddingLeft:20}}>
+                                        <MultiCorrectOptions optionValue={this.setOption}/>
+                                        <View style={{padding:40}}>
+                                            {this.state.error ?
+                                                <Text style={styles.errorMessage}>
+                                                    {this.state.error}
+                                                </Text> : <Text/>
+                                            }
+                                            <View style={styles.shadow}>
+                                                <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
+                                            </View>
+                                        </View>
+                                    </View>
+                                :
+                                <Text/>
                         }
                     </ScrollView>
             }
