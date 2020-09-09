@@ -167,7 +167,7 @@ export default class QuizStudentPage extends Component {
                             <View style={{paddingTop:30}}>
                                 <TextInput
                                     style={styles.textInput}
-                                    maxLength={15}
+                                    maxLength={24}
                                     textAlign={'center'}
                                     onChangeText={text => {this.setState({
                                         option : text

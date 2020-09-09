@@ -209,8 +209,16 @@ export default class QuizFacultyPage extends Component{
         }
     }
 
+    autoGrader(studentAnswer, correctAnswer){
+        studentAnswer = studentAnswer.replace(/,/g,"")
+        if(studentAnswer===correctAnswer)
+            return 1;
+        else
+            return 0;
+    }
+
     async studentsResponseCsv(list, answer,type){
-        const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase();
+        const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase().replace(/,/g,"");
         const date = this.state.date.replace(/\//g,"-").split(" ")[0]
         const quizNumber = this.state.quizNumber
         const fileName = this.state.course.courseCode+"_"+date+"_"+"Quiz-"+quizNumber
@@ -226,10 +234,15 @@ export default class QuizFacultyPage extends Component{
         const reactFile = require('react-native-fs');
         const path = reactFile.DocumentDirectoryPath + `/${fileName}.csv`;
 
-        const aboutQuiz =  `${"Date- "+this.state.date},${"Quiz- "+quizNumber},${"Correct Ans- "+correctAnswer.replace(/,/g,"")}\n\n`
         const headerString = 'Student Name, EmailID, Response, Auto-grade Marks\n';
-        const rowString = await list.map((student,i) => `${student.Name},${student.Email},${student.Answer.replace(/,/g,"")},${answer === "*" ? 'N/A': student.Answer.replace(/,/g,"")===correctAnswer.replace(/,/g,"")? 1:0 }\n`).join('');
-        const csvString = `${aboutQuiz}${headerString}${rowString}`;
+
+        const aboutQuiz =  `"QUIZ",${"#"+quizNumber+"@"+date},${"Correct Ans- "+correctAnswer},${answer==="*"?'N/A':1}\n\n`
+
+        const rowString = await list.map((student,i) =>
+            `${student.Name},${student.Email},${student.Answer.replace(/,/g,"")},${answer === "*" 
+                ? 'N/A': this.autoGrader(student.Answer,correctAnswer)}\n`).join('');
+
+        const csvString = `${headerString}${aboutQuiz}${rowString}`;
 
         return await reactFile.writeFile(path, csvString, 'utf8')
             .then(async (success) => {
@@ -355,7 +368,24 @@ export default class QuizFacultyPage extends Component{
                                         :"100%"
                                 }]}>
                                 <Button style={styles.buttonMessage}
-                                        title="Email Results"
+                                        title="Don't Email Results"
+                                        onPress={()=>{
+                                            this.setState({
+                                                time : 2,
+                                                option : "*",
+                                                icon : "",
+                                                correctAnswer : "*",
+                                                emailPage : false,
+                                                error : null,
+                                                date : "",
+                                                results :"",
+                                                typeofQuiz : "mcq",
+                                            })
+                                            // this.dbUpdateEmailStatus()
+                                            //     .then(()=>{console.log("Updated email")})
+                                        }}/>
+                                <Button style={styles.buttonMessage}
+                                        title="Start Another Quiz"
                                         onPress={async ()=>{
                                             let type = ""
                                             if(this.props.quizType==='mcq'){
@@ -376,23 +406,6 @@ export default class QuizFacultyPage extends Component{
                                                     })
                                                 })
                                             }
-                                        }}/>
-                                <Button style={styles.buttonMessage}
-                                        title="Start Another Quiz"
-                                        onPress={()=>{
-                                            this.setState({
-                                                time : 2,
-                                                option : "*",
-                                                icon : "",
-                                                correctAnswer : "*",
-                                                emailPage : false,
-                                                error : null,
-                                                date : "",
-                                                results :"",
-                                                typeofQuiz : "mcq",
-                                            })
-                                            // this.dbUpdateEmailStatus()
-                                            //     .then(()=>{console.log("Updated email")})
                                         }}/>
                             </View>
                             </View>
@@ -423,7 +436,7 @@ export default class QuizFacultyPage extends Component{
                             </Text>
                             <TextInput
                                 style={styles.textInput}
-                                maxLength={15}
+                                maxLength={24}
                                 textAlign={'center'}
                                 onChangeText={text => {this.setState({
                                     option : text
@@ -494,10 +507,10 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 10,
+            height: 8,
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 2.50,
+        shadowOpacity: 0.1,
+        shadowRadius: 1.50,
         elevation: 10,
     },
     heading : {

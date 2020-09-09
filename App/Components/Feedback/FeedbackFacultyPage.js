@@ -159,7 +159,20 @@ export default class FeedbackFacultyPage extends Component {
                                 </View>
                                 <View style={[styles.buttonRowContainer,styles.shadow]}>
                                     <Button style={styles.buttonMessage}
-                                            title={'Email \n Responses'}
+                                            title={"Don't Email \n Responses"}
+                                            onPress={()=>{
+                                                this.setState({
+                                                    emailPage : false,
+                                                    topics : [],
+                                                    duration : this.duration,
+                                                    date :"",
+                                                    results : ""
+                                                })
+                                                // this.dbUpdateEmailStatus()
+                                                //     .then(()=>{console.log("Updated email")})
+                                            }}/>
+                                    <Button style={styles.buttonMessage}
+                                            title={"Start New \n Minute Paper"}
                                             onPress={()=>{
                                                 Mailer(
                                                     this.state.course.courseName,
@@ -173,19 +186,6 @@ export default class FeedbackFacultyPage extends Component {
                                                     "Minute paper")
                                                 this.mailFeedbackResponses()
                                                 Toast.show('Sending Email...');
-                                            }}/>
-                                    <Button style={styles.buttonMessage}
-                                            title={'Start New \n Minute Paper'}
-                                            onPress={()=>{
-                                                this.setState({
-                                                    emailPage : false,
-                                                    topics : [],
-                                                    duration : this.duration,
-                                                    date :"",
-                                                    results : ""
-                                                })
-                                                // this.dbUpdateEmailStatus()
-                                                //     .then(()=>{console.log("Updated email")})
                                             }}/>
                                 </View>
                             </ScrollView>
