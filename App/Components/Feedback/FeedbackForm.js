@@ -37,7 +37,7 @@ export default class FeedbackForm extends Component {
                 <TextInput
                     style={styles.textInput}
                     key = {index}
-                    autoCapitalize="words"
+                    autoCapitalize="sentences"
                     onChangeText={(text) => this.addValues(text, index)}
                 />
             );
