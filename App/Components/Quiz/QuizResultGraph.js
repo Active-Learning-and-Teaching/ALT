@@ -184,7 +184,9 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         fontSize: 18,
         paddingBottom: 20,
-        fontWeight : "bold"
+        fontWeight : "bold",
+        paddingLeft: 10,
+        paddingRight: 10
     },
     container: {
         flex: 1,

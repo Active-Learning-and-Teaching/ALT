@@ -15,9 +15,9 @@ export const Mailer = (courseName,courseCode,email,name,count,date,topics,result
 
         subject: type==="StudentList"
             ?
-            courseName+" List of Students"
+            `[${courseCode}] ${courseName} List of Students`
             :
-            courseName + " " + type + " " + count + " results " +"("+date+")",
+            `[${courseCode}] ${courseName} ${type} ${count} results (${date})`,
 
         htmlBody : emailTemplate(courseName,name,date,topics,results,type),
         attachmentPaths : type==="StudentList"

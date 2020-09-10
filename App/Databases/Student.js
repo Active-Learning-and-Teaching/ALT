@@ -1,5 +1,6 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
+import Courses from './Courses';
 
 class Student {
 
@@ -133,6 +134,50 @@ class Student {
                 }
             }
         )
+    }
+
+    getAllStudents = async (passCode) => {
+        const course = new Courses()
+        let ans = ""
+        await course.getCourse(passCode)
+            .then(async url=>{
+                await this.reference
+                    .orderByChild("courses")
+                    .once('value')
+                    .then(snapshot => {
+                        const list = []
+                        snapshot.forEach( (data) => {
+                            const keys = Object(data.val())
+
+                            if ("courses" in keys){
+                                const arr = data.val()["courses"]
+                                if (arr.includes(url)){
+                                    const dict = {}
+                                    dict["name"] = keys["name"]
+                                    dict["email"] = keys["email"]
+                                    dict["photo"] = keys["photo"]
+                                    list.push(dict)
+
+                                }
+                            }
+                        })
+                        list.sort((a,b) =>
+                            a.name!==undefined && b.name!==undefined
+                                ? a.name.toUpperCase() > b.name.toUpperCase()
+                                ? 1
+                                : ((b.name.toUpperCase()  > a.name.toUpperCase())
+                                    ? -1
+                                    : 0)
+                                : a.email > b.email
+                                ? 1
+                                : b.email > a.email
+                                    ? -1
+                                    : 0
+                        );
+                        ans = list
+                    })
+            })
+        return ans;
     }
 
 }

@@ -1,5 +1,6 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
+import moment from 'moment';
 
 class Announcement {
 
@@ -56,6 +57,27 @@ class Announcement {
             .then(() => {
                 console.log('Data added')
             })
+    }
+    getAllAnnouncement = async (passCode)=>{
+        let ans = ""
+        await this.reference
+            .orderByChild("passCode")
+            .equalTo(passCode)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const list = Object.values(snapshot.val());
+                    list.sort(function(a, b) {
+                        const keyA = moment(a.date, 'DD/MM/YYYY HH:mm:ss');
+                        const keyB = moment(b.date, 'DD/MM/YYYY HH:mm:ss');
+                        if (keyA < keyB) return 1;
+                        if (keyA > keyB) return -1;
+                        return 0;
+                    });
+                    ans=list
+                }
+            })
+        return ans
     }
 
 }
