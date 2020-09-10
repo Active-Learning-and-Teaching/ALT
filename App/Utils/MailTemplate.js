@@ -2,7 +2,7 @@ import React from 'react';
 
 export const emailTemplate=(courseName,name,date,topics,results,type)=>{
     return(
-        type==="Minute paper" ?
+        type==="Minute paper"?
             `
             <html>
             <body>
@@ -62,7 +62,8 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
         </body>
         </html>
         `
-        : type==="In-Class Quiz"?
+        :
+        type==="In-Class Quiz"?
         `
         <html>
             <head>
@@ -120,6 +121,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
         </html>
         `
         :
+        type==="StudentList"?
         `
         <html>
         <head>
@@ -147,5 +149,47 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
         </body>
         </html>
         `
-
+        :
+        ``
     )}
+
+export const deleteCourseTemplate=(courseName,name,feedbackCount,quizCount,passCode)=>{
+    return(
+        `
+        <html>
+        <head>
+        </head>
+        <body>
+            <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
+                    Respected Professor ${name},
+                    <br/> 
+                    <br/>    
+                    Following are the details of the course ${courseName} :-
+                    <br/>
+                    <br/>
+                    The course passCode on the app - ${passCode}
+                    <br/>
+                    Total Number of Quizzes - ${quizCount}
+                    <br/>
+                    Total Number of Minute Papers - ${feedbackCount}
+                    <br/>
+                    <br/>
+                    <br/>
+                    PFA the list of students and the list of all the Announcements made
+                    <br/> 
+                    <br/>
+            </p>     
+            <br/><br/><br/><br/>
+            <p>
+                Regards,
+                <br/>
+                Team TLS
+                <br/>
+                <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
+                
+            </p>    
+        </body>
+        </html>
+        `
+    )
+}

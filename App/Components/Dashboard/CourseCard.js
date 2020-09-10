@@ -5,6 +5,12 @@ import Dimensions from '../../Utils/Dimensions';
 import {CoursePics} from '../../Utils/CoursePics';
 import ActionSheet from 'react-native-actionsheet';
 import Courses from '../../Databases/Courses';
+import Announcement from '../../Databases/Announcement';
+import Feedback from '../../Databases/Feedback';
+import Quiz from '../../Databases/Quiz';
+import Toast from 'react-native-simple-toast';
+import Student from '../../Databases/Student';
+import {DeleteCourseMailer} from '../../Utils/DeleteCourseMailer';
 
 export default class  CourseCard extends Component{
     constructor() {
@@ -20,6 +26,65 @@ export default class  CourseCard extends Component{
     getImage = () =>{
         this.setState({
             image : CoursePics(this.props.course.imageURL)
+        })
+    }
+
+    emailCourseDetails = async (type)=>{
+        const announcement =  new Announcement()
+        const feedback =  new Feedback()
+        const quiz = new Quiz()
+        const student = new Student()
+        const passCode = this.props.course.passCode
+        announcement.getAllAnnouncement(passCode).then(ann=>{
+            feedback.getFeedbackDetails(passCode).then(feed=>{
+                quiz.getTiming(passCode).then(quiz=>{
+                    student.getAllStudents(passCode).then(async studentList=>{
+                        let announcements = ann===""?[]:ann;
+                        let courseName = this.props.course.courseName
+                        let courseCode = this.props.course.courseCode
+                        let feedbackCount = feed===null ? "0" : feed["feedbackCount"]
+                        let quizCount = quiz===null ? "0" : quiz["questionCount"]
+                        let students = studentList
+
+                        const reactFile = require('react-native-fs');
+
+                        const announcementFilePath = reactFile.DocumentDirectoryPath + `/${courseCode+"_"+"Announcement"}.csv`;
+                        const announcementHeadingString = 'Announcement Date, Announcement Heading, Announcement Description\n';
+                        const announcementRowString = await announcements.map((announcement,i) => `${announcement.date},${announcement.heading},${announcement.description}\n`).join('');
+                        const announcementString = `${announcementHeadingString}${announcementRowString}`;
+
+
+                        const studentFilePath = reactFile.DocumentDirectoryPath + `/${courseCode+"_"+"StudentList"}.csv`;
+                        const studentHeaderString = 'Student Name, EmailID\n';
+                        const studentRowString = await students.map((student,i) => `${student.name},${student.email}\n`).join('');
+                        const studentString = `${studentHeaderString}${studentRowString}`;
+
+                        await reactFile.writeFile(announcementFilePath, announcementString, 'utf8')
+                            .then(async (success) => {
+                                await reactFile.writeFile(studentFilePath, studentString, 'utf8')
+                                    .then((success)=>{
+                                        console.log("Files Written")
+                                        Toast.show('Sending Email...');
+                                        DeleteCourseMailer(
+                                            courseName,
+                                            courseCode,
+                                            this.props.user.email,
+                                            this.props.user.name,
+                                            feedbackCount,
+                                            quizCount,
+                                            passCode,
+                                            type
+                                        )
+                                    }).catch((err) => {
+                                        console.log(err.message);
+                                        });
+                            })
+                            .catch((err) => {
+                                console.log(err.message);
+                            });
+                    })
+                })
+            })
         })
     }
 
@@ -44,7 +109,9 @@ export default class  CourseCard extends Component{
                                     await this.props.user.deleteCourse(value)
                                         .then(r => console.log("Deleted Course"))
                                 })
-                            // TODO Email course details
+                            await this.emailCourseDetails("Delete").then(r=>
+                                Toast.show('Course Successfully Deleted')
+                            )
                         }
                     },
                 ]
@@ -111,13 +178,18 @@ export default class  CourseCard extends Component{
                     }
                     options={
                         this.props.type==="faculty" ?
-                            ['Remove Course', 'Cancel'] :
+                            ['Email Course Details','Remove Course', 'Cancel'] :
                             ['Leave Course', 'Cancel']
                     }
-                    cancelButtonIndex={1}
-                    destructiveButtonIndex={0}
+                    cancelButtonIndex={2}
+                    destructiveButtonIndex={1}
                     onPress={index => {
-                        if(index==0)
+                        if(index===0) {
+                            this.emailCourseDetails("Details").then(r=>
+                                console.log(r)
+                            )
+                        }
+                        else if(index===1)
                             this.showAlert();
                     }}
                 />

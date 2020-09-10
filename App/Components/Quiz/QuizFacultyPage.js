@@ -368,7 +368,7 @@ export default class QuizFacultyPage extends Component{
                                         :"100%"
                                 }]}>
                                 <Button style={styles.buttonMessage}
-                                        title="Don't Email Results"
+                                        title={"Don't Email \n Results"}
                                         onPress={()=>{
                                             this.setState({
                                                 time : 2,
@@ -385,7 +385,7 @@ export default class QuizFacultyPage extends Component{
                                             //     .then(()=>{console.log("Updated email")})
                                         }}/>
                                 <Button style={styles.buttonMessage}
-                                        title="Start Another Quiz"
+                                        title={"Start Another \n Quiz"}
                                         onPress={async ()=>{
                                             let type = ""
                                             if(this.props.quizType==='mcq'){
@@ -436,7 +436,7 @@ export default class QuizFacultyPage extends Component{
                             </Text>
                             <TextInput
                                 style={styles.textInput}
-                                maxLength={24}
+                                maxLength={30}
                                 textAlign={'center'}
                                 onChangeText={text => {this.setState({
                                     option : text
@@ -553,6 +553,7 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "space-between",
+        alignSelf: "center",
         paddingTop: 20,
         paddingBottom:20,
         paddingLeft : 20,
