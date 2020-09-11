@@ -181,16 +181,23 @@ export default class  CourseCard extends Component{
                             ['Email Course Details','Remove Course', 'Cancel'] :
                             ['Leave Course', 'Cancel']
                     }
-                    cancelButtonIndex={2}
-                    destructiveButtonIndex={1}
+
+                    cancelButtonIndex={this.props.type==="faculty"?2:1}
+                    destructiveButtonIndex={this.props.type==="faculty"?1:0}
                     onPress={index => {
-                        if(index===0) {
-                            this.emailCourseDetails("Details").then(r=>
-                                console.log(r)
-                            )
+                        if(this.props.type==="faculty"){
+                            if(index===0) {
+                                this.emailCourseDetails("Details").then(r=>
+                                    console.log(r)
+                                )
+                            }
+                            else if(index===1)
+                                this.showAlert();
                         }
-                        else if(index===1)
-                            this.showAlert();
+                        else{
+                            if(index===0)
+                                this.showAlert();
+                        }
                     }}
                 />
             </ImageBackground>
