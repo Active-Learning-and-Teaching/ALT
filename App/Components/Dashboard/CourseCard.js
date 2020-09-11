@@ -134,7 +134,7 @@ export default class  CourseCard extends Component{
                             await courses.getCourse(this.props.course.passCode)
                                 .then(async value => {
                                     await this.props.user.deleteCourse(value)
-                                        .then(r => console.log("Deleted Course"))
+                                        .then(r => Toast.show('Course Successfully Deleted'))
                                 })
                         }
                     },
