@@ -29,7 +29,7 @@ export const Mailer = (courseName,courseCode,email,name,count,date,topics,result
             ? [`${courseName}.csv`]
             : type==="Minute paper"
                 ?[]
-                :[`/${courseCode+"_"+date.replace(/\//g,"-").split(" ")[0]+"_"+"Quiz-"+count}.csv`],
+                :[`${courseCode+"_"+date.replace(/\//g,"-").split(" ")[0]+"_"+"Quiz-"+count}.csv`],
         attachmentTypes : type==="StudentList"
             ?["csv"]
             :type ==="Minute paper"
