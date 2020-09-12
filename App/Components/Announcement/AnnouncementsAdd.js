@@ -61,7 +61,7 @@ export default class AnnouncementsAdd extends Component {
 
                 <TextInput
                     style={styles.textInput}
-                    autoCapitalize="none"
+                    autoCapitalize="sentences"
                     placeholder="Heading"
                     onChangeText={heading => this.setState({ heading })}
                     value={this.state.heading}
@@ -69,7 +69,7 @@ export default class AnnouncementsAdd extends Component {
 
                 <TextInput
                     style={styles.textInput}
-                    autoCapitalize="none"
+                    autoCapitalize="sentences"
                     placeholder="Description"
                     onChangeText={description => this.setState({ description })}
                     value={this.state.description}

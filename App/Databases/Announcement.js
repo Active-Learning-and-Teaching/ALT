@@ -80,6 +80,32 @@ class Announcement {
         return ans
     }
 
+    getAnnouncementUrl = async (passCode, date)=>{
+        let ans = ""
+        await this.reference
+            .orderByChild("passCode")
+            .equalTo(passCode)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()){
+                    const object = snapshot.val()
+                    ans = Object.keys(object).find(key => object[key]['date'] === date);
+                }
+            })
+        return ans
+    }
+
+    deleteAnnouncement = async (url)=>{
+        await database()
+            .ref(config['internalDb']+'/Announcements/'+url)
+            .set({})
+            .then(()=>{
+                console.log("Announcement deleted")
+            })
+    }
+
+
+
 }
 
 
