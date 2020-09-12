@@ -33,7 +33,9 @@ export default class  Announcement extends Component{
             .orderByChild("passCode")
             .equalTo(this.state.course.passCode)
             .on('value', snapshot => {
-
+                this.setState({
+                    announcementList : []
+                })
                 if (snapshot.val()){
                     const list = Object.values(snapshot.val());
                     list.sort(function(a, b) {
@@ -86,7 +88,11 @@ export default class  Announcement extends Component{
 
                     <View style={styles.grid}>
                         {this.state.announcementList.map((item,i)=> (
-                            <AnnouncementCard announcement = {item} key={i}/>
+                            <AnnouncementCard announcement = {item}
+                                              key={i}
+                                              type={this.state.type}
+                                              course={this.state.course}
+                            />
                         ))}
                     </View>
 

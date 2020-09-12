@@ -1,15 +1,42 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import { ListItem, Badge } from 'react-native-elements'
 import Dimensions from '../../Utils/Dimensions';
+import ActionSheet from 'react-native-actionsheet';
+import Announcement from '../../Databases/Announcement';
+import Toast from 'react-native-simple-toast';
 
 export default class AnnouncementCard extends Component{
+    constructor(props) {
+        super(props);
+    }
+
+    showActionSheet = () => {
+        this.ActionSheet.show();
+    };
+
+    deleteAnnouncement = async () =>{
+        const announcement = new Announcement()
+        await announcement.getAnnouncementUrl(this.props.course.passCode, this.props.announcement.date)
+            .then(async url=>{
+                await announcement.deleteAnnouncement(url)
+                    .then(r=>{Toast.show('Announcement deleted')
+                })
+            })
+    }
 
     render(){
         return(
 
             <View>
                 <ListItem
+                    onLongPress={()=>{
+                        this.props.type==="faculty"
+                            ?this.showActionSheet()
+                            :""
+                    }}
+                    underlayColor="#ffffff00"
+                    key = {this.props.key}
                     containerStyle={styles.container}
                     bottomDivider
                 >
@@ -27,6 +54,18 @@ export default class AnnouncementCard extends Component{
                         textStyle={{color:"white", fontSize:11}}
                     />
                 </ListItem>
+                <ActionSheet
+                    ref={o => (this.ActionSheet = o)}
+                    title={'Do you want to delete this announcement?'}
+                    options={[`Remove Announcement`, 'Cancel']}
+
+                    cancelButtonIndex={1}
+                    destructiveButtonIndex={0}
+                    onPress={index => {
+                        if(index===0)
+                            this.deleteAnnouncement().then(()=>"")
+                    }}
+                />
             </View>
         )
     }
