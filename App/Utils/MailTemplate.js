@@ -44,12 +44,15 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
                 Respected Professor ${name},
                 <br/> 
                 <br/>     
-                Following is the results of ${type} on ${date} for course ${courseName}
+                Following are the results of ${type} on ${date} for course ${courseName}
                 <br/> 
                 <br/>        
                 <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['${results['A']} A','${results['B']} B','${results['C']} C','${results['D']} D'], datasets:[{data:[${results['A']},${results['B']},${results['C']},${results['D']}]}]}}" height=50% width = 50%>
             </p>
             <br/><br/><br/><br/>
+            PFA. The CSV of answers submitted by the students.
+            <br/> 
+            <br/>
             <p>
                 Regards,
                 <br/>
@@ -90,7 +93,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
                 Respected Professor ${name},
                 <br/> 
                 <br/>     
-                Following is the results of ${type} on ${date} for course ${courseName}
+                Following are the results of ${type} on ${date} for course ${courseName}
                 <br/> 
                 <br/>
             </p>
@@ -108,6 +111,9 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
                 ))}
             </div>
             <br/><br/><br/><br/>
+            PFA. The CSV of answers submitted by the students.
+            <br/> 
+            <br/>
             <p>
                 Regards,
                 <br/>
@@ -133,7 +139,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
                     <br/>    
                     <br/>
                     <br/> 
-                    PFA the list of students for course ${courseName}
+                    PFA. List of Students registered for course ${courseName}
                     <br/> 
                     <br/>
             </p>     
@@ -167,7 +173,7 @@ export const deleteCourseTemplate=(courseName,name,feedbackCount,quizCount,passC
                     Following are the details of the course ${courseName} :-
                     <br/>
                     <br/>
-                    The course passCode on the app - ${passCode}
+                    The course pass code on the app - ${passCode}
                     <br/>
                     Total Number of Quizzes - ${quizCount}
                     <br/>
@@ -175,7 +181,7 @@ export const deleteCourseTemplate=(courseName,name,feedbackCount,quizCount,passC
                     <br/>
                     <br/>
                     <br/>
-                    PFA the list of students and the list of all the Announcements made
+                    PFA. List of Students registered, List of Announcements made
                     <br/> 
                     <br/>
             </p>     

@@ -27,7 +27,7 @@ export const DeleteCourseMailer = (courseName,courseCode,email,name,feedbackCoun
 
         attachmentNames : [`${courseCode+"_"+"Announcement"}.csv`, `${courseCode+"_"+"StudentList"}.csv`],
 
-        attachmentTypes : ["csv"],
+        attachmentTypes : ["csv", "csv"],
     })
         .then(success => {
             Toast.show('Email Sent!');
@@ -60,7 +60,7 @@ export const DeleteCourseMailer = (courseName,courseCode,email,name,feedbackCoun
 
         })
         .catch(err => {
-            Toast.show('Sending Email Failed');
+            Toast.show('Sending Email Failed')
             console.log(err)
         });
 }
