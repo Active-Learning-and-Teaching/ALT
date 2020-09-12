@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Linking, Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import Dimensions from '../../Utils/Dimensions';
-import {ListItem,Icon,Avatar} from 'react-native-elements';
+import {Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import database from '@react-native-firebase/database';
 import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
+import StudentCard from './StudentCard';
 
 export default class StudentList extends Component{
 
@@ -70,19 +69,6 @@ export default class StudentList extends Component{
             })
     }
 
-    createTitle = (name,email)=>{
-        if(name!==undefined){
-            name = name.replace(/\s+/g,' ').trim();
-            if(name.length==0)
-                return email.charAt(0).toUpperCase();
-            const res = name.split(" ");
-            if(res.length===1)
-                return res[0].charAt(0).toUpperCase();
-            else if(res.length>1)
-                return res[0].charAt(0).toUpperCase()+res[res.length-1].charAt(0).toUpperCase()
-        }
-        return email.charAt(0).toUpperCase();
-    }
 
     componentDidMount() {
         this.getCourseURL().then(()=>{
@@ -101,38 +87,11 @@ export default class StudentList extends Component{
                             :"Students Enrolled : "+this.state.studentList.length}
                         </Text>
                         {this.state.studentList.map((student,i)=> (
-                            <ListItem
-                                key = {i}
-                                containerStyle={styles.container}
-                                bottomDivider
-                            >
-                                <Avatar
-                                    title = {this.createTitle(student.name, student.email)}
-                                    titleStyle = {{color:"white", fontSize:20}}
-                                    overlayContainerStyle = {{backgroundColor: '#2697BF'}}
-                                    size = "medium"
-                                    rounded
-                                />
-                                <ListItem.Content>
-                                    <ListItem.Title style={styles.title}>
-                                        {student.name!==undefined && student.name.replace(/\s+/g,' ').trim().length!==0
-                                            ? student.name.replace(/\s+/g,' ').trim()
-                                            : student.email}
-                                    </ListItem.Title>
-                                    <ListItem.Subtitle style={styles.caption}>
-                                        {student.email}
-                                    </ListItem.Subtitle>
-                                </ListItem.Content>
-                                <Icon
-                                    name = 'mail-forward'
-                                    type = 'font-awesome'
-                                    size = {20}
-                                    color = 'grey'
-                                    onPress = {() =>{
-                                        Linking.openURL('mailto:' + student.email).then(r  => console.log(r))
-                                    }}
-                                />
-                            </ListItem>
+                            <StudentCard student={student}
+                                         key={i}
+                                         type={this.state.type}
+                                         course={this.state.course}
+                            />
                         ))}
                     </View>
                 </ScrollView>
@@ -148,23 +107,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'transparent',
     },
-    container: {
-        width : Dimensions.window.width-10,
-        height : Dimensions.window.height/(9),
-        marginTop: 2,
-        marginBottom: 2,
-        paddingTop : 2,
-        paddingBottom : 2,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 6,
-        },
-        shadowOpacity: 0.10,
-        shadowRadius: 5.00,
-        elevation: 4,
-        borderRadius: 15,
-    },
     text: {
         color: 'grey',
         alignSelf: "center",
@@ -177,20 +119,5 @@ const styles = StyleSheet.create({
         marginTop : 10,
         paddingBottom : 10,
         alignItems: 'center',
-    },
-    title: {
-        alignSelf:'flex-start',
-        textAlign: 'left',
-        fontSize: 16,
-        color:'black',
-        marginTop: 1,
-        paddingTop : 1,
-        marginBottom: 2,
-        paddingBottom : 2,
-        fontWeight : "bold"
-    },
-    caption: {
-        fontSize: 12,
-        color:'black'
     },
 })
