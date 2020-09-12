@@ -34,6 +34,13 @@ class Student {
             )
     }
 
+    async facultySetUrl(email){
+        await this.getStudent(email)
+            .then( val =>{
+                this.url = val
+            })
+    }
+
     getUrl(){
         return this.url
     }
