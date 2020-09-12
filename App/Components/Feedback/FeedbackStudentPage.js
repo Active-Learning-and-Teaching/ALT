@@ -37,28 +37,31 @@ export default class FeedbackStudentPage extends Component {
     async getTopics (){
         const feedback = new Feedback()
         await feedback.getFeedbackDetails(this.state.course.passCode).then(async value => {
-            const arr = value["topics"]
-            let responses = {}
-            let responded = false
+            if(value!==null){
+                const arr = value["topics"]
+                let responses = {}
+                let responded = false
 
-            const feedbackResponse = new FeedbackResponses()
-            await feedbackResponse.getFeedbackResponseForOneStudent(
-                this.state.user.url,
-                this.state.course.passCode,
-                value["startTime"],
-                value["endTime"]
-            ).then(r=>{
+                const feedbackResponse = new FeedbackResponses()
+                await feedbackResponse.getFeedbackResponseForOneStudent(
+                    this.state.user.url,
+                    this.state.course.passCode,
+                    value["startTime"],
+                    value["endTime"]
+                ).then(r=>{
                     responded = r
                 })
 
-            for await (const item of arr)
-                responses[item] = -1
+                for await (const item of arr)
+                    responses[item] = -1
 
-            await this.setState({
-                topics : value["topics"],
-                responses : responses,
-                responded : responded
-            })
+                await this.setState({
+                    topics : value["topics"],
+                    responses : responses,
+                    responded : responded
+                })
+            }
+
         })
     }
 
