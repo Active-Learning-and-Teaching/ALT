@@ -5,6 +5,7 @@ import AnnouncementStack from './AnnouncementStack';
 import QuizStack from './QuizStack';
 import FeedbackStack from './FeedbackStack';
 import StudentStack from './StudentStack';
+import SettingsStack from './SettingsStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -82,6 +83,22 @@ export default class TabNavigator extends Component{
                             user: this.state.user,
                             course: this.state.course
                         }}
+                />
+                {/*TODO condition only for faculty*/}
+                <Tab.Screen name = "Settings"
+                            component={SettingsStack}
+                            options={{
+                                tabBarLabel: 'Settings',
+                                fontFamily: 'arial',
+                                tabBarIcon: ({focused}) =>(
+                                    <Icon name='cog' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
+                                ),
+                            }}
+                            initialParams={{
+                                type : this.state.type,
+                                user: this.state.user,
+                                course: this.state.course
+                            }}
                 />
 
             </Tab.Navigator>
