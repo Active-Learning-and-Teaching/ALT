@@ -84,23 +84,23 @@ export default class TabNavigator extends Component{
                             course: this.state.course
                         }}
                 />
-                {/*TODO condition only for faculty*/}
-                <Tab.Screen name = "Settings"
-                            component={SettingsStack}
-                            options={{
-                                tabBarLabel: 'Settings',
-                                fontFamily: 'arial',
-                                tabBarIcon: ({focused}) =>(
-                                    <Icon name='cog' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
-                                ),
-                            }}
-                            initialParams={{
-                                type : this.state.type,
-                                user: this.state.user,
-                                course: this.state.course
-                            }}
-                />
-
+                {this.state.type==="faculty" &&
+                    <Tab.Screen name = "Settings"
+                        component={SettingsStack}
+                        options={{
+                            tabBarLabel: 'Settings',
+                            fontFamily: 'arial',
+                            tabBarIcon: ({focused}) =>(
+                                <Icon name='cog' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
+                            ),
+                        }}
+                        initialParams={{
+                            type : this.state.type,
+                            user: this.state.user,
+                            course: this.state.course
+                        }}
+                    />
+                }
             </Tab.Navigator>
         );
     }
