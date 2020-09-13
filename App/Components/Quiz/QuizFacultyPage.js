@@ -295,9 +295,9 @@ export default class QuizFacultyPage extends Component{
                             borderColor={'#383030'}
                             // hasPadding
                             options={[
-                                { label: "Single Correct", value: "mcq", activeColor: '#60CA24'},
+                                { label: "Single-Correct", value: "mcq", activeColor: '#60CA24'},
+                                { label: "Multi-Correct", value: "multicorrect" ,activeColor: '#60CA24'},
                                 { label: "AlphaNumeric", value: "numerical" ,activeColor: '#60CA24'},
-                                { label: "Multi Correct", value: "multicorrect" ,activeColor: '#60CA24'},
                             ]}
                         />
                     </View>
@@ -347,7 +347,9 @@ export default class QuizFacultyPage extends Component{
 
 
                             <View style = {styles.shadow}>
-                                <Button style={{paddingTop:10}} title="BEGIN" onPress={this.startKBC}/>
+                                <View style={{paddingTop:10, marginTop:10}}>
+                                    <Button style={{paddingTop:10}} title="BEGIN" onPress={this.startKBC}/>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -491,7 +493,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         paddingTop : 25,
-        padding: 15,
+        padding: 5,
         marginTop: 5,
         textAlign: 'center',
     },
@@ -531,7 +533,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: 35,
+        padding: 15,
         alignItems: 'center',
     },
     errorMessage: {
@@ -560,7 +562,7 @@ const styles = StyleSheet.create({
         paddingRight : 20
     },
     or: {
-        marginTop: 200,
+        marginTop: 130,
         color: 'grey',
         alignSelf: "center",
         fontSize: 22,
