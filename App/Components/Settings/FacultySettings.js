@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Text, SafeAreaView, ScrollView, StyleSheet, View, TextInput, Switch} from 'react-native';
 import {Button} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
+import Courses from '../../Databases/Courses';
 
 
 export default class FacultySettings extends Component{
@@ -12,15 +13,12 @@ export default class FacultySettings extends Component{
             type : this.props.route.params.type,
             course : this.props.route.params.course,
             user : this.props.route.params.user,
-            quizEmail : 'quizEmail@gmail.com',
-            feedbackEmail : 'feedbackEmail@gmail.com',
-            defaultEmailOption : true,
+            quizEmail : this.props.route.params.course.quizEmail,
+            feedbackEmail : this.props.route.params.course.feedbackEmail,
+            defaultEmailOption : this.props.route.params.course.defaultEmailOption,
+            setCourse : this.props.route.params.setCourse,
             error: null,
         };
-    }
-
-    getData = async ()=>{
-
     }
 
     setData = async ()=>{
@@ -34,9 +32,36 @@ export default class FacultySettings extends Component{
             this.setState({
                 error: null
             })
-            console.log(quizEmail)
-            console.log(feedbackEmail)
-            Toast.show(`Updated ${this.state.course.courseName} Settings`)
+
+            const courses = new Courses()
+            await courses.getCourse(this.state.course.passCode)
+                .then(url=>{
+                    //Update courseDb
+                    courses.setCourseData(
+                        this.state.course.courseName,
+                        this.state.course.courseCode,
+                        this.state.course.room,
+                        this.state.course.passCode,
+                        this.state.course.instructors,
+                        this.state.course.imageURL,
+                        this.state.course.instructor,
+                        quizEmail,
+                        feedbackEmail,
+                        defaultEmailOption,
+                        url
+                    )
+
+                    const course = this.state.course
+                    course.quizEmail = quizEmail
+                    course.feedbackEmail = feedbackEmail
+                    course.defaultEmailOption = defaultEmailOption
+                    this.state.setCourse(course).then(r=>{
+                        Toast.show(`Updated ${this.state.course.courseName} Settings`)
+                    })
+                })
+
+
+
         }
 
     }
@@ -46,12 +71,6 @@ export default class FacultySettings extends Component{
             defaultEmailOption : !this.state.defaultEmailOption
         })
     };
-
-    componentDidMount() {
-        this.getData().then(r=>{
-            console.log("got data")
-        })
-    }
 
     render(){
         return(
@@ -74,6 +93,7 @@ export default class FacultySettings extends Component{
                         <Text style={styles.text}>Current Email for Quiz Results</Text>
                         <TextInput
                             style={styles.textInput}
+                            autoCapitalize="none"
                             textAlign={'center'}
                             onChangeText={text => {this.setState({
                                 quizEmail : text
@@ -83,9 +103,10 @@ export default class FacultySettings extends Component{
                         <Text style={styles.text}>Current Email for Minute Results</Text>
                         <TextInput
                             style={styles.textInput}
+                            autoCapitalize="none"
                             textAlign={'center'}
                             onChangeText={text => {this.setState({
-                                quizEmail : text
+                                feedbackEmail : text
                             })}}
                             value={this.state.feedbackEmail}
                         />

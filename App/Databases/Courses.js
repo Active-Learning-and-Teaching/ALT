@@ -109,6 +109,27 @@ class Courses {
         return ans
     }
 
+    setCourseData = async (courseName, courseCode, room, passCode, instructors, imageURL, instructor, quizEmail, feedbackEmail, defaultEmailOption, url) =>{
+        await database()
+            .ref(config['internalDb']+'/Courses/'+url)
+            .set({
+                courseName : courseName,
+                courseCode : courseCode,
+                room : room,
+                passCode : passCode,
+                instructors : instructors,
+                imageURL : imageURL,
+                instructor: instructor,
+                quizEmail: quizEmail,
+                feedbackEmail: feedbackEmail,
+                defaultEmailOption: defaultEmailOption,
+
+            })
+            .then(()=>{
+                console.log("Courses modified")
+            })
+    }
+
 }
 
 export default Courses;

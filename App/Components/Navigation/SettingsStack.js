@@ -11,7 +11,8 @@ export default class SettingsStack extends Component {
         this.state = {
             type: this.props.route.params.type,
             user: this.props.route.params.user,
-            course: this.props.route.params.course
+            course: this.props.route.params.course,
+            setCourse : this.props.route.params.setCourse
         }
     }
 
@@ -29,7 +30,8 @@ export default class SettingsStack extends Component {
                               initialParams={{
                                   type : this.state.type,
                                   user: this.state.user,
-                                  course: this.state.course
+                                  course: this.state.course,
+                                  setCourse : this.state.setCourse
                               }}
                 />
             </Stack.Navigator>

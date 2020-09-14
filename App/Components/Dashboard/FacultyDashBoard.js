@@ -80,6 +80,15 @@ export default class FacultyDashBoard extends Component {
                         for(var i=0; i<arr.length; i++){
                             course.getCourseByUrl(arr[i])
                                 .then(r => {
+                                    if(!("quizEmail" in r))
+                                        r.quizEmail = this.state.currentUser.email
+
+                                    if(!("feedbackEmail" in r))
+                                        r.feedbackEmail = this.state.currentUser.email
+
+                                    if(!("defaultEmailOption" in r))
+                                        r.defaultEmailOption = true
+
                                     courses.push(r)
                                     this.setState({
                                         courseList : courses

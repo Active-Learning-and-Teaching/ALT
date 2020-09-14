@@ -16,16 +16,25 @@ export default class  CourseCard extends Component{
     constructor() {
         super();
         this.state = {
-            image : ""
+            image : "",
+            course : []
         };
+        this.setCourse = this.setCourse.bind(this);
     }
+
+    async setCourse(courseData){
+        await this.setState({
+            course : courseData
+        })
+    }
+
     showActionSheet = () => {
         this.ActionSheet.show();
     };
 
     getImage = () =>{
         this.setState({
-            image : CoursePics(this.props.course.imageURL)
+            image : CoursePics(this.state.course.imageURL)
         })
     }
 
@@ -34,14 +43,14 @@ export default class  CourseCard extends Component{
         const feedback =  new Feedback()
         const quiz = new Quiz()
         const student = new Student()
-        const passCode = this.props.course.passCode
+        const passCode = this.state.course.passCode
         announcement.getAllAnnouncement(passCode).then(ann=>{
             feedback.getFeedbackDetails(passCode).then(feed=>{
                 quiz.getTiming(passCode).then(quiz=>{
                     student.getAllStudents(passCode).then(async studentList=>{
                         let announcements = ann===""?[]:ann;
-                        let courseName = this.props.course.courseName
-                        let courseCode = this.props.course.courseCode
+                        let courseName = this.state.course.courseName
+                        let courseCode = this.state.course.courseCode
                         let feedbackCount = feed===null ? "0" : feed["feedbackCount"]
                         let quizCount = quiz===null ? "0" : quiz["questionCount"]
                         let students = studentList
@@ -92,7 +101,7 @@ export default class  CourseCard extends Component{
 
         if (this.props.type==="faculty"){
             Alert.alert(
-                'Are you sure you want to remove course '+this.props.course.courseName + " ?",
+                'Are you sure you want to remove course '+this.state.course.courseName + " ?",
                 'This action is irreversible!',
                 [
                     {
@@ -104,7 +113,7 @@ export default class  CourseCard extends Component{
                         text: 'Confirm',
                         onPress: async () => {
                             const courses = new Courses()
-                            await courses.getCourse(this.props.course.passCode)
+                            await courses.getCourse(this.state.course.passCode)
                                 .then(async value => {
                                     await this.props.user.deleteCourse(value)
                                         .then(r => console.log("Deleted Course"))
@@ -119,7 +128,7 @@ export default class  CourseCard extends Component{
         }
         else{
             Alert.alert(
-                'Are you sure you want to leave course '+this.props.course.courseName + " ?",
+                'Are you sure you want to leave course '+this.state.course.courseName + " ?",
                 '',
                 [
                     {
@@ -131,7 +140,7 @@ export default class  CourseCard extends Component{
                         text: 'Confirm',
                         onPress: async () => {
                             const courses = new Courses()
-                            await courses.getCourse(this.props.course.passCode)
+                            await courses.getCourse(this.state.course.passCode)
                                 .then(async value => {
                                     await this.props.user.deleteCourse(value)
                                         .then(r => Toast.show('Course Successfully Deleted'))
@@ -144,7 +153,9 @@ export default class  CourseCard extends Component{
     }
 
     componentDidMount() {
-        this.getImage()
+        this.setCourse(this.props.course).then(r=>{
+            this.getImage()
+        })
     }
 
     render(){
@@ -160,15 +171,16 @@ export default class  CourseCard extends Component{
                         this.props.navigation.navigate('Course', {
                             type : this.props.type,
                             user : this.props.user,
-                            course : this.props.course
+                            course : this.state.course,
+                            setCourse : this.setCourse,
                     })}}
                     onLongPress={()=>{this.showActionSheet()}}
-                    title = {this.props.course.courseCode + " "+ this.props.course.courseName}
+                    title = {this.state.course.courseCode + " "+ this.state.course.courseName}
                     titleStyle={styles.title}
                     containerStyle={styles.container}
                     activeOpacity={0.2}
                 />
-                <Text style={styles.name}>{this.props.course.instructor}</Text>
+                <Text style={styles.name}>{this.state.course.instructor}</Text>
                 <ActionSheet
                     ref={o => (this.ActionSheet = o)}
                     title={
