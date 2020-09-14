@@ -177,7 +177,7 @@ export default class FeedbackFacultyPage extends Component {
                                                 Mailer(
                                                     this.state.course.courseName,
                                                     this.state.course.courseCode,
-                                                    this.state.user.email,
+                                                    this.state.course.feedbackEmail,
                                                     this.state.user.name,
                                                     this.state.feedbackNumber,
                                                     this.state.date,

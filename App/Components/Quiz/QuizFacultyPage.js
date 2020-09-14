@@ -250,7 +250,7 @@ export default class QuizFacultyPage extends Component{
                 await Mailer(
                     this.state.course.courseName,
                     this.state.course.courseCode,
-                    this.state.user.email,
+                    this.state.course.quizEmail,
                     this.state.user.name,
                     quizNumber,
                     this.state.date,
