@@ -165,6 +165,9 @@ export default class QuizStudentPage extends Component {
                             this.props.quizType==="numerical"
                             ?
                             <View style={{paddingTop:30}}>
+                                <Text style={[styles.heading,{fontSize : 19, marginTop:25}]}>
+                                    Please Provide Concise Answer
+                                </Text>
                                 <TextInput
                                     style={styles.textInput}
                                     maxLength={30}

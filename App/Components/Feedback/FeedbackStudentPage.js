@@ -210,11 +210,10 @@ export default class FeedbackStudentPage extends Component {
                                             {this.state.error}
                                         </Text> : <Text/>}
                                 </View>
-                                <View style={styles.shadow}>
-                                    <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.submitFeedback} />
-                                </View>
                             </View>
-
+                            <View style={[styles.buttonContainer,styles.shadow]}>
+                                <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.submitFeedback} />
+                            </View>
                         </ScrollView>
 
                 }

@@ -81,19 +81,6 @@ export default class FeedbackFacultyPage extends Component {
             })
     }
 
-    mailFeedbackResponses = () =>{
-        this.setState({
-            emailPage : false,
-            topics : [],
-            duration : this.duration,
-            date :"",
-            results : ""
-        })
-
-        this.dbUpdateEmailStatus()
-            .then(()=>{console.log("Updated email")})
-    }
-
     startFeedback = async(action)=>{
         const feedback = new Feedback()
         let curr = database().getServerTime()
@@ -158,34 +145,42 @@ export default class FeedbackFacultyPage extends Component {
                                         feedbackresultData={this.feedbackresultData}/>
                                 </View>
                                 <View style={[styles.buttonRowContainer,styles.shadow]}>
-                                    <Button style={styles.buttonMessage}
-                                            title={"Don't Email \n Responses"}
+                                    <Button style={styles.feedbackButtonMessage}
+                                            title={"Start New Minute Paper"}
                                             onPress={()=>{
-                                                this.setState({
-                                                    emailPage : false,
-                                                    topics : [],
-                                                    duration : this.duration,
-                                                    date :"",
-                                                    results : ""
-                                                })
-                                                // this.dbUpdateEmailStatus()
-                                                //     .then(()=>{console.log("Updated email")})
-                                            }}/>
-                                    <Button style={styles.buttonMessage}
-                                            title={"Start New \n Minute Paper"}
-                                            onPress={()=>{
-                                                Mailer(
-                                                    this.state.course.courseName,
-                                                    this.state.course.courseCode,
-                                                    this.state.course.feedbackEmail,
-                                                    this.state.user.name,
-                                                    this.state.feedbackNumber,
-                                                    this.state.date,
-                                                    this.state.topics,
-                                                    this.state.results,
-                                                    "Minute paper")
-                                                this.mailFeedbackResponses()
-                                                Toast.show('Sending Email...');
+                                                if(this.state.course.defaultEmailOption){
+                                                    Mailer(
+                                                        this.state.course.courseName,
+                                                        this.state.course.courseCode,
+                                                        this.state.course.feedbackEmail,
+                                                        this.state.user.name,
+                                                        this.state.feedbackNumber,
+                                                        this.state.date,
+                                                        this.state.topics,
+                                                        this.state.results,
+                                                        "Minute paper")
+                                                    Toast.show('Sending Email...');
+                                                    this.dbUpdateEmailStatus()
+                                                        .then(()=>{
+                                                            this.setState({
+                                                                emailPage : false,
+                                                                topics : [],
+                                                                duration : this.duration,
+                                                                date :"",
+                                                                results : ""
+                                                            })
+                                                        })
+                                                }
+                                                else{
+                                                    this.setState({
+                                                        emailPage : false,
+                                                        topics : [],
+                                                        duration : this.duration,
+                                                        date :"",
+                                                        results : ""
+                                                    })
+                                                }
+
                                             }}/>
                                 </View>
                             </ScrollView>
@@ -228,7 +223,7 @@ export default class FeedbackFacultyPage extends Component {
                                 </View>
                                 <Text style={styles.text}> Or </Text>
                                 <View style={[styles.buttonContainer,styles.shadow]}>
-                                    <Button style={styles.buttonMessage} title='START NOW?' onPress={()=>{
+                                    <Button style={styles.buttonMessage} title=' START NOW? ' onPress={()=>{
                                         this.startFeedback("start").then(r => "")}} />
                                 </View>
                                 <Text style={styles.text}> Or </Text>
@@ -402,13 +397,16 @@ const styles = StyleSheet.create({
         paddingLeft : 30,
         paddingRight : 30
     },
+    feedbackButtonMessage: {
+        marginTop : 30,
+        paddingTop : 20,
+        marginBottom: 30,
+        paddingBottom : 20
+    },
     buttonRowContainer: {
         flex: 1,
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
         paddingTop: 20,
         paddingBottom:20,
         paddingLeft : 40,

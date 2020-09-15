@@ -92,25 +92,6 @@ export default class QuizFacultyPage extends Component{
             })
     }
 
-    mailQuizResult = () =>{
-        this.setState({
-            time : 2,
-            option : "*",
-            icon : "",
-            correctAnswer : "*",
-            emailPage : false,
-            error : null,
-            date : "",
-            results :"",
-            typeofQuiz : "mcq",
-        })
-
-
-        this.dbUpdateEmailStatus()
-            .then(()=>{console.log("Updated email")})
-
-    }
-
     startKBC = async () => {
 
         const {option, time} = this.state;
@@ -258,7 +239,6 @@ export default class QuizFacultyPage extends Component{
                     this.state.results,
                     type
                 )
-                this.mailQuizResult()
                 await Toast.show('Sending Email...');
             })
             .catch((err) => {
@@ -357,7 +337,7 @@ export default class QuizFacultyPage extends Component{
                 </ScrollView>
                         :
                         <ScrollView>
-                            <View style = {styles.shadow}>
+                            <View style = {[styles.shadow,{paddingRight:10,paddingLeft:10}]}>
                             <QuizResultGraph passCode={this.state.course.passCode}
                                              correctAnswer={this.state.correctAnswer}
                                              date={this.state.date}
@@ -370,24 +350,7 @@ export default class QuizFacultyPage extends Component{
                                         :"100%"
                                 }]}>
                                 <Button style={styles.buttonMessage}
-                                        title={"Don't Email \n Results"}
-                                        onPress={()=>{
-                                            this.setState({
-                                                time : 2,
-                                                option : "*",
-                                                icon : "",
-                                                correctAnswer : "*",
-                                                emailPage : false,
-                                                error : null,
-                                                date : "",
-                                                results :"",
-                                                typeofQuiz : "mcq",
-                                            })
-                                            // this.dbUpdateEmailStatus()
-                                            //     .then(()=>{console.log("Updated email")})
-                                        }}/>
-                                <Button style={styles.buttonMessage}
-                                        title={"Start Another \n Quiz"}
+                                        title={"Start Another Quiz"}
                                         onPress={async ()=>{
                                             let type = ""
                                             if(this.props.quizType==='mcq'){
@@ -400,13 +363,43 @@ export default class QuizFacultyPage extends Component{
                                                 const kbcResponse = new QuizResponses()
                                                 const Kbc = new Quiz()
 
-                                                await Kbc.getTiming(this.state.course.passCode).then(r =>{
-                                                    kbcResponse.getAllStudentsforMail(this.state.course.passCode, r["startTime"], r["endTime"]).then(list=>{
-                                                        this.studentsResponseCsv(list,r["correctAnswer"],type).then(()=>{
-                                                            console.log("Email Sent")
+                                                if(this.state.course.defaultEmailOption) {
+                                                    await Kbc.getTiming(this.state.course.passCode).then(r => {
+                                                        kbcResponse.getAllStudentsforMail(this.state.course.passCode, r["startTime"], r["endTime"]).then(list => {
+                                                            this.studentsResponseCsv(list, r["correctAnswer"], type).then(() => {
+                                                                this.setState({
+                                                                    time : 2,
+                                                                    option : "*",
+                                                                    icon : "",
+                                                                    correctAnswer : "*",
+                                                                    emailPage : false,
+                                                                    error : null,
+                                                                    date : "",
+                                                                    results :"",
+                                                                    typeofQuiz : "mcq",
+                                                                })
+                                                            })
                                                         })
                                                     })
-                                                })
+                                                    this.dbUpdateEmailStatus()
+                                                        .then(() => {
+                                                            console.log("Updated email")
+                                                        })
+                                                }
+                                                else{
+                                                    this.setState({
+                                                        time : 2,
+                                                        option : "*",
+                                                        icon : "",
+                                                        correctAnswer : "*",
+                                                        emailPage : false,
+                                                        error : null,
+                                                        date : "",
+                                                        results :"",
+                                                        typeofQuiz : "mcq",
+                                                    })
+                                                }
+
                                             }
                                         }}/>
                             </View>
@@ -551,10 +544,8 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flex: 1,
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: "column",
+        justifyContent: "center",
         alignSelf: "center",
         paddingTop: 20,
         paddingBottom:20,
