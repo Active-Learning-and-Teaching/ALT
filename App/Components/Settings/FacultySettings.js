@@ -21,7 +21,7 @@ export default class FacultySettings extends Component{
         };
     }
 
-    setData = async ()=>{
+    setData = async (data)=>{
         const { quizEmail, feedbackEmail, defaultEmailOption } = this.state;
         if(quizEmail==='' || feedbackEmail==='') {
                 this.setState({
@@ -56,6 +56,8 @@ export default class FacultySettings extends Component{
                     course.feedbackEmail = feedbackEmail
                     course.defaultEmailOption = defaultEmailOption
                     this.state.setCourse(course).then(r=>{
+                        data==="email"?
+                        Toast.show(`Updated Email Settings`):
                         Toast.show(`Updated ${this.state.course.courseName} Settings`)
                     })
                 })
@@ -66,9 +68,12 @@ export default class FacultySettings extends Component{
 
     }
 
-    toggleSwitch = () => {
-        this.setState({
+    toggleSwitch = async () => {
+        await this.setState({
             defaultEmailOption : !this.state.defaultEmailOption
+        })
+        await this.setData("email").then(r=>{
+            console.log("set data")
         })
     };
 
@@ -118,7 +123,7 @@ export default class FacultySettings extends Component{
                         <Button style={styles.buttonMessage}
                                 title="Update Settings"
                                 onPress={()=>{
-                                    this.setData().then(r=>{
+                                    this.setData("completeData").then(r=>{
                                         console.log("set data")
                                     })
                                 }}
