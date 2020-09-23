@@ -26,9 +26,9 @@ export default class QuizResultGraph extends Component {
         const kbcResponse = new QuizResponses()
         const Kbc = new Quiz()
 
-        await Kbc.getTiming(this.props.passCode).then(r =>{
+        await Kbc.getTiming(this.props.passCode).then(async r =>{
             if(this.props.quizType==='mcq'){
-                kbcResponse.getAllMcqResponse(this.props.passCode, r["startTime"], r["endTime"] )
+                await kbcResponse.getAllMcqResponse(this.props.passCode, r["startTime"], r["endTime"] )
                     .then( values  =>{
                         this.setState({
                             values : values,
@@ -37,9 +37,16 @@ export default class QuizResultGraph extends Component {
                         console.log(values)
                         this.props.quizresultData(values,this.state.quizNumber)
                     })
+                if(this.props.course.defaultEmailOption && this.props.emailStatus){
+                    await kbcResponse.getAllStudentsforMail(this.props.passCode, r["startTime"], r["endTime"])
+                        .then( async list => {
+                            await this.props.studentsResponseCsvMailer(list, r["correctAnswer"], "In-Class MCQ Quiz")
+                                .then(() => "")
+                        })
+                }
             }
             else if(this.props.quizType==='numerical' || this.props.quizType=="multicorrect"){
-                kbcResponse.getAllNumericalResponse(this.props.passCode, r["startTime"], r["endTime"] )
+                await kbcResponse.getAllNumericalResponse(this.props.passCode, r["startTime"], r["endTime"] )
                     .then( async values  =>{
                         //https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
                         const items = await Object.keys(values).map(function (key) {
@@ -56,6 +63,13 @@ export default class QuizResultGraph extends Component {
                         console.log(values);
                         this.props.quizresultData(this.state.top5answer,this.state.quizNumber)
                     })
+                if(this.props.emailStatus && this.props.course.defaultEmailOption){
+                    await kbcResponse.getAllStudentsforMail(this.props.passCode, r["startTime"], r["endTime"])
+                        .then( async list => {
+                            await this.props.studentsResponseCsvMailer(list, r["correctAnswer"], "In-Class Quiz")
+                                .then(() => "")
+                        })
+                }
             }
 
         })
