@@ -11,7 +11,6 @@ import Toast from 'react-native-simple-toast';
 import SwitchSelector from "react-native-switch-selector";
 import Dimensions from '../../Utils/Dimensions';
 import database from "@react-native-firebase/database";
-import QuizResponses from '../../Databases/QuizResponses';
 import MultiCorrectOptions from './MultiCorrectOptions';
 
 export default class QuizFacultyPage extends Component{
@@ -24,7 +23,8 @@ export default class QuizFacultyPage extends Component{
             option : "*",
             icon : "",
             correctAnswer : "*",
-            emailPage : false,
+            resultPage : false,
+            emailStatus : false,
             error : null,
             date : "",
             results :"",
@@ -34,6 +34,7 @@ export default class QuizFacultyPage extends Component{
         };
         this.setOption = this.setOption.bind(this);
         this.quizresultData = this.quizresultData.bind(this);
+        this.studentsResponseCsvMailer = this.studentsResponseCsvMailer.bind(this);
     }
 
     quizresultData(resultData, quizNumber){
@@ -44,10 +45,11 @@ export default class QuizFacultyPage extends Component{
     }
     checkEmailSent = async () =>{
         const Kbc = new Quiz()
-        Kbc.getTiming(this.state.course.passCode).then(value => {
+        await Kbc.getTiming(this.state.course.passCode).then( async value => {
             if(value!=null){
-                this.setState({
-                    emailPage : !value["emailResponse"],
+                await this.setState({
+                    emailStatus : !value["emailResponse"],
+                    resultPage: true,
                     correctAnswer : value["correctAnswer"],
                     date : value["startTime"]
                 })
@@ -198,7 +200,7 @@ export default class QuizFacultyPage extends Component{
             return 0;
     }
 
-    async studentsResponseCsv(list, answer,type){
+    async studentsResponseCsvMailer(list, answer,type){
         const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase().replace(/,/g,"");
         const date = this.state.date.replace(/\//g,"-").split(" ")[0]
         const quizNumber = this.state.quizNumber
@@ -239,7 +241,12 @@ export default class QuizFacultyPage extends Component{
                     this.state.results,
                     type
                 )
-                await Toast.show('Sending Email...');
+                Toast.show('Sending Email...');
+                await this.dbUpdateEmailStatus().then(() => {
+                        this.setState({
+                            emailStatus : false,
+                        })
+                })
             })
             .catch((err) => {
                 console.log(err.message);
@@ -253,7 +260,7 @@ export default class QuizFacultyPage extends Component{
 
                 { this.props.currentQuiz === false
                 ?
-                    this.state.emailPage === false
+                    this.state.resultPage === false
                     ?
                 <ScrollView>
                     <View style={{padding:20}}>
@@ -339,10 +346,14 @@ export default class QuizFacultyPage extends Component{
                         <ScrollView>
                             <View style = {[styles.shadow,{paddingRight:10,paddingLeft:10}]}>
                             <QuizResultGraph passCode={this.state.course.passCode}
+                                             course={this.props.course}
                                              correctAnswer={this.state.correctAnswer}
                                              date={this.state.date}
                                              quizType={this.props.quizType}
-                                             quizresultData={this.quizresultData} />
+                                             emailStatus={this.state.emailStatus}
+                                             quizresultData={this.quizresultData}
+                                             studentsResponseCsvMailer = {this.studentsResponseCsvMailer}
+                            />
                             <View style={[
                                 styles.buttonContainer,
                                 { width: this.props.quizType==="numerical"
@@ -351,56 +362,20 @@ export default class QuizFacultyPage extends Component{
                                 }]}>
                                 <Button style={styles.buttonMessage}
                                         title={"Start Another Quiz"}
-                                        onPress={async ()=>{
-                                            let type = ""
-                                            if(this.props.quizType==='mcq'){
-                                                type = "In-Class MCQ Quiz"
-                                            }
-                                            else if(this.props.quizType==='numerical' || this.props.quizType=="multicorrect"){
-                                                type = "In-Class Quiz"
-                                            }
-                                            if(type!=""){
-                                                const kbcResponse = new QuizResponses()
-                                                const Kbc = new Quiz()
-
-                                                if(this.state.course.defaultEmailOption) {
-                                                    await Kbc.getTiming(this.state.course.passCode).then(r => {
-                                                        kbcResponse.getAllStudentsforMail(this.state.course.passCode, r["startTime"], r["endTime"]).then(list => {
-                                                            this.studentsResponseCsv(list, r["correctAnswer"], type).then(() => {
-                                                                this.setState({
-                                                                    time : 2,
-                                                                    option : "*",
-                                                                    icon : "",
-                                                                    correctAnswer : "*",
-                                                                    emailPage : false,
-                                                                    error : null,
-                                                                    date : "",
-                                                                    results :"",
-                                                                    typeofQuiz : "mcq",
-                                                                })
-                                                            })
-                                                        })
-                                                    })
-                                                    this.dbUpdateEmailStatus()
-                                                        .then(() => {
-                                                            console.log("Updated email")
-                                                        })
-                                                }
-                                                else{
-                                                    this.setState({
-                                                        time : 2,
-                                                        option : "*",
-                                                        icon : "",
-                                                        correctAnswer : "*",
-                                                        emailPage : false,
-                                                        error : null,
-                                                        date : "",
-                                                        results :"",
-                                                        typeofQuiz : "mcq",
-                                                    })
-                                                }
-
-                                            }
+                                        onPress={()=>{
+                                            this.setState({
+                                                time : 2,
+                                                option : "*",
+                                                icon : "",
+                                                correctAnswer : "*",
+                                                resultPage : false,
+                                                emailStatus : false,
+                                                error : null,
+                                                date : "",
+                                                results :"",
+                                                typeofQuiz : "mcq",
+                                                quizNumber : "",
+                                            })
                                         }}/>
                             </View>
                             </View>
@@ -413,7 +388,7 @@ export default class QuizFacultyPage extends Component{
                         size={30}
                         onFinish={() =>  {
                             this.setState({
-                                emailPage : true
+                                resultPage : true
                             })
                             this.checkEmailSent().then(r=>{console.log("")})
                             this.props.setQuizState()

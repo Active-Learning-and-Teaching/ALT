@@ -36,7 +36,11 @@ export default class FeedbackResultsList extends Component {
                         responses : values,
                         feedbackNumber : r["feedbackCount"]
                     })
-                    this.props.feedbackresultData(values,this.state.feedbackNumber)
+                    await this.props.feedbackresultData(values,this.state.feedbackNumber)
+                    if(this.state.course.defaultEmailOption && this.props.emailStatus){
+                        await this.props.studentsResponseMailer()
+                            .then(()=>"")
+                    }
                 })
         })
     }

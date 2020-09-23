@@ -21,7 +21,8 @@ export default class FeedbackFacultyPage extends Component {
         this.state = {
             course : this.props.course,
             user : this.props.user,
-            emailPage : false,
+            resultPage : false,
+            emailStatus : false,
             topics : [],
             duration : this.duration,
             date :"",
@@ -31,6 +32,7 @@ export default class FeedbackFacultyPage extends Component {
         }
         this.setTopics = this.setTopics.bind(this);
         this.feedbackresultData = this.feedbackresultData.bind(this);
+        this.studentsResponseMailer = this.studentsResponseMailer.bind(this);
     }
 
     feedbackresultData(resultData,feedbackNumber){
@@ -51,7 +53,8 @@ export default class FeedbackFacultyPage extends Component {
         feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
             if(value!=null){
                 this.setState({
-                    emailPage : !value["emailResponse"],
+                    emailStatus : !value["emailResponse"],
+                    resultPage : true,
                     topics : value["topics"],
                     date: value["startTime"]
                 })
@@ -115,6 +118,26 @@ export default class FeedbackFacultyPage extends Component {
             })
     }
 
+    async studentsResponseMailer(){
+            await Mailer(
+                this.state.course.courseName,
+                this.state.course.courseCode,
+                this.state.course.feedbackEmail,
+                this.state.user.name,
+                this.state.feedbackNumber,
+                this.state.date,
+                this.state.topics,
+                this.state.results,
+                "Minute paper")
+
+            Toast.show('Sending Email...');
+            await this.dbUpdateEmailStatus().then(()=>{
+                    this.setState({
+                        emailStatus : false,
+                    })
+            })
+    }
+
     componentDidMount() {
         this.checkEmailSent().then(r=>{console.log("")})
     }
@@ -127,7 +150,7 @@ export default class FeedbackFacultyPage extends Component {
 
                 {this.props.currentFeedback === false
                     ? this.props.beforeFeedback === false
-                        ? this.state.emailPage === false
+                        ? this.state.resultPage === false
                             ?
                             <FeedbackForm
                                 feedbackCount = {this.props.feedbackCount}
@@ -142,45 +165,22 @@ export default class FeedbackFacultyPage extends Component {
                                         course = {this.state.course}
                                         topics = {this.state.topics}
                                         date={this.state.date}
-                                        feedbackresultData={this.feedbackresultData}/>
+                                        emailStatus={this.state.emailStatus}
+                                        feedbackresultData={this.feedbackresultData}
+                                        studentsResponseMailer={this.studentsResponseMailer}/>
                                 </View>
                                 <View style={[styles.buttonRowContainer,styles.shadow]}>
                                     <Button style={styles.feedbackButtonMessage}
                                             title={"Start New Minute Paper"}
                                             onPress={()=>{
-                                                if(this.state.course.defaultEmailOption){
-                                                    Mailer(
-                                                        this.state.course.courseName,
-                                                        this.state.course.courseCode,
-                                                        this.state.course.feedbackEmail,
-                                                        this.state.user.name,
-                                                        this.state.feedbackNumber,
-                                                        this.state.date,
-                                                        this.state.topics,
-                                                        this.state.results,
-                                                        "Minute paper")
-                                                    Toast.show('Sending Email...');
-                                                    this.dbUpdateEmailStatus()
-                                                        .then(()=>{
-                                                            this.setState({
-                                                                emailPage : false,
-                                                                topics : [],
-                                                                duration : this.duration,
-                                                                date :"",
-                                                                results : ""
-                                                            })
-                                                        })
-                                                }
-                                                else{
-                                                    this.setState({
-                                                        emailPage : false,
-                                                        topics : [],
-                                                        duration : this.duration,
-                                                        date :"",
-                                                        results : ""
-                                                    })
-                                                }
-
+                                                this.setState({
+                                                    resultPage : false,
+                                                    emailStatus : false,
+                                                    topics : [],
+                                                    duration : this.duration,
+                                                    date :"",
+                                                    results : ""
+                                                })
                                             }}/>
                                 </View>
                             </ScrollView>
@@ -243,7 +243,7 @@ export default class FeedbackFacultyPage extends Component {
                             size={30}
                             onFinish={() =>  {
                                 this.setState({
-                                    emailPage : true
+                                    resultPage : true
                                 })
                                 this.checkEmailSent().then(r=>{console.log("")})
                                 this.props.setFeedbackState()
