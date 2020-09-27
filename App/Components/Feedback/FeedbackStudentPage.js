@@ -192,7 +192,7 @@ export default class FeedbackStudentPage extends Component {
                                     timeToShow={['M', 'S']}
                                     timeLabels={{m: 'Min', s: 'Sec'}}
                                 />
-                                <Text style={styles.text}> How well did you understand these topics?</Text>
+                                <Text style={styles.text}> How well did you understand?</Text>
                                 <View style={styles.grid}>
                                     {this.state.topics.map((value, i) => (
                                         <StudentFeedbackCard
