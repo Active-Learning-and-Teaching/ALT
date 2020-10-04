@@ -33,14 +33,14 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
         </html> 
             `
         :
-        type==="In-Class MCQ Quiz"?
+        type==="Single-correct"?
         `
         <html>
         <body>
         <div>
             <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                   
-                Following are the results of ${type} on ${date} for course ${courseName}
+                Following are the results of ${type} quiz on ${date} for course ${courseName}
                 <br/> 
                 <br/>        
 <!--                <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['${results['A']} A','${results['B']} B','${results['C']} C','${results['D']} D'], datasets:[{data:[${results['A']},${results['B']},${results['C']},${results['D']}]}]}}" height=50% width = 50%>-->
@@ -63,7 +63,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
         </html>
         `
         :
-        type==="In-Class Quiz"?
+        (type==="Alpha-numeric" || type==="Multi-correct")?
         `
         <html>
             <head>
@@ -88,7 +88,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
             <div>
             <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                    
-                Following are the results of ${type} on ${date} for course ${courseName}
+                Following are the results of ${type} quiz on ${date} for course ${courseName}
                 <br/> 
                 <br/>
             </p>

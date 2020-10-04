@@ -13,11 +13,15 @@ export const Mailer = (courseName,courseCode,email,name,count,date,topics,result
         from: "tlsauth2020@gmail.com",
         recipients: email,
 
-        subject: type==="StudentList"
+        subject:
+            type==="StudentList"
             ?
-            `[${courseCode}] ${courseName} List of Students`
-            :
-            `[${courseCode}] ${courseName} ${type} ${count} results (${date})`,
+            `[${courseCode}]: ${courseName} List of Students`
+            :type==="Minute paper"
+                ?
+                `[${courseCode}]: ${type} #${count} results (${date})`
+                :
+                `[${courseCode}]: Quiz #${count}: ${type} results (${date})`,
 
         htmlBody : emailTemplate(courseName,name,date,topics,results,type),
         attachmentPaths : type==="StudentList"

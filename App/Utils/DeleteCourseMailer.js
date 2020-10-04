@@ -15,8 +15,8 @@ export const DeleteCourseMailer = (courseName,courseCode,email,name,feedbackCoun
         recipients: email,
 
         subject: type==="Delete"?
-            `[${courseCode}] ${courseName} successfully deleted`:
-            `[${courseCode}] Details of ${courseName}`
+            `[${courseCode}]: ${courseName} successfully deleted`:
+            `[${courseCode}]: ${courseName} course details`
         ,
 
         htmlBody : deleteCourseTemplate(courseName,name,feedbackCount,quizCount,passCode),
