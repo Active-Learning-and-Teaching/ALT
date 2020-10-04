@@ -40,7 +40,7 @@ export default class QuizResultGraph extends Component {
                 if(this.props.course.defaultEmailOption && this.props.emailStatus){
                     await kbcResponse.getAllStudentsforMail(this.props.passCode, r["startTime"], r["endTime"])
                         .then( async list => {
-                            await this.props.studentsResponseCsvMailer(list, r["correctAnswer"], "In-Class MCQ Quiz")
+                            await this.props.studentsResponseCsvMailer(list, r["correctAnswer"], "Single-correct")
                                 .then(() => "")
                         })
                 }
@@ -66,7 +66,10 @@ export default class QuizResultGraph extends Component {
                 if(this.props.emailStatus && this.props.course.defaultEmailOption){
                     await kbcResponse.getAllStudentsforMail(this.props.passCode, r["startTime"], r["endTime"])
                         .then( async list => {
-                            await this.props.studentsResponseCsvMailer(list, r["correctAnswer"], "In-Class Quiz")
+                            let type = "Alpha-numeric"
+                            if(this.props.quizType=="multicorrect")
+                                type = "Multi-correct"
+                            await this.props.studentsResponseCsvMailer(list, r["correctAnswer"], type)
                                 .then(() => "")
                         })
                 }
