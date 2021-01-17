@@ -10,7 +10,7 @@ export const Mailer = (courseName,courseCode,email,name,count,date,topics,result
         ssl: true,
         username: config['usernameEmail'],
         password: config['passwordEmail'],
-        from: "tlsauth2020@gmail.com",
+        from: "atlapp2021@gmail.com",
         recipients: email,
 
         subject:
