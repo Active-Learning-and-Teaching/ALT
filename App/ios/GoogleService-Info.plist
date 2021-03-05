@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>769962526895-34ctktpthp9pdecrvrob1gl0vb2a5qct.apps.googleusercontent.com</string>
+	<string>445800595625-8q0dlrt0u0ebjpkhnccpt0rb8nqqtfjk.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.769962526895-34ctktpthp9pdecrvrob1gl0vb2a5qct</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>769962526895-91j2umvi0d9optiudb4vr98mlur65mgv.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.445800595625-8q0dlrt0u0ebjpkhnccpt0rb8nqqtfjk</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBhsW-laIHfDNuAjoshB5ZTeaR_ohUJ9Ys</string>
+	<string>AIzaSyA8POcb-U4hbLqSlzVEYAigkyapjMbEXzM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>769962526895</string>
+	<string>445800595625</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>org.TLS</string>
 	<key>PROJECT_ID</key>
-	<string>testfortls</string>
+	<string>tls-op</string>
 	<key>STORAGE_BUCKET</key>
-	<string>testfortls.appspot.com</string>
+	<string>tls-op.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:769962526895:ios:222d3ee6d86f691ab3ac5a</string>
+	<string>1:445800595625:ios:ffdb9cba4ded2eed4769b8</string>
 	<key>DATABASE_URL</key>
-	<string>https://testfortls.firebaseio.com</string>
+	<string>https://tls-op-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

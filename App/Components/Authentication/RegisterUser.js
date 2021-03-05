@@ -84,6 +84,7 @@ export default class RegisterUser extends Component {
                             style={styles.textInput}
                             autoCapitalize="words"
                             placeholder="Name"
+                            placeholderTextColor = "grey"
                             onChangeText={name => this.setState({ name })}
                             value={this.state.name}
                         />
@@ -91,6 +92,7 @@ export default class RegisterUser extends Component {
                             style={styles.textInput}
                             autoCapitalize="none"
                             placeholder="Email"
+                            placeholderTextColor = "grey"
                             onChangeText={email => this.setState({ email })}
                             value={this.state.email}
                         />
@@ -99,6 +101,7 @@ export default class RegisterUser extends Component {
                             style={styles.textInput}
                             autoCapitalize="none"
                             placeholder="Password"
+                            placeholderTextColor = "grey"
                             onChangeText={password => this.setState({ password })}
                             value={this.state.password}
                         />
@@ -107,6 +110,7 @@ export default class RegisterUser extends Component {
                             style={styles.textInput}
                             autoCapitalize="none"
                             placeholder="Confirm Password"
+                            placeholderTextColor = "grey"
                             onChangeText={confirmPassword => this.setState({ confirmPassword })}
                             value={this.state.confirmPassword}
                         />
@@ -157,6 +161,7 @@ const styles = StyleSheet.create({
         elevation: 14,
     },
     textInput: {
+        color : 'black',
         width: '100%',
         marginBottom: 15,
         paddingBottom: 15,
