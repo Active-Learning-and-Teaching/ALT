@@ -61,6 +61,7 @@ export default class StudentAddCourseForm extends Component {
                     style={styles.textInput}
                     autoCapitalize="none"
                     placeholder="Pass Code"
+                    placeholderTextColor = "grey"
                     onChangeText={passCode => this.setState({ passCode })}
                     value={this.state.passCode}
                 />
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     textInput: {
+        color: 'black',
         width: '100%',
         marginBottom: 15,
         paddingBottom: 15,

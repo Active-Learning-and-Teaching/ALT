@@ -10,9 +10,9 @@ export const Mailer = (courseName,courseCode,email,name,count,date,topics,result
         ssl: true,
         username: config['usernameEmail'],
         password: config['passwordEmail'],
-        from: "atlapp2021@gmail.com",
+        from: config['nameEmail'],
         recipients: email,
-
+        
         subject:
             type==="StudentList"
             ?

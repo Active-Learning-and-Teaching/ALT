@@ -73,6 +73,7 @@ export default class FormAddCourse extends Component {
                     style={styles.textInput}
                     autoCapitalize="none"
                     placeholder="Course Name"
+                    placeholderTextColor = "grey"
                     onChangeText={courseName => this.setState({ courseName })}
                     value={this.state.courseName}
                 />
@@ -80,6 +81,7 @@ export default class FormAddCourse extends Component {
                     style={styles.textInput}
                     autoCapitalize="none"
                     placeholder="Course Code"
+                    placeholderTextColor = "grey"
                     onChangeText={courseCode => this.setState({ courseCode })}
                     value={this.state.courseCode}
                 />
@@ -87,6 +89,7 @@ export default class FormAddCourse extends Component {
                     style={styles.textInput}
                     autoCapitalize="none"
                     placeholder="Room"
+                    placeholderTextColor = "grey"
                     onChangeText={room => this.setState({ room })}
                     value={this.state.room}
                 />
@@ -113,6 +116,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     textInput: {
+        color: 'black',
         width: '100%',
         marginBottom: 8,
         paddingBottom: 8,

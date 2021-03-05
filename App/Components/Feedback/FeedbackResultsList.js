@@ -23,7 +23,6 @@ export default class FeedbackResultsList extends Component {
     getResponseData = async ()=>{
         const feedbackResponses = new FeedbackResponses()
         const feedback = new Feedback()
-
         await feedback.getFeedbackDetails(this.state.course.passCode)
             .then(async r =>{
                 await feedbackResponses.getAllResponse(

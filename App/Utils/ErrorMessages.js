@@ -15,7 +15,7 @@ export default class ErrorMessages{
             'auth/email-already-in-use' : "Email-id already in use.",
             'auth/unknown' : "Please try again later."
         }
-
+        
         if (errorDict[code]) {
             return errorDict[code];
         }
