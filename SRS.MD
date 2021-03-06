@@ -2,8 +2,8 @@
 
 ## Purpose
 
-This document specifies the software requirements for the upgrade of TLS app developed by Mr Suraj Kumar and Ms Dewangee Agrawal. 
-The project is sponsored by Dr Pankaj Jalote. The intended audience of this document includes the project team, mentors, and the sponsor.
+This document specifies the software requirements for the upgrade of TLS app developed by Mr. Suraj Kumar prathik and Ms. Dewangee Agrawal. 
+The project is sponsored by Dr Pankaj Jalote. The intended audience of this document includes the project team, mentors, and the sponsor. 
 
 ## Overview of TLS :iphone:
 
@@ -115,5 +115,5 @@ Make at least 2 releases of the app and fulfil the high and medium priority requ
 **Size of SRS:** 5 pages  
 **Method of Review:** After submitting the first draft, the mentors reviewed it offline and suggested necessary changes. 
 Certain elements of the SRS required further discussion with the sponsor. The SRS was presented to the sponsor and key issues were identified. 
-Key issues identified: The requirements had to be prioritized as High, Medium and Low.
+Key issues identified: The requirements had to be prioritized as High, Medium and Low. Also some updates in the architectural design were mentioned along with naming the cloud functions , with their descriptions.
 
