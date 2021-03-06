@@ -450,6 +450,7 @@ const styles = StyleSheet.create({
         paddingRight : 30
     },
     textInput: {
+        color:'black',
         width: '80%',
         marginBottom: 15,
         paddingBottom: 15,
