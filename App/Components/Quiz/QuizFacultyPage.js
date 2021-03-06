@@ -466,6 +466,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     textInput: {
+        color:'black',
         width: '100%',
         paddingTop: 55,
         paddingBottom: 15,
