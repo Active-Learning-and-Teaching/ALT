@@ -63,6 +63,7 @@ export default class AnnouncementsAdd extends Component {
                     style={styles.textInput}
                     autoCapitalize="sentences"
                     placeholder="Heading"
+                    placeholderTextColor = "grey"
                     onChangeText={heading => this.setState({ heading })}
                     value={this.state.heading}
                 />
@@ -71,6 +72,7 @@ export default class AnnouncementsAdd extends Component {
                     style={styles.textInput}
                     autoCapitalize="sentences"
                     placeholder="Description"
+                    placeholderTextColor = "grey"
                     onChangeText={description => this.setState({ description })}
                     value={this.state.description}
                 />
@@ -97,6 +99,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     textInput: {
+        color:'black',
         width: '100%',
         marginBottom: 15,
         paddingBottom: 15,
