@@ -19,13 +19,14 @@ export default class FeedbackStudentPage extends Component {
             responded : false,
             responses : {},
             error : null,
-            loading : true
+            loading : true,
+            kind : null,
         }
         this.getTopics = this.getTopics.bind(this);
         this.studentResponses = this.studentResponses.bind(this)
     }
 
-    studentResponses(key, value){
+    studentResponses(key, value){        
         let responses = this.state.responses
         responses[key] = value
 
@@ -58,7 +59,8 @@ export default class FeedbackStudentPage extends Component {
                 await this.setState({
                     topics : value["topics"],
                     responses : responses,
-                    responded : responded
+                    responded : responded,
+                    kind : value["kind"]
                 })
             }
 
@@ -124,6 +126,7 @@ export default class FeedbackStudentPage extends Component {
                 responded: true,
                 topics: [],
                 responses: {},
+                kind: null,
                 error: null
             })
         }
@@ -148,11 +151,11 @@ export default class FeedbackStudentPage extends Component {
                     ?this.props.beforeFeedback === false
                         ?
                             <ScrollView>
-                                <Text style={styles.or}> No current minute paper!</Text>
+                                <Text style={styles.or}> No current feedback form!</Text>
                             </ScrollView>
                                 :
                         <ScrollView>
-                            <Text style={styles.or}> No current minute paper!</Text>
+                            <Text style={styles.or}> No current feedback form!</Text>
                             <View style={styles.invisible}>
                                 <CountDown
                                     until={this.props.beforeDuration + 5}
@@ -167,13 +170,13 @@ export default class FeedbackStudentPage extends Component {
                     : this.state.responded === true
                     ?
                         <ScrollView>
-                            <Text style={styles.or}> No current minute paper!</Text>
+                            <Text style={styles.or}> No current feedback form!</Text>
                         </ScrollView>
                         :
 
                         <ScrollView>
                             <View style={styles.container}>
-                                <Text style={styles.heading}> Minute Paper</Text>
+                                <Text style={styles.heading}> Feedback </Text>
 
                                 <CountDown
                                     until={this.props.currentDuration + 5}
@@ -199,6 +202,7 @@ export default class FeedbackStudentPage extends Component {
                                             value = {value}
                                             key = {i}
                                             index = {i}
+                                            kind = {this.state.kind}
                                             studentResponses = {this.studentResponses}
                                         />
                                     ))}
@@ -282,8 +286,8 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         paddingTop : 15,
-        paddingLeft : 30,
-        paddingRight : 30
+        paddingLeft : 50,
+        paddingRight : 50
     },
     buttonMessage: {
         marginTop: 15,

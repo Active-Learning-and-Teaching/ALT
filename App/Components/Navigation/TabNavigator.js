@@ -58,7 +58,7 @@ export default class TabNavigator extends Component{
                 <Tab.Screen name = "Feedback DashBoard"
                         component={FeedbackStack}
                         options={{
-                            tabBarLabel: 'Minute Paper',
+                            tabBarLabel: 'Feedback',
                             fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
                                 <Icon name='comments' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
