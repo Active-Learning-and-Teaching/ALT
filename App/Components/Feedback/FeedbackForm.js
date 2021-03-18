@@ -6,6 +6,7 @@ import database from '@react-native-firebase/database';
 import moment from 'moment';
 import Feedback from '../../Databases/Feedback';
 import {Button as IosButton } from 'react-native';
+import SwitchSelector from 'react-native-switch-selector';
 export default class FeedbackForm extends Component {
 
     // TODO change duration at deployment
@@ -27,6 +28,7 @@ export default class FeedbackForm extends Component {
             error : null,
             topics : [],
             duration : this.duration,
+            kind : null,
         }
     }
 
@@ -61,7 +63,12 @@ export default class FeedbackForm extends Component {
 
     addFeedback = async () => {
 
-        if (this.state.inputData.length === 0) {
+        if (this.state.kind === null){
+            this.setState({
+                error: "Please choose feedback type."
+            })
+        }
+        else if (this.state.inputData.length === 0) {
             this.setState({
                 error: "Please enter at least one topic."
             })
@@ -106,9 +113,11 @@ export default class FeedbackForm extends Component {
                                 startTime,
                                 endTime,
                                 this.state.topics,
+                                this.state.kind,
                                 this.state.user.email
                             ).then(r => {
                                 console.log("create")
+                                console.log(this.state.kind)
                             })
                         } else {
                             const url = Object.keys(values)[0];
@@ -118,6 +127,7 @@ export default class FeedbackForm extends Component {
                                 startTime,
                                 endTime,
                                 this.state.topics,
+                                this.state.kind,
                                 this.state.user.email,
                                 url,
                                 false,
@@ -125,6 +135,8 @@ export default class FeedbackForm extends Component {
 
                             ).then(r => {
                                 console.log("update")
+                                console.log(this.state.kind)
+                                console.log(this.state.topics)
                             })
 
                         }
@@ -138,6 +150,7 @@ export default class FeedbackForm extends Component {
                             time : null,
                             error : null,
                             topics : [],
+                            kind : null
                         })
 
                     })
@@ -226,7 +239,7 @@ export default class FeedbackForm extends Component {
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-                    <Text style={styles.heading}> Minute Paper {this.props.feedbackCount + 1}</Text>
+                    <Text style={styles.heading}> Feedback {this.props.feedbackCount + 1}</Text>
 
                     <View style={styles.rowContainer}>
                         <Text style={styles.topic}> Topics </Text>
@@ -242,6 +255,19 @@ export default class FeedbackForm extends Component {
                     {this.state.textInput.map((value) => {
                         return value
                     })}
+
+                    <SwitchSelector
+                    onPress={value => {this.setState({kind : value })}}
+                    style={styles.shadow}
+                    textStyle={{fontFamily:"arial"}}
+                    textColor={'#383030'}
+                    selectedColor={'white'}
+                    borderColor={'#383030'}
+                    options={[
+                        { label: "Color Scale", value: "0", activeColor: '#60CA24'},
+                        { label: "Likert Scale", value: "1" ,activeColor: '#60CA24'},
+                    ]}
+                    />
 
                     <View style={styles.buttonRowContainer}>
                         <View style={styles.container}>
@@ -358,7 +384,6 @@ export default class FeedbackForm extends Component {
                             <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.addFeedback} />
                         </View>
                     </View>
-
                 </ScrollView>
             </SafeAreaView>
         )
@@ -463,7 +488,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        paddingLeft : 30,
-        paddingRight : 30
-    },
+        paddingLeft : 50,
+        paddingRight : 50
+    }
 })

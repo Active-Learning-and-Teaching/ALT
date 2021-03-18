@@ -29,8 +29,10 @@ export default class FeedbackFacultyPage extends Component {
             results : "",
             loading : true,
             feedbackNumber :"",
+            kind : null
         }
         this.setTopics = this.setTopics.bind(this);
+        this.setKind = this.setKind.bind(this);
         this.feedbackresultData = this.feedbackresultData.bind(this);
         this.studentsResponseMailer = this.studentsResponseMailer.bind(this);
     }
@@ -48,6 +50,12 @@ export default class FeedbackFacultyPage extends Component {
         })
     }
 
+    setKind(kind){
+        this.setState({
+            kind : kind
+        })
+    }
+
     checkEmailSent = async () =>{
         const feedback = new Feedback()
         feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
@@ -56,6 +64,7 @@ export default class FeedbackFacultyPage extends Component {
                     emailStatus : !value["emailResponse"],
                     resultPage : true,
                     topics : value["topics"],
+                    kind : value["kind"],
                     date: value["startTime"]
                 })
             }
@@ -75,6 +84,7 @@ export default class FeedbackFacultyPage extends Component {
                             value["startTime"],
                             value["endTime"],
                             value["topics"],
+                            value["kind"],
                             value["instructor"],
                             url,
                             true,
@@ -109,6 +119,7 @@ export default class FeedbackFacultyPage extends Component {
                             startTime,
                             endTime,
                             value["topics"],
+                            value["kind"],
                             value["instructor"],
                             url,
                             false,
@@ -128,7 +139,7 @@ export default class FeedbackFacultyPage extends Component {
                 this.state.date,
                 this.state.topics,
                 this.state.results,
-                "Minute paper")
+                "Feedback"+this.state.kind)
 
             Toast.show('Sending Email...');
             await this.dbUpdateEmailStatus().then(()=>{
@@ -157,6 +168,7 @@ export default class FeedbackFacultyPage extends Component {
                                 course={this.state.course}
                                 user={this.state.user}
                                 setTopics={this.setTopics}
+                                setKind={this.setKind}
                             />
                             :
                             <ScrollView>
@@ -171,7 +183,7 @@ export default class FeedbackFacultyPage extends Component {
                                 </View>
                                 <View style={[styles.buttonRowContainer,styles.shadow]}>
                                     <Button style={styles.feedbackButtonMessage}
-                                            title={"Start New Minute Paper"}
+                                            title={"Start New Feedback"}
                                             onPress={()=>{
                                                 this.setState({
                                                     resultPage : false,
@@ -188,7 +200,7 @@ export default class FeedbackFacultyPage extends Component {
                         <ScrollView>
                             <View style={styles.container}>
                                 <Text style={styles.heading}>
-                                    Minute Paper {this.props.feedbackCount}
+                                    Feedback {this.props.feedbackCount}
                                 </Text>
                                 <View style={[styles.shadow]}>
                                 {this.state.topics.map((value, i) => (
@@ -236,7 +248,7 @@ export default class FeedbackFacultyPage extends Component {
                     :
                     <ScrollView>
                         <Text style={styles.or}>
-                            Minute Paper {this.props.feedbackCount} in Progress
+                            Feedback {this.props.feedbackCount} in Progress
                         </Text>
                         <CountDown
                             until={this.props.currentDuration + 5}

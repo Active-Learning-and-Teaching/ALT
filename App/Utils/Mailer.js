@@ -17,7 +17,7 @@ export const Mailer = (courseName,courseCode,email,name,count,date,topics,result
             type==="StudentList"
             ?
             `[${courseCode}]: ${courseName} List of Students`
-            :type==="Minute paper"
+            :type==="Feedback"
                 ?
                 `[${courseCode}]: ${type} #${count} results (${date})`
                 :
@@ -26,17 +26,17 @@ export const Mailer = (courseName,courseCode,email,name,count,date,topics,result
         htmlBody : emailTemplate(courseName,name,date,topics,results,type),
         attachmentPaths : type==="StudentList"
             ? [RNFS.DocumentDirectoryPath + `/${courseName}.csv`]
-            : type ==="Minute paper"
+            : type ==="Feedback"
                 ?[]
                 :[RNFS.DocumentDirectoryPath + `/${courseCode+"_"+date.replace(/\//g,"-").split(" ")[0]+"_"+"Quiz-"+count}.csv`],
         attachmentNames : type==="StudentList"
             ? [`${courseName}.csv`]
-            : type==="Minute paper"
+            : type==="Feedback"
                 ?[]
                 :[`${courseCode+"_"+date.replace(/\//g,"-").split(" ")[0]+"_"+"Quiz-"+count}.csv`],
         attachmentTypes : type==="StudentList"
             ?["csv"]
-            :type ==="Minute paper"
+            :type ==="Feedback"
                 ?[]
                 :["csv"],
     })
@@ -48,7 +48,7 @@ export const Mailer = (courseName,courseCode,email,name,count,date,topics,result
             const reactFile = require('react-native-fs');
             const fileName = type==="StudentList"
                 ? courseName
-                : type==="Minute paper"
+                : type==="Feedback"
                     ?""
                     :courseCode+"_"+date.replace(/\//g,"-").split(" ")[0]+"_"+"Quiz-"+count
 

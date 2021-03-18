@@ -44,7 +44,7 @@ class Feedback {
         return ans
     }
 
-    setFeedback = async (passCode, startTime, endTime, topics, instructor, url, emailResponse, feedbackCount) =>{
+    setFeedback = async (passCode, startTime, endTime, topics, kind, instructor, url, emailResponse, feedbackCount) =>{
         await database()
             .ref(config['internalDb']+'/Feedback/'+url)
             .set({
@@ -52,6 +52,7 @@ class Feedback {
                 startTime: startTime,
                 endTime: endTime,
                 topics: topics,
+                kind : kind,
                 instructor: instructor,
                 emailResponse: emailResponse,
                 feedbackCount: feedbackCount
@@ -61,7 +62,7 @@ class Feedback {
             })
     }
 
-    createFeedback =  async (passCode, startTime, endTime, topics, instructor) => {
+    createFeedback =  async (passCode, startTime, endTime, topics, kind, instructor) => {
         await this.reference
             .push()
             .set({
@@ -69,6 +70,7 @@ class Feedback {
                 startTime: startTime,
                 endTime: endTime,
                 topics: topics,
+                kind : kind,
                 instructor: instructor,
                 emailResponse: false,
                 feedbackCount: 1

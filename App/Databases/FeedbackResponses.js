@@ -87,7 +87,7 @@ class FeedbackResponses {
             })
     }
 
-    getAllResponse = async (passCode, startTime, endTime, topics)=> {
+    getAllResponse = async (passCode, startTime, endTime, topics, kind)=> {
         let ans = null
         await this.reference
             .orderByChild("passCode")
@@ -95,8 +95,13 @@ class FeedbackResponses {
             .once('value')
             .then(async snapshot => {
                 const list = {}
+
+                if (kind === "0")
                 for await (const topic of topics)
                     list[topic] = {0:0, 1:0, 2:0}
+                else
+                for await (const topic of topics)
+                    list[topic] = {1:0, 2:0, 3:0, 4:0, 5:0}
 
                 await snapshot.forEach( (data) => {
                     const keys = Object(data.val())

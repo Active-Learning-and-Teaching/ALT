@@ -13,8 +13,28 @@ export default class FeedbackResultsList extends Component {
             course : this.props.course,
             responses : {},
             feedbackNumber : "",
+            kind : null,
+            avg_points : {},
         };
     }
+
+    AvgPoints(){   
+        avg_points = this.state.avg_points
+        for (value in this.state.responses){
+        sum = 0
+        n = 0
+        for(let i = 1; i < 6; i++){ 
+            sum += this.state.responses[value][i]*i
+            n += this.state.responses[value][i]
+        }
+        avg = sum/n
+        avg_points[value]=avg
+    }
+        this.setState({
+            avg_points : avg_points
+        })
+    }
+    
 
     componentDidMount(){
         this.getResponseData().then(r=>console.log(this.state.responses))
@@ -29,13 +49,16 @@ export default class FeedbackResultsList extends Component {
                     this.state.course.passCode,
                     r["startTime"],
                     r["endTime"],
-                    r["topics"]
+                    r["topics"],
+                    r["kind"]
                 ).then( async values  =>{
                     await this.setState({
                         responses : values,
-                        feedbackNumber : r["feedbackCount"]
+                        feedbackNumber : r["feedbackCount"],
+                        kind : r["kind"],
                     })
                     await this.props.feedbackresultData(values,this.state.feedbackNumber)
+                    await this.AvgPoints()
                     if(this.state.course.defaultEmailOption && this.props.emailStatus){
                         await this.props.studentsResponseMailer()
                             .then(()=>"")
@@ -55,7 +78,7 @@ export default class FeedbackResultsList extends Component {
             barPercentage: 0.5,
             useShadowColorFromDataset: false
         };
-
+        if (this.state.kind === "0")
         return(
 
             <View style={styles.container}>
@@ -63,7 +86,7 @@ export default class FeedbackResultsList extends Component {
                     Student Responses ({this.props.date.split(" ")[0]})
                 </Text>
                 <Text style={[styles.heading,{fontSize: 18,paddingTop : 5}]}>
-                    Minute Paper {this.state.feedbackNumber}
+                    Feedback {this.state.feedbackNumber}
                 </Text>
                 <View style={styles.grid}>
                     {this.props.topics.map((value, i) => (
@@ -84,21 +107,21 @@ export default class FeedbackResultsList extends Component {
                                     data={
                                         [
                                             {
-                                                name: "Not Much",
+                                                name: ": Not Much",
                                                 responses: this.state.responses[value][0],
                                                 color: "#F3460A",
                                                 legendFontColor: "#7F7F7F",
                                                 legendFontSize: 15
                                             },
                                             {
-                                                name: "Somewhat",
+                                                name: ": Somewhat",
                                                 responses: this.state.responses[value][1],
                                                 color: 'orange',
                                                 legendFontColor: "#7F7F7F",
                                                 legendFontSize: 15
                                             },
                                             {
-                                                name: "Completely",
+                                                name: ": Completely",
                                                 responses: this.state.responses[value][2],
                                                 color: "#60CA24",
                                                 legendFontColor: "#7F7F7F",
@@ -123,6 +146,94 @@ export default class FeedbackResultsList extends Component {
                 </View>
             </View>
         )
+
+        else
+        return(
+
+            <View style={styles.container}>
+                <Text style={styles.heading}>
+                    Student Responses ({this.props.date.split(" ")[0]})
+                </Text>
+                <Text style={[styles.heading,{fontSize: 18,paddingTop : 5}]}>
+                    Feedback {this.state.feedbackNumber}
+                </Text>
+                <View style={styles.grid}>
+                    {this.props.topics.map((value, i) => (
+
+                        <View key={i}>
+                            <ListItem
+                                containerStyle={styles.listContainer}
+                            >
+                                <ListItem.Content>
+                                    <ListItem.Title style={styles.title}>
+                                        {(i+1)+". " +value}
+                                    </ListItem.Title>
+                                </ListItem.Content>
+                            </ListItem>
+                            {value in this.state.responses
+                            ?
+                                <PieChart
+                                    data={
+                                        [
+                                            {
+                                                name: ": One Point",
+                                                responses: this.state.responses[value][1],
+                                                color: "#F3460A",
+                                                legendFontColor: "#7F7F7F",
+                                                legendFontSize: 15
+                                            },
+                                            {
+                                                name: ": Two Points",
+                                                responses: this.state.responses[value][2],
+                                                color: 'orange',
+                                                legendFontColor: "#7F7F7F",
+                                                legendFontSize: 15
+                                            },
+                                            {
+                                                name: ": Three Points",
+                                                responses: this.state.responses[value][3],
+                                                color: "pink",
+                                                legendFontColor: "#7F7F7F",
+                                                legendFontSize: 15
+                                            },
+                                            {
+                                                name: ": Four Points",
+                                                responses: this.state.responses[value][4],
+                                                color: "skyblue",
+                                                legendFontColor: "#7F7F7F",
+                                                legendFontSize: 15
+                                            },
+                                            {
+                                                name: ": Five Points",
+                                                responses: this.state.responses[value][5],
+                                                color: "#60CA24",
+                                                legendFontColor: "#7F7F7F",
+                                                legendFontSize: 15
+                                            },
+                                        ]
+                                    }
+                                    width={Dimensions.window.width}
+                                    height={150}
+                                    chartConfig={chartConfig}
+                                    accessor="responses"
+                                    backgroundColor="transparent"
+                                    paddingLeft="12"
+                                    absolute
+
+                                />
+                                :
+                                <Text/>
+                            }
+
+
+
+                            <Text style={[{textAlign: 'center'}]}> Average of Points : {this.state.avg_points[value]}</Text>
+                        </View>
+                    ))}
+                </View>
+            </View>
+        )
+        
     }
 }
 

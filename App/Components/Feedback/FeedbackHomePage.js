@@ -20,7 +20,8 @@ export default class FeedbackHomePage extends Component{
             beforeDuration : 0,
             feedbackCount : 0,
             startTime :'',
-            topics : []
+            topics : [],
+            kind : null,
         }
         this.setFeedbackState = this.setFeedbackState.bind(this);
     }
@@ -50,7 +51,8 @@ export default class FeedbackHomePage extends Component{
                             currentDuration : duration,
                             beforeDuration : 0,
                             topics : values["topics"],
-                            feedbackCount : values["feedbackCount"]
+                            feedbackCount : values["feedbackCount"],
+                            kind : values["kind"],
                         })
                     }
                     else if (curr<startTime){
@@ -61,7 +63,8 @@ export default class FeedbackHomePage extends Component{
                             beforeDuration : beforeDuration,
                             startTime : startTime,
                             topics : values["topics"],
-                            feedbackCount : values["feedbackCount"]
+                            feedbackCount : values["feedbackCount"],
+                            kind : values["kind"]
                         })
                     }
                     else{
@@ -71,7 +74,8 @@ export default class FeedbackHomePage extends Component{
                             currentDuration : 0,
                             beforeDuration : 0,
                             topics : values["topics"],
-                            feedbackCount : values["feedbackCount"]
+                            feedbackCount : values["feedbackCount"],
+                            kind : values["kind"]
                         })
                     }
                 }
@@ -96,6 +100,7 @@ export default class FeedbackHomePage extends Component{
                         setFeedbackState = {this.setFeedbackState}
                         startTime = {this.state.startTime}
                         feedbackCount = {this.state.feedbackCount}
+                        kind = {this.state.kind}
                     />
                     :
                     <FeedbackStudentPage
@@ -107,6 +112,7 @@ export default class FeedbackHomePage extends Component{
                         beforeDuration = {this.state.beforeDuration}
                         setFeedbackState = {this.setFeedbackState}
                         topics = {this.state.topics}
+                        kind = {this.state.kind}
                     />
                 }
             </SafeAreaView>
