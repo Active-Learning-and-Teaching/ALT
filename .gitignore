@@ -172,3 +172,11 @@ RNTester/Pods/*
 # Visual studio
 .vscode
 .vs
+
+# Config
+
+android/app/google-services.json
+ios/GoogleService-Info.plist
+
+App/ios/GoogleService-Info.plist
+App/android/app/google-services.json

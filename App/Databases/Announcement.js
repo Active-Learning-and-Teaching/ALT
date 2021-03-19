@@ -1,7 +1,6 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
 import moment from 'moment';
-
 class Announcement {
 
     coursePasscode :string
@@ -77,7 +76,7 @@ class Announcement {
                     ans=list
                 }
             })
-        return ans
+            return ans
     }
 
     getAnnouncementUrl = async (passCode, date)=>{
