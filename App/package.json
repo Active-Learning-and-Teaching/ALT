@@ -11,6 +11,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/clipboard": "^1.2.3",
     "@react-native-community/datetimepicker": "^2.5.0",
     "@react-native-community/google-signin": "^4.0.1",
