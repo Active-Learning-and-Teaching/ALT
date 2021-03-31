@@ -17,12 +17,13 @@ console.disableYellowBox = true;
 function App() {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log(unsubscribe);
       Alert.alert(
         'A new FCM message has arrived!',
         JSON.stringify(remoteMessage),
       );
     });
-    console.log(unsubscribe);
+    //console.log(unsubscribe);
     return unsubscribe;
   }, []);
 
