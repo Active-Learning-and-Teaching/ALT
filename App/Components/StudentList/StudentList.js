@@ -22,8 +22,8 @@ export default class StudentList extends Component{
         const course = new Courses()
         await course.getCourse(this.state.course.passCode)
             .then(async url=>{
-                await this.setState({
-                    courseURL :url
+                this.setState({
+                    courseURL : url  
                 })
             })
     }
@@ -34,6 +34,7 @@ export default class StudentList extends Component{
             .orderByChild("courses")
             .on('value', snapshot => {
                 const list = []
+
                 snapshot.forEach( (data) => {
                     const keys = Object(data.val())
 
@@ -44,8 +45,15 @@ export default class StudentList extends Component{
                             dict["name"] = keys["name"]
                             dict["email"] = keys["email"]
                             dict["photo"] = keys["photo"]
-                            list.push(dict)
+                            dict["verified"] = 0
 
+                            if ("verified" in keys){
+                                const arr = data.val()["verified"]
+                                if (arr.includes(this.state.courseURL)){
+                                    dict["verified"] = 1
+                                }
+                            }
+                            list.push(dict)
                         }
                     }
                 })
@@ -62,8 +70,9 @@ export default class StudentList extends Component{
                             ? -1
                             : 0
                 );
+
                 this.setState({
-                    studentList : list
+                    studentList : list,
                 })
                 this.props.route.params.getStudentListData(list)
             })
@@ -84,13 +93,14 @@ export default class StudentList extends Component{
                         <Text style={styles.text}>
                             {this.state.studentList.length===0
                             ?""
-                            :"Students Enrolled : "+this.state.studentList.length}
+                            :"Total Students : "+this.state.studentList.length}
                         </Text>
                         {this.state.studentList.map((student,i)=> (
                             <StudentCard student={student}
                                          key={i}
                                          type={this.state.type}
                                          course={this.state.course}
+                                         courseURL={this.state.courseURL}
                             />
                         ))}
                     </View>
@@ -109,6 +119,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'grey',
+        textAlign : 'center',
         alignSelf: "center",
         fontSize: 16,
         paddingTop : 5,

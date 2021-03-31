@@ -130,6 +130,7 @@ class Student {
         )
     }
 
+    
     //@Vishwesh
     deleteCourse = async (courseUrl) => {
         await this.getCourseStudent().then(
@@ -165,7 +166,6 @@ class Student {
                                     dict["email"] = keys["email"]
                                     dict["photo"] = keys["photo"]
                                     list.push(dict)
-
                                 }
                             }
                         })
