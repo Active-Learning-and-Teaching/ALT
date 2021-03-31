@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable max-len */
 /* eslint-disable eol-last */
 /* eslint-disable no-var */
@@ -36,20 +37,18 @@ exports.sendPushNotification = functions.database
       const {after} = change;
       const {_data} = after;
       console.log(_data);
-      const {deviceToken} = _data.receiver; // Always send the device token within the data entry.
-
-
-      if (!deviceToken) return;
+      //const {deviceToken} = await firebase.messaging().getToken();
+      //if (!deviceToken) return;
 
       const payload = {
         notification: {
           title: 'Notification',
           body: `FCM notification triggered!`,
         },
-        data: context.params, // Passing the path params along with the notification to the device. [optional]
+        topic: 'Course', // Passing the path params along with the notification to the device. [optional]
       };
 
-      return await admin.messaging().sendToDevice(deviceToken, payload);
+      return await admin.messaging().send(payload);
     } catch (ex) {
       return console.error('Error:', ex.toString());
     }

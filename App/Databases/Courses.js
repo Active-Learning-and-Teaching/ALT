@@ -2,134 +2,138 @@ import database from '@react-native-firebase/database';
 import * as config from '../config';
 
 class Courses {
+  courseName: string;
+  courseCode: string;
+  room: string;
+  passCode: string;
+  instructors = [];
+  imageURL: string;
+  instructor: string;
 
-    courseName :string
-    courseCode :string
-    room : string
-    passCode : string
-    instructors = []
-    imageURL : string
-    instructor : string
+  constructor() {}
 
-    constructor() {
-    }
+  getcourseName() {
+    return this.courseName;
+  }
 
+  setcourseName(courseName) {
+    this.courseName = courseName;
+  }
 
-    getcourseName() {
-        return this.courseName;
-    }
+  getcourseCode() {
+    return this.courseCode;
+  }
 
-    setcourseName(courseName) {
-        this.courseName = courseName;
-    }
+  setcourseCode(courseCode) {
+    this.courseCode = courseCode;
+  }
 
-    getcourseCode() {
-        return this.courseCode;
-    }
+  getRoom() {
+    return this.room;
+  }
 
-    setcourseCode(courseCode) {
-        this.courseCode = courseCode;
-    }
+  setRoom(room) {
+    this.room = room;
+  }
 
-    getRoom() {
-        return this.room;
-    }
+  getPassCode() {
+    return this.passCode;
+  }
 
-    setRoom(room) {
-        this.room = room;
-    }
+  setPassCode() {
+    this.passCode = (+new Date()).toString(36);
+  }
 
-    getPassCode(){
-        return this.passCode
-    }
+  async setImage() {
+    this.imageURL = Math.floor(Math.random() * 8) + 1;
+  }
 
-    setPassCode(){
-        this.passCode = (+new Date).toString(36)
-    }
+  getImage() {
+    return this.imageURL;
+  }
 
-    async setImage(){
-        this.imageURL = Math.floor(Math.random() * (8)) +1
-    }
+  addInstructors(faculty) {
+    this.instructors.push(faculty.getUrl());
+    this.instructor = faculty.getName();
+  }
 
-    getImage(){
-        return this.imageURL
-    }
+  reference = database().ref(config['internalDb'] + '/Courses/');
 
-    addInstructors(faculty){
-        this.instructors.push(faculty.getUrl())
-        this.instructor = faculty.getName()
-    }
+  getCourse = async passCode => {
+    let ans = '';
+    await this.reference
+      .orderByChild('passCode')
+      .equalTo(passCode)
+      .once('value')
+      .then(snapshot => {
+        if (snapshot.val()) {
+          const keys = Object.keys(snapshot.val());
+          ans = keys[0];
+        }
+      });
+    return ans;
+  };
 
-    reference = database().ref(config['internalDb']+'/Courses/')
+  createCourse = () => {
+    this.reference
+      .push()
+      .set({
+        courseName: this.courseName,
+        courseCode: this.courseCode,
+        room: this.room,
+        passCode: this.passCode,
+        instructors: this.instructors,
+        imageURL: this.imageURL,
+        instructor: this.instructor,
+      })
+      .then(() => {
+        console.log('Data added');
+        console.log(this.passCode);
+      });
+  };
 
-    getCourse  = async (passCode)=> {
-        let ans = ""
-        await this.reference
-            .orderByChild("passCode")
-            .equalTo(passCode)
-            .once('value')
-            .then(snapshot => {
-                if (snapshot.val()){
-                    const keys = Object.keys(snapshot.val());
-                    ans = keys[0]
-                }
-            })
-        return ans
-    }
+  getCourseByUrl = async courseUrl => {
+    let ans = {};
+    await database()
+      .ref(config['internalDb'] + '/Courses/' + courseUrl)
+      .once('value')
+      .then(snapshot => {
+        if (snapshot.val()) ans = snapshot.val();
+      });
+    return ans;
+  };
 
-    createCourse =  ()=>{
-
-        this.reference
-            .push()
-            .set({
-                courseName : this.courseName,
-                courseCode : this.courseCode,
-                room : this.room,
-                passCode : this.passCode,
-                instructors : this.instructors,
-                imageURL : this.imageURL,
-                instructor: this.instructor
-            })
-            .then(()=>{
-                console.log('Data added')
-                console.log(this.passCode)
-            })
-    }
-
-
-    getCourseByUrl = async (courseUrl) => {
-        let ans = {}
-        await database()
-            .ref(config['internalDb']+'/Courses/'+courseUrl)
-            .once('value')
-            .then(snapshot => {
-                if (snapshot.val())
-                    ans = snapshot.val()
-            })
-        return ans
-    }
-
-    setCourseData = async (courseName, courseCode, room, passCode, instructors, imageURL, instructor, quizEmail, feedbackEmail, defaultEmailOption, url) =>{
-        await database()
-            .ref(config['internalDb']+'/Courses/'+url)
-            .set({
-                courseName : courseName,
-                courseCode : courseCode,
-                room : room,
-                passCode : passCode,
-                instructors : instructors,
-                imageURL : imageURL,
-                instructor: instructor,
-                quizEmail: quizEmail,
-                feedbackEmail: feedbackEmail,
-                defaultEmailOption: defaultEmailOption,
-
-            })
-            .then(()=>{
-                console.log("Courses modified")
-            })
-    }
-
+  setCourseData = async (
+    courseName,
+    courseCode,
+    room,
+    passCode,
+    instructors,
+    imageURL,
+    instructor,
+    quizEmail,
+    feedbackEmail,
+    defaultEmailOption,
+    url,
+  ) => {
+    await database()
+      .ref(config['internalDb'] + '/Courses/' + url)
+      .set({
+        courseName: courseName,
+        courseCode: courseCode,
+        room: room,
+        passCode: passCode,
+        instructors: instructors,
+        imageURL: imageURL,
+        instructor: instructor,
+        quizEmail: quizEmail,
+        feedbackEmail: feedbackEmail,
+        defaultEmailOption: defaultEmailOption,
+      })
+      .then(() => {
+        console.log('Courses modified');
+      });
+  };
 }
 
 export default Courses;
