@@ -11,6 +11,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@notifee/react-native": "^1.2.1",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/clipboard": "^1.2.3",
     "@react-native-community/datetimepicker": "^2.5.0",
@@ -50,7 +51,8 @@
     "react-native-svg-charts": "^5.4.0",
     "react-native-switch-selector": "^2.0.6",
     "react-native-vector-icons": "6.7.0",
-    "react-native-web": "^0.12.2"
+    "react-native-web": "^0.12.2",
+    "tailwind-rn": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",

@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from 'react';
+import React, {Component, useEffect, FC} from 'react';
 import {Alert} from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import * as config from './config';
@@ -7,6 +7,7 @@ import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconI from 'react-native-vector-icons/MaterialIcons';
 import MainNavigator from './Components/Navigation/MainNavigator';
 import messaging from '@react-native-firebase/messaging';
+import NotifiactionCentre from './NotificationCenter';
 
 IconF.loadFont();
 IconM.loadFont();
@@ -14,26 +15,19 @@ IconI.loadFont();
 
 console.disableYellowBox = true;
 
-function App() {
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log(unsubscribe);
-      Alert.alert(
-        'A new FCM message has arrived!',
-        JSON.stringify(remoteMessage),
-      );
-    });
-    //console.log(unsubscribe);
-    return unsubscribe;
-  }, []);
-
+const App: FC = () => {
   GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId: config.webClientId,
     offlineAccess: true,
   });
 
-  return <MainNavigator />;
-}
+  return (
+    <>
+      <MainNavigator />
+      <NotifiactionCentre />
+    </>
+  );
+};
 
 export default App;
