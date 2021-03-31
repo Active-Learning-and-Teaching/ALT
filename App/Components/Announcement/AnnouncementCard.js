@@ -15,6 +15,8 @@ export default class AnnouncementCard extends Component{
         this.ActionSheet.show();
     };
 
+
+    //@Vishwesh
     deleteAnnouncement = async () =>{
         const announcement = new Announcement()
         await announcement.getAnnouncementUrl(this.props.course.passCode, this.props.announcement.date)
