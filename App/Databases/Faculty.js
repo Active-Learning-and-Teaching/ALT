@@ -139,6 +139,7 @@ class Faculty {
         )
     }
 
+    //@Vishwesh
     deleteCourse = async (courseUrl) => {
         await this.getCourseFaculty().then(
             value => {

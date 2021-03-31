@@ -111,6 +111,7 @@ export default class  CourseCard extends Component{
                     },
                     {
                         text: 'Confirm',
+                        //@Vishwesh
                         onPress: async () => {
                             const courses = new Courses()
                             await courses.getCourse(this.state.course.passCode)
@@ -138,6 +139,7 @@ export default class  CourseCard extends Component{
                     },
                     {
                         text: 'Confirm',
+                        //@Vishwesh
                         onPress: async () => {
                             const courses = new Courses()
                             await courses.getCourse(this.state.course.passCode)
