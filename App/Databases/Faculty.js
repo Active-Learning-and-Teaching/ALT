@@ -1,5 +1,6 @@
 import database from '@react-native-firebase/database';
 import * as config from '../config';
+import {firebase} from '@react-native-firebase/functions'
 
 class Faculty {
 
@@ -140,17 +141,21 @@ class Faculty {
     }
 
     //@Vishwesh
-    deleteCourse = async (courseUrl) => {
-        await this.getCourseFaculty().then(
-            value => {
-                if (value.includes(courseUrl)){
-                    const index = value.indexOf(courseUrl);
-                    value.splice(index, 1);
-
-                    this.setCourseFaculty(value)
-                }
-            }
-        )
+    deleteCourse = async (passCode) => {
+            console.log('triggering delete for passCode:' + passCode)
+            const { data } = firebase.functions().httpsCallable('deleteCourse')({
+              passCode:passCode,
+            }).catch(function(error) {
+            console.log('There has been a problem with your delete Course operation: ' + error);})
+        // await this.getCourseFaculty().then(
+        //     value => {
+        //         if (value.includes(courseUrl)){
+        //             const index = value.indexOf(courseUrl);
+        //             value.splice(index, 1);
+        //             this.setCourseFaculty(value)
+        //         }
+        //     }
+        // )
     }
 
 
