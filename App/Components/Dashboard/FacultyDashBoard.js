@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
-import {
-    Button,
-    StyleSheet,
-    View,
-    Alert, ScrollView, SafeAreaView,
-} from 'react-native';
+import {Button, StyleSheet,View,Alert, ScrollView, SafeAreaView} from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import Faculty from '../../Databases/Faculty';
 import database from '@react-native-firebase/database';
@@ -34,6 +29,32 @@ export default class FacultyDashBoard extends Component {
             currentUser : faculty
         })
     };
+
+    //@Vishwesh
+    deleteAccount = async () => {
+        console.log('Deleted Course')
+    };
+
+    showAlert() {
+
+        Alert.alert(
+                'Are you sure you want to delete account?',
+                'This will delete all the data associated with the account',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => {console.log('Cancel Pressed')},
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Confirm',
+                        onPress:  ()=>{this.deleteAccount()}
+                    },
+                ]
+            );
+        }
+
+
 
     signOut = async () => {
         auth()
@@ -131,6 +152,7 @@ export default class FacultyDashBoard extends Component {
                     </View>
 
                     <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
+                    <Button style={styles.buttonMessage} title="Delete Account" onPress={()=>{this.showAlert()}} />
                 </ScrollView>
             </SafeAreaView>
         );
