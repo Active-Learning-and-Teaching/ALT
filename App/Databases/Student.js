@@ -3,6 +3,7 @@ import * as config from '../config';
 import Courses from './Courses';
 
 class Student {
+
   name: string;
   email: string;
   url: string;
@@ -176,6 +177,7 @@ class Student {
     });
     return ans;
   };
-}
+
+  
 
 export default Student;
