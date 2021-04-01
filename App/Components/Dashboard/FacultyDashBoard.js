@@ -32,6 +32,7 @@ export default class FacultyDashBoard extends Component {
 
     //@Vishwesh
     deleteAccount = async () => {
+        
         console.log('Deleted Course')
     };
 
