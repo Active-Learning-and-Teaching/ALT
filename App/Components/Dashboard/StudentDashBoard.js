@@ -35,6 +35,29 @@ export default class StudentDashBoard extends Component {
         })
     };
 
+    deleteAccount = async () => {
+        console.log('Deleted Course')
+    };
+
+    showAlert() {
+
+        Alert.alert(
+                'Are you sure you want to delete account?',
+                'This will delete all the data associated with the account',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => {console.log('Cancel Pressed')},
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Confirm',
+                        onPress:  ()=>{this.deleteAccount()}
+                    },
+                ]
+            );
+        }
+
     signOut = async () => {
         auth()
             .signOut()
@@ -123,6 +146,7 @@ export default class StudentDashBoard extends Component {
                     </View>
 
                     <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
+                    <Button style={styles.buttonMessage} title="Delete Account" onPress={()=>{this.showAlert()}} />
                 </ScrollView>
             </SafeAreaView>
         );

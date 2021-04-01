@@ -15,7 +15,7 @@ export default class StudentStack extends Component {
             type: this.props.route.params.type,
             user: this.props.route.params.user,
             course: this.props.route.params.course,
-            studentList : []
+            studentList : [],
         }
         this.getStudentListData = this.getStudentListData.bind(this);
     }
