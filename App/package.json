@@ -11,7 +11,6 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-
     "@notifee/react-native": "^1.2.1",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/checkbox": "^0.5.7",
