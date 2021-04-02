@@ -62,7 +62,7 @@ export default class FeedbackFacultyPage extends Component {
             if(value!=null){
                 this.setState({
                     emailStatus : !value["emailResponse"],
-                    resultPage : true,
+                    resultPage : false,
                     topics : value["topics"],
                     kind : value["kind"],
                     date: value["startTime"]
@@ -70,6 +70,11 @@ export default class FeedbackFacultyPage extends Component {
             }
 
         })
+        if (!(this.state.topics.length===0)){
+            this.setState ({
+                resultPage : true
+            })
+        }
     }
 
     dbUpdateEmailStatus = async () =>{
@@ -192,11 +197,7 @@ export default class FeedbackFacultyPage extends Component {
 
     componentDidMount() {
         this.checkEmailSent().then(r=>{console.log("")})
-        if (this.state.topics.length===0){
-            this.setState ({
-                resultPage : false
-            })
-        }
+        console.log(this.state.resultPage)
     }
 
 
@@ -311,11 +312,10 @@ export default class FeedbackFacultyPage extends Component {
                             timeToShow={['M', 'S']}
                             timeLabels={{m: 'Min', s: 'Sec'}}
                         />
-                        <Text style={styles.text}> Or </Text>
-                            <View style={[styles.buttonContainer,styles.shadow]}>
-                                <Button style={styles.buttonMessage} title='Cancel' onPress={()=>{
-                                    this.startFeedback("stop").then(r => "")}} />
-                            </View>
+                        <View style={[styles.buttonContainer,styles.shadow]}>
+                            <Button style={styles.buttonMessage} title='Cancel' onPress={()=>{
+                                this.startFeedback("stop").then(r => "")}} />
+                        </View>
                     </ScrollView>
                 }
             </SafeAreaView>
