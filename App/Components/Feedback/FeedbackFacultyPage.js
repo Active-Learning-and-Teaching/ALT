@@ -29,7 +29,7 @@ export default class FeedbackFacultyPage extends Component {
             results : "",
             loading : true,
             feedbackNumber :"",
-            kind : null
+            kind : null,
         }
         this.setTopics = this.setTopics.bind(this);
         this.setKind = this.setKind.bind(this);
@@ -62,7 +62,7 @@ export default class FeedbackFacultyPage extends Component {
             if(value!=null){
                 this.setState({
                     emailStatus : !value["emailResponse"],
-                    resultPage : true,
+                    resultPage : false,
                     topics : value["topics"],
                     kind : value["kind"],
                     date: value["startTime"]
@@ -70,6 +70,11 @@ export default class FeedbackFacultyPage extends Component {
             }
 
         })
+        if (!(this.state.topics.length===0)){
+            this.setState ({
+                resultPage : true
+            })
+        }
     }
 
     dbUpdateEmailStatus = async () =>{
@@ -99,7 +104,45 @@ export default class FeedbackFacultyPage extends Component {
         let curr = database().getServerTime()
         let startTime = moment(curr).format("DD/MM/YYYY HH:mm:ss")
         let endTime = moment(curr).add(this.state.duration, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+
         if(action==="stop")
+        {
+            startTime = ''
+            endTime = ''
+            this.setState({
+                resultPage : false,
+                emailStatus : false,
+                topics : [],
+                duration : this.duration,
+                date :"",
+                results : ""
+            })
+
+            this.props.beforeFeedback = false
+            this.props.currentFeedback = false
+
+
+            feedback.getFeedbackDetails(this.state.course.passCode)
+            .then(value => {
+                feedback.getFeedback(this.state.course.passCode)
+                    .then(values => {
+                        const url = Object.keys(values)[0];
+                        feedback.setFeedback(
+                            this.state.course.passCode,
+                            '',
+                            '',
+                            '',
+                            '',
+                            '',
+                            url,
+                            false,
+                            value["feedbackCount"]-1
+                        )
+                    })
+            })
+        }
+
+        else if(action==="delay")
         {
             startTime = moment(this.props.startTime, "DD/MM/YYYY HH:mm:ss")
                 .add(10, 'minutes')
@@ -109,6 +152,8 @@ export default class FeedbackFacultyPage extends Component {
                 .format("DD/MM/YYYY HH:mm:ss")
         }
 
+        else
+        {
         feedback.getFeedbackDetails(this.state.course.passCode)
             .then(value => {
                 feedback.getFeedback(this.state.course.passCode)
@@ -126,7 +171,8 @@ export default class FeedbackFacultyPage extends Component {
                             value["feedbackCount"]
                         )
                     })
-            })
+            })}
+
     }
 
     async studentsResponseMailer(){
@@ -151,6 +197,7 @@ export default class FeedbackFacultyPage extends Component {
 
     componentDidMount() {
         this.checkEmailSent().then(r=>{console.log("")})
+        console.log(this.state.resultPage)
     }
 
 
@@ -241,7 +288,7 @@ export default class FeedbackFacultyPage extends Component {
                                 <Text style={styles.text}> Or </Text>
                                 <View style={[styles.buttonContainer,styles.shadow]}>
                                     <Button style={styles.buttonMessage} title='Extend by 10 mins' onPress={()=>{
-                                        this.startFeedback("stop").then(r => "")}} />
+                                        this.startFeedback("delay").then(r => "")}} />
                                 </View>
                             </View>
                         </ScrollView>
@@ -265,6 +312,10 @@ export default class FeedbackFacultyPage extends Component {
                             timeToShow={['M', 'S']}
                             timeLabels={{m: 'Min', s: 'Sec'}}
                         />
+                        <View style={[styles.buttonContainer,styles.shadow]}>
+                            <Button style={styles.buttonMessage} title='Cancel' onPress={()=>{
+                                this.startFeedback("stop").then(r => "")}} />
+                        </View>
                     </ScrollView>
                 }
             </SafeAreaView>

@@ -49,16 +49,22 @@ export default class QuizFacultyPage extends Component{
             if(value!=null){
                 await this.setState({
                     emailStatus : !value["emailResponse"],
-                    resultPage: true,
+                    resultPage: false,
                     correctAnswer : value["correctAnswer"],
                     date : value["startTime"]
                 })
             }
         })
+        if (!(this.state.correctAnswer==='')){
+            this.setState ({
+                resultPage : true
+            })
+        }
+        console.log(this.state.correctAnswer) 
     }
 
     componentDidMount() {
-        this.checkEmailSent().then(r=>{console.log("")})
+        this.checkEmailSent().then(r=>{console.log("Check")})  
     }
 
     async setOption(value){
@@ -94,7 +100,46 @@ export default class QuizFacultyPage extends Component{
             })
     }
 
-    startKBC = async () => {
+    startKBC = async (action = "start") => {
+
+
+        if (action==="stop")
+        {
+            this.setState({
+                time : 2,
+                option : "*",
+                icon : "",
+                correctAnswer : "-",
+                resultPage : false,
+                emailStatus : false,
+                error : null,
+                date : "",
+                results :"",
+                typeofQuiz : "mcq",
+            })
+
+            this.props.setQuizState()
+            const kbc = new Quiz()
+            await kbc.getQuestion(this.state.course.passCode)
+            .then((values)=>{
+                const url = Object.keys(values)[0];
+                const questionCount = Object.values(values)[0].questionCount;
+                kbc.setQuestion(
+                    this.state.course.passCode,
+                    '',
+                    '',
+                    '',
+                    '',
+                    this.state.user.email,
+                    '',
+                    url,
+                    false,
+                    questionCount-1
+                ).then(r => {console.log("update")})})
+        }
+
+        else
+        {
 
         const {option, time} = this.state;
 
@@ -152,7 +197,7 @@ export default class QuizFacultyPage extends Component{
 
                 })
 
-        }
+        }}
 
     }
 
@@ -398,6 +443,10 @@ export default class QuizFacultyPage extends Component{
                         timeToShow={['M', 'S']}
                         timeLabels={{m: 'Min', s: 'Sec'}}
                     />
+                    <View style={[styles.buttonContainer,styles.shadow]}>
+                        <Button style={styles.buttonMessage} title='Cancel' onPress={()=>{
+                             this.startKBC("stop").then(r => "")}} />
+                    </View>
                     {this.props.quizType==="numerical"
                         ?
                         <View>
