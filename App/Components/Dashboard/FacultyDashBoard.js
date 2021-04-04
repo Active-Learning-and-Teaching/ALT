@@ -31,10 +31,10 @@ export default class FacultyDashBoard extends Component {
     };
 
     //@Vishwesh
-    deleteAccount = async () => {
+    deleteAccount = async (url,uid) => {
         const { data } = firebase.functions().httpsCallable('deleteFaculty')({
-          key: this.state.currentUser.url,
-          limit: 15,
+          key: url,
+          uid: uid,
         }).catch(function(error) {
     console.log('There has been a problem with your fetch operation: ' + error);})
 
@@ -54,7 +54,23 @@ export default class FacultyDashBoard extends Component {
                     },
                     {
                         text: 'Confirm',
-                        onPress:  ()=>{this.deleteAccount()}
+                        onPress:  ()=>{
+                            const currProfUrl = this.state.currentUser.url
+                            const uid = auth().currentUser.uid;
+                            console.log(auth().currentUser)
+                            this.deleteAccount(currProfUrl,uid)
+
+                            this.props.navigation.dispatch(
+                                        CommonActions.reset({
+                                            index: 1,
+                                            routes: [
+                                                { name: 'Login' },
+                                            ]
+                                        })
+                                    )
+
+
+                        }
                     },
                 ]
             );
