@@ -31,6 +31,7 @@ export default class FacultyDashBoard extends Component {
     };
 
     //@Vishwesh
+
     deleteAccount = async (url,uid) => {
         const { data } = firebase.functions().httpsCallable('deleteFaculty')({
           key: url,
@@ -40,6 +41,7 @@ export default class FacultyDashBoard extends Component {
 
         console.log(this.state.currentUser.url);
         console.log('Deleted Account')
+
     };
     showAlert() {
 

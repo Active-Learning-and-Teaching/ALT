@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable max-len */
 /* eslint-disable eol-last */
 /* eslint-disable no-var */
@@ -206,9 +207,32 @@ exports.sendNotificationToTopic_New = functions.firestore
       topic: 'Course',
     };
 
-    console.log(message);
     const response = await admin.messaging().send(message);
     console.log(response);
   });
 
+
+exports.sendPushNotification = functions.database
+  .ref('InternalDb/Student/{sid}') // Put your path here with the params.
+  .onWrite(async (change, context) => {
+    try {
+      const {after} = change;
+      const {_data} = after;
+      console.log(_data);
+      //const {deviceToken} = await firebase.messaging().getToken();
+      //if (!deviceToken) return;
+
+      const payload = {
+        notification: {
+          title: 'Notification',
+          body: `FCM notification triggered!`,
+        },
+        topic: 'Course', // Passing the path params along with the notification to the device. [optional]
+      };
+
+      return await admin.messaging().send(payload);
+    } catch (ex) {
+      return console.error('Error:', ex.toString());
+    }
+  });
 
