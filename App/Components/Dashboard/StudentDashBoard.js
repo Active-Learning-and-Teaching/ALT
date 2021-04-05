@@ -12,6 +12,7 @@ import CourseCard from './CourseCard';
 import Student from '../../Databases/Student';
 import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
+import {firebase} from '@react-native-firebase/functions';
 import {CommonActions} from '@react-navigation/native';
 
 export default class StudentDashBoard extends Component {
@@ -35,8 +36,16 @@ export default class StudentDashBoard extends Component {
         })
     };
 
-    deleteAccount = async () => {
-        console.log('Deleted Course')
+    deleteAccount = async (url,uid) => {
+        const { data } = firebase.functions().httpsCallable('deleteStudent')({
+          key: url,
+          userUID: uid,
+        })
+        .catch(function(error) {
+            console.log('There has been a problem with your fetch operation: ' + error);
+        })
+        console.log(this.state.currentUser.url);
+        console.log('Deleted Account')
     };
 
     showAlert() {
@@ -52,7 +61,22 @@ export default class StudentDashBoard extends Component {
                     },
                     {
                         text: 'Confirm',
-                        onPress:  ()=>{this.deleteAccount()}
+                        onPress:  ()=>{
+                            const studenURL = this.state.currentUser.url
+                            const uid = auth().currentUser.uid;
+                            console.log(auth().currentUser)
+                            this.deleteAccount(studenURL, uid)
+                            this.props.navigation.dispatch(
+                                        CommonActions.reset({
+                                            index: 1,
+                                            routes: [
+                                                { name: 'Login' },
+                                            ]
+                                        })
+                                    )
+
+
+                        }
                     },
                 ]
             );
