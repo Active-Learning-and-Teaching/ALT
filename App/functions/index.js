@@ -11,27 +11,27 @@ admin.initializeApp(functions.config().firebase);
 const url = 'https://testfortls.firebaseio.com/'
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-function deleteAllMatchingKey(table,key) {
-    const db_ref = admin.app().database(url).ref('InternalDb/'+table+'/');
-    db_ref.orderByChild("passCode").equalTo(key).once("value", function(snapshot) {
-      console.log('starting to remove from table '+table)
-      snapshot.forEach(function(child){
-        console.log(child.key);
-        child.ref.remove();
-      });
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-
+function deleteAllMatchingKey(table,key, childKey) {
+  const db_ref = admin.app().database(url).ref('InternalDb/'+table+'/');
+  db_ref.orderByChild(childKey).equalTo(key).once("value", function(snapshot) {
+    console.log('starting to remove from table '+table)
+    snapshot.forEach(function(child){
+      console.log(child.key);
+      child.ref.remove();
     });
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
 
+  });
 }
+
 function deleteCourseHelper(passCode){
-    deleteAllMatchingKey('Courses',passCode)
-    deleteAllMatchingKey('Announcements',passCode)
-    deleteAllMatchingKey('KBC',passCode)
-    deleteAllMatchingKey('KBCResponse',passCode)
-    deleteAllMatchingKey('Feedback',passCode)
-    deleteAllMatchingKey('FeedbackResponse',passCode)
+    deleteAllMatchingKey('Courses',passCode, "passCode")
+    deleteAllMatchingKey('Announcements',passCode, "passCode")
+    deleteAllMatchingKey('KBC',passCode, "passCode")
+    deleteAllMatchingKey('KBCResponse',passCode, "passCode")
+    deleteAllMatchingKey('Feedback',passCode, "passCode")
+    deleteAllMatchingKey('FeedbackResponse',passCode, "passCode")
     removeFromStudentList(passCode)
     removeCourseFromFacultyList(passCode)
 }
@@ -95,6 +95,43 @@ function delCoursesOfFaculty(facultyKey){
   console.log("Called");
   removeFromFacultyList(facultyKey);
 }
+
+function deleteStudentHelper(studentID){
+  deleteAllMatchingKey("KBCResponse", studentID, "userID");
+  deleteAllMatchingKey("FeedbackResponse", studentID, "userID");
+}
+
+exports.deleteStudent = functions.https.onCall((data, context) =>{
+  studentID = data.key;
+  userUID = data.userUID;
+  console.log("Student ID: " + studentID);
+  console.log("Recieved data");
+  console.log(data);
+  console.log(context);
+  dbRef = admin.app().database(url).ref('InternalDb/Student/' + studentID);
+  dbRef.once("value", function(snapshot){
+    if (snapshot.val()){
+      deleteStudentHelper(studentID);
+      snapshot.ref.remove();
+      return "removed";
+    }
+    else{
+      return "error while removing";
+    }
+  }, function (errorObject) {
+    console.log("The student read failed: " + errorObject.code);
+    return "Error";
+  });
+  admin
+  .auth()
+  .deleteUser(userUID)
+  .then(() => {
+    console.log('Successfully deleted user from firebase auth');
+  })
+  .catch((error) => {
+    console.log('Error deleting user from firebase auth:', error);
+  });
+});
 
 exports.deleteFaculty = functions.https.onCall((data,context) => {
 // key = req.body['key'];
