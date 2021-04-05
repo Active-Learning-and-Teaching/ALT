@@ -135,7 +135,8 @@ exports.deleteStudent = functions.https.onCall((data, context) =>{
 
 exports.deleteFaculty = functions.https.onCall((data,context) => {
 // key = req.body['key'];
-key = data.key;
+key = data.key
+uid = data.uid
 console.log("Faculty KEY "+ key )
 console.log("recieved data")
 console.log(data)
@@ -176,9 +177,20 @@ db_ref.once("value", function(snapshot)
   // res.send("ERROR")
   return "Error";
 });
+   
+admin
+  .auth()
+  .deleteUser(uid)
+  .then(() => {
+    console.log('Successfully deleted user from firebase auth');
+  })
+  .catch((error) => {
+    console.log('Error deleting user from firebase auth:', error);
+  });
+
+
 }
 );
-
 
 exports.sendNotificationToTopic_New = functions.firestore
   .document('Course/{uid}')
