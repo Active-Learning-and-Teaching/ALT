@@ -178,6 +178,6 @@ class Student {
     return ans;
   };
 
-  
+}
 
 export default Student;
