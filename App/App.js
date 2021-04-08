@@ -18,7 +18,8 @@ console.disableYellowBox = true;
 const App: FC = () => {
   GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-    webClientId: config.webClientId,
+    webClientId:
+      '769962526895-08kognjarhar35ife1q2r0gpvlh0kj3h.apps.googleusercontent.com',
     offlineAccess: true,
   });
 

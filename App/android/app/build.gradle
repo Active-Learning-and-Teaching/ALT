@@ -155,13 +155,12 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(MYAPP_UPLOAD_STORE_FILE)
-                storePassword MYAPP_UPLOAD_STORE_PASSWORD
-                keyAlias MYAPP_UPLOAD_KEY_ALIAS
-                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-            }
+            storeFile file('/Users/ig-rail/Documents/GitHub/Team_1_ALT/keystore.jks')
+            storePassword '123456'
+            keyAlias 'testfortls'
+            keyPassword '123456'
         }
+
     }
     buildTypes {
         debug {
@@ -178,6 +177,9 @@ android {
     }
 
     packagingOptions {
+
+        exclude 'classes.dex'
+
         pickFirst "lib/armeabi-v7a/libc++_shared.so"
         pickFirst "lib/arm64-v8a/libc++_shared.so"
         pickFirst "lib/x86/libc++_shared.so"
