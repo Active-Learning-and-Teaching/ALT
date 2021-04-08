@@ -8,7 +8,7 @@ import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
 import CourseCard from './CourseCard';
 import {CommonActions} from '@react-navigation/native';
-
+import {firebase} from '@react-native-firebase/functions';
 export default class FacultyDashBoard extends Component {
     constructor() {
         super();
@@ -31,11 +31,18 @@ export default class FacultyDashBoard extends Component {
     };
 
     //@Vishwesh
-    deleteAccount = async () => {
-        
-        console.log('Deleted Course')
-    };
 
+    deleteAccount = async (url,uid) => {
+        const { data } = firebase.functions().httpsCallable('deleteFaculty')({
+          key: url,
+          uid: uid,
+        }).catch(function(error) {
+    console.log('There has been a problem with your fetch operation: ' + error);})
+
+        console.log(this.state.currentUser.url);
+        console.log('Deleted Account')
+
+    };
     showAlert() {
 
         Alert.alert(
@@ -49,7 +56,23 @@ export default class FacultyDashBoard extends Component {
                     },
                     {
                         text: 'Confirm',
-                        onPress:  ()=>{this.deleteAccount()}
+                        onPress:  ()=>{
+                            const currProfUrl = this.state.currentUser.url
+                            const uid = auth().currentUser.uid;
+                            console.log(auth().currentUser)
+                            this.deleteAccount(currProfUrl,uid)
+
+                            this.props.navigation.dispatch(
+                                        CommonActions.reset({
+                                            index: 1,
+                                            routes: [
+                                                { name: 'Login' },
+                                            ]
+                                        })
+                                    )
+
+
+                        }
                     },
                 ]
             );
