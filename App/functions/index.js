@@ -27,29 +27,37 @@ async function getURLFromPasscode(passCode){
     return courseURL
 }
 
-function deleteAllMatchingKey(table,key, childKey) {
+async function deleteAllMatchingKey(table,key, childKey) {
     const db_ref = admin.app().database(url).ref('InternalDb/'+table+'/');
     db_ref.orderByChild(childKey).equalTo(key).once("value", function(snapshot) {
       console.log('starting to remove from table '+table)
       snapshot.forEach(function(child){
         console.log(child.key);
-        child.ref.remove();
+        child.ref.remove().then(()=>{
+          console.log()
+        });
       });
     }, function (errorObject) {
       console.log("The read failed: " + errorObject.code);
 
+    }).then(()=>{
+      console.log("Done");
+    }).catch((error)=>{
+      console.log(error);
     });
 
 }
 
-function deleteCourseHelper(passCode, courseURL){
-    deleteAllMatchingKey('Courses',passCode, "passCode")
-    deleteAllMatchingKey('Announcements',passCode, "passCode")
-    deleteAllMatchingKey('KBC',passCode, "passCode")
-    deleteAllMatchingKey('KBCResponse',passCode, "passCode")
-    deleteAllMatchingKey('Feedback',passCode, "passCode")
-    deleteAllMatchingKey('FeedbackResponse',passCode, "passCode")
+async function deleteCourseHelper(passCode, courseURL){
+    await deleteAllMatchingKey('Courses',passCode, "passCode")
+    await deleteAllMatchingKey('Announcements',passCode, "passCode")
+    await deleteAllMatchingKey('KBC',passCode, "passCode")
+    await deleteAllMatchingKey('KBCResponse',passCode, "passCode")
+    await deleteAllMatchingKey('Feedback',passCode, "passCode")
+    await deleteAllMatchingKey('FeedbackResponse',passCode, "passCode")
+    console.log("Starting remove from student list");
     removeFromStudentList(courseURL);
+    console.log("Starting remove from faculty list");
     removeCourseFromFacultyList(courseURL);
 }
 
@@ -61,8 +69,7 @@ exports.deleteCourse = functions.https.onCall(async (data,context) => {
   const passCode = data.passCode;
   console.log("Got passCode to delete "+ passCode)
   let courseURL = await getURLFromPasscode(passCode);
-  deleteCourseHelper(passCode, courseURL);
-  context.send("Done deleting")
+  await deleteCourseHelper(passCode, courseURL);
   return 'done';
 });
 
@@ -75,13 +82,20 @@ function removeFromStudentList(courseKey){
       thisStudent.once("value", function(snapshot){
         snapshot.forEach((el)=>{
           if(el.val() === courseKey){
-            el.ref.remove();
+            el.ref.remove().then(()=>{
+              console.log();
+            });
           }
         })
+      }).then(()=>{
+        console.log();
       })
     })
+  }).then(()=>{
+    console.log();
   })
 }
+
 function removeCourseFromFacultyList(courseKey){
   const student = admin.app().database(url).ref('InternalDb/Faculty/');
   student.once("value", function(snapshot){
@@ -91,11 +105,17 @@ function removeCourseFromFacultyList(courseKey){
       thisStudent.once("value", function(snapshot){
         snapshot.forEach((el)=>{
           if(el.val() === courseKey){
-            el.ref.remove();
+            el.ref.remove().then(()=>{
+              console.log();
+            });
           }
         })
+      }).then(()=>{
+        console.log();
       })
     })
+  }).then(()=>{
+    console.log();
   })
 }
 
@@ -104,8 +124,12 @@ function removeFromFacultyList(key){
   faculty.once("value", function(snapshot){
     snapshot.forEach((el)=>{
       removeFromStudentList(el.val())
-      el.ref.remove();
+      el.ref.remove().then(()=>{
+        console.log();
+      });
     })
+  }).then(()=>{
+    console.log();
   })
 }
 
@@ -130,7 +154,9 @@ exports.deleteStudent = functions.https.onCall((data, context) =>{
   dbRef.once("value", function(snapshot){
     if (snapshot.val()){
       deleteStudentHelper(studentID);
-      snapshot.ref.remove();
+      snapshot.ref.remove().then(()=>{
+        console.log();
+      });
       return "removed";
     }
     else{
@@ -139,6 +165,8 @@ exports.deleteStudent = functions.https.onCall((data, context) =>{
   }, function (errorObject) {
     console.log("The student read failed: " + errorObject.code);
     return "Error";
+  }).then(()=>{
+    console.log();
   });
   admin
   .auth()
@@ -153,7 +181,8 @@ exports.deleteStudent = functions.https.onCall((data, context) =>{
 
 exports.deleteFaculty = functions.https.onCall((data,context) => {
   // key = data.body['key'];
-  key = data.key;
+  let key = data.key;
+  let userUID = data.uid;
   console.log("Faculty KEY "+ key )
   console.log("recieved data")
   console.log(data)
@@ -169,8 +198,10 @@ exports.deleteFaculty = functions.https.onCall((data,context) => {
       course_ref = admin.app().database(url).ref('InternalDb/Courses/'+child)
       course_ref.once("value", 
         function(courseSnapshot){
-            var passcode  = courseSnapshot.val()['passCode'];
-            deleteCourseHelper(passcode, child);
+            if(courseSnapshot.val()){
+              var passcode  = courseSnapshot.val()['passCode'];
+              deleteCourseHelper(passcode, child);
+            }
           }
         ,
         function (errorObject) {
@@ -178,11 +209,15 @@ exports.deleteFaculty = functions.https.onCall((data,context) => {
           // res.send("ERROR");
           return "Error";
         }
-      );
+      ).then(()=>{
+        console.log();
+      });
     });
     delCoursesOfFaculty(key);
-    snapshot.ref.remove();
-    // res.send("removed");
+    snapshot.ref.remove().then(()=>{
+      console.log();
+    });
+    context.send("removed");
     return "removed"
     }
     else{
@@ -193,8 +228,20 @@ exports.deleteFaculty = functions.https.onCall((data,context) => {
     console.log("The faculty read failed: " + errorObject.code);
     // res.send("ERROR")
     return "Error";
+  }).then(()=>{
+    console.log();
+  });
+  admin
+  .auth()
+  .deleteUser(userUID)
+  .then(() => {
+    console.log('Successfully deleted user from firebase auth');
+  })
+  .catch((error) => {
+    console.log('Error deleting user from firebase auth:', error);
   });
 });
+
 
 exports.sendNotificationToTopic_New = functions.firestore
   .document('Course/{uid}')
@@ -214,5 +261,30 @@ exports.sendNotificationToTopic_New = functions.firestore
     const response = await admin.messaging().send(message);
     console.log(response);
   });
+
+  exports.sendPushNotification = functions.database
+  .ref('InternalDb/Student/{sid}') // Put your path here with the params.
+  .onWrite(async (change, context) => {
+    try {
+      const {after} = change;
+      const {_data} = after;
+      console.log(_data);
+      //const {deviceToken} = await firebase.messaging().getToken();
+      //if (!deviceToken) return;
+
+      const payload = {
+        notification: {
+          title: 'Notification',
+          body: `FCM notification triggered!`,
+        },
+        topic: 'Course', // Passing the path params along with the notification to the device. [optional]
+      };
+
+      return await admin.messaging().send(payload);
+    } catch (ex) {
+      return console.error('Error:', ex.toString());
+    }
+  });
+
 
 
