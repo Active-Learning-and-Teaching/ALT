@@ -180,3 +180,4 @@ ios/GoogleService-Info.plist
 
 App/ios/GoogleService-Info.plist
 App/android/app/google-services.json
+keystore.jks
