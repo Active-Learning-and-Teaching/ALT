@@ -70,7 +70,7 @@ export default class StudentAddCourseForm extends Component {
                         {this.state.error}
                     </Text> : <Text/>}
 
-                <Button style={styles.buttonMessage} title="Join" onPress={this.joinCourse} />
+                <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Join" onPress={this.joinCourse} />
 
             </View>
         );

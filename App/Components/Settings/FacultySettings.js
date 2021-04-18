@@ -121,6 +121,7 @@ export default class FacultySettings extends Component{
                             </Text> : <Text/>}
 
                         <Button style={styles.buttonMessage}
+                                buttonStyle={{backgroundColor: 'black'}}
                                 title="Update Settings"
                                 onPress={()=>{
                                     this.setData("completeData").then(r=>{

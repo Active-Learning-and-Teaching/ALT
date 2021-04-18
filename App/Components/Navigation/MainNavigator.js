@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import CheckUserLoggedIn from '../Authentication/CheckUserLoggedIn';
 import LogIn from '../Authentication/LogIn';
 import RegisterUser from '../Authentication/RegisterUser';
@@ -9,6 +9,18 @@ import StudentDashBoard from '../Dashboard/StudentDashBoard';
 import CourseAdd from '../Dashboard/CourseAdd';
 import FacultyDashBoard from '../Dashboard/FacultyDashBoard';
 import TabNavigator from './TabNavigator';
+
+const MyTheme = {
+  dark: false,
+  colors: {
+    primary: 'black',
+    background: 'white',
+    card: 'white',
+    text: 'black',
+    border: 'gray',
+    notification: 'black',
+  },
+};
 
 export default class MainNavigator extends Component{
 
@@ -31,7 +43,7 @@ export default class MainNavigator extends Component{
         const Stack = createStackNavigator();
 
         return (
-            <NavigationContainer>
+            <NavigationContainer theme = {MyTheme}>
                 <Stack.Navigator
                     initialRouteName="CheckUserLoggedIn"
                     screenOptions={{

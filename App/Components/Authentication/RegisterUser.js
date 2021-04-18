@@ -120,7 +120,7 @@ export default class RegisterUser extends Component {
                                 {this.state.error}
                             </Text> : <Text/>}
                         <View style = {styles.shadow}>
-                            <Button style={styles.buttonMessage} title="Continue" onPress={this.RegisterUserToFirebase} />
+                            <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Continue" onPress={this.RegisterUserToFirebase} />
                             <Button
                                 buttonStyle= {{borderColor: 'white'}}
                                 type="clear"

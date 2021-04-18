@@ -14,7 +14,7 @@ import {Mailer} from '../../Utils/Mailer';
 export default class FeedbackFacultyPage extends Component {
 
     // TODO change duration at deployment
-    duration=5;
+    duration=1;
 
     constructor(props) {
         super(props);
@@ -62,19 +62,19 @@ export default class FeedbackFacultyPage extends Component {
             if(value!=null){
                 this.setState({
                     emailStatus : !value["emailResponse"],
-                    resultPage : false,
+                    resultPage : true,
                     topics : value["topics"],
                     kind : value["kind"],
                     date: value["startTime"]
                 })
             }
-
+            if (this.state.topics.length===0){
+                this.setState ({
+                    resultPage : false
+                })
+            }
         })
-        if (!(this.state.topics.length===0)){
-            this.setState ({
-                resultPage : true
-            })
-        }
+        
     }
 
     dbUpdateEmailStatus = async () =>{
@@ -196,7 +196,12 @@ export default class FeedbackFacultyPage extends Component {
     }
 
     componentDidMount() {
-        this.checkEmailSent().then(r=>{console.log("")})
+        this.checkEmailSent().then(r=>{if (!(this.state.topics.length===0)){
+            this.setState ({
+                resultPage : true
+            })
+        }})
+        
         console.log(this.state.resultPage)
     }
 
@@ -230,6 +235,7 @@ export default class FeedbackFacultyPage extends Component {
                                 </View>
                                 <View style={[styles.buttonRowContainer,styles.shadow]}>
                                     <Button style={styles.feedbackButtonMessage}
+                                            buttonStyle={{backgroundColor: 'black'}}
                                             title={"Start New Feedback"}
                                             onPress={()=>{
                                                 this.setState({
@@ -282,12 +288,12 @@ export default class FeedbackFacultyPage extends Component {
                                 </View>
                                 <Text style={styles.text}> Or </Text>
                                 <View style={[styles.buttonContainer,styles.shadow]}>
-                                    <Button style={styles.buttonMessage} title=' START NOW? ' onPress={()=>{
+                                    <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title=' Start Now? ' onPress={()=>{
                                         this.startFeedback("start").then(r => "")}} />
                                 </View>
                                 <Text style={styles.text}> Or </Text>
                                 <View style={[styles.buttonContainer,styles.shadow]}>
-                                    <Button style={styles.buttonMessage} title='Extend by 10 mins' onPress={()=>{
+                                    <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title='Extend by 10 mins' onPress={()=>{
                                         this.startFeedback("delay").then(r => "")}} />
                                 </View>
                             </View>
@@ -313,7 +319,7 @@ export default class FeedbackFacultyPage extends Component {
                             timeLabels={{m: 'Min', s: 'Sec'}}
                         />
                         <View style={[styles.buttonContainer,styles.shadow]}>
-                            <Button style={styles.buttonMessage} title='Cancel' onPress={()=>{
+                            <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title='Cancel' onPress={()=>{
                                 this.startFeedback("stop").then(r => "")}} />
                         </View>
                     </ScrollView>

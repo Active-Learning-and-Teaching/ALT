@@ -169,8 +169,8 @@ export default class StudentDashBoard extends Component {
                         ))}
                     </View>
 
-                    <Button style={styles.buttonMessage} title="SignOut" onPress={this.signOut} />
-                    <Button style={styles.buttonMessage} title="Delete Account" onPress={()=>{this.showAlert()}} />
+                    <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="SignOut" onPress={this.signOut} />
+                    <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Delete Account" onPress={()=>{this.showAlert()}} />
                 </ScrollView>
             </SafeAreaView>
         );
