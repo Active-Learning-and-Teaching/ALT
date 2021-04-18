@@ -20,7 +20,8 @@
 		5940416E05A19B5DD3A6F41D /* libPods-TLS-TLSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D5BE73E6A3D85F09D2E48E /* libPods-TLS-TLSTests.a */; };
 		8C3911A469A19A968D62F58D /* libPods-TLS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DA35EA13167F9AAC586D61D /* libPods-TLS.a */; };
 		B931966AABF3D1AE18E90E61 /* libPods-TLS-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA1FC014A3D7EEE1C57D5EC /* libPods-TLS-tvOSTests.a */; };
-		FBDC2D532606504900CD0DAE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FBDC2D522606504900CD0DAE /* GoogleService-Info.plist */; };
+		FB1BC4EF262C784800BE485E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB1BC4EE262C784800BE485E /* GoogleService-Info.plist */; };
+		FB1BC4F0262C784800BE485E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB1BC4EE262C784800BE485E /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +68,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F499858C4C33599391A775A6 /* Pods-TLS-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TLS-tvOS.release.xcconfig"; path = "Target Support Files/Pods-TLS-tvOS/Pods-TLS-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		FBDC2D522606504900CD0DAE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FB1BC4EE262C784800BE485E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,11 +128,11 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				FB1BC4EE262C784800BE485E /* GoogleService-Info.plist */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				FBDC2D522606504900CD0DAE /* GoogleService-Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = TLS;
@@ -306,7 +307,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 83NACB75EC;
+						DevelopmentTeam = 657J687DK4;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -355,7 +356,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				FBDC2D532606504900CD0DAE /* GoogleService-Info.plist in Resources */,
+				FB1BC4EF262C784800BE485E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,6 +365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
+				FB1BC4F0262C784800BE485E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,6 +551,9 @@
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "[CP-User] [RNFB] Core Configuration";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -804,7 +809,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 83NACB75EC;
+				DEVELOPMENT_TEAM = 657J687DK4;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -818,7 +823,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.TLSOP;
+				PRODUCT_BUNDLE_IDENTIFIER = org.IIITD.ALT;
 				PRODUCT_NAME = TLS;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -833,7 +838,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 83NACB75EC;
+				DEVELOPMENT_TEAM = 657J687DK4;
 				INFOPLIST_FILE = TLS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -842,7 +847,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.TLSOP;
+				PRODUCT_BUNDLE_IDENTIFIER = org.IIITD.ALT;
 				PRODUCT_NAME = TLS;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -853,7 +858,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5275CEB45733BD6B91192931 /* Pods-TLS-tvOS.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -881,7 +885,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F499858C4C33599391A775A6 /* Pods-TLS-tvOS.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;

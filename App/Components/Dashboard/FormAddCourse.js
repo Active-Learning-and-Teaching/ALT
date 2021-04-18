@@ -99,7 +99,7 @@ export default class FormAddCourse extends Component {
                         {this.state.error}
                     </Text> : <Text/>}
 
-                <Button style={styles.buttonMessage} title="Create" onPress={this.CreateCourse} />
+                <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Create" onPress={this.CreateCourse} />
 
             </View>
         );

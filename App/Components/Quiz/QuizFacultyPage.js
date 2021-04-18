@@ -49,22 +49,18 @@ export default class QuizFacultyPage extends Component{
             if(value!=null){
                 await this.setState({
                     emailStatus : !value["emailResponse"],
-                    resultPage: false,
+                    resultPage: true,
                     correctAnswer : value["correctAnswer"],
                     date : value["startTime"]
                 })
             }
+            if (this.state.correctAnswer===''){this.setState ({resultPage : false})}
         })
-        if (!(this.state.correctAnswer==='')){
-            this.setState ({
-                resultPage : true
-            })
-        }
         console.log(this.state.correctAnswer) 
     }
 
     componentDidMount() {
-        this.checkEmailSent().then(r=>{console.log("Check")})  
+        this.checkEmailSent().then(r=>{if (this.state.correctAnswer===''){this.setState ({resultPage : false})}})  
     }
 
     async setOption(value){
@@ -380,7 +376,7 @@ export default class QuizFacultyPage extends Component{
 
                             <View style = {styles.shadow}>
                                 <View style={{paddingTop:10, marginTop:10}}>
-                                    <Button style={{paddingTop:10}} title="BEGIN" onPress={this.startKBC}/>
+                                    <Button buttonStyle={{backgroundColor: 'black'}} style={{paddingTop:10}} title="Begin" onPress={this.startKBC}/>
                                 </View>
                             </View>
                         </View>
@@ -405,7 +401,8 @@ export default class QuizFacultyPage extends Component{
                                         ? Dimensions.window.width-50
                                         :"100%"
                                 }]}>
-                                <Button style={styles.buttonMessage}
+                                <Button buttonStyle={{backgroundColor: 'black'}}
+                                        style={styles.buttonMessage}
                                         title={"Start Another Quiz"}
                                         onPress={()=>{
                                             this.setState({
@@ -444,7 +441,7 @@ export default class QuizFacultyPage extends Component{
                         timeLabels={{m: 'Min', s: 'Sec'}}
                     />
                     <View style={[styles.buttonContainer,styles.shadow]}>
-                        <Button style={styles.buttonMessage} title='Cancel' onPress={()=>{
+                        <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title='Cancel' onPress={()=>{
                              this.startKBC("stop").then(r => "")}} />
                     </View>
                     {this.props.quizType==="numerical"
@@ -465,6 +462,7 @@ export default class QuizFacultyPage extends Component{
                             {this.state.error ? <Text style={styles.errorMessage}>{this.state.error}</Text> : <Text/>}
 
                             <Button style={styles.buttonMessage}
+                                buttonStyle={{backgroundColor: 'black'}}
                                 title="Submit"
                                 onPress={()=>{
                                     this.dbUpdateCorrectAnswer()

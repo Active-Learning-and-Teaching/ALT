@@ -278,7 +278,7 @@ export default class FeedbackForm extends Component {
                                 </View>
                             :
                                 <View>
-                                    <Button onPress={this.showDatePicker} title="Select Date" />
+                                    <Button buttonStyle={{backgroundColor: 'black'}} onPress={this.showDatePicker} title="Select Date" />
                                     <Text style={styles.dateTime}> {this.state.date!=null ? this.state.date:""}</Text>
                                 </View>
                             }
@@ -292,7 +292,7 @@ export default class FeedbackForm extends Component {
                                 </View>
                                 :
                                 <View>
-                                    <Button onPress={this.showTimePicker} title="Select Time" />
+                                    <Button buttonStyle={{backgroundColor: 'black'}} onPress={this.showTimePicker} title="Select Time" />
                                     <Text style={styles.dateTime}> {this.state.time!=null ? this.state.time:""}</Text>
                                 </View>
                             }
@@ -381,7 +381,7 @@ export default class FeedbackForm extends Component {
                             {this.state.error}
                         </Text> : <Text/>}
                         <View style={styles.shadow}>
-                            <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.addFeedback} />
+                            <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title='Submit' onPress={this.addFeedback} />
                         </View>
                     </View>
                 </ScrollView>

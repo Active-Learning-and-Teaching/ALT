@@ -216,7 +216,7 @@ export default class FeedbackStudentPage extends Component {
                                 </View>
                             </View>
                             <View style={[styles.buttonContainer,styles.shadow]}>
-                                <Button style={styles.buttonMessage} title='SUBMIT' onPress={this.submitFeedback} />
+                                <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title='Submit' onPress={this.submitFeedback} />
                             </View>
                         </ScrollView>
 

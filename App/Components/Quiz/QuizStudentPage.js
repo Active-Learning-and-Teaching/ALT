@@ -157,7 +157,7 @@ export default class QuizStudentPage extends Component {
                                         </Text> : <Text/>
                                     }
                                     <View style={styles.shadow}>
-                                        <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
+                                        <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Submit" onPress={this.submitResponse}/>
                                     </View>
                                 </View>
                             </View>
@@ -183,7 +183,7 @@ export default class QuizStudentPage extends Component {
                                     </Text> : <Text/>
                                 }
                                 <View style={[{paddingTop:20},styles.shadow]}>
-                                    <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
+                                    <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Submit" onPress={this.submitResponse}/>
                                 </View>
                             </View>
                             :
@@ -198,7 +198,7 @@ export default class QuizStudentPage extends Component {
                                                 </Text> : <Text/>
                                             }
                                             <View style={styles.shadow}>
-                                                <Button style={styles.buttonMessage} title="SUBMIT" onPress={this.submitResponse}/>
+                                                <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Submit" onPress={this.submitResponse}/>
                                             </View>
                                         </View>
                                     </View>

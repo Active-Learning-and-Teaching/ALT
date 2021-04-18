@@ -144,7 +144,7 @@ export default class LogIn extends Component {
                                 {this.state.error}
                             </Text> : <Text/>}
                             <View style={styles.shadow}>
-                                <Button style={styles.buttonMessage} title="Login" onPress={this.LoginUser}/>
+                                <Button  style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Login" onPress={this.LoginUser}/>
 
                                 <Button
                                     buttonStyle= {{borderColor: 'white'}}
@@ -161,13 +161,13 @@ export default class LogIn extends Component {
                                     <GoogleSigninButton
                                         style={styles.googleSigninButton}
                                         size={GoogleSigninButton.Size.Wide}
-                                        color={GoogleSigninButton.Color.Dark}
+                                        color={GoogleSigninButton.Color.Light}
                                         onPress={this.signInWithGoogle}/>
                                         :
                                     <GoogleSigninButton
                                         style={{alignSelf:'center'}}
                                         size={GoogleSigninButton.Size.Wide}
-                                        color={GoogleSigninButton.Color.Dark}
+                                        color={GoogleSigninButton.Color.Light}
                                         onPress={this.signInWithGoogle}/>
                                 }
                             </View>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 12,
+            height: 2,
         },
         shadowOpacity: 0.23,
         shadowRadius: 5.00,
