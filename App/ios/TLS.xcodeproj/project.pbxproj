@@ -20,8 +20,8 @@
 		5940416E05A19B5DD3A6F41D /* libPods-TLS-TLSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D5BE73E6A3D85F09D2E48E /* libPods-TLS-TLSTests.a */; };
 		8C3911A469A19A968D62F58D /* libPods-TLS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DA35EA13167F9AAC586D61D /* libPods-TLS.a */; };
 		B931966AABF3D1AE18E90E61 /* libPods-TLS-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA1FC014A3D7EEE1C57D5EC /* libPods-TLS-tvOSTests.a */; };
-		FB1BC4EF262C784800BE485E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB1BC4EE262C784800BE485E /* GoogleService-Info.plist */; };
-		FB1BC4F0262C784800BE485E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB1BC4EE262C784800BE485E /* GoogleService-Info.plist */; };
+		EE3F16CA263496B100CD6A6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE3F16C9263496B100CD6A6F /* GoogleService-Info.plist */; };
+		EE3F16CB263496B100CD6A6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE3F16C9263496B100CD6A6F /* GoogleService-Info.plist */; };
 		FBE6FF69262CD61A00FFE5A0 /* AppIcons in Resources */ = {isa = PBXBuildFile; fileRef = FBE6FF68262CD61A00FFE5A0 /* AppIcons */; };
 		FBE6FF6A262CD61A00FFE5A0 /* AppIcons in Resources */ = {isa = PBXBuildFile; fileRef = FBE6FF68262CD61A00FFE5A0 /* AppIcons */; };
 /* End PBXBuildFile section */
@@ -69,8 +69,8 @@
 		EBA1FC014A3D7EEE1C57D5EC /* libPods-TLS-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TLS-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		EE3F16C9263496B100CD6A6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F499858C4C33599391A775A6 /* Pods-TLS-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TLS-tvOS.release.xcconfig"; path = "Target Support Files/Pods-TLS-tvOS/Pods-TLS-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		FB1BC4EE262C784800BE485E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FBE6FF68262CD61A00FFE5A0 /* AppIcons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppIcons; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -131,9 +131,9 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				FB1BC4EE262C784800BE485E /* GoogleService-Info.plist */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				EE3F16C9263496B100CD6A6F /* GoogleService-Info.plist */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -359,9 +359,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				EE3F16CA263496B100CD6A6F /* GoogleService-Info.plist in Resources */,
 				FBE6FF69262CD61A00FFE5A0 /* AppIcons in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				FB1BC4EF262C784800BE485E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,7 +371,7 @@
 			files = (
 				FBE6FF6A262CD61A00FFE5A0 /* AppIcons in Resources */,
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
-				FB1BC4F0262C784800BE485E /* GoogleService-Info.plist in Resources */,
+				EE3F16CB263496B100CD6A6F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,9 +557,6 @@
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "[CP-User] [RNFB] Core Configuration";
 			runOnlyForDeploymentPostprocessing = 0;
