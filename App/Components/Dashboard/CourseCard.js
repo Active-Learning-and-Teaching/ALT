@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         top: 0,
         color:'white',
-        fontWeight : "bold"
+        fontWeight : "bold",
     },
     name: {
         position: 'absolute',

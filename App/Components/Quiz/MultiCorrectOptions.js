@@ -38,7 +38,9 @@ export default class MultiCorrectOptions extends Component{
                         }
                         title={this.state.selected[value] === 1 ? '' : value}
                         titleStyle={{fontSize:24, fontWeight:'bold'}}
-                        overlayContainerStyle={{backgroundColor: '#2697BF'}}
+                        overlayContainerStyle={this.state.selected[value] === 1
+                            ? {backgroundColor:'#118040'}
+                            : {backgroundColor:'#333'}}
                         onPress={() => {this.selectedValue(value)}}
                         rounded
                         activeOpacity={0.7}
@@ -75,8 +77,8 @@ const styles = StyleSheet.create({
 
         shadowColor: "#000",
         shadowOffset: {
-            width: 0,
-            height: 12,
+            width: 5,
+            height: 5,
         },
         shadowOpacity: 0.30,
         shadowRadius: 10.00,

@@ -10,7 +10,7 @@ import SwitchSelector from 'react-native-switch-selector';
 export default class FeedbackForm extends Component {
 
     // TODO change duration at deployment
-    duration=5;
+    duration = 3;
 
     constructor(props) {
         super(props);
@@ -255,19 +255,18 @@ export default class FeedbackForm extends Component {
                     {this.state.textInput.map((value) => {
                         return value
                     })}
-
+                    <View style={styles.selector}>
                     <SwitchSelector
                     onPress={value => {this.setState({kind : value })}}
-                    style={styles.shadow}
-                    textStyle={{fontFamily:"arial"}}
-                    textColor={'#383030'}
-                    selectedColor={'white'}
+                    textColor={'black'}
+                    selectedColor={'black'}
                     borderColor={'#383030'}
                     options={[
-                        { label: "Color Scale", value: "0", activeColor: '#60CA24'},
-                        { label: "Likert Scale", value: "1" ,activeColor: '#60CA24'},
+                        { label: "Color Scale", value: "0", activeColor: 'tomato'},
+                        { label: "Likert Scale", value: "1" ,activeColor: 'tomato'},
                     ]}
                     />
+                    </View>
 
                     <View style={styles.buttonRowContainer}>
                         <View style={styles.container}>
@@ -380,8 +379,8 @@ export default class FeedbackForm extends Component {
                         <Text style={styles.errorMessage}>
                             {this.state.error}
                         </Text> : <Text/>}
-                        <View style={styles.shadow}>
-                            <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title='Submit' onPress={this.addFeedback} />
+                        <View >
+                            <Button buttonStyle={styles.mybutton} style={styles.buttonMessage} title='Submit' onPress={this.addFeedback} />
                         </View>
                     </View>
                 </ScrollView>
@@ -403,29 +402,29 @@ const styles = StyleSheet.create({
         paddingTop : 20,
         paddingBottom: 10,
     },
-    heading : {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        paddingTop : 25,
-        padding: 15,
-        fontSize : 22,
-        fontWeight: "bold",
-        color: 'grey',
-        marginTop: 5,
-        textAlign: 'center',
-    },
     shadow: {
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 10,
+            height: 5,
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 2.50,
+        shadowOpacity: 0.5,
+        shadowRadius: 1.50,
         elevation: 10,
-    },
+      },
+      heading : {
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          paddingTop : 25,
+          padding: 15,
+          fontSize : 25,
+          fontWeight: "bold",
+          color: 'black',
+          marginTop: 5,
+          textAlign: 'center',
+      },
     dateTime : {
         flex: 1,
         display: "flex",
@@ -433,7 +432,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         padding: 10,
         fontSize : 16,
-        color: 'grey',
+        color: '#333',
         marginTop: 5,
         textAlign: 'center',
     },
@@ -441,7 +440,7 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize : 18,
         fontWeight: "bold",
-        color: 'grey',
+        color: '#333',
         paddingLeft :20
     },
     container: {
@@ -453,7 +452,7 @@ const styles = StyleSheet.create({
     },
     rowContainer: {
 
-        paddingVertical: 15,
+        paddingVertical: 25,
         paddingHorizontal: 10,
         flexDirection: "row",
         alignItems: "center"
@@ -469,7 +468,7 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingTop: 10,
+        paddingTop: 30,
         paddingBottom:10,
         paddingLeft : 30,
         paddingRight : 30
@@ -490,5 +489,22 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingLeft : 50,
         paddingRight : 50
-    }
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
+    selector:{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        paddingTop : 25,
+        padding: 5,
+        marginTop: 5,
+        textAlign: 'center',
+    },
 })

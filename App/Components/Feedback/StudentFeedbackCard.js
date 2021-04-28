@@ -36,8 +36,6 @@ export default class StudentFeedbackCard extends Component{
                 </ListItem>
                 <SwitchSelector
                     onPress={value => {this.props.studentResponses(this.props.value, value)}}
-                    style={styles.shadow}
-                    textStyle={{fontFamily:"arial"}}
                     textColor={'#383030'}
                     selectedColor={'white'}
                     borderColor={'#383030'}
@@ -46,6 +44,7 @@ export default class StudentFeedbackCard extends Component{
                         { label: "Somewhat", value: "1" ,activeColor: 'orange'},
                         { label: "Completely", value: "2", activeColor: '#60CA24'}
                     ]}/>
+                    
             </View>)
         else
         return(
@@ -143,5 +142,15 @@ const styles = StyleSheet.create({
     line:{
         fontSize:10,
         textAlign: 'center',
-    }
+    },
+    selector:{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        paddingTop : 25,
+        padding: 5,
+        marginTop: 5,
+        textAlign: 'center',
+    },
 })
