@@ -16,19 +16,19 @@ export const CoursePics = (imageNumber) => {
             url = require('../Assets/4.jpeg');
             break;
         case 5:
-            url = require('../Assets/5.jpeg');
+            url = require('../Assets/1.jpeg');
             break;
         case 6:
-            url = require('../Assets/6.jpeg');
+            url = require('../Assets/2.jpeg');
             break;
         case 7:
-            url = require('../Assets/7.jpeg');
+            url = require('../Assets/3.jpeg');
             break;
         case 8:
-            url = require('../Assets/8.jpeg');
+            url = require('../Assets/4.jpeg');
             break;
         default:
-            url = require('../Assets/8.jpeg');
+            url = require('../Assets/1.jpeg');
     }
 
     return url
