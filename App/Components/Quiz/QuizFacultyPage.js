@@ -305,7 +305,7 @@ export default class QuizFacultyPage extends Component{
                     ?
                 <ScrollView>
                     <View style={{padding:20}}>
-                    <Text style={styles.heading}> In-Class Quiz {this.props.questionCount + 1} </Text>
+                    <Text style={styles.heading}>Quiz {this.props.questionCount + 1} </Text>
                     <View style={styles.selector}>
                         <SwitchSelector
                             initial={0}
@@ -317,15 +317,15 @@ export default class QuizFacultyPage extends Component{
                                     correctAnswer : "*",
                                 })
                             }}
-                            textStyle={{fontFamily:"arial"}}
-                            textColor={'#383030'}
-                            selectedColor={'white'}
+                            textStyle={{fontSize:12}}
+                            textColor={'black'}
+                            selectedColor={'black'}
                             borderColor={'#383030'}
                             // hasPadding
                             options={[
-                                { label: "Single-Correct", value: "mcq", activeColor: '#60CA24'},
-                                { label: "Multi-Correct", value: "multicorrect" ,activeColor: '#60CA24'},
-                                { label: "AlphaNumeric", value: "numerical" ,activeColor: '#60CA24'},
+                                { label: "Single-Correct", value: "mcq", activeColor: 'tomato'},
+                                { label: "Multi-Correct", value: "multicorrect" ,activeColor: 'tomato'},
+                                { label: "Alpha-Numeric", value: "numerical" ,activeColor: 'tomato'},
                             ]}
                         />
                     </View>
@@ -360,7 +360,7 @@ export default class QuizFacultyPage extends Component{
                                 maximumValue={15}
                                 // thumbTouchSize={{width: 100, height: 100}}
                                 // thumbTintColor='#2697BF'
-                                minimumTrackTintColor="#2697BF"
+                                minimumTrackTintColor="tomato"
                                 // maximumTrackTintColor="#000000"
                                 trackStyle={{ height: 10, backgroundColor: 'transparent' }}
                                 thumbStyle={{ height: 35, width: 35, backgroundColor: 'transparent' }}
@@ -374,9 +374,9 @@ export default class QuizFacultyPage extends Component{
                             />
 
 
-                            <View style = {styles.shadow}>
+                            <View style>
                                 <View style={{paddingTop:10, marginTop:10}}>
-                                    <Button buttonStyle={{backgroundColor: 'black'}} style={{paddingTop:10}} title="Begin" onPress={this.startKBC}/>
+                                    <Button buttonStyle={styles.mybutton} title="Begin" onPress={this.startKBC} />
                                 </View>
                             </View>
                         </View>
@@ -385,7 +385,7 @@ export default class QuizFacultyPage extends Component{
                 </ScrollView>
                         :
                         <ScrollView>
-                            <View style = {[styles.shadow,{paddingRight:10,paddingLeft:10}]}>
+                            <View style = {[{paddingRight:10,paddingLeft:10}]}>
                             <QuizResultGraph passCode={this.state.course.passCode}
                                              course={this.props.course}
                                              correctAnswer={this.state.correctAnswer}
@@ -401,7 +401,7 @@ export default class QuizFacultyPage extends Component{
                                         ? Dimensions.window.width-50
                                         :"100%"
                                 }]}>
-                                <Button buttonStyle={{backgroundColor: 'black'}}
+                                <Button buttonStyle={styles.mybutton}
                                         style={styles.buttonMessage}
                                         title={"Start Another Quiz"}
                                         onPress={()=>{
@@ -424,7 +424,7 @@ export default class QuizFacultyPage extends Component{
                         </ScrollView>
                 :
                 <ScrollView>
-                    <Text style={styles.or}> Quiz {this.props.questionCount} in Progress</Text>
+                    <Text style={styles.subheading}> Quiz {this.props.questionCount} in Progress</Text>
                     <CountDown
                         until={this.props.currentDuration}
                         size={30}
@@ -436,18 +436,18 @@ export default class QuizFacultyPage extends Component{
                             this.props.setQuizState()
                         }}
                         digitStyle={{backgroundColor: '#FFF'}}
-                        digitTxtStyle={{fontFamily: 'arial',color: '#2697BF'}}
+                        digitTxtStyle={{color: 'tomato'}}
                         timeToShow={['M', 'S']}
                         timeLabels={{m: 'Min', s: 'Sec'}}
                     />
-                    <View style={[styles.buttonContainer,styles.shadow]}>
-                        <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title='Cancel' onPress={()=>{
+                    <View>
+                        <Button buttonStyle={styles.mybutton} title='Cancel' onPress={()=>{
                              this.startKBC("stop").then(r => "")}} />
                     </View>
                     {this.props.quizType==="numerical"
                         ?
                         <View>
-                            <Text style={[styles.heading,{fontSize : 19, marginTop:25}]}>
+                            <Text style={[styles.heading,{fontSize : 20, }]}>
                                 Provide Answer for Auto-grading
                             </Text>
                             <TextInput
@@ -462,7 +462,7 @@ export default class QuizFacultyPage extends Component{
                             {this.state.error ? <Text style={styles.errorMessage}>{this.state.error}</Text> : <Text/>}
 
                             <Button style={styles.buttonMessage}
-                                buttonStyle={{backgroundColor: 'black'}}
+                                buttonStyle={styles.mybutton}
                                 title="Submit"
                                 onPress={()=>{
                                     this.dbUpdateCorrectAnswer()
@@ -490,6 +490,13 @@ export default class QuizFacultyPage extends Component{
 
 }
 const styles = StyleSheet.create({
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
     safeContainer: {
         flex: 1,
         backgroundColor: 'transparent',
@@ -499,7 +506,7 @@ const styles = StyleSheet.create({
         display: "flex",
         padding: 10,
         fontSize : 18,
-        color: 'grey',
+        color: 'black',
         marginTop: 5,
     },
     selector:{
@@ -515,19 +522,20 @@ const styles = StyleSheet.create({
     textInput: {
         color:'black',
         width: '100%',
-        paddingTop: 55,
+        paddingTop: 25,
         paddingBottom: 15,
         alignSelf: "center",
         borderColor: "#ccc",
         borderBottomWidth: 1,
+        fontSize:20
     },
     shadow: {
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 8,
+            height: 5,
         },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.5,
         shadowRadius: 1.50,
         elevation: 10,
     },
@@ -540,8 +548,22 @@ const styles = StyleSheet.create({
         padding: 15,
         fontSize : 25,
         fontWeight: "bold",
-        color: 'grey',
+        color: 'black',
         marginTop: 5,
+        textAlign: 'center',
+    },
+    subheading : {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        paddingTop : 25,
+        padding: 15,
+        fontSize : 25,
+        fontWeight: "bold",
+        color: 'black',
+        marginTop: 50,
+        marginBottom :25,
         textAlign: 'center',
     },
     container: {
@@ -560,10 +582,12 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     buttonMessage: {
-        marginTop : 30,
+        marginTop : 20,
         paddingTop : 20,
         marginBottom: 30,
-        paddingBottom : 20
+        paddingBottom : 20,
+        textAlign: 'center',
+
     },
     buttonContainer: {
         flex: 1,

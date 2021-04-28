@@ -118,7 +118,7 @@ export default class StudentOrFaculty extends Component {
                             })}
                             activeOpacity={0.7}
                             avatarStyle={styles.avatarStyle}
-                            containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='faculty'?8:0}]}
+                            containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='faculty'?5:0}]}
                         />
                         <Text style={styles.text}>Faculty</Text>
                         <Avatar
@@ -132,7 +132,7 @@ export default class StudentOrFaculty extends Component {
                             })}
                             activeOpacity={0.7}
                             avatarStyle={styles.avatarStyle}
-                            containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='student'?8:0}]}
+                            containerStyle={[styles.avatarContainer,{borderWidth: this.state.selected==='student'?5:0}]}
                         />
                         <Text style={styles.text}>Student</Text>
 
@@ -141,9 +141,9 @@ export default class StudentOrFaculty extends Component {
                         <Text style={styles.errorMessage}>
                             {this.state.error}
                         </Text> : <Text/>}
-                    <View style = {styles.shadow}>
+                    <View >
                         <Button
-                            buttonStyle={{backgroundColor: 'black'}}
+                            buttonStyle={styles.mybutton}
                             style={styles.buttonMessage}
                             title="Register"
                             onPress={()=>{
@@ -173,13 +173,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 35,
         marginTop :20,
-        backgroundColor: '#fff'
+        backgroundColor: 'white'
     },
     shadow: {
         shadowColor: "#000",
         shadowOffset: {
-            width: 0,
-            height: 12,
+            width: 4,
+            height: 4,
         },
         shadowOpacity: 0.23,
         shadowRadius: 5.00,
@@ -196,7 +196,9 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     text:{
-        marginTop: 10
+        marginTop: 10,
+        fontSize:20,
+        fontWeight:'bold'
     },
     buttonMessage: {
         marginTop: 15,
@@ -204,18 +206,24 @@ const styles = StyleSheet.create({
     },
     avatarContainer:{
         marginTop: 30,
-        shadowColor: "#000",
+        shadowColor: "black",
         shadowOffset: {
-            width: 0,
-            height: 16,
+            width: 4,
+            height: 4,
         },
-        shadowOpacity: 0.38,
+        shadowOpacity: 0.5,
         shadowRadius: 10.00,
-        elevation: 24,
+        elevation: 15,
 
-        borderColor: '#2697BF',
-
+        borderColor: 'tomato',
         borderRadius: 80,
-    }
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
 
 });
