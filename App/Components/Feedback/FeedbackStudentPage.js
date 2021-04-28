@@ -179,7 +179,7 @@ export default class FeedbackStudentPage extends Component {
                                 <Text style={styles.heading}> Feedback </Text>
 
                                 <CountDown
-                                    until={this.props.currentDuration + 5}
+                                    until={this.props.currentDuration + 2}
                                     size={24}
                                     onFinish={() => {
                                         this.setState({
@@ -190,8 +190,8 @@ export default class FeedbackStudentPage extends Component {
                                         })
                                         this.props.setFeedbackState()
                                     }}
-                                    digitStyle={{backgroundColor: '#FFF'}}
-                                    digitTxtStyle={{fontFamily: 'arial',color: '#2697BF'}}
+                                    digitStyle={{backgroundColor: 'white'}}
+                                    digitTxtStyle={{color: 'tomato'}}
                                     timeToShow={['M', 'S']}
                                     timeLabels={{m: 'Min', s: 'Sec'}}
                                 />
@@ -215,8 +215,8 @@ export default class FeedbackStudentPage extends Component {
                                         </Text> : <Text/>}
                                 </View>
                             </View>
-                            <View style={[styles.buttonContainer,styles.shadow]}>
-                                <Button buttonStyle={{backgroundColor: 'black'}} style={styles.buttonMessage} title='Submit' onPress={this.submitFeedback} />
+                            <View style={[styles.buttonContainer]}>
+                                <Button buttonStyle={styles.mybutton} style={styles.buttonMessage} title='Submit' onPress={this.submitFeedback} />
                             </View>
                         </ScrollView>
 
@@ -248,9 +248,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingTop : 25,
         padding: 15,
-        fontSize : 22,
+        fontSize : 25,
         fontWeight: "bold",
-        color: 'grey',
+        color: 'black',
         marginTop: 5,
         textAlign: 'center',
     },
@@ -301,9 +301,9 @@ const styles = StyleSheet.create({
         flex: 1,
         display: "flex",
         padding: 10,
-        fontSize : 16,
-        color: 'grey',
-        marginTop: 5,
+        fontSize : 20,
+        color: '#333',
+        marginTop: 10,
     },
     grid: {
         marginTop: 10,
@@ -327,5 +327,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff'
-    }
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
 })

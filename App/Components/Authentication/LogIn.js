@@ -143,19 +143,16 @@ export default class LogIn extends Component {
                             <Text style={styles.errorMessage}>
                                 {this.state.error}
                             </Text> : <Text/>}
-                            <View style={styles.shadow}>
-                                <Button  style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Login" onPress={this.LoginUser}/>
+                            <View >
+                                <Button  style={styles.buttonMessage} buttonStyle= {styles.mybutton} titleStyle = {{}} title="Login" onPress={this.LoginUser}/>
 
                                 <Button
-                                    buttonStyle= {{borderColor: 'white'}}
-                                    type="clear"
-                                    title="Don't have an account? Register Now"
-                                    titleStyle={styles.loginText}
+                                    buttonStyle= {{backgroundColor: '#333', borderColor : 'black', borderRadius:20,}}
+                                    title="Create Account"
                                     onPress={() => this.props.navigation.navigate('Register User')}
                                 />
 
-                                <Text style={styles.or}> Or
-                                </Text>
+                                <Text style={styles.or}> </Text>
                                 {Platform.OS==='ios'
                                     ?
                                     <GoogleSigninButton
@@ -173,7 +170,6 @@ export default class LogIn extends Component {
                             </View>
                         </View>
                     </View>
-
                 </ScrollView>
             </SafeAreaView>
         );
@@ -191,7 +187,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         padding: 35,
-        backgroundColor: '#fff',
+        backgroundColor: 'white',
     },
     shadow: {
         shadowColor: "#000",
@@ -250,7 +246,26 @@ const styles = StyleSheet.create({
         width: 192,
         height: 48,
         alignSelf: "center",
-    }
+        borderColor:'#333',
+        borderWidth:2,
+        borderRadius:20,
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
+    myimage: {
+        flex: 1,
+        resizeMode: "cover",
+        justifyContent: "center"
+      },
+      backgroundImage: {
+        flex: 1,
+        resizeMode: 'cover',
+      }
 
 });
 
