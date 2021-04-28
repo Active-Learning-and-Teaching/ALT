@@ -53,7 +53,7 @@ export default class AnnouncementCard extends Component{
                     <Badge
                         value = {"  "+this.props.announcement.date+"  "}
                         containerStyle = {styles.date}
-                        textStyle={{color:"white", fontSize:11}}
+                        textStyle={{color:"white", fontSize:10}}
                     />
                 </ListItem>
                 <ActionSheet
@@ -90,30 +90,31 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.05,
         shadowRadius: 2.50,
         elevation: 1,
-        borderRadius: 15,
+        borderRadius: 25,
     },
     title: {
         alignSelf:'flex-start',
         textAlign: 'left',
-        fontSize: 16,
+        fontSize: 15,
         color:'black',
         marginTop: 1,
         paddingTop : 1,
-        marginBottom: 8,
-        paddingBottom : 8,
-        fontWeight : "bold"
+        marginBottom: 1,
+        paddingBottom : 5,
+        fontWeight : "bold",
     },
     date: {
         position : 'absolute',
         top : 8,
-        right : 4
+        right : 10,
+        borderRadius: 25,
         // marginTop: 0,
         // paddingTop : 0,
         // marginBottom: 30,
         // paddingBottom : 30,
     },
     caption: {
-        fontSize: 12,
+        fontSize: 13,
         color:'black'
     },
 })

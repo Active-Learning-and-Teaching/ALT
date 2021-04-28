@@ -115,7 +115,7 @@ export default class QuizStudentPage extends Component {
                         </ScrollView>
                     :
                         <ScrollView>
-                            <View style={styles.shadow}>
+                            <View>
                             <QuizResultGraph passCode={this.state.course.passCode}
                                              correctAnswer={this.state.correctAnswer}
                                              date={this.state.date}
@@ -141,8 +141,8 @@ export default class QuizStudentPage extends Component {
                                 this.props.setQuizState()
                                 this.getCorrectAnswer().then(r=>{console.log("")})
                             }}
-                            digitStyle={{backgroundColor: '#FFF'}}
-                            digitTxtStyle={{fontFamily: 'arial',color: '#2697BF'}}
+                            digitStyle={{backgroundColor: 'white'}}
+                            digitTxtStyle={{color: 'tomato'}}
                             timeToShow={['M', 'S']}
                             timeLabels={{m: 'Min', s: 'Sec'}}
                         />
@@ -156,16 +156,16 @@ export default class QuizStudentPage extends Component {
                                             {this.state.error}
                                         </Text> : <Text/>
                                     }
-                                    <View style={styles.shadow}>
-                                        <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Submit" onPress={this.submitResponse}/>
+                                    <View>
+                                        <Button style={styles.buttonMessage} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
                                     </View>
                                 </View>
                             </View>
                             :
                             this.props.quizType==="numerical"
                             ?
-                            <View style={{paddingTop:30}}>
-                                <Text style={[styles.heading,{fontSize : 19, marginTop:25}]}>
+                            <View style={{paddingTop:20}}>
+                                <Text style={[styles.heading,{fontSize : 18, marginTop:15}]}>
                                     Please Provide Concise Answer
                                 </Text>
                                 <TextInput
@@ -182,8 +182,8 @@ export default class QuizStudentPage extends Component {
                                         {this.state.error}
                                     </Text> : <Text/>
                                 }
-                                <View style={[{paddingTop:20},styles.shadow]}>
-                                    <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Submit" onPress={this.submitResponse}/>
+                                <View style={[{paddingTop:20}]}>
+                                    <Button style={styles.buttonMessage} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
                                 </View>
                             </View>
                             :
@@ -197,8 +197,8 @@ export default class QuizStudentPage extends Component {
                                                     {this.state.error}
                                                 </Text> : <Text/>
                                             }
-                                            <View style={styles.shadow}>
-                                                <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Submit" onPress={this.submitResponse}/>
+                                            <View>
+                                                <Button style={styles.buttonMessage} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
                                             </View>
                                         </View>
                                     </View>
@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderColor: "#ccc",
         borderBottomWidth: 1,
+        fontSize : 20
     },
     shadow: {
         shadowColor: "#000",
@@ -249,11 +250,12 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        paddingTop : 25,
+        paddingTop : 35,
+        paddingBottom : 20,
         padding: 15,
         fontSize : 25,
         fontWeight: "bold",
-        color: 'grey',
+        color: '#333',
         marginTop: 5,
         textAlign: 'center',
     },
@@ -292,7 +294,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff'
-    }
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
 })
 
 

@@ -83,29 +83,29 @@ export default class QuizResultGraph extends Component {
             {
                 name: "A",
                 responses: this.state.values['A'],
-                color: "rgb(77, 137, 249)",
-                legendFontColor: "#7F7F7F",
+                color: "rgb(102, 255, 102)",
+                legendFontColor: "#000",
                 legendFontSize: 15
             },
             {
                 name: "B",
                 responses: this.state.values['B'],
-                color: "rgb(0, 184, 138)",
-                legendFontColor: "#7F7F7F",
+                color: "rgb(102, 102, 255)",
+                legendFontColor: "#000",
                 legendFontSize: 15
             },
             {
                 name: "C",
                 responses: this.state.values['C'],
-                color: "rgb(255, 159, 64)",
-                legendFontColor: "#7F7F7F",
+                color: "rgb(255, 255, 102)",
+                legendFontColor: "#000",
                 legendFontSize: 15
             },
             {
                 name: "D",
                 responses: this.state.values['D'],
-                color: "rgb(255, 99, 132)",
-                legendFontColor: "#7F7F7F",
+                color: "rgb(252, 102, 102)",
+                legendFontColor: "#000",
                 legendFontSize: 15
             },
         ];
@@ -124,7 +124,7 @@ export default class QuizResultGraph extends Component {
         return (
             <ScrollView>
                 <Text style={styles.body}>
-                    Results - Quiz {this.state.quizNumber} ({this.props.date.split(" ")[0]})
+                    Results : Quiz {this.state.quizNumber} ({this.props.date.split(" ")[0]})
                 </Text>
                 <View>
                 {this.props.quizType==="mcq"?
@@ -132,7 +132,7 @@ export default class QuizResultGraph extends Component {
                         <PieChart
                             data={data}
                             width={Dimensions.window.width}
-                            height={220}
+                            height={200}
                             chartConfig={chartConfig}
                             accessor="responses"
                             backgroundColor="transparent"
@@ -176,28 +176,28 @@ export default class QuizResultGraph extends Component {
 const styles = StyleSheet.create({
     body: {
         marginTop: 100,
-        color: 'grey',
+        color: 'black',
         alignSelf: "center",
         fontSize: 22,
         paddingBottom: 20,
         fontWeight : "bold"
     },
     body1: {
-        color: 'grey',
+        color: 'black',
         alignSelf: "center",
         fontSize: 20,
         paddingBottom : 30,
         fontWeight : "bold"
     },
     body2: {
-        color: 'grey',
+        color: '#333',
         alignSelf: "center",
         fontSize: 18,
         paddingBottom : 20,
     },
     ca: {
         marginTop: 18,
-        color: 'grey',
+        color: '#333',
         alignSelf: "center",
         fontSize: 18,
         paddingBottom: 20,

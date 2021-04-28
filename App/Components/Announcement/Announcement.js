@@ -71,7 +71,7 @@ export default class  Announcement extends Component{
                             <Avatar
                                 onPress={()=>{
                                     Clipboard.setString(this.state.course.passCode)
-                                    Toast.show('PassCode Copied to Clipboard');
+                                    Toast.show('Passcode Copied to Clipboard');
                                 }}
                                 title = {
                                     this.state.course.courseCode + " " +
@@ -80,7 +80,7 @@ export default class  Announcement extends Component{
                                 }
                                 titleStyle={styles.title}
                                 containerStyle={styles.container}
-                                activeOpacity={0.7}
+                                activeOpacity={0.5}
                             />
                             <Text style={styles.name}>{this.state.course.instructor}</Text>
                         </ImageBackground>
@@ -132,11 +132,11 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 12,
+            height: 5,
         },
         shadowOpacity: 0.20,
         shadowRadius: 2.00,
-        elevation: 24,
+        elevation: 25,
     },
     imageContainer: {
         width : Dimensions.window.width-20,
