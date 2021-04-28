@@ -85,10 +85,9 @@ export default class FacultySettings extends Component{
                         <View style={styles.toggleButtonView}>
                             <Text style={styles.toggleText}>
                                 Email Responses
-                                {this.state.defaultEmailOption===true?" Enabled":" Disabled"}
                             </Text>
                             <Switch
-                                trackColor={{ false: "#767577", true: "#81b0ff" }}
+                                trackColor={{ false: "#767577", true: "tomato" }}
                                 thumbColor={this.state.defaultEmailOption ? "#f4f3f4" : "#f4f3f4"}
                                 ios_backgroundColor="#3e3e3e"
                                 onValueChange={this.toggleSwitch}
@@ -121,7 +120,7 @@ export default class FacultySettings extends Component{
                             </Text> : <Text/>}
 
                         <Button style={styles.buttonMessage}
-                                buttonStyle={{backgroundColor: 'black'}}
+                                buttonStyle={styles.mybutton}
                                 title="Update Settings"
                                 onPress={()=>{
                                     this.setData("completeData").then(r=>{
@@ -161,10 +160,10 @@ const styles = StyleSheet.create({
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        fontSize : 20,
+        fontSize : 25,
         fontWeight: "bold",
-        color: 'grey',
-        textAlign: 'left',
+        color: '#333',
+        textAlign: 'center',
     },
     textInput: {
         color: 'black',
@@ -174,6 +173,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderColor: "#ccc",
         borderBottomWidth: 1,
+        fontSize : 20,
     },
     text:{
         flex: 1,
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
         padding: 15,
         fontSize : 20,
         fontWeight: "bold",
-        color: 'grey',
+        color: '#333',
         marginTop: 25,
         textAlign: 'center',
     },
@@ -199,5 +199,12 @@ const styles = StyleSheet.create({
         paddingTop : 20,
         marginBottom: 30,
         paddingBottom : 20
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
     },
 })

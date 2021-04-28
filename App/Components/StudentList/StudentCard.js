@@ -135,7 +135,7 @@ export default class StudentCard extends Component{
                         <Avatar
                             title = {this.createTitle(this.props.student.name, this.props.student.email)}
                             titleStyle = {{color:"white", fontSize:20}}
-                            overlayContainerStyle = {{backgroundColor: '#2697BF'}}
+                            overlayContainerStyle = {{backgroundColor: 'tomato'}}
                             size = "medium"
                             rounded
                         />
@@ -205,7 +205,7 @@ export default class StudentCard extends Component{
                     <Avatar
                         title = {this.createTitle(this.props.student.name, this.props.student.email)}
                         titleStyle = {{color:"white", fontSize:20}}
-                        overlayContainerStyle = {{backgroundColor: '#2697BF'}}
+                        overlayContainerStyle = {{backgroundColor: 'tomato'}}
                         size = "medium"
                         rounded
                     />
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 6,
+            height: 5,
         },
         shadowOpacity: 0.10,
         shadowRadius: 5.00,
