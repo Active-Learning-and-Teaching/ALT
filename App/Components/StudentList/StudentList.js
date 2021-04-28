@@ -118,12 +118,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     text: {
-        color: 'grey',
+        color: '#333',
         textAlign : 'center',
         alignSelf: "center",
-        fontSize: 16,
-        paddingTop : 5,
-        paddingBottom : 5,
+        fontSize: 18,
+        paddingTop : 10,
+        paddingBottom : 25,
         fontWeight : "bold"
     },
     grid: {

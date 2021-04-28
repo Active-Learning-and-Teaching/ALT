@@ -22,7 +22,9 @@ export default class Options extends Component{
                         }
                         title={this.props.icon === value ? '' : value}
                         titleStyle={{fontSize:24, fontWeight:'bold'}}
-                        overlayContainerStyle={{backgroundColor: '#2697BF'}}
+                        overlayContainerStyle={this.props.icon === value
+                            ? {backgroundColor:'#118040'}
+                            : {backgroundColor:'#333'}}
                         onPress={() => { this.props.optionValue(value)}}
                         rounded
                         activeOpacity={0.7}
@@ -59,8 +61,8 @@ const styles = StyleSheet.create({
 
         shadowColor: "#000",
         shadowOffset: {
-            width: 0,
-            height: 12,
+            width: 5,
+            height: 5,
         },
         shadowOpacity: 0.30,
         shadowRadius: 10.00,
