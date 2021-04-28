@@ -28,10 +28,9 @@ export default class TabNavigator extends Component{
                 <Tab.Screen name = "Course DashBoard"
                         component={AnnouncementStack}
                         options={{
-                            tabBarLabel: 'Announcements',
-                            fontFamily: 'arial',
+                            tabBarLabel: 'Home',
                             tabBarIcon: ({focused}) =>(
-                                <Icon name='home' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
+                                <Icon name='home' type='font-awesome' size={25} color={focused?"tomato":"grey"}/>
                             ),
                         }}
                         initialParams={{
@@ -44,9 +43,8 @@ export default class TabNavigator extends Component{
                         component={QuizStack}
                         options={{
                             tabBarLabel: 'Quiz',
-                            fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
-                                <Icon name='gamepad' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
+                                <Icon name='gamepad' type='font-awesome' size={25} color={focused?"tomato":"grey"}/>
                             ),
                         }}
                         initialParams={{
@@ -59,9 +57,8 @@ export default class TabNavigator extends Component{
                         component={FeedbackStack}
                         options={{
                             tabBarLabel: 'Feedback',
-                            fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
-                                <Icon name='comments' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
+                                <Icon name='comments' type='font-awesome' size={25} color={focused?"tomato":"grey"}/>
                             ),
                         }}
                         initialParams={{
@@ -74,9 +71,8 @@ export default class TabNavigator extends Component{
                         component={StudentStack}
                         options={{
                             tabBarLabel: 'Students',
-                            fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
-                                <Icon name='users' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
+                                <Icon name='users' type='font-awesome' size={25} color={focused?"tomato":"grey"}/>
                             ),
                         }}
                         initialParams={{
@@ -90,9 +86,8 @@ export default class TabNavigator extends Component{
                         component={SettingsStack}
                         options={{
                             tabBarLabel: 'Settings',
-                            fontFamily: 'arial',
                             tabBarIcon: ({focused}) =>(
-                                <Icon name='cog' type='font-awesome' size={28} color={focused?"#1E90FF":"grey"}/>
+                                <Icon name='cog' type='font-awesome' size={25} color={focused?"tomato":"grey"}/>
                             ),
                         }}
                         initialParams={{

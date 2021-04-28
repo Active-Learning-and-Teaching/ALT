@@ -83,10 +83,10 @@ export default class FeedbackResultsList extends Component {
 
             <View style={styles.container}>
                 <Text style={styles.heading}>
-                    Student Responses ({this.props.date.split(" ")[0]})
+                    Feedback {this.state.feedbackNumber}
                 </Text>
                 <Text style={[styles.heading,{fontSize: 18,paddingTop : 5}]}>
-                    Feedback {this.state.feedbackNumber}
+                    ({this.props.date.split(" ")[0]})
                 </Text>
                 <View style={styles.grid}>
                     {this.props.topics.map((value, i) => (
@@ -110,21 +110,21 @@ export default class FeedbackResultsList extends Component {
                                                 name: ": Not Much",
                                                 responses: this.state.responses[value][0],
                                                 color: "#F3460A",
-                                                legendFontColor: "#7F7F7F",
+                                                legendFontColor: "black",
                                                 legendFontSize: 15
                                             },
                                             {
                                                 name: ": Somewhat",
                                                 responses: this.state.responses[value][1],
                                                 color: 'orange',
-                                                legendFontColor: "#7F7F7F",
+                                                legendFontColor: "black",
                                                 legendFontSize: 15
                                             },
                                             {
                                                 name: ": Completely",
                                                 responses: this.state.responses[value][2],
                                                 color: "#60CA24",
-                                                legendFontColor: "#7F7F7F",
+                                                legendFontColor: "black",
                                                 legendFontSize: 15
                                             },
                                         ]
@@ -133,7 +133,7 @@ export default class FeedbackResultsList extends Component {
                                     height={150}
                                     chartConfig={chartConfig}
                                     accessor="responses"
-                                    backgroundColor="transparent"
+                                    backgroundColor="white"
                                     paddingLeft="12"
                                     absolute
                                 />
@@ -152,10 +152,10 @@ export default class FeedbackResultsList extends Component {
 
             <View style={styles.container}>
                 <Text style={styles.heading}>
-                    Student Responses ({this.props.date.split(" ")[0]})
+                    Feedback {this.state.feedbackNumber}
                 </Text>
                 <Text style={[styles.heading,{fontSize: 18,paddingTop : 5}]}>
-                    Feedback {this.state.feedbackNumber}
+                    ({this.props.date.split(" ")[0]})
                 </Text>
                 <View style={styles.grid}>
                     {this.props.topics.map((value, i) => (
@@ -176,38 +176,38 @@ export default class FeedbackResultsList extends Component {
                                     data={
                                         [
                                             {
-                                                name: ": One Point",
+                                                name: ": o",
                                                 responses: this.state.responses[value][1],
                                                 color: "#F3460A",
-                                                legendFontColor: "#7F7F7F",
+                                                legendFontColor: "black",
                                                 legendFontSize: 15
                                             },
                                             {
-                                                name: ": Two Points",
+                                                name: ": oo",
                                                 responses: this.state.responses[value][2],
                                                 color: 'orange',
-                                                legendFontColor: "#7F7F7F",
+                                                legendFontColor: "black",
                                                 legendFontSize: 15
                                             },
                                             {
-                                                name: ": Three Points",
+                                                name: ": ooo",
                                                 responses: this.state.responses[value][3],
                                                 color: "pink",
-                                                legendFontColor: "#7F7F7F",
+                                                legendFontColor: "black",
                                                 legendFontSize: 15
                                             },
                                             {
-                                                name: ": Four Points",
+                                                name: ": oooo",
                                                 responses: this.state.responses[value][4],
                                                 color: "skyblue",
-                                                legendFontColor: "#7F7F7F",
+                                                legendFontColor: "black",
                                                 legendFontSize: 15
                                             },
                                             {
-                                                name: ": Five Points",
+                                                name: ": ooooo",
                                                 responses: this.state.responses[value][5],
                                                 color: "#60CA24",
-                                                legendFontColor: "#7F7F7F",
+                                                legendFontColor: "black",
                                                 legendFontSize: 15
                                             },
                                         ]
@@ -216,18 +216,18 @@ export default class FeedbackResultsList extends Component {
                                     height={150}
                                     chartConfig={chartConfig}
                                     accessor="responses"
-                                    backgroundColor="transparent"
+                                    backgroundColor="white"
+                                    borderRadius = {20}
                                     paddingLeft="12"
                                     absolute
 
                                 />
+                                
                                 :
                                 <Text/>
+                                
                             }
-
-
-
-                            <Text style={[{textAlign: 'center'}]}> Average of Points : {this.state.avg_points[value]}</Text>
+                            <Text style={[styles.miniheading]}> Average Score : {this.state.avg_points[value]}</Text>
                         </View>
                     ))}
                 </View>
@@ -259,10 +259,10 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 8,
+            height: 5,
         },
-        shadowOpacity: 0.15,
-        shadowRadius: 2.0,
+        shadowOpacity: 0.5,
+        shadowRadius: 1.50,
         elevation: 10,
     },
     heading : {
@@ -272,11 +272,19 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingTop : 25,
         padding: 15,
-        fontSize : 22,
+        fontSize : 25,
         fontWeight: "bold",
-        color: 'grey',
+        color: 'black',
         marginTop: 5,
         textAlign: 'center',
+    },
+    miniheading : {
+        padding: 15,
+        fontSize : 15,
+        fontWeight: "bold",
+        color: "#333",
+        textAlign: 'center',
+        backgroundColor : 'white',
     },
     container: {
         flex: 1,
@@ -292,14 +300,12 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 14,
+            height: 5,
         },
-        shadowOpacity: 0.18,
+        shadowOpacity: 0.2,
         shadowRadius: 2.50,
         elevation: 24,
-
-        borderColor: '#2697BF',
-        borderRadius: 8,
+        borderRadius: 15,
         marginTop: 2,
         marginBottom: 2,
         paddingTop : 2,

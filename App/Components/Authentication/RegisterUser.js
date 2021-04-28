@@ -119,15 +119,8 @@ export default class RegisterUser extends Component {
                             <Text style={styles.errorMessage}>
                                 {this.state.error}
                             </Text> : <Text/>}
-                        <View style = {styles.shadow}>
-                            <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Continue" onPress={this.RegisterUserToFirebase} />
-                            <Button
-                                buttonStyle= {{borderColor: 'white'}}
-                                type="clear"
-                                title="Already have an account? Login"
-                                titleStyle={styles.loginText}
-                                onPress={() => this.props.navigation.navigate('Login')}
-                            />
+                        <View>
+                            <Button style={styles.buttonMessage} buttonStyle={styles.mybutton} title="Continue" onPress={this.RegisterUserToFirebase} />
                         </View>
                     </View>
                 </ScrollView>
@@ -153,8 +146,8 @@ const styles = StyleSheet.create({
     shadow: {
         shadowColor: "#000",
         shadowOffset: {
-            width: 0,
-            height: 12,
+            width: 4,
+            height: 4,
         },
         shadowOpacity: 0.23,
         shadowRadius: 5.00,
@@ -183,5 +176,12 @@ const styles = StyleSheet.create({
     },
     buttonMessage: {
         marginTop: 15
-    }
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
 });

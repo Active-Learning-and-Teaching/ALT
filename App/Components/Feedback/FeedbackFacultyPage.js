@@ -20,7 +20,7 @@ import {Mailer} from '../../Utils/Mailer';
 
 export default class FeedbackFacultyPage extends Component {
   // TODO change duration at deployment
-  duration = 1;
+  duration = 3;
 
   constructor(props) {
     super(props);
@@ -142,12 +142,29 @@ export default class FeedbackFacultyPage extends Component {
         });
       });
     } else if (action === 'delay') {
+      console.log('delay')
       startTime = moment(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
         .add(10, 'minutes')
         .format('DD/MM/YYYY HH:mm:ss');
       endTime = moment(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
         .add(10 + this.state.duration, 'minutes')
         .format('DD/MM/YYYY HH:mm:ss');
+        feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
+          feedback.getFeedback(this.state.course.passCode).then(values => {
+            const url = Object.keys(values)[0];
+            feedback.setFeedback(
+              this.state.course.passCode,
+              startTime,
+              endTime,
+              value['topics'],
+              value['kind'],
+              value['instructor'],
+              url,
+              false,
+              value['feedbackCount'],
+            );
+          });
+        });
     } else {
       feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
@@ -227,10 +244,10 @@ export default class FeedbackFacultyPage extends Component {
                       studentsResponseMailer={this.studentsResponseMailer}
                     />
                   </View>
-                  <View style={[styles.buttonRowContainer, styles.shadow]}>
+                  <View style={[styles.buttonRowContainer]}>
                     <Button
                       style={styles.feedbackButtonMessage}
-                      buttonStyle={{backgroundColor: 'black'}}
+                      buttonStyle={styles.mybutton}
                       title={'Start New Feedback'}
                       onPress={() => {
                         this.setState({
@@ -252,7 +269,7 @@ export default class FeedbackFacultyPage extends Component {
                   <Text style={styles.heading}>
                     Feedback {this.props.feedbackCount}
                   </Text>
-                  <View style={[styles.shadow]}>
+                  <View >
                     {this.state.topics.map((value, i) => (
                       <ListItem key={i} containerStyle={styles.listContainer}>
                         <ListItem.Content>
@@ -274,28 +291,24 @@ export default class FeedbackFacultyPage extends Component {
                         });
                         this.props.setFeedbackState();
                       }}
-                      digitStyle={{backgroundColor: '#FFF'}}
-                      digitTxtStyle={{fontFamily: 'arial', color: '#2697BF'}}
+                      digitStyle={{backgroundColor: 'white'}}
+                      digitTxtStyle={{fontFamily: 'arial', color: 'tomato'}}
                       timeToShow={['D', 'H', 'M', 'S']}
                       timeLabels={{d: 'Day', h: 'Hour', m: 'Min', s: 'Sec'}}
                     />
                   </View>
-                  <Text style={styles.text}> Or </Text>
-                  <View style={[styles.buttonContainer, styles.shadow]}>
+                  <View style={[styles.buttonContainer]}>
                     <Button
-                      buttonStyle={{backgroundColor: 'black'}}
-                      style={styles.buttonMessage}
-                      title=" Start Now? "
+                      buttonStyle={styles.mybutton}
+                      title=" Start Now"
                       onPress={() => {
                         this.startFeedback('start').then(r => '');
                       }}
                     />
                   </View>
-                  <Text style={styles.text}> Or </Text>
-                  <View style={[styles.buttonContainer, styles.shadow]}>
+                  <View style={[styles.buttonContainer]}>
                     <Button
-                      buttonStyle={{backgroundColor: 'black'}}
-                      style={styles.buttonMessage}
+                      buttonStyle={styles.mybutton}
                       title="Extend by 10 mins"
                       onPress={() => {
                         this.startFeedback('delay').then(r => '');
@@ -307,7 +320,7 @@ export default class FeedbackFacultyPage extends Component {
             )
           ) : (
             <ScrollView>
-              <Text style={styles.or}>
+              <Text style={styles.subheading}>
                 Feedback {this.props.feedbackCount} in Progress
               </Text>
               <CountDown
@@ -323,13 +336,13 @@ export default class FeedbackFacultyPage extends Component {
                   this.props.setFeedbackState();
                 }}
                 digitStyle={{backgroundColor: '#FFF'}}
-                digitTxtStyle={{fontFamily: 'arial', color: '#2697BF'}}
+                digitTxtStyle={{ color: 'tomato'}}
                 timeToShow={['M', 'S']}
                 timeLabels={{m: 'Min', s: 'Sec'}}
               />
-              <View style={[styles.buttonContainer, styles.shadow]}>
+              <View style={[styles.buttonContainer]}>
                 <Button
-                  buttonStyle={{backgroundColor: 'black'}}
+                  buttonStyle={styles.mybutton}
                   style={styles.buttonMessage}
                   title="Cancel"
                   onPress={() => {
@@ -385,34 +398,33 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: 8,
   },
-  heading: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    paddingTop: 25,
-    paddingBottom: 25,
-    padding: 15,
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: 'grey',
-    marginTop: 5,
-    textAlign: 'center',
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+        width: 0,
+        height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 1.50,
+    elevation: 10,
+  },
+  heading : {
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      paddingTop : 25,
+      padding: 15,
+      fontSize : 25,
+      fontWeight: "bold",
+      color: 'black',
+      marginTop: 5,
+      textAlign: 'center',
   },
   result: {
     padding: 10,
     paddingLeft: 30,
     paddingRight: 20,
-  },
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.5,
-    elevation: 10,
   },
   container: {
     flex: 1,
@@ -455,8 +467,9 @@ const styles = StyleSheet.create({
     padding: 8,
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'grey',
-    marginTop: 5,
+    color: '#333',
+    marginTop: 30,
+    marginBottom :10,
     alignSelf: 'center',
   },
   buttonMessage: {
@@ -508,4 +521,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
   },
+  mybutton:{
+    backgroundColor: 'tomato', 
+    borderColor : 'black',
+    borderRadius:20,
+    marginTop:30,
+    marginBottom:30
+},
+subheading : {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  paddingTop : 25,
+  padding: 15,
+  fontSize : 25,
+  fontWeight: "bold",
+  color: 'black',
+  marginTop: 50,
+  marginBottom :25,
+  textAlign: 'center',
+},
 });

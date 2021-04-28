@@ -14,7 +14,7 @@ const MyTheme = {
   dark: false,
   colors: {
     primary: 'black',
-    background: 'white',
+    background: '#e6e6e6',
     card: 'white',
     text: 'black',
     border: 'gray',
