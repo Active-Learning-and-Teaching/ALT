@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Courses from '../../Databases/Courses';
 
+
 export default class StudentAddCourseForm extends Component {
     constructor(props) {
         super(props);
@@ -30,9 +31,12 @@ export default class StudentAddCourseForm extends Component {
             const courses = new Courses()
             await courses.getCourse(passCode)
                 .then(async value => {
+                    console.log(courses.getCourse(passCode))
                     if (value){
                         await this.props.student.addCourseStudent(value)
-                            .then(r => console.log("Added Course to Student"))
+                            .then(r => console.log("Added Course to Student")
+
+                            )
                         this.props.toggle()
                     }
                     else {

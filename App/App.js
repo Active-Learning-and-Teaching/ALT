@@ -18,10 +18,11 @@ console.disableYellowBox = true;
 const App: FC = () => {
   GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-    webClientId:config['webClientId'],
+    webClientId: config['webClientId'],
     offlineAccess: true,
   });
 
+  console.log('In App.js');
   return (
     <>
       <MainNavigator />
