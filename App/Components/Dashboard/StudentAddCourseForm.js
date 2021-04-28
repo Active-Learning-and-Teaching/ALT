@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    TextInput,
-    Button,
-} from 'react-native';
+import {StyleSheet,Text,View,TextInput,} from 'react-native';
+import {Button} from 'react-native-elements';
 import Courses from '../../Databases/Courses';
 
 export default class StudentAddCourseForm extends Component {
@@ -70,7 +65,7 @@ export default class StudentAddCourseForm extends Component {
                         {this.state.error}
                     </Text> : <Text/>}
 
-                <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Join" onPress={this.joinCourse} />
+                <Button style={styles.buttonMessage} titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mybutton} title="Join" onPress={this.joinCourse} />
 
             </View>
         );
@@ -102,7 +97,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         paddingBottom: 15,
         alignSelf: "center",
-        color : "grey",
+        color : "#333",
         fontSize : 18,
     },
     errorMessage: {
@@ -113,6 +108,13 @@ const styles = StyleSheet.create({
     },
     buttonMessage: {
         marginTop: 15
-    }
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
 });
 
