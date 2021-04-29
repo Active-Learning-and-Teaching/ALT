@@ -144,6 +144,7 @@ export default class StudentOrFaculty extends Component {
                     <View >
                         <Button
                             buttonStyle={styles.mybutton}
+                            titleStyle={{color:'white',fontWeight:'normal'}}
                             style={styles.buttonMessage}
                             title="Register"
                             onPress={()=>{

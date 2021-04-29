@@ -1,12 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    TextInput,
-    Button,
-} from 'react-native';
+import {StyleSheet,View,TextInput,} from 'react-native';
+import {Button, Text} from 'react-native-elements';
 import moment from 'moment';
 import database from '@react-native-firebase/database';
 import Announcement from '../../Databases/Announcement';
@@ -78,11 +73,9 @@ export default class AnnouncementsAdd extends Component {
                     value={this.state.description}
                 />
 
-                { this.state.error ?
-                    <Text style={styles.errorMessage}>
-                        {this.state.error}
-                    </Text> : <Text/>}
-                <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Share" onPress={this.addAnnouncement} />
+                { this.state.error ? <Text style={styles.errorMessage}> {this.state.error}</Text> : <Text/>}
+
+                <View><Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} title="Share" onPress={this.addAnnouncement} /></View>
             </View>
         );
     }
@@ -95,7 +88,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         padding: 35,
-        backgroundColor: '#fff'
+        backgroundColor: 'white',
     },
     textInput: {
         color:'black',
@@ -113,7 +106,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         paddingBottom: 15,
         alignSelf: "center",
-        color : "grey",
+        color : "#333",
         fontSize : 18,
     },
     errorMessage: {
@@ -124,6 +117,13 @@ const styles = StyleSheet.create({
     },
     buttonMessage: {
         marginTop: 15,
-    }
+    },
+    mybutton:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:30
+    },
 });
 

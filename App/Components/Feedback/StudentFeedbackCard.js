@@ -57,14 +57,14 @@ export default class StudentFeedbackCard extends Component{
                     </ListItem.Content>
                 </ListItem>
                 
-                <View style={[styles.column,{marginLeft:this.props.LRpadding,marginRight:this.props.LRpadding}]}>
+                <View style={[styles.column]}>
                 {this.renderScale()}
                 </View>
                 <MultiSlider
                     values={[1]}
-                    trackStyle={{backgroundColor:'#5e5e5e'}}
-                    selectedStyle={{backgroundColor:"lightgreen"}}
-                    sliderLength={Dimensions.window.width-100}
+                    trackStyle={{backgroundColor:'#333'}}
+                    selectedStyle={{backgroundColor:"tomato"}}
+                    sliderLength={Dimensions.window.width/1.35}
                     onValuesChange={value => {this.props.studentResponses(this.props.value, value[0])}}
                     min={1}
                     max={5}
@@ -128,20 +128,20 @@ const styles = StyleSheet.create({
     column:{
         flexDirection:'row',
         alignItems:'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        width: Dimensions.window.width/2.8,
+
         bottom:-20,
-        paddingLeft : 50,
-        paddingRight : 50
     },
     active:{
         textAlign: 'center',
         fontSize:20,
-        bottom:10,
-        color:'#5e5e5e',
+        color:'#333',
     },
     line:{
         fontSize:10,
         textAlign: 'center',
+        color:'#333',
     },
     selector:{
         flex: 1,
