@@ -157,7 +157,7 @@ export default class QuizStudentPage extends Component {
                                         </Text> : <Text/>
                                     }
                                     <View>
-                                        <Button style={styles.buttonMessage} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
+                                        <Button style={styles.buttonMessage} titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
                                     </View>
                                 </View>
                             </View>
@@ -183,7 +183,7 @@ export default class QuizStudentPage extends Component {
                                     </Text> : <Text/>
                                 }
                                 <View style={[{paddingTop:20}]}>
-                                    <Button style={styles.buttonMessage} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
+                                    <Button style={styles.buttonMessage} titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
                                 </View>
                             </View>
                             :
@@ -198,7 +198,7 @@ export default class QuizStudentPage extends Component {
                                                 </Text> : <Text/>
                                             }
                                             <View>
-                                                <Button style={styles.buttonMessage} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
+                                                <Button style={styles.buttonMessage} titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
                                             </View>
                                         </View>
                                     </View>

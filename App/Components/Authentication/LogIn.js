@@ -144,9 +144,10 @@ export default class LogIn extends Component {
                                 {this.state.error}
                             </Text> : <Text/>}
                             <View >
-                                <Button  style={styles.buttonMessage} buttonStyle= {styles.mybutton} titleStyle = {{}} title="Login" onPress={this.LoginUser}/>
+                                <Button  style={styles.buttonMessage} titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle= {styles.mybutton} titleStyle = {{}} title="Login" onPress={this.LoginUser}/>
 
                                 <Button
+                                    titleStyle={{color:'white',fontWeight:'normal'}}
                                     buttonStyle= {{backgroundColor: '#333', borderColor : 'black', borderRadius:20,}}
                                     title="Create Account"
                                     onPress={() => this.props.navigation.navigate('Register User')}
