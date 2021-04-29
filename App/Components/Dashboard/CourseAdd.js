@@ -89,6 +89,6 @@ const styles = StyleSheet.create({
     buttonMessage: {
         paddingTop : 10,
         marginTop: 15
-    }
+    },
 });
 

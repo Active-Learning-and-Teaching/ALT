@@ -129,11 +129,12 @@ export default class FeedbackResultsList extends Component {
                                             },
                                         ]
                                     }
-                                    width={Dimensions.window.width}
+                                    width={Dimensions.window.width-10}
                                     height={150}
                                     chartConfig={chartConfig}
                                     accessor="responses"
                                     backgroundColor="white"
+                                    borderRadius = {20}
                                     paddingLeft="12"
                                     absolute
                                 />
@@ -212,7 +213,7 @@ export default class FeedbackResultsList extends Component {
                                             },
                                         ]
                                     }
-                                    width={Dimensions.window.width}
+                                    width={Dimensions.window.width-10}
                                     height={150}
                                     chartConfig={chartConfig}
                                     accessor="responses"
@@ -220,9 +221,7 @@ export default class FeedbackResultsList extends Component {
                                     borderRadius = {20}
                                     paddingLeft="12"
                                     absolute
-
                                 />
-                                
                                 :
                                 <Text/>
                                 

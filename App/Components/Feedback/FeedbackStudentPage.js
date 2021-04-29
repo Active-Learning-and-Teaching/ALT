@@ -216,7 +216,7 @@ export default class FeedbackStudentPage extends Component {
                                 </View>
                             </View>
                             <View style={[styles.buttonContainer]}>
-                                <Button buttonStyle={styles.mybutton} style={styles.buttonMessage} title='Submit' onPress={this.submitFeedback} />
+                                <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} style={styles.buttonMessage} title='Submit' onPress={this.submitFeedback} />
                             </View>
                         </ScrollView>
 
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     },
     grid: {
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: -80,
         paddingTop : 10,
         paddingBottom : 10,
         alignItems: 'center',
