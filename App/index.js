@@ -12,7 +12,7 @@ typography();
 
 async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
-  console.log(authStatus);
+  console.log('Authorization status:', authStatus);
 }
 
 requestUserPermission();
@@ -31,6 +31,17 @@ requestUserPermission();
 //           /* handle error */
 //           console.log(error);
 //         });
+//     } else {
+//       messaging()
+//         .requestPermission()
+//         .then(() => {
+//           console.log('Requesting Permission');
+//           /* got permission */
+//         })
+//         .catch(error => {
+//           /* handle error */
+//           console.log(error);
+//         });
 //     }
 //   })
 //   .catch(error => {
@@ -39,8 +50,6 @@ requestUserPermission();
 //   });
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('----------');
-  console.log('In Back Ground');
   console.log('Message handled in the background!', remoteMessage);
 });
 
