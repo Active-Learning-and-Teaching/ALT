@@ -10,7 +10,7 @@ import Dimensions from '../../Utils/Dimensions';
 export default class FeedbackForm extends Component {
 
     // TODO change duration at deployment
-    duration = 30;
+    duration = 5;
 
     constructor(props) {
         super(props);
