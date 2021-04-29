@@ -376,7 +376,7 @@ export default class QuizFacultyPage extends Component{
 
                             <View style>
                                 <View style={{paddingTop:10, marginTop:10}}>
-                                    <Button buttonStyle={styles.mybutton} title="Begin" onPress={this.startKBC} />
+                                    <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} title="Begin" onPress={this.startKBC} />
                                 </View>
                             </View>
                         </View>
@@ -402,6 +402,7 @@ export default class QuizFacultyPage extends Component{
                                         :"100%"
                                 }]}>
                                 <Button buttonStyle={styles.mybutton}
+                                        titleStyle={{color:'white',fontWeight:'normal'}}
                                         style={styles.buttonMessage}
                                         title={"Start Another Quiz"}
                                         onPress={()=>{
@@ -441,7 +442,7 @@ export default class QuizFacultyPage extends Component{
                         timeLabels={{m: 'Min', s: 'Sec'}}
                     />
                     <View>
-                        <Button buttonStyle={styles.mybutton} title='Cancel' onPress={()=>{
+                        <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} title='Cancel' onPress={()=>{
                              this.startKBC("stop").then(r => "")}} />
                     </View>
                     {this.props.quizType==="numerical"
@@ -463,6 +464,7 @@ export default class QuizFacultyPage extends Component{
 
                             <Button style={styles.buttonMessage}
                                 buttonStyle={styles.mybutton}
+                                titleStyle={{color:'white',fontWeight:'normal'}}
                                 title="Submit"
                                 onPress={()=>{
                                     this.dbUpdateCorrectAnswer()

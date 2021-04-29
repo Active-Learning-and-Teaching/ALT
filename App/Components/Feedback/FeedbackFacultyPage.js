@@ -20,7 +20,7 @@ import {Mailer} from '../../Utils/Mailer';
 
 export default class FeedbackFacultyPage extends Component {
   // TODO change duration at deployment
-  duration = 3;
+  duration = 5;
 
   constructor(props) {
     super(props);
@@ -248,6 +248,7 @@ export default class FeedbackFacultyPage extends Component {
                     <Button
                       style={styles.feedbackButtonMessage}
                       buttonStyle={styles.mybutton}
+                      titleStyle={{color:'white',fontWeight:'normal'}}
                       title={'Start New Feedback'}
                       onPress={() => {
                         this.setState({
@@ -300,6 +301,7 @@ export default class FeedbackFacultyPage extends Component {
                   <View style={[styles.buttonContainer]}>
                     <Button
                       buttonStyle={styles.mybutton}
+                      titleStyle={{color:'white',fontWeight:'normal'}}
                       title=" Start Now"
                       onPress={() => {
                         this.startFeedback('start').then(r => '');
@@ -309,6 +311,7 @@ export default class FeedbackFacultyPage extends Component {
                   <View style={[styles.buttonContainer]}>
                     <Button
                       buttonStyle={styles.mybutton}
+                      titleStyle={{color:'white',fontWeight:'normal'}}
                       title="Extend by 10 mins"
                       onPress={() => {
                         this.startFeedback('delay').then(r => '');
@@ -343,6 +346,7 @@ export default class FeedbackFacultyPage extends Component {
               <View style={[styles.buttonContainer]}>
                 <Button
                   buttonStyle={styles.mybutton}
+                  titleStyle={{color:'white',fontWeight:'normal'}}
                   style={styles.buttonMessage}
                   title="Cancel"
                   onPress={() => {
@@ -526,7 +530,7 @@ const styles = StyleSheet.create({
     borderColor : 'black',
     borderRadius:20,
     marginTop:30,
-    marginBottom:30
+    marginBottom:30,
 },
 subheading : {
   flex: 1,

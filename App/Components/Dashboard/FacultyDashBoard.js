@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
-import {Button, StyleSheet,View,Alert, ScrollView, SafeAreaView} from 'react-native';
+import {StyleSheet,View,Alert, ScrollView, SafeAreaView} from 'react-native';
+import {Button} from 'react-native-elements';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import Faculty from '../../Databases/Faculty';
 import database from '@react-native-firebase/database';
@@ -162,7 +163,6 @@ export default class FacultyDashBoard extends Component {
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
-
                     <View style={styles.grid}>
                         {this.state.courseList.map((item,i)=> (
                             <CourseCard
@@ -174,9 +174,8 @@ export default class FacultyDashBoard extends Component {
                             />
                         ))}
                     </View>
-
-                    <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="SignOut" onPress={this.signOut} />
-                    <Button style={styles.buttonMessage} buttonStyle={{backgroundColor: 'black'}} title="Delete Account" onPress={()=>{this.showAlert()}} />
+                    <Button buttonStyle={styles.signout} title="Sign Out" titleStyle={{color:'white',fontWeight:'normal'}} onPress={this.signOut} />
+                    <Button  buttonStyle={styles.account} title="Delete Account" titleStyle={{color:'white',fontWeight:'normal'}} onPress={()=>{this.showAlert()}} />
                 </ScrollView>
             </SafeAreaView>
         );
@@ -210,5 +209,32 @@ const styles = StyleSheet.create({
     buttonMessage: {
         paddingTop : 10,
         marginTop: 15
-    }
+    },
+    signout:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:20,
+        marginBottom:20,
+        marginLeft:100,
+        marginRight:100
+    },
+    account:{
+        backgroundColor: '#333', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:30,
+        marginBottom:20,
+        marginLeft:100,
+        marginRight:100
+    },
+    create:{
+        backgroundColor: 'tomato', 
+        borderColor : 'black',
+        borderRadius:20,
+        marginTop:20,
+        marginBottom:20,
+        marginLeft:100,
+        marginRight:100
+    },
 });
