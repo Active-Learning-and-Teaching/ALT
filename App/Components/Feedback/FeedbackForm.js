@@ -5,12 +5,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
 import Feedback from '../../Databases/Feedback';
-import {Button as IosButton } from 'react-native';
 import SwitchSelector from 'react-native-switch-selector';
+import Dimensions from '../../Utils/Dimensions';
 export default class FeedbackForm extends Component {
 
     // TODO change duration at deployment
-    duration = 3;
+    duration = 30;
 
     constructor(props) {
         super(props);
@@ -272,12 +272,12 @@ export default class FeedbackForm extends Component {
                         <View style={styles.container}>
                             { Platform.OS==='ios'?
                                 <View>
-                                    <IosButton onPress={this.showDatePicker} title="Select Date" />
+                                    <Button titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mydatebutton} onPress={this.showDatePicker} title="Select Date" />
                                     <Text style={styles.dateTime}> {this.state.iosdate!=null ? this.state.iosdate:""}</Text>
                                 </View>
                             :
                                 <View>
-                                    <Button buttonStyle={{backgroundColor: 'black'}} onPress={this.showDatePicker} title="Select Date" />
+                                    <Button titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mydatebutton} onPress={this.showDatePicker} title="Select Date" />
                                     <Text style={styles.dateTime}> {this.state.date!=null ? this.state.date:""}</Text>
                                 </View>
                             }
@@ -286,12 +286,12 @@ export default class FeedbackForm extends Component {
                         <View style={styles.container}>
                             {  Platform.OS === 'ios' ?
                                 <View>
-                                    <IosButton onPress={this.showTimePicker} title="Select Time" />
+                                    <Button titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mydatebutton}  onPress={this.showTimePicker} title="Select Time" />
                                     <Text style={styles.dateTime}> {this.state.iostime!=null ? this.state.iostime:""}</Text>
                                 </View>
                                 :
                                 <View>
-                                    <Button buttonStyle={{backgroundColor: 'black'}} onPress={this.showTimePicker} title="Select Time" />
+                                    <Button titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mydatebutton} onPress={this.showTimePicker} title="Select Time" />
                                     <Text style={styles.dateTime}> {this.state.time!=null ? this.state.time:""}</Text>
                                 </View>
                             }
@@ -306,8 +306,8 @@ export default class FeedbackForm extends Component {
 
                                 { Platform.OS==='ios'?
                                     <View>
-                                        <View style={styles.iosButton}>
-                                            <IosButton  onPress={this.doneButton} title="Done"/>
+                                        <View>
+                                            <Button  buttonStyle={styles.mydatebutton} titleStyle={{color:'white',fontWeight:'normal'}} onPress={this.doneButton} title="Ok"/>
                                         </View>
                                         <DateTimePicker
                                             testID="datePicker"
@@ -344,8 +344,8 @@ export default class FeedbackForm extends Component {
                             <View>
                                 { Platform.OS==='ios'?
                                     <View>
-                                        <View style={styles.iosButton}>
-                                            <IosButton onPress={this.doneButton} title="Done"/>
+                                        <View>
+                                            <Button buttonStyle={styles.mydatebutton} titleStyle={{color:'white',fontWeight:'normal'}} onPress={this.doneButton} title="Ok"/>
                                         </View>
                                         <DateTimePicker
                                             testID="timePicker"
@@ -380,7 +380,7 @@ export default class FeedbackForm extends Component {
                             {this.state.error}
                         </Text> : <Text/>}
                         <View >
-                            <Button buttonStyle={styles.mybutton} style={styles.buttonMessage} title='Submit' onPress={this.addFeedback} />
+                            <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} style={styles.buttonMessage} title='Submit' onPress={this.addFeedback} />
                         </View>
                     </View>
                 </ScrollView>
@@ -457,11 +457,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center"
     },
-    iosButton :{
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        paddingRight :30,
-    },
     buttonRowContainer: {
         flex: 1,
         display: "flex",
@@ -496,6 +491,13 @@ const styles = StyleSheet.create({
         borderRadius:20,
         marginTop:30,
         marginBottom:30
+    },
+    mydatebutton:{
+        backgroundColor: '#333', 
+        borderColor : 'black',
+        borderRadius:20,
+        width:Dimensions.window.width/3,
+        alignSelf:'center'
     },
     selector:{
         flex: 1,
