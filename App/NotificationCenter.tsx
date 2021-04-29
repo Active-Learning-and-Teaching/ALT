@@ -1,18 +1,7 @@
-import {
-  Animated,
-  Dimensions,
-  Easing,
-  PanResponder,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import {Animated,Dimensions,Easing,PanResponder,Text,View,TouchableOpacity,} from 'react-native';
 import React, {FC, useState, useEffect, useRef} from 'react';
-
 import tailwind from 'tailwind-rn';
-import messaging, {
-  FirebaseMessagingTypes,
-} from '@react-native-firebase/messaging';
+import messaging, {FirebaseMessagingTypes,} from '@react-native-firebase/messaging';
 
 const NotifiactionCentre: FC = () => {
   const [
@@ -87,7 +76,7 @@ const NotifiactionCentre: FC = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(remoteMessage => {
-      console.log(remoteMessage.notification);
+      console.log(remoteMessage);
       if (remoteMessage.notification) {
         transition.setValue(300);
         const enterAnim = Animated.spring(transition, {
@@ -122,7 +111,7 @@ const NotifiactionCentre: FC = () => {
     <>
       <Animated.View
         style={[
-          tailwind('absolute top-0 z-10 inset-x-0 px-2 mb-2'),
+          tailwind('absolute top-10 z-10 inset-x-0 px-2 mb-2'),
           {transform: [{translateY: transition}, {translateX: swipe}], opacity},
         ]}>
         <TouchableOpacity

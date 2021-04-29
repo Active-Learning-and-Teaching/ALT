@@ -20,7 +20,7 @@ import {Mailer} from '../../Utils/Mailer';
 
 export default class FeedbackFacultyPage extends Component {
   // TODO change duration at deployment
-  duration = 30;
+  duration = 5;
 
   constructor(props) {
     super(props);
