@@ -23,7 +23,7 @@ const url = 'https://testfortls.firebaseio.com/';
 //     await db_ref.orderByChild("passCode").equalTo(passCode).once("value",
 //           function(snapshot) {
 //             courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
-//           }, 
+//           },
 //           function (errorObject) {
 //             console.log("The read failed: " + errorObject.code);
 //           }
@@ -192,7 +192,7 @@ const url = 'https://testfortls.firebaseio.com/';
 //   console.log(data)
 //   console.log(context)
 //   db_ref = admin.app().database(url).ref('InternalDb/Faculty/'+key)
-//   db_ref.once("value", function(snapshot) 
+//   db_ref.once("value", function(snapshot)
 //   {
 //     console.log(snapshot.val());
 //     if(snapshot.val()['courses']){
@@ -200,7 +200,7 @@ const url = 'https://testfortls.firebaseio.com/';
 //     {
 //       console.log("Removing course of key " + child);
 //       course_ref = admin.app().database(url).ref('InternalDb/Courses/'+child)
-//       course_ref.once("value", 
+//       course_ref.once("value",
 //         function(courseSnapshot){
 //             if(courseSnapshot.val()){
 //               var passcode  = courseSnapshot.val()['passCode'];
@@ -246,45 +246,118 @@ const url = 'https://testfortls.firebaseio.com/';
 //   });
 // });
 
+// exports.sendNotificationToTopic_New = functions.firestore
+//   .document('Course/{uid}')
+//   .onWrite(async (event) => {
+//     // let docID = event.after.id;
+//     const title = event.after.get('title');
+//     const content = event.after.get('content');
+//     var message = {
+//       notification: {
+//         title: title,
+//         body: content,
+//       },
+//       topic: 'Course',
+//     };
 
-exports.sendNotificationToTopic_New = functions.firestore
-  .document('Course/{uid}')
-  .onWrite(async (event) => {
-    // let docID = event.after.id;
-    const title = event.after.get('title');
-    const content = event.after.get('content');
-    var message = {
-      notification: {
-        title: title,
-        body: content,
-      },
-      topic: 'Course',
-    };
+//     console.log(message);
+//     const response = await admin.messaging().send(message);
+//     console.log(response);
+//   });
 
-    console.log(message);
-    const response = await admin.messaging().send(message);
-    console.log(response);
-  });
-
-  exports.sendPushNotification = functions.database
-  .ref('InternalDb/Feedback/{fid}') // Put your path here with the params.
+exports.sendPushNotificationQuiz = functions.database
+  .ref('InternalDb/KBC/{qid}') // Put your path here with the params.
   .onWrite(async (change, context) => {
     try {
       const {after} = change;
       const {_data} = after;
-      console.log(_data);
-      //const {deviceToken} = await firebase.messaging().getToken();
-      //if (!deviceToken) return;
+      const {_path} = after;
+      console.log('------------------');
+      console.log('function Quiz Notification executing');
+      //console.log(_path);
+      //console.log(after);
+      console.log('------------------');
 
-      const payload = {
+      //console.log(_data.passCode);
+      //console.log(context);
+      //console.log(after);
+
+      if (!_data.emailResponse && _data.quizType != '') {
+        const payload = {
+          notification: {
+            title: 'Quiz Notification',
+            body: `A New Quiz 📋has been started By instructor ${
+              _data.instructor
+            } !`,
+          },
+          topic: _data.passCode, // Passing the path params along with the notification to the device. [optional]
+        };
+        return await admin.messaging().send(payload);
+      }
+    } catch (ex) {
+      return console.error('Error:', ex.toString());
+    }
+  });
+
+exports.sendPushNotificationFeedback = functions.database
+  .ref('InternalDb/Feedback/{id}') // Put your path here with the params.
+  .onWrite(async (change, context) => {
+    try {
+      const {after} = change;
+      const {_data} = after;
+      const {_path} = after;
+      console.log('------------------');
+      console.log('function Feedback Notification executing');
+      //console.log(_path);
+      //console.log(after);
+      console.log('------------------');
+
+      //console.log(_data.passCode);
+      //console.log(context);
+      //console.log(after);
+
+      if (!_data.emailResponse) {
+        const Noitfier = {
+          notification: {
+            title: 'FeedBack Notification',
+            body: `A New FeedBack has been started By instructor ${
+              _data.instructor
+            } !`,
+          },
+          topic: _data.passCode, // Passing the path params along with the notification to the device. [optional]
+        };
+        return await admin.messaging().send(Noitfier);
+      }
+    } catch (ex) {
+      return console.error('Error:', ex.toString());
+    }
+  });
+
+exports.Annoucements = functions.database
+  .ref('InternalDb/Announcements/{a_id}') // Put your path here with the params.
+  .onWrite(async (change, context) => {
+    try {
+      const {after} = change;
+      const {_data} = after;
+      const {_path} = after;
+      console.log('------------------');
+      console.log('function Annoucement Notification executing');
+      //console.log(_path);
+      //console.log(after);
+      console.log('------------------');
+
+      //console.log(_data.passCode);
+      //console.log(context);
+      //console.log(after);
+
+      const Announce = {
         notification: {
-          title: 'Notification',
-          body: `FCM notification triggered!`,
+          title: `New Annoucement -> ${_data.heading}`,
+          body: `${_data.description}`,
         },
-        topic: 'Course', // Passing the path params along with the notification to the device. [optional]
+        topic: _data.passCode, // Passing the path params along with the notification to the device. [optional]
       };
-
-      return await admin.messaging().send(payload);
+      return await admin.messaging().send(Announce);
     } catch (ex) {
       return console.error('Error:', ex.toString());
     }

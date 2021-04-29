@@ -22,7 +22,6 @@ const App: FC = () => {
     offlineAccess: true,
   });
 
-  console.log('In App.js');
   return (
     <>
       <MainNavigator />

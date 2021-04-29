@@ -122,7 +122,7 @@ const NotifiactionCentre: FC = () => {
     <>
       <Animated.View
         style={[
-          tailwind('absolute bottom-0 z-10 inset-x-0 px-2 mb-2'),
+          tailwind('absolute top-10 z-10 inset-x-0 px-2 mb-2'),
           {transform: [{translateY: transition}, {translateX: swipe}], opacity},
         ]}>
         <TouchableOpacity
