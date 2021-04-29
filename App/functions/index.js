@@ -310,13 +310,30 @@ exports.sendPushNotificationFeedback = functions.database
       console.log('function Feedback Notification executing');
       //console.log(_path);
       //console.log(after);
+      console.log(context);
+      console.log(_data.startTime);
+      console.log(context.timestamp);
       console.log('------------------');
+      var str1 = _data.startTime;
+
+      str1 = str1.replace('/', '-');
+      str1 = str1.replace('/', '-');
+
+      var newdate = str1
+        .split('-')
+        .reverse()
+        .join('-');
+      console.log(newdate);
+      var t = new Date(newdate);
+      console.log(t);
+
+      console.log(new Date().toString().split('GMT')[0] + ' UTC');
 
       //console.log(_data.passCode);
       //console.log(context);
       //console.log(after);
 
-      if (!_data.emailResponse) {
+      if (!_data.emailResponse && _data.startTime != '') {
         const Noitfier = {
           notification: {
             title: 'FeedBack Notification',
