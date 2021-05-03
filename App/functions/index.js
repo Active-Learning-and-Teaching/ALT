@@ -11,15 +11,11 @@
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 
-
-const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-
-const url = 'https://testfortls.firebaseio.com/';
-
-const moment = require('moment')
-admin.initializeApp(functions.config().firebase);
+const functions = require('firebase-functions');
 const nodemailer = require("nodemailer");
+const moment = require('moment')
+const url = 'https://testfortls.firebaseio.com/';
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   auth: {
@@ -27,6 +23,9 @@ const transporter = nodemailer.createTransport({
     pass: "Teaching2021!!",
   },
 });
+
+admin.initializeApp(functions.config().firebase);
+
 async function getURLFromPasscode(passCode) {
     const db_ref = admin.app().database(url).ref('InternalDb/Courses/');
     let courseURL;
@@ -40,6 +39,21 @@ async function getURLFromPasscode(passCode) {
     );
     return courseURL;
 }
+
+async function getKBCURLFromPasscode(passCode) {
+  const db_ref = admin.app().database(url).ref('InternalDb/KBC/');
+  let courseURL;
+  await db_ref.orderByChild("passCode").equalTo(passCode).once("value",
+        function(snapshot) {
+          courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
+        },
+        function(errorObject) {
+          console.log("The read failed: " + errorObject.code);
+        },
+  );
+  return courseURL;
+}
+
 
 async function deleteAllMatchingKey(table, key, childKey) {
     const db_ref = admin.app().database(url).ref('InternalDb/'+table+'/');
@@ -59,7 +73,6 @@ async function deleteAllMatchingKey(table, key, childKey) {
       console.log(error);
     });
 }
-
 async function deleteCourseHelper(passCode, courseURL) {
     console.log("Starting remove from faculty list");
     removeCourseFromFacultyList(courseURL);
@@ -72,7 +85,6 @@ async function deleteCourseHelper(passCode, courseURL) {
     await deleteAllMatchingKey('Feedback', passCode, "passCode");
     await deleteAllMatchingKey('FeedbackResponse', passCode, "passCode");
 }
-
 function removeFromStudentList(courseKey) {
   const student = admin.app().database(url).ref('InternalDb/Student/');
   student.once("value", function(snapshot) {
@@ -95,7 +107,6 @@ function removeFromStudentList(courseKey) {
     console.log();
   });
 }
-
 function removeCourseFromFacultyList(courseKey) {
   const student = admin.app().database(url).ref('InternalDb/Faculty/');
   student.once("value", function(snapshot) {
@@ -118,7 +129,6 @@ function removeCourseFromFacultyList(courseKey) {
     console.log();
   });
 }
-
 function removeFromFacultyList(key) {
   const faculty = admin.app().database(url).ref('InternalDb/Faculty/'+key+'/courses');
   faculty.once("value", function(snapshot) {
@@ -132,20 +142,170 @@ function removeFromFacultyList(key) {
     console.log();
   });
 }
-
 function delCoursesOfFaculty(facultyKey) {
-  console.log("Called");
   removeFromFacultyList(facultyKey);
 }
-
 function deleteStudentHelper(studentID) {
   deleteAllMatchingKey("KBCResponse", studentID, "userID");
   deleteAllMatchingKey("FeedbackResponse", studentID, "userID");
 }
+function autoGrader(studentAnswer,correctAnswer,type){
+  if (!type === "numerical"){
+      studentAnswer = studentAnswer.replace(/,/g,"")
+      if(studentAnswer===correctAnswer)
+          return 1;
+      else
+          return 0;
+  }
+  else{
+      studentAnswer = studentAnswer.trim().toUpperCase().replace(/,/g,"")
+      correctAnswer = correctAnswer.trim().toUpperCase().replace(/,/g,"")
+                  
+      if(studentAnswer===correctAnswer)
+          return 1;
+      else if(!studentAnswer.search(correctAnswer)===-1)
+          return 1;
+      else
+          return 0;
+  }
+}
+async function getAllStudentsforMail(passCode, startTime, endTime){
 
-// del announcements
-// del student registerations ,faculty registrations
-// getting all announcements and deleting them
+  let myurl = null
+  console.log(passCode)
+  await admin.app().database(url)
+      .ref('InternalDb/Courses/')
+      .orderByChild('passCode')
+      .equalTo(passCode)
+      .once('value')
+      .then(snapshot => {myurl = Object.keys(snapshot.val())[0].replace(' ', '')})
+
+  let vlist = null
+  await admin.app().database(url)
+      .ref('InternalDb/Student/')
+      .once('value')
+      .then(snapshot => {
+          const list = []
+          snapshot.forEach( (data) => {
+              const keys = Object(data.val())
+              const x = data.key
+              if ("verified" in keys){
+                  const arr = data.val()["verified"]
+                  if (arr.includes(myurl)){
+                      list.push(x)
+                  }
+              }
+          })
+          vlist = list
+      })
+  
+  console.log("Collecting: 1")
+
+  let ans = null
+  let attempted = null
+
+  await admin.app().database(url).ref('InternalDb/KBCResponse/')
+      .orderByChild("passCode")
+      .equalTo(passCode)
+      .once('value')
+      .then(snapshot => {
+          const a = {}
+          const b = []
+          snapshot.forEach( (data) => {
+              const keys = Object(data.val())
+              const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
+              const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+              const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+
+              if (temp1<=temp2 && temp1>=temp){
+                  let answer = keys['answer'].trim().toUpperCase()
+                  let email = keys['userName']
+                  let ID = keys['userID']
+                  let name = keys['name']===undefined? "N/A": keys["name"]
+                  const val={"Name":name,"Email":email,"Answer":answer}
+                  if (vlist.includes(ID)){
+                  a[ID]=val
+                  b.push(ID)
+                  }
+              }
+          })
+          ans = a
+          attempted = b
+      })
+
+  console.log("Collecting: 2")
+
+  let final = null
+  await admin.app().database(url)
+      .ref('InternalDb/Student/')
+      .once('value')
+      .then(snapshot => {
+          const list = []
+          snapshot.forEach( (data) => {
+              const x = data.key
+              const keys = Object(data.val())
+              if (vlist.includes(x)){
+                  if (attempted.includes(x)){
+                      list.push(ans[x])
+                  }
+                  else
+                  {
+                      let name = keys['name']
+                      let email = keys['email']
+                      let answer = "N/A"
+                      const val={"Name":name,"Email":email,"Answer":answer}
+                      list.push(val)
+                  }
+
+              }
+          })
+          final = list
+      })
+
+  console.log("Collecting: 3")
+
+  return final
+}
+async function studentsResponseCsvMailer(list,answer,type,passCode,quizNumber,time,email){
+  
+  console.log("Grading: 0")
+  const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase().replace(/,/g,"");
+  max = answer==="*"?'N/A':1
+  const date = time.replace(/\//g,"-").split(" ")[0]
+  const fileName = passCode+"_"+date+"_"+"Quiz-"+quizNumber
+  await list.sort((a,b) =>a.Email > b.Email? 1: b.Email > a.Email? -1: 0);
+  const path = `${fileName}.csv`;
+  console.log("Grading: 1")
+  const aboutQuiz =  `${"QUIZ #"+quizNumber},${date},${"Correct Answer : "+correctAnswer},${"Max Score : "+max}\n\n`
+  const headerString = 'Student Name, Email, Response, Score\n';
+  const rowString = await list.map((student,i) =>`${student.Name},${student.Email},${student.Answer.replace(/,/g,"")},${answer === "*" ? 'N/A': autoGrader(student.Answer,correctAnswer,type)}\n`).join('');
+  const csvString = `${aboutQuiz}${headerString}${rowString}`;
+  console.log("Grading: 2")
+
+  try {
+    await transporter.sendMail(
+      {
+      from: "atlapp2021@gmail.com",
+      to: email,
+      subject: "Quiz Responses",
+      text: "Ola! Please check the attachment.",
+      html: "<b>PFA Quiz Responses</b>",
+       // here is the magic
+      attachments: [
+        {
+          filename: path,
+          content: csvString,
+        },
+      ],
+    },);
+    console.log("Grading: 3")
+    return "Mail sent"
+  } catch(error) {
+    functions.logger.error('There was an error while sending the email:',error);
+    return "Error"
+  }
+}
+
 exports.deleteCourse = functions.https.onCall(async (data, context) => {
   const passCode = data.passCode;
   console.log("Got passCode to delete "+ passCode);
@@ -245,23 +405,6 @@ exports.deleteFaculty = functions.https.onCall((data, context) => {
   });
 });
 
-// exports.courseNotification = functions.firestore
-//   .document('Course/{uid}')
-//   .onWrite(async (event) => {
-//     const title = event.after.get('title');
-//     const content = event.after.get('content');
-//     var message = {
-//       notification: {
-//         title: title,
-//         body: content,
-//       },
-//       topic: 'Course',
-//     };
-//     console.log(message);
-//     const response = await admin.messaging().send(message);
-//     console.log(response);
-//   });
-
 exports.quizNotification  = functions.database
   .ref('InternalDb/KBC/{qid}') // Put your path here with the params.
   .onWrite(async (change, context) => {
@@ -343,167 +486,22 @@ exports.announcementsNotification  = functions.database
     }
   });
 
-
-
-getAllStudentsforMail = async (passCode, startTime, endTime)=> {
-    let ans = null
-    await admin.app().database(url).ref("InternalDb/KBCResponse")
-        .orderByChild("passCode")
-        .equalTo(passCode)
-        .once('value')
-        .then(snapshot => {
-          console.log('starting to iterate');
-            const list = []
-            snapshot.forEach( (data) => {
-                const keys = Object(data.val())
-                const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
-
-                if (temp1<=temp2 && temp1>=temp){
-                    let answer = keys['answer'].trim().toUpperCase()
-                    let email = keys['userName']
-                    let name = keys['name']===undefined? "N/A": keys["name"]
-                    const val={"Name":name,"Email":email,"Answer":answer}
-                    list.push(val)
-                }
-            })
-            ans = list
-        })
-    return ans
-}
-
-getAllMcqResponse = async (passCode, startTime, endTime)=> {
-    let ans = null
-    await admin.app().database(url).ref("InternalDb/KBCResponse")
-        .orderByChild("passCode")
-        .equalTo(passCode)
-        .once('value')
-        .then(snapshot => {
-            const list = {'A':0,'B':0,'C':0,'D':0}
-            snapshot.forEach( (data) => {
-                const keys = Object(data.val())
-                const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
-
-                if (temp1<=temp2 && temp1>=temp){
-                    list[keys["answer"]] += 1
-                }
-            })
-            ans = list
-        })
-    return ans
-}
-
-getAllNumericalResponse = async (passCode, startTime, endTime)=> {
-    let ans = null
-    await admin.app().database(url).ref("InternalDb/KBCResponse")
-        .orderByChild("passCode")
-        .equalTo(passCode)
-        .once('value')
-        .then(snapshot => {
-            const dict = {}
-            console.log("here"); 
-            snapshot.forEach( (data) => {
-                const keys = Object(data.val())
-                const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
-
-                if (temp1<=temp2 && temp1>=temp){
-                    let answer = keys["answer"].trim().toUpperCase()
-                    console.log(answer)
-                    if(answer in dict){
-                        dict[answer]+=1
-                    }
-                    else{
-                        dict[answer] = 1
-                    }
-                }
-            })
-            ans = dict
-        })
-    return ans
-}
-function autoGrader(studentAnswer, correctAnswer){
-    studentAnswer = studentAnswer.replace(/,/g,"")
-    if(studentAnswer===correctAnswer)
-        return 1;
-    else
-        return 0;
-  }
-
-studentsResponseCsvMailer = async(list, answer,type,passCode,quizNumber,time)=>{
-  console.log('creating csv now')
-    const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase().replace(/,/g,"");
-    const date = time.replace(/\//g,"-").split(" ")[0]
-    const fileName = passCode+"_"+date+"_"+"Quiz-"+quizNumber
-
-    await list.sort((a,b) =>
-        a.Email > b.Email
-        ? 1
-        : b.Email > a.Email
-            ? -1
-            : 0
-    );
-
-    const reactFile = require('fs');
-    const path = `${fileName}.csv`;
-
-    const headerString = 'Student Name, EmailID, Response, Auto-grade Marks\n';
-
-    const aboutQuiz =  `"QUIZ",${"#"+quizNumber+"@"+date},${"Correct Ans- "+correctAnswer},${answer==="*"?'N/A':1}\n\n`
-
-    const rowString = await list.map((student,i) =>
-        `${student.Name},${student.Email},${student.Answer.replace(/,/g,"")},${answer === "*" 
-            ? 'N/A': autoGrader(student.Answer,correctAnswer)}\n`).join('');
-
-    const csvString = `${headerString}${aboutQuiz}${rowString}`;
-
-    console.log(transporter)
-    try {
-      await transporter.sendMail(
-        {
-        from: "atlapp2021@gmail.com",
-        to: "vishwesh18119@iiitd.ac.in",
-        subject: "Quiz Responses",
-        text: "Ola! Please check the attachment for a surprise 😊",
-        html: "<b>PFA Quiz Responses</b>",
-         // here is the magic
-        attachments: [
-          {
-            filename: path,
-            content: csvString,
-          },
-        ],
-      },);
-
-      return "Mail sent"
-    } catch(error) {
-      functions.logger.error(
-        'There was an error while sending the email:',
-        error
-      );
-      return "Error"
-    }
-
-exports.mailResponses = functions.https.onCall(async (data,context) => {
-  key = data.key
-  return admin.app().database(url).ref("InternalDb/KBC/"+key)
+exports.quizResponses = functions.https.onCall(async (data,context) => {
+  passCode = data.passCode
+  courseurl = await getKBCURLFromPasscode(passCode)
+  console.log('Mail Function Started')
+  return admin.app().database(url)
+    .ref("InternalDb/KBC/"+courseurl)
     .once('value')
     .then(snapshot => {
+      console.log(data.passCode)
       value = snapshot.val()
-      return getAllStudentsforMail(value['passCode'],value['startTime'],value['endTime']).then(
+      console.log("Collecting List")
+      return getAllStudentsforMail(passCode,value['startTime'],value['endTime']).then(
         data => {
-          console.log(data);
-          return studentsResponseCsvMailer(data,value['correctAnswer'],value['quizType'],value['passCode'],value['questionCount'],value['startTime'])
-        }
-        )
-      
-      }
-      )
-    .catch((error)=>{
-      console.log(error);
-    });
-})
+          console.log("List : Done")
+          return studentsResponseCsvMailer(data,value['correctAnswer'],value['quizType'],value['passCode'],value['questionCount'],value['startTime'],value['instructor'])
+        })
+      })
+    .catch((error)=>{console.log(error)})
+});

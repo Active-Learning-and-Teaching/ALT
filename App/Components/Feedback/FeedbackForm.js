@@ -19,19 +19,18 @@ export default class FeedbackForm extends Component {
             user: this.props.user,
             textInput : [],
             inputData : [],
-            date : null,
-            iosdate : moment(database().getServerTime()).format("DD/MM/YYYY"),
+            date : moment(database().getServerTime()).add(360, 'minutes').format("DD/MM/YYYY"),
+            time : moment(database().getServerTime()).add(360, 'minutes').format("HH:mm:ss"),
+            iosdate : moment(database().getServerTime()).add(360, 'minutes').format("DD/MM/YYYY"),
+            iostime : moment(database().getServerTime()).add(360, 'minutes').format("HH:mm:ss"),
             showDate : false,
             showTime : false,
-            time : null,
-            iostime : moment(database().getServerTime()).format("HH:mm:ss"),
             error : null,
             topics : [],
             duration : this.duration,
             kind : null,
         }
     }
-
 
     addTextInput = (index) => {
         let textInput = this.state.textInput;
@@ -73,12 +72,12 @@ export default class FeedbackForm extends Component {
                 error: "Please enter at least one topic."
             })
         }
-        else if(Platform.OS==='android'&& (this.state.date == null || this.state.time == null)){
+        // else if(Platform.OS==='android'&& (this.state.date == null || this.state.time == null)){
 
-            this.setState({
-                error: "Please schedule feedback."
-            })
-        }
+        //     this.setState({
+        //         error: "Please schedule feedback."
+        //     })
+        // }
         else {
             const feedback = new Feedback()
             let startTime = "0"
@@ -88,6 +87,10 @@ export default class FeedbackForm extends Component {
            else
                 startTime = this.state.iosdate + " " + this.state.iostime
 
+            startTime = moment(startTime, "DD/MM/YYYY HH:mm:ss")
+            .add(360, 'minutes')
+            .format("DD/MM/YYYY HH:mm:ss")
+            
             let endTime = moment(startTime, "DD/MM/YYYY HH:mm:ss")
                 .add(this.state.duration, 'minutes')
                 .format("DD/MM/YYYY HH:mm:ss")
@@ -182,7 +185,7 @@ export default class FeedbackForm extends Component {
             });
         }
     }
-
+    
     onChangeDate = (event, selectedDate) => {
         const currentDate = moment(selectedDate).format("DD/MM/YYYY")
         this.setState({
@@ -191,11 +194,10 @@ export default class FeedbackForm extends Component {
             showTime : false
         })
     }
-
-    onChangeTime = (event, selectedDate) => {
-        const currentDate = moment(selectedDate).format("HH:mm:ss")
+    onChangeTime = (event, selectedTime) => {
+        const currentTime = moment(selectedTime).format("HH:mm:ss")
         this.setState({
-            time : currentDate,
+            time : currentTime,
             showDate : false,
             showTime : false
         })
@@ -206,7 +208,6 @@ export default class FeedbackForm extends Component {
             iosdate : currentDate,
         })
     }
-
     iOSonChangeTime = (event, selectedDate) => {
         const currentDate = moment(selectedDate).format("HH:mm:ss")
         this.setState({
@@ -219,14 +220,12 @@ export default class FeedbackForm extends Component {
             showTime : false,
         })
     }
-
     showDatePicker = ()=>{
         this.setState({
             showDate : true,
             showTime : false
         })
     }
-
     showTimePicker = ()=>{
         this.setState({
             showDate : false,
