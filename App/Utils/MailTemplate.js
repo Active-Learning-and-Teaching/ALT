@@ -3,16 +3,18 @@ import React from 'react';
 export const emailTemplate=(courseName,name,date,topics,results,type)=>{
     console.log(type)
     console.log(topics)
-    avg_points = {}
-    for (value in results){
-        sum = 0
-        n = 0
-        for(let i = 1; i < 6; i++){ 
-            sum += results[value][i]*i
-            n += results[value][i]
-        }
-    avg = sum/n
-    avg_points[value]=avg}
+    if (type==="Feedback1"){
+        avg_points = {}
+        for (value in results){
+            sum = 0
+            n = 0
+            for(let i = 1; i < 6; i++){ 
+                sum += results[value][i]*i
+                n += results[value][i]
+            }
+        avg = sum/n
+        avg_points[value]=avg}
+    }
     return(
         type==="Feedback0"?
             `
@@ -35,7 +37,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
             <p>
                 Regards,
                 <br/>
-                Team TLS
+                Team ALT
                 <br/>
                 <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
                 
@@ -67,7 +69,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
             <p>
                 Regards,
                 <br/>
-                Team TLS
+                Team ALT
                 <br/>
                 <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
                 
@@ -97,7 +99,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
             <p>
                 Regards,
                 <br/>
-                Team TLS
+                Team ALT
                 <br/>
                 <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
                 
@@ -156,7 +158,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
             <p>
                 Regards,
                 <br/>
-                Team TLS
+                Team ALT
                 <br/>
                 <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
                 
@@ -186,7 +188,7 @@ export const emailTemplate=(courseName,name,date,topics,results,type)=>{
             <p>
                 Regards,
                 <br/>
-                Team TLS
+                Team ALT
                 <br/>
                 <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
                 
@@ -228,7 +230,7 @@ export const deleteCourseTemplate=(courseName,name,feedbackCount,quizCount,passC
             <p>
                 Regards,
                 <br/>
-                Team TLS
+                Team ALT
                 <br/>
                 <img src="https://i.ibb.co/ky4tJD8/Logo.png" alt="Logo" border="0" width="75px"/>
                 

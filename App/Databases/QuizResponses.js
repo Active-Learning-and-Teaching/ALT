@@ -65,32 +65,94 @@ class QuizResponses {
             })
     }
 
-    getAllStudentsforMail = async (passCode, startTime, endTime)=> {
-        let ans = null
-        await this.reference
-            .orderByChild("passCode")
-            .equalTo(passCode)
-            .once('value')
-            .then(snapshot => {
-                const list = []
-                snapshot.forEach( (data) => {
-                    const keys = Object(data.val())
-                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+    // getAllStudentsforMail = async (passCode, startTime, endTime)=> {
 
-                    if (temp1<=temp2 && temp1>=temp){
-                        let answer = keys['answer'].trim().toUpperCase()
-                        let email = keys['userName']
-                        let name = keys['name']===undefined? "N/A": keys["name"]
-                        const val={"Name":name,"Email":email,"Answer":answer}
-                        list.push(val)
-                    }
-                })
-                ans = list
-            })
-        return ans
-    }
+    //     let url = null
+    //     const db_ref = database().ref('InternalDb/Courses/');
+    //     await db_ref.orderByChild("passCode").equalTo(passCode).once("value",
+    //     function(snapshot) {url = Object.keys(snapshot.val())[0].replace(' ', '');},
+    //     function(errorObject) {console.log("The read failed: " + errorObject.code);},)
+
+    //     let vlist = null
+    //     await database()
+    //         .ref(config['internalDb'] + '/Student/')
+    //         .once('value')
+    //         .then(snapshot => {
+    //             const list = []
+    //             snapshot.forEach( (data) => {
+    //                 const keys = Object(data.val())
+    //                 const x = data.key
+    //                 if ("verified" in keys){
+    //                     const arr = data.val()["verified"]
+    //                     if (arr.includes(url)){
+    //                         list.push(x)
+    //                     }
+    //                 }
+    //             })
+    //             vlist = list
+    //         })
+        
+    //     let ans = null
+    //     let attempted = null
+
+    //     await this.reference
+    //         .orderByChild("passCode")
+    //         .equalTo(passCode)
+    //         .once('value')
+    //         .then(snapshot => {
+    //             const a = {}
+    //             const b = []
+    //             snapshot.forEach( (data) => {
+    //                 const keys = Object(data.val())
+    //                 const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
+    //                 const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+    //                 const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+
+    //                 if (temp1<=temp2 && temp1>=temp){
+    //                     let answer = keys['answer'].trim().toUpperCase()
+    //                     let email = keys['userName']
+    //                     let ID = keys['userID']
+    //                     let name = keys['name']===undefined? "N/A": keys["name"]
+    //                     const val={"Name":name,"Email":email,"Answer":answer}
+    //                     if (vlist.includes(ID)){
+    //                     a[ID]=val
+    //                     b.push(ID)
+    //                     }
+    //                 }
+    //             })
+    //             ans = a
+    //             attempted = b
+    //         })
+
+    //     let final = null
+    //     await database()
+    //         .ref(config['internalDb'] + '/Student/')
+    //         .once('value')
+    //         .then(snapshot => {
+    //             const list = []
+    //             snapshot.forEach( (data) => {
+    //                 const x = data.key
+    //                 const keys = Object(data.val())
+    //                 if (vlist.includes(x)){
+    //                     if (attempted.includes(x)){
+    //                         list.push(ans[x])
+    //                     }
+    //                     else
+    //                     {
+    //                         let name = keys['name']
+    //                         let email = keys['email']
+    //                         let answer = "N/A"
+    //                         const val={"Name":name,"Email":email,"Answer":answer}
+    //                         list.push(val)
+    //                     }
+
+    //                 }
+    //             })
+    //             final = list
+    //         })
+    
+    //     return final
+    // }
 
     getAllMcqResponse = async (passCode, startTime, endTime)=> {
         let ans = null
@@ -130,7 +192,7 @@ class QuizResponses {
                     const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
 
                     if (temp1<=temp2 && temp1>=temp){
-                        let answer = keys["answer"].trim().toUpperCase()
+                        let answer = keys["answer"].trim().toUpperCase().replace(/,/g,"")
                         console.log(answer)
                         if(answer in dict){
                             dict[answer]+=1

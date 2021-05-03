@@ -37,7 +37,6 @@ export default class StudentList extends Component{
 
                 snapshot.forEach( (data) => {
                     const keys = Object(data.val())
-
                     if ("courses" in keys){
                         const arr = data.val()["courses"]
                         if (arr.includes(this.state.courseURL)){
@@ -78,13 +77,12 @@ export default class StudentList extends Component{
             })
     }
 
-
     componentDidMount() {
         this.getCourseURL().then(()=>{
             this.getStudents()
         })
-
     }
+
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>

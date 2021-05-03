@@ -142,20 +142,20 @@ class Faculty {
 
     //@Vishwesh
     deleteCourse = async (passCode) => {
+            // await this.getCourseFaculty().then(
+            //     value => {
+            //         if (value.includes(courseUrl)){
+            //             const index = value.indexOf(courseUrl);
+            //             value.splice(index, 1);
+            //             this.setCourseFaculty(value)
+            //         }
+            //     }
+            // )
             console.log('triggering delete for passCode:' + passCode)
             const { data } = firebase.functions().httpsCallable('deleteCourse')({
               passCode:passCode,
             }).catch(function(error) {
             console.log('There has been a problem with your delete Course operation: ' + error);})
-        // await this.getCourseFaculty().then(
-        //     value => {
-        //         if (value.includes(courseUrl)){
-        //             const index = value.indexOf(courseUrl);
-        //             value.splice(index, 1);
-        //             this.setCourseFaculty(value)
-        //         }
-        //     }
-        // )
     }
 
 
