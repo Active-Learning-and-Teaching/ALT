@@ -5,7 +5,6 @@ import {Button} from 'react-native-elements';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import Faculty from '../../Databases/Faculty';
 import database from '@react-native-firebase/database';
-import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
 import CourseCard from './CourseCard';
 import {CommonActions} from '@react-navigation/native';
@@ -110,7 +109,7 @@ export default class FacultyDashBoard extends Component {
 
     getAllCourses = ()=>{
         database()
-            .ref(config['internalDb']+'/Faculty/'+this.state.currentUser.url)
+            .ref('InternalDb/Faculty/'+this.state.currentUser.url)
             .on('value', snapshot => {
                 if (snapshot.val()){
                     const keys = Object(snapshot.val());

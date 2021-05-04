@@ -1,5 +1,4 @@
 import database from '@react-native-firebase/database';
-import * as config from '../config';
 import moment from 'moment';
 
 class FeedbackResponses {
@@ -14,7 +13,7 @@ class FeedbackResponses {
     }
 
 
-    reference = database().ref(config['internalDb']+'/FeedbackResponse/')
+    reference = database().ref('InternalDb/FeedbackResponse/')
 
     getFeedbackResponse  = async (userID, passCode)=> {
         let ans = null
@@ -57,7 +56,7 @@ class FeedbackResponses {
 
     setFeedbackResponse = async (passCode, userID, userName, responses, timestamp, url) =>{
         await database()
-            .ref(config['internalDb']+'/FeedbackResponse/'+url)
+            .ref('InternalDb/FeedbackResponse/'+url)
             .set({
                 passCode: passCode,
                 userID: userID,

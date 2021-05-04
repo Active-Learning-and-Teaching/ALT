@@ -6,7 +6,6 @@ import Dimensions from '../../Utils/Dimensions';
 import {Avatar} from 'react-native-elements';
 import {CoursePics} from '../../Utils/CoursePics';
 import database from '@react-native-firebase/database';
-import * as config from '../../config.json';
 import AnnouncementCard from './AnnouncementCard';
 import moment from 'moment';
 
@@ -29,7 +28,7 @@ export default class  Announcement extends Component{
 
     getAnnouncements = () => {
         database()
-            .ref(config['internalDb']+'/Announcements/')
+            .ref('InternalDb/Announcements/')
             .orderByChild("passCode")
             .equalTo(this.state.course.passCode)
             .on('value', snapshot => {
