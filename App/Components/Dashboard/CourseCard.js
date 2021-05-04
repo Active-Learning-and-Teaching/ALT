@@ -5,12 +5,8 @@ import Dimensions from '../../Utils/Dimensions';
 import {CoursePics} from '../../Utils/CoursePics';
 import ActionSheet from 'react-native-actionsheet';
 import Courses from '../../Databases/Courses';
-import Announcement from '../../Databases/Announcement';
-import Feedback from '../../Databases/Feedback';
-import Quiz from '../../Databases/Quiz';
 import Toast from 'react-native-simple-toast';
-import Student from '../../Databases/Student';
-import {DeleteCourseMailer} from '../../Utils/DeleteCourseMailer';
+import {firebase} from '@react-native-firebase/functions';
 
 export default class  CourseCard extends Component{
     constructor() {
@@ -38,63 +34,11 @@ export default class  CourseCard extends Component{
         })
     }
 
-    emailCourseDetails = async (type)=>{
-        const announcement =  new Announcement()
-        const feedback =  new Feedback()
-        const quiz = new Quiz()
-        const student = new Student()
-        const passCode = this.state.course.passCode
-        announcement.getAllAnnouncement(passCode).then(ann=>{
-            feedback.getFeedbackDetails(passCode).then(feed=>{
-                quiz.getTiming(passCode).then(quiz=>{
-                    student.getAllStudents(passCode).then(async studentList=>{
-                        let announcements = ann===""?[]:ann;
-                        let courseName = this.state.course.courseName
-                        let courseCode = this.state.course.courseCode
-                        let feedbackCount = feed===null ? "0" : feed["feedbackCount"]
-                        let quizCount = quiz===null ? "0" : quiz["questionCount"]
-                        let students = studentList
-
-                        const reactFile = require('react-native-fs');
-
-                        const announcementFilePath = reactFile.DocumentDirectoryPath + `/${courseCode+"_"+"Announcement"}.csv`;
-                        const announcementHeadingString = 'Announcement Date, Announcement Heading, Announcement Description\n';
-                        const announcementRowString = await announcements.map((announcement,i) => `${announcement.date},${announcement.heading},${announcement.description}\n`).join('');
-                        const announcementString = `${announcementHeadingString}${announcementRowString}`;
-
-
-                        const studentFilePath = reactFile.DocumentDirectoryPath + `/${courseCode+"_"+"StudentList"}.csv`;
-                        const studentHeaderString = 'Student Name, EmailID\n';
-                        const studentRowString = await students.map((student,i) => `${student.name},${student.email}\n`).join('');
-                        const studentString = `${studentHeaderString}${studentRowString}`;
-
-                        await reactFile.writeFile(announcementFilePath, announcementString, 'utf8')
-                            .then(async (success) => {
-                                await reactFile.writeFile(studentFilePath, studentString, 'utf8')
-                                    .then((success)=>{
-                                        console.log("Files Written")
-                                        Toast.show('Sending Email...');
-                                        DeleteCourseMailer(
-                                            courseName,
-                                            courseCode,
-                                            this.props.user.email,
-                                            this.props.user.name,
-                                            feedbackCount,
-                                            quizCount,
-                                            passCode,
-                                            type
-                                        )
-                                    }).catch((err) => {
-                                        console.log(err.message);
-                                        });
-                            })
-                            .catch((err) => {
-                                console.log(err.message);
-                            });
-                    })
-                })
-            })
-        })
+    emailCourseDetails = async () => {
+        console.log('triggering mail for passCode:' + this.state.course.passCode)
+        Toast.show('Sending Email...');
+        const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:this.state.course.passCode, type:"Course"})
+        .catch(function(error) {console.log('There has been a problem with your mail operation: ' + error);})
     }
 
     showAlert() {
@@ -114,16 +58,14 @@ export default class  CourseCard extends Component{
                         //@Vishwesh
                         onPress: async () => {
                             const courses = new Courses()
-                            await this.props.user.deleteCourse(this.state.course.passCode)
-                                .then(r => console.log("Deleted Course"))
-                            // await courses.getCourse(this.state.course.passCode)
-                            //     .then(async value => {
-                            //         await this.props.user.deleteCourse(this.state.course.passCode)
-                            //             .then(r => console.log("Deleted Course"))
-                            //     })
-                            await this.emailCourseDetails("Delete").then(r=>
-                                Toast.show('Course Successfully Deleted')
+                            await this.emailCourseDetails().then(r=>
+                                Toast.show('Deleting Course...')
                             )
+                            await courses.getCourse(this.state.course.passCode)
+                                .then(async value => {
+                                    await this.props.user.deleteCourse(this.state.course.passCode,value)
+                                        .then(r => console.log("Deleted Course"))
+                                })
                         }
                     },
                 ]
@@ -203,7 +145,7 @@ export default class  CourseCard extends Component{
                     onPress={index => {
                         if(this.props.type==="faculty"){
                             if(index===0) {
-                                this.emailCourseDetails("Details").then(r=>
+                                this.emailCourseDetails().then(r=>
                                     console.log(r)
                                 )
                             }
