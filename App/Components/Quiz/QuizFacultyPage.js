@@ -6,12 +6,12 @@ import moment from 'moment';
 import Options from './Options';
 import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
-import {Mailer} from '../../Utils/Mailer';
 import Toast from 'react-native-simple-toast';
 import SwitchSelector from "react-native-switch-selector";
 import Dimensions from '../../Utils/Dimensions';
 import database from "@react-native-firebase/database";
 import MultiCorrectOptions from './MultiCorrectOptions';
+import {firebase} from '@react-native-firebase/functions';
 
 export default class QuizFacultyPage extends Component{
     constructor(props) {
@@ -34,7 +34,7 @@ export default class QuizFacultyPage extends Component{
         };
         this.setOption = this.setOption.bind(this);
         this.quizresultData = this.quizresultData.bind(this);
-        this.studentsResponseCsvMailer = this.studentsResponseCsvMailer.bind(this);
+        this.QuizMailer = this.QuizMailer.bind(this);
     }
 
     quizresultData(resultData, quizNumber){
@@ -199,7 +199,6 @@ export default class QuizFacultyPage extends Component{
 
     dbUpdateCorrectAnswer = async () => {
         const option = this.state.option
-
         if (option === "" || option === "*") {
             this.setState({
                 error : "Please type Correct Answer"
@@ -233,65 +232,13 @@ export default class QuizFacultyPage extends Component{
         }
     }
 
-    autoGrader(studentAnswer, correctAnswer){
-        studentAnswer = studentAnswer.replace(/,/g,"")
-        if(studentAnswer===correctAnswer)
-            return 1;
-        else
-            return 0;
-    }
-
-    async studentsResponseCsvMailer(list, answer,type){
-        const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase().replace(/,/g,"");
-        const date = this.state.date.replace(/\//g,"-").split(" ")[0]
-        const quizNumber = this.state.quizNumber
-        const fileName = this.state.course.courseCode+"_"+date+"_"+"Quiz-"+quizNumber
-
-        await list.sort((a,b) =>
-            a.Email > b.Email
-            ? 1
-            : b.Email > a.Email
-                ? -1
-                : 0
-        );
-
-        const reactFile = require('react-native-fs');
-        const path = reactFile.DocumentDirectoryPath + `/${fileName}.csv`;
-
-        const headerString = 'Student Name, EmailID, Response, Auto-grade Marks\n';
-
-        const aboutQuiz =  `"QUIZ",${"#"+quizNumber+"@"+date},${"Correct Ans- "+correctAnswer},${answer==="*"?'N/A':1}\n\n`
-
-        const rowString = await list.map((student,i) =>
-            `${student.Name},${student.Email},${student.Answer.replace(/,/g,"")},${answer === "*" 
-                ? 'N/A': this.autoGrader(student.Answer,correctAnswer)}\n`).join('');
-
-        const csvString = `${headerString}${aboutQuiz}${rowString}`;
-
-        return await reactFile.writeFile(path, csvString, 'utf8')
-            .then(async (success) => {
-                console.log("File Written")
-                await Mailer(
-                    this.state.course.courseName,
-                    this.state.course.courseCode,
-                    this.state.course.quizEmail,
-                    this.state.user.name,
-                    quizNumber,
-                    this.state.date,
-                    "",
-                    this.state.results,
-                    type
-                )
-                Toast.show('Sending Email...');
-                await this.dbUpdateEmailStatus().then(() => {
-                        this.setState({
-                            emailStatus : false,
-                        })
-                })
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
+    async QuizMailer(){
+        console.log('triggering mail for passCode:' + this.state.course.passCode)
+        Toast.show('Sending Email...');
+        const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:this.state.course.passCode, type:"Quiz"})
+        .catch(function(error) {console.log('There has been a problem with your mail operation: ' + error);})
+        await this.dbUpdateEmailStatus().then(() => {this.setState({emailStatus : false,})})
+        console.log("Email Status Updated")
     }
 
     render(){
@@ -393,7 +340,7 @@ export default class QuizFacultyPage extends Component{
                                              quizType={this.props.quizType}
                                              emailStatus={this.state.emailStatus}
                                              quizresultData={this.quizresultData}
-                                             studentsResponseCsvMailer = {this.studentsResponseCsvMailer}
+                                             QuizMailer = {this.QuizMailer}
                             />
                             <View style={[
                                 styles.buttonContainer,

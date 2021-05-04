@@ -1,14 +1,7 @@
 import React, {Component} from 'react';
 import FeedbackForm from './FeedbackForm';
 import database from '@react-native-firebase/database';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
-  ActivityIndicator,
-} from 'react-native';
+import {SafeAreaView,ScrollView,StyleSheet,View,Text,ActivityIndicator,} from 'react-native';
 import Feedback from '../../Databases/Feedback';
 import CountDown from 'react-native-countdown-component';
 import {Button, ListItem} from 'react-native-elements';
@@ -16,8 +9,7 @@ import Dimensions from '../../Utils/Dimensions';
 import moment from 'moment';
 import FeedbackResultsList from './FeedbackResultsList';
 import Toast from 'react-native-simple-toast';
-import {Mailer} from '../../Utils/Mailer';
-
+import {firebase} from '@react-native-firebase/functions';
 export default class FeedbackFacultyPage extends Component {
   // TODO change duration at deployment
   duration = 5;
@@ -40,7 +32,7 @@ export default class FeedbackFacultyPage extends Component {
     this.setTopics = this.setTopics.bind(this);
     this.setKind = this.setKind.bind(this);
     this.feedbackresultData = this.feedbackresultData.bind(this);
-    this.studentsResponseMailer = this.studentsResponseMailer.bind(this);
+    this.FeedbackMailer = this.FeedbackMailer.bind(this);
   }
 
   feedbackresultData(resultData, feedbackNumber) {
@@ -185,20 +177,11 @@ export default class FeedbackFacultyPage extends Component {
     }
   };
 
-  async studentsResponseMailer() {
-    await Mailer(
-      this.state.course.courseName,
-      this.state.course.courseCode,
-      this.state.course.feedbackEmail,
-      this.state.user.name,
-      this.state.feedbackNumber,
-      this.state.date,
-      this.state.topics,
-      this.state.results,
-      'Feedback' + this.state.kind,
-    );
-
+  async FeedbackMailer() {
+    console.log('triggering mail for passCode:' + this.state.course.passCode)
     Toast.show('Sending Email...');
+    const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:this.state.course.passCode, type:"Feedback"})
+    .catch(function(error) {console.log('There has been a problem with your mail operation: ' + error);})
     await this.dbUpdateEmailStatus().then(() => {
       this.setState({
         emailStatus: false,
@@ -206,8 +189,8 @@ export default class FeedbackFacultyPage extends Component {
     });
   }
 
-  componentDidMount() {
-    this.checkEmailSent().then(r => {
+  load = async() => {
+    await this.checkEmailSent().then(r => {
       if (!(this.state.topics.length === 0)) {
         this.setState({
           resultPage: true,
@@ -215,6 +198,10 @@ export default class FeedbackFacultyPage extends Component {
       }
     });
 
+  }
+
+  componentDidMount() {
+    this.load()
     console.log(this.state.resultPage);
   }
 
@@ -241,7 +228,7 @@ export default class FeedbackFacultyPage extends Component {
                       date={this.state.date}
                       emailStatus={this.state.emailStatus}
                       feedbackresultData={this.feedbackresultData}
-                      studentsResponseMailer={this.studentsResponseMailer}
+                      FeedbackMailer={this.FeedbackMailer}
                     />
                   </View>
                   <View style={[styles.buttonRowContainer]}>

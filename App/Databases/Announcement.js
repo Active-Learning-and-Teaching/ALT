@@ -1,5 +1,4 @@
 import database from '@react-native-firebase/database';
-import * as config from '../config';
 import moment from 'moment';
 class Announcement {
 
@@ -42,7 +41,7 @@ class Announcement {
         return this.description
     }
 
-    reference = database().ref(config['internalDb']+'/Announcements/')
+    reference = database().ref('InternalDb/Announcements/')
 
     createAnnouncement =  async (passCode, heading, description, date) => {
         await this.reference
@@ -97,7 +96,7 @@ class Announcement {
     //@Vishwesh
     deleteAnnouncement = async (url)=>{
         await database()
-            .ref(config['internalDb']+'/Announcements/'+url)
+            .ref('InternalDb/Announcements/'+url)
             .set({})
             .then(()=>{
                 console.log("Announcement deleted")

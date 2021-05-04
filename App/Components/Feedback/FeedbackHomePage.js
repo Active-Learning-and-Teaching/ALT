@@ -3,7 +3,6 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import FeedbackStudentPage from './FeedbackStudentPage';
 import FeedbackFacultyPage from './FeedbackFacultyPage';
 import database from '@react-native-firebase/database';
-import * as config from '../../config.json';
 import moment from 'moment';
 
 export default class FeedbackHomePage extends Component{
@@ -32,7 +31,7 @@ export default class FeedbackHomePage extends Component{
 
     isCurrentFeedback = ()=>{
         database()
-            .ref(config['internalDb']+'/Feedback/')
+            .ref('InternalDb/Feedback/')
             .orderByChild('passCode')
             .equalTo(this.state.course.passCode)
             .on('value', snapshot => {
