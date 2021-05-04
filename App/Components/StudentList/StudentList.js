@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import database from '@react-native-firebase/database';
-import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
 import StudentCard from './StudentCard';
 
@@ -30,7 +29,7 @@ export default class StudentList extends Component{
 
     getStudents = () => {
         database()
-            .ref(config['internalDb'] + '/Student/')
+            .ref('InternalDb/Student/')
             .orderByChild("courses")
             .on('value', snapshot => {
                 const list = []

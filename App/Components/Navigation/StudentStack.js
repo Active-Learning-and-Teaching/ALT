@@ -4,7 +4,7 @@ import StudentList from '../StudentList/StudentList';
 import {Icon} from 'react-native-elements';
 import {Alert, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {Mailer} from '../../Utils/Mailer';
+import {firebase} from '@react-native-firebase/functions';
 const Stack = createStackNavigator();
 
 export default class StudentStack extends Component {
@@ -39,33 +39,10 @@ export default class StudentStack extends Component {
                 {
                     text: 'OK',
                     onPress: () => {
-                        const reactFile = require('react-native-fs');
-                        const path = reactFile.DocumentDirectoryPath + `/${this.state.course.courseName}.csv`;
-                        const values = this.state.studentList;
-
-                        const headerString = 'Student Name, EmailID\n';
-                        const rowString = values.map((student,i) => `${student.name},${student.email}\n`).join('');
-                        const csvString = `${headerString}${rowString}`;
-
-                        reactFile.writeFile(path, csvString, 'utf8')
-                            .then((success) => {
-                                console.log("File Written")
-                                Toast.show('Sending Email...');
-                                Mailer(
-                                    this.state.course.courseName,
-                                    this.state.course.courseCode,
-                                    this.state.user.email,
-                                    this.state.user.name,
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "StudentList"
-                                )
-                            })
-                            .catch((err) => {
-                                console.log(err.message);
-                            });
+                        console.log('triggering mail for passCode:' + this.state.course.passCode)
+                        Toast.show('Sending Email...');
+                        const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:this.state.course.passCode, type:"StudentList"})
+                        .catch(function(error) {console.log('There has been a problem with your mail operation: ' + error);})
                     }
                 },
             ]

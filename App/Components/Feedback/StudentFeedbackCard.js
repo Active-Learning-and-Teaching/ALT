@@ -16,7 +16,8 @@ export default class StudentFeedbackCard extends Component{
             items.push(
                 <View>
                 <Text style={styles.active}>{i}</Text>
-                <Text style={styles.line}>|                         </Text>
+                <Text style={styles.line}>|</Text>
+                <Text style={styles.space}> </Text>
                 </View>
             );
         }
@@ -142,6 +143,10 @@ const styles = StyleSheet.create({
         fontSize:10,
         textAlign: 'center',
         color:'#333',
+    },
+    space:{
+        paddingLeft:Dimensions.window.width/6,
+        paddingRight:0,
     },
     selector:{
         flex: 1,

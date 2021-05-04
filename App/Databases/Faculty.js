@@ -1,5 +1,4 @@
 import database from '@react-native-firebase/database';
-import * as config from '../config';
 import {firebase} from '@react-native-firebase/functions'
 
 class Faculty {
@@ -36,23 +35,7 @@ class Faculty {
         return this.url
     }
 
-    reference = database().ref(config['internalDb']+'/Faculty/')
-
-    //Checking if user is faculty
-    checkFaculty = async (email)=> {
-        let ans = false
-        await database()
-            .ref(config['sheetFaculty'])
-            .orderByChild("Email")
-            .equalTo(email)
-            .once("value")
-            .then(snapshot => {
-                if (snapshot.val()){
-                    ans = true
-                }
-            })
-        return ans
-    }
+    reference = database().ref('InternalDb/Faculty/')
 
     //Login
     getUser  = async (email)=> {
@@ -105,7 +88,7 @@ class Faculty {
     getCourseFaculty = async () =>{
         let ans = []
         await database()
-            .ref(config['internalDb']+'/Faculty/'+this.url)
+            .ref('InternalDb/Faculty/'+this.url)
             .once('value')
             .then(snapshot => {
                 if (snapshot.val()){
@@ -119,7 +102,7 @@ class Faculty {
 
     setCourseFaculty = async (courses) =>{
         await database()
-            .ref(config['internalDb']+'/Faculty/'+this.url)
+            .ref('InternalDb/Faculty/'+this.url)
             .set({
                 name : this.getName(),
                 email : this.getEmail(),
@@ -141,16 +124,17 @@ class Faculty {
     }
 
     //@Vishwesh
-    deleteCourse = async (passCode) => {
-            // await this.getCourseFaculty().then(
-            //     value => {
-            //         if (value.includes(courseUrl)){
-            //             const index = value.indexOf(courseUrl);
-            //             value.splice(index, 1);
-            //             this.setCourseFaculty(value)
-            //         }
-            //     }
-            // )
+    deleteCourse = async (passCode,courseUrl) => {
+            await this.getCourseFaculty().then(
+                value => {
+                    if (value.includes(courseUrl)){
+                        const index = value.indexOf(courseUrl);
+                        value.splice(index, 1);
+                        this.setCourseFaculty(value)
+                    }
+                }
+            )
+            console.log(">>")
             console.log('triggering delete for passCode:' + passCode)
             const { data } = firebase.functions().httpsCallable('deleteCourse')({
               passCode:passCode,

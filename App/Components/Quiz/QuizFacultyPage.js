@@ -235,11 +235,10 @@ export default class QuizFacultyPage extends Component{
     async QuizMailer(){
         console.log('triggering mail for passCode:' + this.state.course.passCode)
         Toast.show('Sending Email...');
-        const { data } = firebase.functions().httpsCallable('quizResponses')({passCode:this.state.course.passCode})
+        const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:this.state.course.passCode, type:"Quiz"})
         .catch(function(error) {console.log('There has been a problem with your mail operation: ' + error);})
         await this.dbUpdateEmailStatus().then(() => {this.setState({emailStatus : false,})})
         console.log("Email Status Updated")
-        Toast.show('Email Sent!')
     }
 
     render(){

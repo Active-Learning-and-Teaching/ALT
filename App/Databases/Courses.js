@@ -1,5 +1,4 @@
 import database from '@react-native-firebase/database';
-import * as config from '../config';
 
 class Courses {
   courseName: string;
@@ -57,7 +56,7 @@ class Courses {
     this.instructor = faculty.getName();
   }
 
-  reference = database().ref(config['internalDb'] + '/Courses/');
+  reference = database().ref('InternalDb/Courses/');
 
   getCourse = async passCode => {
     let ans = '';
@@ -95,7 +94,7 @@ class Courses {
   getCourseByUrl = async courseUrl => {
     let ans = {};
     await database()
-      .ref(config['internalDb'] + '/Courses/' + courseUrl)
+      .ref('InternalDb/Courses/' + courseUrl)
       .once('value')
       .then(snapshot => {
         if (snapshot.val()) ans = snapshot.val();
@@ -117,7 +116,7 @@ class Courses {
     url,
   ) => {
     await database()
-      .ref(config['internalDb'] + '/Courses/' + url)
+      .ref('InternalDb/Courses/' + url)
       .set({
         courseName: courseName,
         courseCode: courseCode,
