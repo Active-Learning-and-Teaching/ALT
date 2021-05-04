@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
-import {StyleSheet,View,Alert, ScrollView, SafeAreaView,} from 'react-native';
+import {StyleSheet, View, Alert, ScrollView, SafeAreaView} from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import CourseCard from './CourseCard';
 import Student from '../../Databases/Student';
+import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
 import {firebase} from '@react-native-firebase/functions';
 import {CommonActions} from '@react-navigation/native';
@@ -34,7 +35,21 @@ export default class StudentDashBoard extends Component {
     });
   };
 
+  unSubscribe_Notifications = () => {
+    for (let i = 0; i < this.state.courseList.length; i++) {
+      messaging()
+        .unsubscribeFromTopic(this.state.courseList[i].passCode)
+        .then(() =>
+          console.log(
+            `Unsubscribed to topic! ${this.state.courseList[i].passCode}`,
+          ),
+        );
+    }
+  };
+
   deleteAccount = async (url, uid) => {
+    //Unsubscribing to notification and then calling the delete end point of the Cloud Function.
+    this.unSubscribe_Notifications();
     const {data} = firebase
       .functions()
       .httpsCallable('deleteStudent')({
@@ -82,6 +97,8 @@ export default class StudentDashBoard extends Component {
   }
 
   signOut = async () => {
+    // Unsubcribing to notifications before signout
+    this.unSubscribe_Notifications();
     auth()
       .signOut()
       .then(async r => {
@@ -106,7 +123,7 @@ export default class StudentDashBoard extends Component {
 
   getAllCourses = () => {
     database()
-      .ref('InternalDb/Student/' + this.state.currentUser.url)
+      .ref(config['internalDb'] + '/Student/' + this.state.currentUser.url)
       .on('value', snapshot => {
         if (snapshot.val()) {
           const keys = Object(snapshot.val());
@@ -122,10 +139,11 @@ export default class StudentDashBoard extends Component {
             for (var i = 0; i < arr.length; i++) {
               course.getCourseByUrl(arr[i]).then(r => {
                 courses.push(r);
-                console.log(r.passCode);
                 messaging()
                   .subscribeToTopic(r.passCode)
-                  .then(() => console.log('Subscribed to topic!'));
+                  .then(() =>
+                    console.log(`Subscribed to topic! ${r.passCode}`),
+                  );
 
                 this.setState({
                   courseList: courses,
@@ -149,75 +167,85 @@ export default class StudentDashBoard extends Component {
     });
     console.log('Student Dashboard');
   }
-    render(){
-        return(
+  render() {
+    return (
+      <SafeAreaView style={styles.safeContainer}>
+        <ScrollView>
+          <View style={styles.grid}>
+            {this.state.courseList.map((item, i) => (
+              <CourseCard
+                course={item}
+                type={'student'}
+                user={this.state.currentUser}
+                navigation={this.props.navigation}
+                key={i}
+              />
+            ))}
+          </View>
 
-            <SafeAreaView style={styles.safeContainer}>
-                <ScrollView>
-
-                    <View style={styles.grid}>
-                        {this.state.courseList.map((item,i)=> (
-                            <CourseCard
-                                course = {item}
-                                type = {"student"}
-                                user = {this.state.currentUser}
-                                navigation ={this.props.navigation}
-                                key={i}
-                            />
-                        ))}
-                    </View>
-
-                    <Button buttonStyle={styles.signout} titleStyle={{color:'white',fontWeight:'normal'}} title="Sign Out" onPress={this.signOut} />
-                    <Button buttonStyle={styles.account} titleStyle={{color:'white',fontWeight:'normal'}} title="Delete Account" onPress={()=>{this.showAlert()}} />
-                </ScrollView>
-            </SafeAreaView>
-        );
-    }
+          <Button
+            buttonStyle={styles.signout}
+            titleStyle={{color: 'white', fontWeight: 'normal'}}
+            title="Sign Out"
+            onPress={this.signOut}
+          />
+          <Button
+            buttonStyle={styles.account}
+            titleStyle={{color: 'white', fontWeight: 'normal'}}
+            title="Delete Account"
+            onPress={() => {
+              this.showAlert();
+            }}
+          />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    safeContainer: {
-        flex: 1,
-        backgroundColor: 'transparent',
-    },
-    grid: {
-        marginTop: 10,
-        marginBottom: 10,
-        paddingTop : 10,
-        paddingBottom : 10,
-        alignItems: 'center',
-    },
-    textStyle: {
-        fontSize: 15,
-        marginBottom: 20
-    },
-    buttonMessage: {
-        paddingTop : 10,
-        marginTop: 15
-    },
-    mybutton:{
-        backgroundColor: 'tomato', 
-        borderColor : 'black',
-        borderRadius:20,
-        marginTop:30,
-        marginBottom:30
-    },
-    signout:{
-        backgroundColor: 'tomato', 
-        borderColor : 'black',
-        borderRadius:20,
-        marginTop:20,
-        marginBottom:20,
-        marginLeft:100,
-        marginRight:100
-    },
-    account:{
-        backgroundColor: '#333', 
-        borderColor : 'black',
-        borderRadius:20,
-        marginTop:30,
-        marginBottom:20,
-        marginLeft:100,
-        marginRight:100
-    },
+  safeContainer: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  grid: {
+    marginTop: 10,
+    marginBottom: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    alignItems: 'center',
+  },
+  textStyle: {
+    fontSize: 15,
+    marginBottom: 20,
+  },
+  buttonMessage: {
+    paddingTop: 10,
+    marginTop: 15,
+  },
+  mybutton: {
+    backgroundColor: 'tomato',
+    borderColor: 'black',
+    borderRadius: 20,
+    marginTop: 30,
+    marginBottom: 30,
+  },
+  signout: {
+    backgroundColor: 'tomato',
+    borderColor: 'black',
+    borderRadius: 20,
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 100,
+    marginRight: 100,
+  },
+  account: {
+    backgroundColor: '#333',
+    borderColor: 'black',
+    borderRadius: 20,
+    marginTop: 30,
+    marginBottom: 20,
+    marginLeft: 100,
+    marginRight: 100,
+  },
 });
