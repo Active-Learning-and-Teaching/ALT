@@ -17,11 +17,14 @@ const functions = require('firebase-functions');
 const nodemailer = require("nodemailer");
 const moment = require('moment')
 const url = 'https://testfortls.firebaseio.com/';
+
+// ADD CREDENTIALS BEFORE DEPLOYING
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   auth: {
     user: "atlapp2021@gmail.com",
-    pass: "Teaching2021!!",
+    pass: "",
   },
 });
 
