@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import moment from 'moment';
 import database from '@react-native-firebase/database';
-import * as config from '../../config.json';
 import QuizFacultyPage from './QuizFacultyPage';
 import QuizStudentPage from './QuizStudentPage';
 
@@ -29,7 +28,7 @@ export default class QuizHomePage extends Component{
 
     ifCurrentQuiz = ()=>{
         database()
-            .ref(config['internalDb']+'/KBC/')
+            .ref('InternalDb/KBC/')
             .orderByChild('passCode')
             .equalTo(this.state.course.passCode)
             .on('value', snapshot => {

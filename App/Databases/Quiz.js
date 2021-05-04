@@ -1,5 +1,4 @@
 import database from '@react-native-firebase/database';
-import * as config from '../config';
 
 class Quiz {
 
@@ -15,7 +14,7 @@ class Quiz {
     }
 
 
-    reference = database().ref(config['internalDb']+'/KBC/')
+    reference = database().ref('InternalDb/KBC/')
 
     getQuestion  = async (passCode)=> {
         let ans = null
@@ -49,7 +48,7 @@ class Quiz {
 
     setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, instructor, quizType, url, emailResponse,questionCount) =>{
         await database()
-            .ref(config['internalDb']+'/KBC/'+url)
+            .ref('InternalDb/KBC/'+url)
             .set({
                 passCode: passCode,
                 startTime: startTime,

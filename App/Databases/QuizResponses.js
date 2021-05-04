@@ -1,5 +1,4 @@
 import database from '@react-native-firebase/database';
-import * as config from '../config';
 import moment from 'moment';
 
 class QuizResponses {
@@ -14,7 +13,7 @@ class QuizResponses {
     }
 
 
-    reference = database().ref(config['internalDb']+'/KBCResponse/')
+    reference = database().ref('InternalDb/KBCResponse/')
 
     getResponse  = async (userID, passCode)=> {
         let ans = null
@@ -33,7 +32,7 @@ class QuizResponses {
 
     setResponse = async (passCode, userID, userName, answer, timestamp, name, url) =>{
         await database()
-            .ref(config['internalDb']+'/KBCResponse/'+url)
+            .ref('InternalDb/KBCResponse/'+url)
             .set({
                 passCode: passCode,
                 userID: userID,
@@ -75,7 +74,7 @@ class QuizResponses {
 
     //     let vlist = null
     //     await database()
-    //         .ref(config['internalDb'] + '/Student/')
+    //         .ref('InternalDb/Student/')
     //         .once('value')
     //         .then(snapshot => {
     //             const list = []
@@ -126,7 +125,7 @@ class QuizResponses {
 
     //     let final = null
     //     await database()
-    //         .ref(config['internalDb'] + '/Student/')
+    //         .ref('InternalDb/Student/')
     //         .once('value')
     //         .then(snapshot => {
     //             const list = []

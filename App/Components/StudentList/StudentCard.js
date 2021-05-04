@@ -8,7 +8,6 @@ import Toast from 'react-native-simple-toast';
 import Student from '../../Databases/Student';
 import CheckBox from '@react-native-community/checkbox';
 import database from '@react-native-firebase/database';
-import * as config from '../../config';
 
 export default class StudentCard extends Component{
     constructor(props) {
@@ -52,7 +51,7 @@ export default class StudentCard extends Component{
         let ans = []
         let url = ''
         await database()
-            .ref(config['internalDb']+'/Student/')
+            .ref('InternalDb/Student/')
             .equalTo(email)
             .once('value')
             .then(snapshot => {
@@ -64,7 +63,7 @@ export default class StudentCard extends Component{
             })
 
         await database()
-            .ref(config['internalDb']+'/Student/')
+            .ref('InternalDb/Student/')
             .orderByChild("email")
             .equalTo(email)
             .once('value')
@@ -78,7 +77,7 @@ export default class StudentCard extends Component{
         if (!ans.includes(courseUrl)){
             ans.push(courseUrl)
             await database()
-                .ref(config['internalDb']+'/Student/'+url)
+                .ref('InternalDb/Student/'+url)
                 .update({verified : ans})
                 .then(()=>{console.log("Student Verified")})
         }
@@ -89,7 +88,7 @@ export default class StudentCard extends Component{
         let ans = []
         let abc = []
         await database()
-            .ref(config['internalDb']+'/Student/')
+            .ref('InternalDb/Student/')
             .equalTo(email)
             .once('value')
             .then(snapshot => {
@@ -105,7 +104,7 @@ export default class StudentCard extends Component{
             }}
         
         await database()
-            .ref(config['internalDb']+'/Student/')
+            .ref('InternalDb/Student/')
             .orderByChild("email")
             .equalTo(email)
             .once('value')
@@ -117,7 +116,7 @@ export default class StudentCard extends Component{
             })
 
         await database()
-            .ref(config['internalDb']+'/Student/'+url)
+            .ref('InternalDb/Student/'+url)
             .update({verified : abc})
             .then(()=>{console.log("Student Cancelled")})
     }
