@@ -5,7 +5,6 @@ import {StyleSheet, View, Alert, ScrollView, SafeAreaView} from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import CourseCard from './CourseCard';
 import Student from '../../Databases/Student';
-import * as config from '../../config.json';
 import Courses from '../../Databases/Courses';
 import {firebase} from '@react-native-firebase/functions';
 import {CommonActions} from '@react-navigation/native';
@@ -123,7 +122,7 @@ export default class StudentDashBoard extends Component {
 
   getAllCourses = () => {
     database()
-      .ref(config['internalDb'] + '/Student/' + this.state.currentUser.url)
+      .ref('InternalDb/Student/' + this.state.currentUser.url)
       .on('value', snapshot => {
         if (snapshot.val()) {
           const keys = Object(snapshot.val());
