@@ -86,10 +86,6 @@ export default class FeedbackForm extends Component {
                 startTime = this.state.date + " " + this.state.time
            else
                 startTime = this.state.iosdate + " " + this.state.iostime
-
-            startTime = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-            .add(360, 'minutes')
-            .format("DD/MM/YYYY HH:mm:ss")
             
             let endTime = moment(startTime, "DD/MM/YYYY HH:mm:ss")
                 .add(this.state.duration, 'minutes')
