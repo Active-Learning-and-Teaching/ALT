@@ -966,9 +966,10 @@ exports.feedbackNotification  = functions.database.ref('InternalDb/Feedback/{id}
       const {after} = change;
       const {_data} = after;
       const courseName = await getCourseNameFromPasscode(_data.passCode)
-
       console.log('Feedback Notification executing');
-      var str1 = _data.startTime;
+      var str1 = _data.startTime.substring(0,10);
+      var str2 = _data.startTime.substring(10,_data.startTime.length);
+      console.log(str2);
 
       str1 = str1.replace('/', '-');
       str1 = str1.replace('/', '-');
@@ -977,12 +978,19 @@ exports.feedbackNotification  = functions.database.ref('InternalDb/Feedback/{id}
         .split('-')
         .reverse()
         .join('-');
-      console.log(newdate);
+      newdate = newdate.concat(str2)
       var t = new Date(newdate);
-      console.log(t);
-      console.log(new Date().toString().split('GMT')[0] + ' UTC');
+      console.log(`The new date is ${t}`);
+      var clientTime = (t.getTime()-330*60*1000)/1000
+      console.log(`The call date in UTC seconds ${clientTime}`);
+      var server  = new Date();
+      console.log(`The server date is ${server}`);
+      console.log(`The server date in UTC seconds ${server.getTime()/1000}`)
+      //console.log(new Date().toString().split('GMT')[0] + ' UTC');
+      serverTime = server.getTime()/1000;
 
-      if (!_data.emailResponse && _data.startTime != '') {
+      if (serverTime > clientTime && !_data.emailResponse && _data.startTime != '') {
+        console.log('Sending Notif');
         const Noitfier = {
           notification: {
             title: 'FeedBack',
