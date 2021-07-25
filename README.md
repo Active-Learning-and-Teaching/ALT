@@ -29,7 +29,6 @@ An open-source mobile application to facilitate teaching and learning in courses
 │   └── patches
 ├── Architecture.jpeg
 ├── README.md
-└── SRS.MD
 ```
 
 ## Setup 📥
@@ -61,7 +60,3 @@ pod install
 
 ## Release ⬇️
 You can install the latest stable version of the app from Releases. The Android app is available as APK and iOS app is available through TestFlight.
-
-## Team ⭐
-
-``` Anuneet Anand | Divyam Gupta | Vishwesh Kumar | Yashdeep Prasad ```
