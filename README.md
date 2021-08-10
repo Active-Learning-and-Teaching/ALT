@@ -57,9 +57,14 @@ pod install
 ## Build ⚙️
 
 ### iOS   
-`react-native run-ios`  
+`react-native run-ios` 
+or 
+`npx react-native run-ios`
+
 ### Android       
 `react-native run-android`
+or 
+`npx react-native run-ios`
 
 ## Release ⬇️
 You can install the latest stable version of the app from Releases. The Android app is available as APK and iOS app is available through TestFlight.
