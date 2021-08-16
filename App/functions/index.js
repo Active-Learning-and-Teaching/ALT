@@ -705,21 +705,20 @@ async function CourseMailer(list,passCode,email,announcements,qc,fc){
 }
 async function deleteAllMatchingKey(table, key, childKey) {
     const db_ref = admin.app().database(url).ref('InternalDb/'+table+'/');
-    db_ref.orderByChild(childKey).equalTo(key).once("value", function(snapshot) {
-      console.log('starting to remove from table '+table);
-      snapshot.forEach(function(child) {
-        console.log(child.key);
-        child.ref.remove().then(()=>{
-          console.log();
-        });
-      });
-    }, function(errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    }).then(()=>{
-      console.log("Done");
-    }).catch((error)=>{
-      console.log(error);
-    });
+    return db_ref.orderByChild(childKey).equalTo(key).once("value")
+      .then((snapshots) => {
+        console.log('starting to remove from table '+table);
+        let childrenToRemove = []
+        snapshots.forEach((child) => {
+          console.log(child.key)
+          childrenToRemove.push(child.ref.remove())
+        })
+        return Promise.all(childrenToRemove)
+      }).then(() => {
+        console.log("Done")
+      }).catch(errorObject => {
+        console.log(errorObject)
+      })
 }
 async function deleteCourseHelper(passCode, courseURL) {
     console.log("Starting remove from faculty list");
