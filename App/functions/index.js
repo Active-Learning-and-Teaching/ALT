@@ -795,18 +795,20 @@ function delCoursesOfFaculty(facultyKey) {
 
 async function removeStudentFromCourses(studentID){
   const db = admin.app().database(url)
-  snapshots = await db.ref('InternalDb/Student/'+studentID+'/courses').once('value')
+  console.log('Removing Student from courses')
+  const snapshots = await db.ref('InternalDb/Student/'+studentID+'/courses').once('value')
   let removeFromCourses = []
-  snapshots.forEach((snapshot) => {
-    removeFromCourses.push(db.ref('InternalDb/Courses/students/'+studentID).remove())
+  const courses = snapshots.val()
+  courses.forEach((course) => {
+    removeFromCourses.push(db.ref('InternalDb/Courses/'+course+'/students/'+studentID).remove())
   })
-  return Promise.all(removeFromCourses)
+  return Promise.all(removeFromCourses).then(()=>{console.log("Done")})
 }
 
-function deleteStudentHelper(studentID) {
-  deleteAllMatchingKey("KBCResponse", studentID, "userID");
-  deleteAllMatchingKey("FeedbackResponse", studentID, "userID");
-  removeStudentFromCourses(studentID)
+async function deleteStudentHelper(studentID) {
+  await deleteAllMatchingKey("KBCResponse", studentID, "userID");
+  await deleteAllMatchingKey("FeedbackResponse", studentID, "userID");
+  await removeStudentFromCourses(studentID)
 }
 
 exports.mailingSystem = functions.https.onCall(async (data,context) => {
@@ -859,7 +861,7 @@ exports.deleteCourse = functions.https.onCall(async (data, context) => {
   await deleteCourseHelper(passCode, courseURL);
   return 'done';
 });
-exports.deleteStudent = functions.https.onCall((data, context) =>{
+exports.deleteStudent = functions.https.onCall(async (data, context) =>{
   studentID = data.key;
   userUID = data.userUID;
   console.log("Student ID: " + studentID);
@@ -867,31 +869,24 @@ exports.deleteStudent = functions.https.onCall((data, context) =>{
   console.log(data);
   console.log(context);
   dbRef = admin.app().database(url).ref('InternalDb/Student/' + studentID);
-  dbRef.once("value", function(snapshot) {
-    if (snapshot.val()) {
-      deleteStudentHelper(studentID);
-      snapshot.ref.remove().then(()=>{
-        console.log();
-      });
-      return "removed";
-    } else {
-      return "error while removing";
+  return dbRef.once('value').then(async (snapshot) => {
+    if(snapshot.val()){
+      await deleteStudentHelper(studentID)
+      await snapshot.ref.remove()
+    }else{
+      throw new functions.https.HttpsError('unknown','error while removing')
     }
-  }, function(errorObject) {
+  },(errorObject) =>{
     console.log("The student read failed: " + errorObject.code);
-    return "Error";
+    throw new functions.https.HttpsError('unknown','error while student read')
   }).then(()=>{
-    console.log();
-  });
-  admin
-  .auth()
-  .deleteUser(userUID)
-  .then(() => {
-    console.log('Successfully deleted user from firebase auth');
-  })
-  .catch((error) => {
+    return admin.auth().deleteUser(userUID)
+  },(error)=>{
     console.log('Error deleting user from firebase auth:', error);
-  });
+    throw new functions.https.HttpsError('unknown','error while deleting user from firebase auth')
+  }).then(() =>{
+    console.log("Deleted Student "+studentID)
+  })
 });
 exports.deleteFaculty = functions.https.onCall((data, context) => {
   const key = data.key;
