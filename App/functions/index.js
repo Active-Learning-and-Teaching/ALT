@@ -793,9 +793,21 @@ function removeFromFacultyList(key) {
 function delCoursesOfFaculty(facultyKey) {
   removeFromFacultyList(facultyKey);
 }
+
+async function removeStudentFromCourses(studentID){
+  const db = admin.app().database(url)
+  snapshots = await db.ref('InternalDb/Student/'+studentID+'/courses').once('value')
+  let removeFromCourses = []
+  snapshots.forEach((snapshot) => {
+    removeFromCourses.push(db.ref('InternalDb/Courses/students/'+studentID).remove())
+  })
+  return Promise.all(removeFromCourses)
+}
+
 function deleteStudentHelper(studentID) {
   deleteAllMatchingKey("KBCResponse", studentID, "userID");
   deleteAllMatchingKey("FeedbackResponse", studentID, "userID");
+  removeStudentFromCourses(studentID)
 }
 
 exports.mailingSystem = functions.https.onCall(async (data,context) => {
