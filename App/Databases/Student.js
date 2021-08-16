@@ -138,6 +138,8 @@ class Student {
 
         this.setCourseStudent(value);
       }
+    }).then(() => {
+      database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.url).remove()
     });
   };
 
