@@ -257,7 +257,7 @@ async function getURLFromPasscode(passCode) {
     snapshot = await db_ref.orderByChild("passCode").equalTo(passCode).once("value")
     courseURL = snapshot.key
   }
-  catch(errorObject){
+  catch (errorObject) {
     console.log("The read in getURLFromPasscode failed: " + errorObject.code);
   }
   return courseURL;
@@ -270,16 +270,16 @@ async function getEmailFromPasscode(passCode, type) {
   let quiz = "";
   let feedback = "";
   let snapshot;
-  try{
+  try {
     snapshot = await db_ref.once('value')
     const course = snapshot.val()
-    if ('quizEmail' in course){
+    if ('quizEmail' in course) {
       quiz = course['quizEmail']
     }
-    if('feedbackEmail' in course){
+    if ('feedbackEmail' in course) {
       feedback = course['feedbackEmail']
     }
-  }catch(errorObject){
+  } catch (errorObject) {
     console.log("The read in getEmailFromPasscode failed: " + errorObject.code)
   }
 
@@ -624,36 +624,41 @@ async function FeedbackResponseMailer(results, passCode, topics, startTime, type
   }
 }
 async function getStudents(passCode) {
-  let studentList = null
   const courseURL = await getURLFromPasscode(passCode)
-  console.log(courseURL)
-  await admin.app().database(url).ref("InternalDb/Student/").orderByChild("courses")
-    .once('value', snapshot => {
-      const list = []
-      snapshot.forEach((data) => {
-        const keys = Object(data.val());
-        if ("courses" in keys) {
-          const arr = data.val()["courses"]
-          if (arr.includes(courseURL)) {
-            const dict = {};
-            dict["name"] = keys["name"]
-            dict["email"] = keys["email"]
-            dict["photo"] = keys["photo"]
-            dict["verified"] = 0
-            if ("verified" in keys) {
-              const arr = data.val()["verified"]
-              if (arr.includes(courseURL)) { dict["verified"] = 1 }
-            }
-            list.push(dict)
-          }
-        }
-      }
-      )
-      list.sort((a, b) => a.name !== undefined && b.name !== undefined
-        ? a.name.toUpperCase() > b.name.toUpperCase() ? 1 : ((b.name.toUpperCase() > a.name.toUpperCase()) ? -1 : 0)
-        : a.email > b.email ? 1 : b.email > a.email ? -1 : 0)
-      studentList = list
+  console.log("Inside getStudents for course: " + courseURL)
+  const db_ref = admin.app().database(url).ref('InternalDb/Courses/' + courseURL + '/students')
+  const studentSnapshots = await db_ref.once('value')
+  let studentPromiseList = []
+  if (studentSnapshots.exists()) {
+    studentSnapshots.forEach((studentSnapshot) => {
+      studentPromiseList.push(admin.app().database(url).ref("InternalDb/Students/" + studentSnapshot.key).once('value'))
     })
+  }
+  let studentSnapshotList = []
+  try {
+    studentSnapshotList = await Promise.all(studentPromiseList)
+  } catch (errorObject) {
+    console.log("Inside getStudents, failed to read students: " + errorObject.code)
+  }
+  let studentList = []
+  studentSnapshotList.forEach((student) => {
+    const dict = {}
+    dict['name'] = student.val()['name']
+    dict['email'] = student.val()['email']
+    dict['photo'] = student.val()['photo']
+    dict['verified'] = 0
+    if ('verified' in student.val()) {
+      if (student.val()['verified'].includes(courseURL)) {
+        dict['verified'] = 1
+      }
+    }
+    studentList.push(dict)
+  })
+
+  studentList.sort((a, b) => a.name !== undefined && b.name !== undefined
+    ? a.name.toUpperCase() > b.name.toUpperCase() ? 1 : ((b.name.toUpperCase() > a.name.toUpperCase()) ? -1 : 0)
+    : a.email > b.email ? 1 : b.email > a.email ? -1 : 0)
+
   return studentList
 }
 async function StudentListMailer(list, passCode, email) {
