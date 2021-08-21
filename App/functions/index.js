@@ -251,33 +251,37 @@ function emailTemplate(courseName, date, topics, results, type, quizCount, feedb
 }
 async function getURLFromPasscode(passCode) {
   const db_ref = admin.app().database(url).ref('InternalDb/Courses/');
+  let snapshot;
   let courseURL;
-  await db_ref.orderByChild("passCode").equalTo(passCode).once("value",
-    function (snapshot) {
-      courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
-    },
-    function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    },
-  );
+  try {
+    snapshot = await db_ref.orderByChild("passCode").equalTo(passCode).once("value")
+    courseURL = snapshot.key
+  }
+  catch(errorObject){
+    console.log("The read in getURLFromPasscode failed: " + errorObject.code);
+  }
   return courseURL;
 }
 async function getEmailFromPasscode(passCode, type) {
 
-  let myurl = null
-  await getURLFromPasscode(passCode).then(value => { myurl = value })
+  let myurl = await getURLFromPasscode(passCode)
   const db_ref = admin.app().database(url).ref('InternalDb/Courses/' + myurl);
   let primary = "";
   let quiz = "";
   let feedback = "";
-
-  await db_ref.once("value",
-    function (snapshot) {
-      const keys = Object(snapshot.val());
-      if ('quizEmail' in keys) { quiz = snapshot.val()['quizEmail'] }
-      if ('feedbackEmail' in keys) { feedback = snapshot.val()['feedbackEmail'] }
-    },
-    function (errorObject) { console.log("The read failed: " + errorObject.code) })
+  let snapshot;
+  try{
+    snapshot = await db_ref.once('value')
+    const course = snapshot.val()
+    if ('quizEmail' in course){
+      quiz = course['quizEmail']
+    }
+    if('feedbackEmail' in course){
+      feedback = course['feedbackEmail']
+    }
+  }catch(errorObject){
+    console.log("The read in getEmailFromPasscode failed: " + errorObject.code)
+  }
 
   await admin.app().database(url).ref("InternalDb/Faculty/").orderByChild("courses")
     .once('value', snapshot => {
@@ -303,8 +307,7 @@ async function getEmailFromPasscode(passCode, type) {
   }
 }
 async function getCourseNameFromPasscode(passCode) {
-  let myurl = null
-  await getURLFromPasscode(passCode).then(value => { myurl = value })
+  let myurl = await getURLFromPasscode(passCode)
   const db_ref = admin.app().database(url).ref('InternalDb/Courses/' + myurl);
   let courseName;
   await db_ref.once("value",
@@ -739,7 +742,7 @@ async function deleteAllMatchingKey(table, key, childKey) {
 }
 async function deleteCourseHelper(passCode, courseURL) {
   console.log("Inside delete course helper")
-  console.log("Passcode,course: ",passCode,courseURL)
+  console.log("Passcode,course: ", passCode, courseURL)
   await removeFromStudentList(courseURL);
   await deleteAllMatchingKey('Courses', passCode, "passCode");
   await deleteAllMatchingKey('Announcements', passCode, "passCode");
@@ -755,15 +758,15 @@ async function removeFromStudentList(courseKey) {
   let studentsToModify = []
   if (snapshots.val()) {
     snapshots.forEach((student) => {
-      console.log("Student: ",student.key)
+      console.log("Student: ", student.key)
       const promise = db.ref('InternalDb/Student/' + student.key + '/courses/').once('value')
         .then((courses) => {
-          console.log("Courses: ",courses.val())
+          console.log("Courses: ", courses.val())
           let newCourses = courses.val().filter((course) => { return course !== courseKey })
           return newCourses
         })
         .then((courses) => {
-          console.log("New Courses: ",courses)
+          console.log("New Courses: ", courses)
           return db.ref('InternalDb/Student/' + student.key + '/courses/').set(courses)
         })
       studentsToModify.push(promise)
@@ -803,7 +806,7 @@ async function deleteFacultyHelper(facultyID) {
   let coursesToRemove = []
   snapshots = await db_ref.child('courses').once('value')
   const courses = snapshots.val()
-  console.log("Course are: ",courses)
+  console.log("Course are: ", courses)
   if (courses) {
     courses.forEach((course) => {
       courseRemovePromise = db.ref('InternalDb/Courses/' + course + '/passCode/').once('value').then((passCode) => {
