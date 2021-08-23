@@ -31,6 +31,7 @@ export default class QuizFacultyPage extends Component{
             typeofQuiz : "mcq",
             loading : true,
             quizNumber : "",
+            errorRate : "*",
         };
         this.setOption = this.setOption.bind(this);
         this.quizresultData = this.quizresultData.bind(this);
@@ -272,7 +273,7 @@ export default class QuizFacultyPage extends Component{
                             options={[
                                 { label: "Single-Correct", value: "mcq", activeColor: 'tomato'},
                                 { label: "Multi-Correct", value: "multicorrect" ,activeColor: 'tomato'},
-                                { label: "Alpha-Numeric", value: "numerical" ,activeColor: 'tomato'},
+                                { label: "Alpha-Numeric", value: "alphaNumerical" ,activeColor: 'tomato'},
                             ]}
                         />
                     </View>
@@ -282,7 +283,7 @@ export default class QuizFacultyPage extends Component{
                             <Options optionValue={this.setOption} icon={this.state.icon}/>
                         </View>
                     :
-                        this.state.typeofQuiz ==="numerical"
+                        this.state.typeofQuiz ==="alphaNumerical"
                         ?
                         <Text/>
                         :
@@ -344,7 +345,7 @@ export default class QuizFacultyPage extends Component{
                             />
                             <View style={[
                                 styles.buttonContainer,
-                                { width: this.props.quizType==="numerical"
+                                { width: this.props.quizType==="alphaNumerical"
                                         ? Dimensions.window.width-50
                                         :"100%"
                                 }]}>
@@ -392,7 +393,7 @@ export default class QuizFacultyPage extends Component{
                         <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} title='Cancel' onPress={()=>{
                              this.startKBC("stop").then(r => "")}} />
                     </View>
-                    {this.props.quizType==="numerical"
+                    {this.props.quizType==="alphaNumerical"
                         ?
                         <View>
                             <Text style={[styles.heading,{fontSize : 20, }]}>

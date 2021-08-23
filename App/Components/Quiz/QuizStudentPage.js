@@ -162,7 +162,7 @@ export default class QuizStudentPage extends Component {
                                 </View>
                             </View>
                             :
-                            this.props.quizType==="numerical"
+                            this.props.quizType==="alphaNumerical"
                             ?
                             <View style={{paddingTop:20}}>
                                 <Text style={[styles.heading,{fontSize : 18, marginTop:15}]}>

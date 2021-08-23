@@ -128,7 +128,7 @@ function emailTemplate(courseName,date,topics,results,type,quizCount,feedbackCou
       </html>
       `
       :
-      (type==="numerical" || type==="multicorrect")?
+      (type==="alphaNumerical" || type==="multicorrect")?
       `
       <html>
           <head>
@@ -353,7 +353,7 @@ async function getAllAnnouncement(passCode){
   else {return ans}
 }
 function autoGrader(studentAnswer,correctAnswer,type){
-  if (!type === "numerical"){
+  if (!type === "alphaNumerical"){
       studentAnswer = studentAnswer.replace(/,/g,"")
       if(studentAnswer===correctAnswer)
           return 1;
@@ -944,7 +944,7 @@ exports.quizNotification  = functions.database.ref('InternalDb/KBC/{qid}').onWri
       const courseName = await getCourseNameFromPasscode(_data.passCode)
       let type = "single-correct"
       if (_data.quizType==="multicorrect") { type = "multi-correct"}
-      if (_data.quizType==="numerical") { type = "alpha-numeric"}
+      if (_data.quizType==="alphaNumerical") { type = "alpha-numeric"}
 
       console.log('Quiz Notification executing');
       if (!_data.emailResponse && _data.quizType != '') {
