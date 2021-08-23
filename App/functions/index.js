@@ -460,37 +460,15 @@ async function QuizResponseMailer(list, answer, type, passCode, quizNumber, star
   }
 }
 async function getAllStudentsforMail(passCode, startTime, endTime) {
-
-  let myurl = null
-  console.log(passCode)
-  await admin.app().database(url)
-    .ref('InternalDb/Courses/')
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
-    .then(snapshot => { myurl = Object.keys(snapshot.val())[0].replace(' ', '') })
-
   let vlist = null
-  await admin.app().database(url)
-    .ref('InternalDb/Student/')
-    .once('value')
-    .then(snapshot => {
-      const list = []
-      snapshot.forEach((data) => {
-        const keys = Object(data.val())
-        const x = data.key
-        if ("verified" in keys) {
-          const arr = data.val()["verified"]
-          if (arr.includes(myurl)) {
-            list.push(x)
-          }
-        }
-      })
-      vlist = list
-    })
+  let verifiedStudentList = null
+  let studentList = await getStudents(passCode)
+  verifiedStudentList = studentList.filter(student => {student['verified']==1})
+  vlist = verifiedStudentList.map((student) => {return student['key']})
 
   let ans = null
   let attempted = null
+
 
   await admin.app().database(url).ref('InternalDb/KBCResponse/')
     .orderByChild("passCode")
@@ -521,31 +499,15 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
       attempted = b
     })
 
-  let final = null
-  await admin.app().database(url)
-    .ref('InternalDb/Student/')
-    .once('value')
-    .then(snapshot => {
-      const list = []
-      snapshot.forEach((data) => {
-        const x = data.key
-        const keys = Object(data.val())
-        if (vlist.includes(x)) {
-          if (attempted.includes(x)) {
-            list.push(ans[x])
-          }
-          else {
-            let name = keys['name']
-            let email = keys['email']
-            let answer = "N/A"
-            const val = { "Name": name, "Email": email, "Answer": answer }
-            list.push(val)
-          }
-
-        }
-      })
-      final = list
-    })
+  let final = []
+  verifiedStudentList.forEach((student) => {
+    if(attempted.includes(student['key'])){
+      final.push(ans[student['key']])
+    }else{
+      const val = {'Name':student['name'], 'Email':student['email'], 'Answer':'N/A'}
+      final.push(val)
+    }
+  })
 
   return final
 }
@@ -643,6 +605,7 @@ async function getStudents(passCode) {
   let studentList = []
   studentSnapshotList.forEach((student) => {
     const dict = {}
+    dict['key'] = student.key
     dict['name'] = student.val()['name']
     dict['email'] = student.val()['email']
     dict['photo'] = student.val()['photo']
