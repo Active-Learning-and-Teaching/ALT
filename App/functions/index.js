@@ -251,14 +251,20 @@ function emailTemplate(courseName, date, topics, results, type, quizCount, feedb
 }
 async function getURLFromPasscode(passCode) {
   const db_ref = admin.app().database(url).ref('InternalDb/Courses/');
-  let snapshot;
+  let snapshots;
   let courseURL;
   try {
-    snapshot = await db_ref.orderByChild("passCode").equalTo(passCode).once("value")
-    courseURL = snapshot.key
+    snapshots = await db_ref.orderByChild("passCode").equalTo(passCode).once("value")
+    snapshots.forEach((snapshot) =>  {
+      courseURL = snapshot.key
+    })
+    if(snapshots.numChildren()==0){
+      throw "No courses with passcode: "+passCode
+    }
+    console.log("Inside getURLFromPasscode: ", courseURL)
   }
   catch (errorObject) {
-    console.log("The read in getURLFromPasscode failed: " + errorObject.code);
+    console.log("The read in getURLFromPasscode failed: ", errorObject);
   }
   return courseURL;
 }
@@ -280,7 +286,7 @@ async function getEmailFromPasscode(passCode, type) {
       feedback = course['feedbackEmail']
     }
   } catch (errorObject) {
-    console.log("The read in getEmailFromPasscode failed: " + errorObject.code)
+    console.log("The read in getEmailFromPasscode failed: ", errorObject)
   }
 
   await admin.app().database(url).ref("InternalDb/Faculty/").orderByChild("courses")
@@ -315,7 +321,7 @@ async function getCourseNameFromPasscode(passCode) {
       courseName = snapshot.val()['courseName']
     },
     function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+      console.log("The read failed: ", errorObject);
     },
   );
   return courseName;
@@ -328,7 +334,7 @@ async function getKBCURLFromPasscode(passCode) {
       courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
     },
     function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+      console.log("The read failed: ", errorObject);
     },
   );
   return courseURL;
@@ -559,7 +565,7 @@ async function getFBURLFromPasscode(passCode) {
       courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
     },
     function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+      console.log("The read failed: ",errorObject);
     },
   );
   return courseURL;
@@ -600,7 +606,7 @@ async function getStudents(passCode) {
   try {
     studentSnapshotList = await Promise.all(studentPromiseList)
   } catch (errorObject) {
-    console.log("Inside getStudents, failed to read students: " + errorObject.code)
+    console.log("Inside getStudents, failed to read students: ", errorObject)
   }
   let studentList = []
   studentSnapshotList.forEach((student) => {
