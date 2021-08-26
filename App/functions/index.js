@@ -599,7 +599,7 @@ async function getStudents(passCode) {
   let studentPromiseList = []
   if (studentSnapshots.exists()) {
     studentSnapshots.forEach((studentSnapshot) => {
-      studentPromiseList.push(admin.app().database(url).ref("InternalDb/Students/" + studentSnapshot.key).once('value'))
+      studentPromiseList.push(admin.app().database(url).ref("InternalDb/Student/" + studentSnapshot.key).once('value'))
     })
   }
   let studentSnapshotList = []
@@ -609,8 +609,12 @@ async function getStudents(passCode) {
     console.log("Inside getStudents, failed to read students: ", errorObject)
   }
   let studentList = []
+  console.log("Student snapshotlist", studentSnapshotList)
   studentSnapshotList.forEach((student) => {
-    const dict = {}
+    let dict = {}
+    console.log("Student",student)
+    console.log(student.key)
+    console.log(student.val())
     dict['key'] = student.key
     dict['name'] = student.val()['name']
     dict['email'] = student.val()['email']
