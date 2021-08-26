@@ -13,7 +13,7 @@ jobs:
         run: cd App && npm i
 
       - name: Build Android Release
-        run: cd android && ./gradlew assembleRelease
+        run: cd App && cd android && ./gradlew assembleRelease
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
