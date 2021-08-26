@@ -21,10 +21,10 @@ const url = 'https://testfortls.firebaseio.com/';
 // ADD CREDENTIALS BEFORE DEPLOYING
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: functions.config().mailingsystem.host,
   auth: {
-    user: "atlapp2021@gmail.com",
-    pass: "",
+    user: functions.config().mailingsystem.email,
+    pass: functions.config().mailingsystem.password,
   },
 });
 
