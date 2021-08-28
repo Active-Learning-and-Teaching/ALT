@@ -11,7 +11,6 @@ import SwitchSelector from "react-native-switch-selector";
 import Dimensions from '../../Utils/Dimensions';
 import database from "@react-native-firebase/database";
 import MultiCorrectOptions from './MultiCorrectOptions';
-import Numeric from './Numeric';
 import {firebase} from '@react-native-firebase/functions';
 
 export default class QuizFacultyPage extends Component{
