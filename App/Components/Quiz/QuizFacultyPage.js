@@ -361,6 +361,12 @@ export default class QuizFacultyPage extends Component{
                                         ? Dimensions.window.width-50
                                         :"100%"
                                 }]}>
+                            <View style={[
+                                styles.buttonContainer,
+                                { width: this.props.quizType==="numeric"
+                                        ? Dimensions.window.width-50
+                                        :"100%"
+                                }]}>
                                 <Button buttonStyle={styles.mybutton}
                                         titleStyle={{color:'white',fontWeight:'normal'}}
                                         style={styles.buttonMessage}
@@ -380,6 +386,7 @@ export default class QuizFacultyPage extends Component{
                                                 quizNumber : "",
                                             })
                                         }}/>
+                            </View>
                             </View>
                             </View>
                         </ScrollView>
