@@ -1,7 +1,7 @@
 import {Animated,Dimensions,Easing,PanResponder,Text,View,TouchableOpacity,} from 'react-native';
 import React, {FC, useState, useEffect, useRef} from 'react';
 import tailwind from 'tailwind-rn';
-import messaging, {FirebaseMessagingTypes,} from '@react-native-firebase/messaging';
+import messaging, {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 
 const NotifiactionCentre: FC = () => {
   const [
