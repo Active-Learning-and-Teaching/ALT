@@ -1,7 +1,15 @@
 # Active Learning and Teaching App :iphone:
+[![iOS](https://img.shields.io/badge/-iOS-black?style=flat&logo=apple&link=https://github.com/Active-Learning-and-Teaching/ALT/releases)](https://github.com/Active-Learning-and-Teaching/ALT/releases)
+[![Android](https://img.shields.io/badge/-Android-grey?style=flat&logo=android&link=https://github.com/Active-Learning-and-Teaching/ALT/releases)](https://github.com/Active-Learning-and-Teaching/ALT/releases)
+[![React Native](https://img.shields.io/badge/-ReactNative-black?style=flat&logo=react)]()
+[![Firebase](https://img.shields.io/badge/-Firebase-blue?style=flat&logo=firebase)]()
+
 An open-source mobile application to facilitate teaching and learning in courses, including taking quizzes and feedbacks efficiently in classes.
 
-<img width="731" alt="Screenshot 2021-04-30 at 18 16 51" src="https://user-images.githubusercontent.com/42066451/116697230-8e4b4c80-a9e0-11eb-860d-6fca12a876f5.png">
+<!-- <img width="731" alt="Screenshot 2021-04-30 at 18 16 51" src="https://user-images.githubusercontent.com/42066451/116697230-8e4b4c80-a9e0-11eb-860d-6fca12a876f5.png"> -->
+
+<img width="1440" alt="Screenshot 2021-08-10 at 04 30 57" src="https://user-images.githubusercontent.com/42066451/128784943-4d3ad9d0-d575-4dfc-9be7-6522114db8ef.png">
+
 
 ## Folder Structure 📁
 
@@ -29,7 +37,6 @@ An open-source mobile application to facilitate teaching and learning in courses
 │   └── patches
 ├── Architecture.jpeg
 ├── README.md
-└── SRS.MD
 ```
 
 ## Setup 📥
@@ -48,20 +55,18 @@ npm install --legacy-peer-deps
 cd ios
 pod install
 ```
-6. Place `config.json` in App/
-7. Place `google-services.json` in App/android/app/
-8. Place `GoogleService-Info.plist` in App/ios/
+4. Download the following files from the Firebase project and place them in their respective folder.
+ - `App/config.json`
+ - `App/android/app/google-services.json`
+ - `App/ios/GoogleService-Info.plist`
 
 ## Build ⚙️
 
 ### iOS   
-`react-native run-ios`  
+`npx react-native run-ios` 
+
 ### Android       
-`react-native run-android`
+`npx react-native run-android`
 
 ## Release ⬇️
 You can install the latest stable version of the app from Releases. The Android app is available as APK and iOS app is available through TestFlight.
-
-## Team ⭐
-
-``` Anuneet Anand | Divyam Gupta | Vishwesh Kumar | Yashdeep Prasad ```
