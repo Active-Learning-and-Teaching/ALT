@@ -89,6 +89,7 @@ export default class QuizFacultyPage extends Component{
                             value["endTime"],
                             value["duration"],
                             value["correctAnswer"],
+                            value["errorRate"],
                             value["instructor"],
                             value["quizType"],
                             url,
@@ -143,7 +144,7 @@ export default class QuizFacultyPage extends Component{
         else
         {
 
-        const {option, time} = this.state;
+        const {option, time, errorRate} = this.state;
 
         if (option === '') {
             this.setState({
@@ -165,6 +166,7 @@ export default class QuizFacultyPage extends Component{
                             endTime,
                             time,
                             option,
+                            errorRate,
                             this.state.user.email,
                             this.state.typeofQuiz
                         ).then(r => {
@@ -180,6 +182,7 @@ export default class QuizFacultyPage extends Component{
                             endTime,
                             time,
                             option,
+                            errorRate,
                             this.state.user.email,
                             this.state.typeofQuiz,
                             url,
