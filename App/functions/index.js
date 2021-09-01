@@ -129,7 +129,7 @@ function emailTemplate(courseName, date, topics, results, type, quizCount, feedb
       </html>
       `
           :
-          (type === "numerical" || type === "multicorrect") ?
+          (type === "alphaNumerical" || type === "multicorrect" || type === "numeric") ?
             `
       <html>
           <head>
@@ -358,21 +358,32 @@ async function getAllAnnouncement(passCode) {
   if (ans.length === 0) { return "-1" }
   else { return ans }
 }
-function autoGrader(studentAnswer, correctAnswer, type) {
-  if (!type === "numerical") {
-    studentAnswer = studentAnswer.replace(/,/g, "")
-    if (studentAnswer === correctAnswer)
-      return 1;
-    else
-      return 0;
-  }
-  else {
+function autoGrader(studentAnswer, correctAnswer, errorRate, type) {
+  if (type === "alphaNumerical") {
     studentAnswer = studentAnswer.trim().toUpperCase().replace(/,/g, "")
     correctAnswer = correctAnswer.trim().toUpperCase().replace(/,/g, "")
 
     if (studentAnswer === correctAnswer)
       return 1;
-    else if (!studentAnswer.search(correctAnswer) === -1)
+    else if (!(studentAnswer.search(correctAnswer) === -1))
+      return 1;
+    else
+      return 0;
+
+  }
+  else if (type === 'numeric') {
+    studentAnswer = parseFloat(studentAnswer.trim().replace(/,/g, ""))
+    correctAnswer = parseFloat(correctAnswer.trim().replace(/,/g, ""))
+    errorRate = parseFloat(errorRate.trim().replace(/,/g, ""))
+    if (studentAnswer >= (correctAnswer - errorRate) && studentAnswer <= (correctAnswer + errorRate)) {
+      return 1
+    } else {
+      return 0
+    }
+  }
+  else {
+    studentAnswer = studentAnswer.replace(/,/g, "")
+    if (studentAnswer === correctAnswer)
       return 1;
     else
       return 0;
@@ -419,9 +430,10 @@ async function getQuizResponse(passCode, startTime, endTime, type) {
   console.log("All Responses Collected")
   return ans
 }
-async function QuizResponseMailer(list, answer, type, passCode, quizNumber, startTime, endTime, email) {
+async function QuizResponseMailer(list, answer, errorRate, type, passCode, quizNumber, startTime, endTime, email) {
 
   const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase().replace(/,/g, "");
+  errorRate = ((errorRate === "*") | (errorRate == "") ? 'N/A' : errorRate.trim().replace(/,/g, ''))
   max = answer === "*" ? 'N/A' : 1
   const date = startTime.replace(/\//g, "-").split(" ")[0]
   const fileName = passCode + "_" + date + "_" + "Quiz-" + quizNumber
@@ -429,7 +441,7 @@ async function QuizResponseMailer(list, answer, type, passCode, quizNumber, star
   const path = `${fileName}.csv`;
   const aboutQuiz = `${"QUIZ #" + quizNumber},${date},${"Correct Answer : " + correctAnswer},${"Max Score : " + max}\n\n`
   const headerString = 'Student Name, Email, Response, Score\n';
-  const rowString = await list.map((student, i) => `${student.Name},${student.Email},${student.Answer.replace(/,/g, "")},${answer === "*" ? 'N/A' : autoGrader(student.Answer, correctAnswer, type)}\n`).join('');
+  const rowString = await list.map((student, i) => `${student.Name},${student.Email},${student.Answer.replace(/,/g, "")},${answer === "*" ? 'N/A' : autoGrader(student.Answer, correctAnswer, errorRate, type)}\n`).join('');
   const csvString = `${aboutQuiz}${headerString}${rowString}`;
   let results = null
   let courseName = null
@@ -828,7 +840,7 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
       .then(async snapshot => {
         value = snapshot.val()
         const data = await getAllStudentsforMail(passCode, value['startTime'], value['endTime'])
-        return await QuizResponseMailer(data, value['correctAnswer'], value['quizType'], value['passCode'], value['questionCount'], value['startTime'], value['endTime'], email)
+        return await QuizResponseMailer(data, value['correctAnswer'], value['errorRate'], value['quizType'], value['passCode'], value['questionCount'], value['startTime'], value['endTime'], email)
       })
       .catch((error) => { console.log(error) })
   }
@@ -964,7 +976,8 @@ exports.quizNotification = functions.database.ref('InternalDb/KBC/{qid}').onWrit
     const courseName = await getCourseNameFromPasscode(_data.passCode)
     let type = "single-correct"
     if (_data.quizType === "multicorrect") { type = "multi-correct" }
-    if (_data.quizType === "numerical") { type = "alpha-numeric" }
+    if (_data.quizType === "alphaNumerical") { type = "alpha-numeric" }
+    if (_data.quizType === "numeric") { type = "numeric" }
 
     console.log('Quiz Notification executing');
     if (!_data.emailResponse && _data.quizType != '') {
@@ -1043,4 +1056,3 @@ exports.announcementsNotification = functions.database.ref('InternalDb/Announcem
     return console.error('Error:', ex.toString());
   }
 });
-
