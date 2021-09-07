@@ -42,7 +42,7 @@ export default class QuizResultGraph extends Component {
                 }
             }
             else if(this.props.quizType==='alphaNumerical' || this.props.quizType=="multicorrect" || this.props.quizType=="numeric"){
-                await kbcResponse.getAllalphaNumericalResponse(this.props.passCode, r["startTime"], r["endTime"] )
+                await kbcResponse.getAllAlphaNumericalResponse(this.props.passCode, r["startTime"], r["endTime"] )
                     .then( async values  =>{
                         //https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
                         const items = await Object.keys(values).map(function (key) {

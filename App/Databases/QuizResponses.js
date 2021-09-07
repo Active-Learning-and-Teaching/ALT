@@ -176,7 +176,7 @@ class QuizResponses {
         return ans
     }
 
-    getAllNumericalResponse = async (passCode, startTime, endTime)=> {
+    getAllAlphaNumericalResponse = async (passCode, startTime, endTime)=> {
         let ans = null
         await this.reference
             .orderByChild("passCode")
