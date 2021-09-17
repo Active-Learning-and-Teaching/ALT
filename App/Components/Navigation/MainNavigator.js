@@ -14,7 +14,7 @@ import CourseAdd from '../Dashboard/CourseAdd';
 import FacultyDashBoard from '../Dashboard/FacultyDashBoard';
 import TabNavigator from './TabNavigator';
 //import {create} from 'eslint/lib/rules/*';
-import analytics from '@react-native-firebase/analytics';
+//import analytics from '@react-native-firebase/analytics';
 
 const MyTheme = {
   dark: false,
