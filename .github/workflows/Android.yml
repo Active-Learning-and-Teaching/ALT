@@ -9,7 +9,7 @@ jobs:
 
   # First Job
   build-android:
-    runs-on: mac-os
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
