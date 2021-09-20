@@ -12,5 +12,14 @@ jobs:
       - name: Install dependencies
         run: cd App && npm i
 
-      - name: Build Android Release
-        run: cd App && npx react-native run-android
+      - name: move to location and give permissions
+        run: cd App && cd android && chmod +x ./gradlew
+
+      - name: build android
+        run: ./gradlew assembleRelease
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/
