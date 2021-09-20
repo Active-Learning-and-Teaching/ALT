@@ -1,22 +1,33 @@
-name: Build Android
+name: "React Native Android Build APK"
+
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches:
+      - master
+    paths:
+      - App/**
 jobs:
-  build:
+
+  # First Job
+  build-android:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Install dependencies
-        run: cd App && npm i
-
-      - name: move to location and give permissions and Build
-        run: cd App && cd android && chmod +x ./gradlew && ./gradlew assembleRelease
-
+      - name: Install npm dependencies
+        run: |
+          cd App && npm install
+      - name: Make Gradlew Executable
+        run: |
+          cd App && cd android && chmod +x ./gradlew
+        # Build Command
+      - name: Build Android Release
+        run: |
+          cd App && cd android && ./gradlew assembleRelease
+      # Upload to Artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/
+
+
