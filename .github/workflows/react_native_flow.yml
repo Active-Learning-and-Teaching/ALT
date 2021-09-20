@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: cd App && npm install --legacy-peer-deps
+        run: cd App && npm i
 
       - name: move to location and give permissions and Build
         run: cd App && cd android && chmod +x ./gradlew && ./gradlew assembleRelease
