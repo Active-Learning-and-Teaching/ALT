@@ -28,16 +28,9 @@ export default class StudentFeedbackCard extends Component {
     if (this.props.kind === '0')
       return (
         <View style={styles.grid}>
-          {/* <ListItem containerStyle={styles.listContainer} >
-                    <ListItem.Content>
-                        <ListItem.Title style={styles.title}>
-                            {(this.props.index+1)+". " +this.props.value}
-                        </ListItem.Title>
-                    </ListItem.Content>
-                </ListItem> */}
           <SwitchSelector
             onPress={value => {
-              this.props.studentResponses(this.props.value, value);
+              this.props.studentResponses(value);
             }}
             textColor={'#383030'}
             selectedColor={'white'}
@@ -53,14 +46,6 @@ export default class StudentFeedbackCard extends Component {
     else
       return (
         <View style={styles.grid}>
-          {/* <ListItem containerStyle={styles.listContainer}>
-                    <ListItem.Content>
-                        <ListItem.Title style={styles.title}>
-                            {(this.props.index+1)+". " +this.props.value}
-                        </ListItem.Title>
-                    </ListItem.Content>
-                </ListItem> */}
-
           <View style={[styles.column]}>{this.renderScale()}</View>
           <MultiSlider
             values={[1]}
@@ -68,7 +53,7 @@ export default class StudentFeedbackCard extends Component {
             selectedStyle={{backgroundColor: 'tomato'}}
             sliderLength={Dimensions.window.width / 1.35}
             onValuesChange={value => {
-              this.props.studentResponses(this.props.value, value[0]);
+              this.props.studentResponses(value[0]);
             }}
             min={1}
             max={5}

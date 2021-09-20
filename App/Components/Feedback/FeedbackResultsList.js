@@ -14,29 +14,28 @@ export default class FeedbackResultsList extends Component {
       responses: {},
       feedbackNumber: '',
       kind: null,
-      avg_points: {},
+      avg_points: null,
     };
   }
 
   AvgPoints() {
     avg_points = this.state.avg_points;
-    for (value in this.state.responses) {
-      sum = 0;
-      n = 0;
-      for (let i = 1; i < 6; i++) {
-        sum += this.state.responses[value][i] * i;
-        n += this.state.responses[value][i];
-      }
-      avg = sum / n;
-      avg_points[value] = avg;
+    // console.log("Averaging for Likert Scale")
+    sum = 0;
+    n = 0;
+    for (let i = 1; i < 6; i++) {
+      sum += this.state.responses[i] * i;
+      n += this.state.responses[i];
     }
+    
+    avg_points = sum / n;
     this.setState({
       avg_points: avg_points,
     });
   }
 
   componentDidMount() {
-    this.getResponseData().then(r => console.log(this.state.responses));
+    this.getResponseData().then(r => {console.log(`All Feedback Responses`);console.log(this.state.responses)});
   }
 
   getResponseData = async () => {
@@ -50,10 +49,11 @@ export default class FeedbackResultsList extends Component {
             this.state.course.passCode,
             r.startTime,
             r.endTime,
-            r.topics,
             r.kind,
           )
           .then(async values => {
+            // console.log("Logging resp values");
+            // console.log(values);
             await this.setState({
               responses: values,
               feedbackNumber: r.feedbackCount,
@@ -71,6 +71,9 @@ export default class FeedbackResultsList extends Component {
               await this.props.FeedbackMailer().then();
             }
           });
+      })
+      .catch(error => {
+        console.error(error);
       });
   };
 
@@ -95,58 +98,49 @@ export default class FeedbackResultsList extends Component {
             ({this.props.date.split(' ')[0]})
           </Text>
           <View style={styles.grid}>
-            {this.props.topics.map((value, i) => (
-              <View key={i}>
-                {/* <ListItem containerStyle={styles.listContainer}>
-                  <ListItem.Content>
-                    <ListItem.Title style={styles.title}>
-                      {i + 1 + '. ' + value}
-                    </ListItem.Title>
-                  </ListItem.Content>
-                </ListItem> */}
-                {value in this.state.responses ? (
-                  <PieChart
-                    data={[
-                      {
-                        name: ': Not Much',
-                        responses: this.state.responses[value][0],
-                        color: '#F3460A',
-                        legendFontColor: 'black',
-                        legendFontSize: 15,
-                      },
-                      {
-                        name: ': Somewhat',
-                        responses: this.state.responses[value][1],
-                        color: 'orange',
-                        legendFontColor: 'black',
-                        legendFontSize: 15,
-                      },
-                      {
-                        name: ': Completely',
-                        responses: this.state.responses[value][2],
-                        color: '#60CA24',
-                        legendFontColor: 'black',
-                        legendFontSize: 15,
-                      },
-                    ]}
-                    width={Dimensions.window.width - 10}
-                    height={150}
-                    chartConfig={chartConfig}
-                    accessor="responses"
-                    backgroundColor="white"
-                    borderRadius={20}
-                    paddingLeft="12"
-                    absolute
-                  />
-                ) : (
-                  <Text />
-                )}
-              </View>
-            ))}
+            <View key={this.state.kind}>
+              {this.state.responses ? (
+                <PieChart
+                  data={[
+                    {
+                      name: ': Not Much',
+                      responses: this.state.responses[0],
+                      color: '#F3460A',
+                      legendFontColor: 'black',
+                      legendFontSize: 15,
+                    },
+                    {
+                      name: ': Somewhat',
+                      responses: this.state.responses[1],
+                      color: 'orange',
+                      legendFontColor: 'black',
+                      legendFontSize: 15,
+                    },
+                    {
+                      name: ': Completely',
+                      responses: this.state.responses[2],
+                      color: '#60CA24',
+                      legendFontColor: 'black',
+                      legendFontSize: 15,
+                    },
+                  ]}
+                  width={Dimensions.window.width - 10}
+                  height={150}
+                  chartConfig={chartConfig}
+                  accessor="responses"
+                  backgroundColor="white"
+                  borderRadius={20}
+                  paddingLeft="12"
+                  absolute
+                />
+              ) : (
+                <Text />
+              )}
+            </View>
           </View>
         </View>
       );
-    } else {
+    } else if (this.state.kind === '1') {
       return (
         <View style={styles.container}>
           <Text style={styles.heading}>
@@ -156,74 +150,75 @@ export default class FeedbackResultsList extends Component {
             ({this.props.date.split(' ')[0]})
           </Text>
           <View style={styles.grid}>
-            {this.props.topics.map((value, i) => (
-              <View key={i}>
-                {/* <ListItem containerStyle={styles.listContainer}>
-                  <ListItem.Content>
-                    <ListItem.Title style={styles.title}>
-                      {i + 1 + '. ' + value}
-                    </ListItem.Title>
-                  </ListItem.Content>
-                </ListItem> */}
-                {value in this.state.responses ? (
-                  <PieChart
-                    data={[
-                      {
-                        name: ': o',
-                        responses: this.state.responses[value][1],
-                        color: '#F3460A',
-                        legendFontColor: 'black',
-                        legendFontSize: 15,
-                      },
-                      {
-                        name: ': oo',
-                        responses: this.state.responses[value][2],
-                        color: 'orange',
-                        legendFontColor: 'black',
-                        legendFontSize: 15,
-                      },
-                      {
-                        name: ': ooo',
-                        responses: this.state.responses[value][3],
-                        color: 'pink',
-                        legendFontColor: 'black',
-                        legendFontSize: 15,
-                      },
-                      {
-                        name: ': oooo',
-                        responses: this.state.responses[value][4],
-                        color: 'skyblue',
-                        legendFontColor: 'black',
-                        legendFontSize: 15,
-                      },
-                      {
-                        name: ': ooooo',
-                        responses: this.state.responses[value][5],
-                        color: '#60CA24',
-                        legendFontColor: 'black',
-                        legendFontSize: 15,
-                      },
-                    ]}
-                    width={Dimensions.window.width - 10}
-                    height={150}
-                    chartConfig={chartConfig}
-                    accessor="responses"
-                    backgroundColor="white"
-                    borderRadius={20}
-                    paddingLeft="12"
-                    absolute
-                  />
-                ) : (
-                  <Text />
-                )}
-                <Text style={[styles.miniheading]}>
-                  {' '}
-                  Average Score : {this.state.avg_points[value]}
-                </Text>
-              </View>
-            ))}
+            <View key="1">
+              {this.state.responses ? (
+                <PieChart
+                  data={[
+                    {
+                      name: ': o',
+                      responses: this.state.responses[1],
+                      color: '#F3460A',
+                      legendFontColor: 'black',
+                      legendFontSize: 15,
+                    },
+                    {
+                      name: ': oo',
+                      responses: this.state.responses[2],
+                      color: 'orange',
+                      legendFontColor: 'black',
+                      legendFontSize: 15,
+                    },
+                    {
+                      name: ': ooo',
+                      responses: this.state.responses[3],
+                      color: 'pink',
+                      legendFontColor: 'black',
+                      legendFontSize: 15,
+                    },
+                    {
+                      name: ': oooo',
+                      responses: this.state.responses[4],
+                      color: 'skyblue',
+                      legendFontColor: 'black',
+                      legendFontSize: 15,
+                    },
+                    {
+                      name: ': ooooo',
+                      responses: this.state.responses[5],
+                      color: '#60CA24',
+                      legendFontColor: 'black',
+                      legendFontSize: 15,
+                    },
+                  ]}
+                  width={Dimensions.window.width - 10}
+                  height={150}
+                  chartConfig={chartConfig}
+                  accessor="responses"
+                  backgroundColor="white"
+                  borderRadius={20}
+                  paddingLeft="12"
+                  absolute
+                />
+              ) : (
+                <Text />
+                
+              )} 
+              <Text style={[styles.miniheading]}>
+                {' '}
+                Average Score : {this.state.avg_points}
+              </Text>
+            </View>
           </View>
         </View>
+      );
+    }
+    else{
+      return (
+      <View style={styles.container}>
+        <Text style={styles.heading}>
+          Fetching Results ...
+        </Text>
+      </View>  
       );
     }
   }

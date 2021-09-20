@@ -28,7 +28,7 @@ export default class FeedbackFacultyPage extends Component {
       user: this.props.user,
       resultPage: false,
       emailStatus: false,
-      topics: [],
+      // topics: [],
       duration: this.duration,
       date: '',
       results: '',
@@ -36,22 +36,18 @@ export default class FeedbackFacultyPage extends Component {
       feedbackNumber: '',
       kind: null,
     };
-    this.setTopics = this.setTopics.bind(this);
+    // this.setTopics = this.setTopics.bind(this);
     this.setKind = this.setKind.bind(this);
     this.feedbackresultData = this.feedbackresultData.bind(this);
     this.FeedbackMailer = this.FeedbackMailer.bind(this);
   }
 
   feedbackresultData(resultData, feedbackNumber) {
+    // console.log("Result data");
+    // console.log(resultData);
     this.setState({
       results: resultData,
       feedbackNumber: feedbackNumber,
-    });
-  }
-
-  setTopics(topics) {
-    this.setState({
-      topics: topics,
     });
   }
 
@@ -68,14 +64,8 @@ export default class FeedbackFacultyPage extends Component {
         this.setState({
           emailStatus: !value.emailResponse,
           resultPage: true,
-          topics: value.topics,
           kind: value.kind,
           date: value.startTime,
-        });
-      }
-      if (this.state.topics.length === 0) {
-        this.setState({
-          resultPage: false,
         });
       }
     });
@@ -90,7 +80,6 @@ export default class FeedbackFacultyPage extends Component {
           this.state.course.passCode,
           value.startTime,
           value.endTime,
-          value.topics,
           value.kind,
           value.instructor,
           url,
@@ -115,7 +104,6 @@ export default class FeedbackFacultyPage extends Component {
       this.setState({
         resultPage: false,
         emailStatus: false,
-        topics: [],
         duration: this.duration,
         date: '',
         results: '',
@@ -155,7 +143,6 @@ export default class FeedbackFacultyPage extends Component {
             this.state.course.passCode,
             startTime,
             endTime,
-            value.topics,
             value.kind,
             value.instructor,
             url,
@@ -172,7 +159,6 @@ export default class FeedbackFacultyPage extends Component {
             this.state.course.passCode,
             startTime,
             endTime,
-            value.topics,
             value.kind,
             value.instructor,
             url,
@@ -207,11 +193,12 @@ export default class FeedbackFacultyPage extends Component {
 
   load = async () => {
     await this.checkEmailSent().then(r => {
-      if (!(this.state.topics.length === 0)) {
-        this.setState({
-          resultPage: true,
-        });
-      }
+      // if (!(this.state.topics.length === 0)) {
+      //   this.setState({
+      //     resultPage: true,
+      //   });
+      // }
+      console.log("Email Sent");
     });
   };
 
@@ -231,7 +218,6 @@ export default class FeedbackFacultyPage extends Component {
                   feedbackCount={this.props.feedbackCount}
                   course={this.state.course}
                   user={this.state.user}
-                  setTopics={this.setTopics}
                   setKind={this.setKind}
                 />
               ) : (
@@ -239,7 +225,6 @@ export default class FeedbackFacultyPage extends Component {
                   <View style={styles.result}>
                     <FeedbackResultsList
                       course={this.state.course}
-                      topics={this.state.topics}
                       date={this.state.date}
                       emailStatus={this.state.emailStatus}
                       feedbackresultData={this.feedbackresultData}
@@ -256,7 +241,6 @@ export default class FeedbackFacultyPage extends Component {
                         this.setState({
                           resultPage: false,
                           emailStatus: false,
-                          topics: [],
                           duration: this.duration,
                           date: '',
                           results: '',
@@ -272,17 +256,7 @@ export default class FeedbackFacultyPage extends Component {
                   <Text style={styles.heading}>
                     Feedback {this.props.feedbackCount}
                   </Text>
-                  <View>
-                    {this.state.topics.map((value, i) => (
-                      <ListItem key={i} containerStyle={styles.listContainer}>
-                        <ListItem.Content>
-                          <ListItem.Title style={styles.title}>
-                            {i + 1 + '. ' + value}
-                          </ListItem.Title>
-                        </ListItem.Content>
-                      </ListItem>
-                    ))}
-                  </View>
+                  
                   <View style={styles.container}>
                     <Text style={styles.text1}>Scheduled to go live in</Text>
                     <CountDown

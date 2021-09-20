@@ -86,35 +86,37 @@ class FeedbackResponses {
             })
     }
 
-    getAllResponse = async (passCode, startTime, endTime, topics, kind)=> {
+    getAllResponse = async (passCode, startTime, endTime, kind)=> {
         let ans = null
+        // console.log('Getting all Feedback Responses')
         await this.reference
             .orderByChild("passCode")
             .equalTo(passCode)
             .once('value')
             .then(async snapshot => {
-                const list = {}
-
-                if (kind === "0")
-                for await (const topic of topics)
-                    list[topic] = {0:0, 1:0, 2:0}
-                else
-                for await (const topic of topics)
-                    list[topic] = {1:0, 2:0, 3:0, 4:0, 5:0}
-
+                let list = {}
+                // console.log("Snapshot "  + snapshot.val());
+                if (kind === "0"){
+                    list = {0:0, 1:0, 2:0}
+                }
+                else{
+                    list = {1:0, 2:0, 3:0, 4:0, 5:0}
+                }
                 await snapshot.forEach( (data) => {
                     const keys = Object(data.val())
-
+                    // console.log(keys);
                     const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
                     const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
                     const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
 
                     if (temp1<=temp2 && temp1>=temp){
-                        for (const topic of topics)
-                            list[topic][keys["responses"][topic]] += 1
+                        list[keys["responses"]] += 1
                     }
                 })
                 ans = list
+            })
+            .catch(error => {
+                console.error(error)
             })
         return ans
     }

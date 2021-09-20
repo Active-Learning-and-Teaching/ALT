@@ -21,7 +21,6 @@ export default class FeedbackStudentPage extends Component {
     this.state = {
       course: this.props.course,
       user: this.props.user,
-      topics: [],
       responded: false,
       responses: {},
       error: null,
@@ -32,9 +31,9 @@ export default class FeedbackStudentPage extends Component {
     this.studentResponses = this.studentResponses.bind(this);
   }
 
-  studentResponses(key, value) {
+  studentResponses(value) {
     let responses = this.state.responses;
-    responses[key] = value;
+    responses = value;
 
     this.setState({
       responses: responses,
@@ -47,7 +46,6 @@ export default class FeedbackStudentPage extends Component {
       .getFeedbackDetails(this.state.course.passCode)
       .then(async value => {
         if (value !== null) {
-          const arr = value.topics;
           let responses = {};
           let responded = false;
 
@@ -63,12 +61,7 @@ export default class FeedbackStudentPage extends Component {
               responded = r;
             });
 
-          for await (const item of arr) {
-            responses[item] = -1;
-          }
-
           await this.setState({
-            topics: value.topics,
             responses: responses,
             responded: responded,
             kind: value.kind,
@@ -138,7 +131,6 @@ export default class FeedbackStudentPage extends Component {
         });
       await this.setState({
         responded: true,
-        topics: [],
         responses: {},
         kind: null,
         error: null,
@@ -148,17 +140,17 @@ export default class FeedbackStudentPage extends Component {
 
   componentDidMount() {
     this.getTopics().then(r => {
-      console.log(this.state.topics);
+      // console.log(this.state.topics);
     });
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.topics != this.props.topics) {
-      this.getTopics().then(r => {
-        console.log(this.state.topics);
-      });
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.topics != this.props.topics) {
+  //     this.getTopics().then(r => {
+  //       console.log(this.state.topics);
+  //     });
+  //   }
+  // }
 
   render() {
     if (!this.state.loading) {
@@ -177,7 +169,6 @@ export default class FeedbackStudentPage extends Component {
                     until={this.props.beforeDuration + 5}
                     onFinish={() => {
                       this.getTopics().then(r => {
-                        console.log(this.state.topics);
                       });
                       this.props.setFeedbackState();
                     }}
@@ -199,7 +190,6 @@ export default class FeedbackStudentPage extends Component {
                   size={24}
                   onFinish={() => {
                     this.setState({
-                      topics: [],
                       responded: false,
                       responses: {},
                       error: null,
@@ -213,15 +203,13 @@ export default class FeedbackStudentPage extends Component {
                 />
                 <Text style={styles.text}> How well did you understand?</Text>
                 <View style={styles.grid}>
-                  {this.state.topics.map((value, i) => (
                     <StudentFeedbackCard
-                      value={value}
-                      key={i}
-                      index={i}
+                      value="Question"
+                      key="0"
+                      index="0"
                       kind={this.state.kind}
                       studentResponses={this.studentResponses}
                     />
-                  ))}
                 </View>
 
                 <View style={styles.buttonContainer}>

@@ -18,7 +18,6 @@ export default class FeedbackHomePage extends Component {
       beforeDuration: 0,
       feedbackCount: 0,
       startTime: '',
-      topics: [],
       kind: null,
     };
     this.setFeedbackState = this.setFeedbackState.bind(this);
@@ -50,7 +49,6 @@ export default class FeedbackHomePage extends Component {
               currentFeedback: true,
               currentDuration: duration,
               beforeDuration: 0,
-              topics: values.topics,
               feedbackCount: values.feedbackCount,
               kind: values.kind,
             });
@@ -61,7 +59,6 @@ export default class FeedbackHomePage extends Component {
               currentDuration: 0,
               beforeDuration: beforeDuration,
               startTime: startTime,
-              topics: values.topics,
               feedbackCount: values.feedbackCount,
               kind: values.kind,
             });
@@ -71,7 +68,6 @@ export default class FeedbackHomePage extends Component {
               currentFeedback: false,
               currentDuration: 0,
               beforeDuration: 0,
-              topics: values.topics,
               feedbackCount: values.feedbackCount,
               kind: values.kind,
             });
@@ -109,7 +105,6 @@ export default class FeedbackHomePage extends Component {
             currentDuration={this.state.currentDuration}
             beforeDuration={this.state.beforeDuration}
             setFeedbackState={this.setFeedbackState}
-            topics={this.state.topics}
             kind={this.state.kind}
           />
         )}

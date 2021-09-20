@@ -30,48 +30,11 @@ export default class FeedbackForm extends Component {
       time: moment(database().getServerTime())
         .add(360, 'minutes')
         .format('HH:mm:ss'),
-      iosdate: moment(database().getServerTime())
-        .add(360, 'minutes')
-        .format('DD/MM/YYYY'),
-      iostime: moment(database().getServerTime())
-        .add(360, 'minutes')
-        .format('HH:mm:ss'),
-      showDate: false,
-      showTime: false,
       error: null,
-      topics: ['topic 1'],
       duration: 1,
       kind: null,
     };
   }
-
-  // addTextInput = index => {
-  //   let textInput = this.state.textInput;
-  //   textInput.push(
-  //     <TextInput
-  //       style={styles.textInput}
-  //       key={index}
-  //       autoCapitalize="sentences"
-  //       onChangeText={text => this.addValues(text, index)}
-  //     />,
-  //   );
-  //   this.setState({textInput});
-  // };
-
-  // updateTopics = async () => {
-  //   let arr = [];
-  //   const t = this.state.inputData;
-  //   for await (const item of t) {
-  //     if (item.text.length !== 0) {
-  //       let topic = item.text;
-  //       topic = topic.charAt(0).toUpperCase() + topic.slice(1);
-  //       arr.push(topic);
-  //     }
-  //   }
-  //   await this.setState({
-  //     topics: arr,
-  //   });
-  // };
 
   addFeedback = async () => {
     if (this.state.kind === null) {
@@ -79,42 +42,17 @@ export default class FeedbackForm extends Component {
         error: 'Please choose feedback type.',
       });
     }
-    // else if (this.state.inputData.length === 0) {
-    //     this.setState({
-    //         error: "Please enter at least one topic."
-    //     })
-    // }
-    // else if(Platform.OS==='android'&& (this.state.date == null || this.state.time == null)){
 
-    //     this.setState({
-    //         error: "Please schedule feedback."
-    //     })
-    // }
     else {
       const feedback = new Feedback();
       const curr = moment(database().getServerTime());
       let startTime = curr.format('DD/MM/YYYY HH:mm:ss');
 
-      // if (Platform.OS === 'android')
-      //     startTime = this.state.date + " " + this.state.time
-      // else
-      //     startTime = this.state.iosdate + " " + this.state.iostime
-
       let endTime = curr
         .add(this.state.duration, 'minutes')
         .format('DD/MM/YYYY HH:mm:ss');
 
-      //   const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
-
-      //   if (curr > temp) {
-      //     // this.setState({
-      //     //     error: "Please schedule correct time."
-      //     // })
-      //   } else {
-      await this.updateTopics().then(r => {
-        console.log();
-      });
-
+      console.log(this.state.kind);
       await feedback.getFeedback(this.state.course.passCode).then(values => {
         if (values === null) {
           feedback
@@ -122,7 +60,6 @@ export default class FeedbackForm extends Component {
               this.state.course.passCode,
               startTime,
               endTime,
-              this.state.topics,
               this.state.kind,
               this.state.user.email,
             )
@@ -138,7 +75,6 @@ export default class FeedbackForm extends Component {
               this.state.course.passCode,
               startTime,
               endTime,
-              this.state.topics,
               this.state.kind,
               this.state.user.email,
               url,
@@ -148,10 +84,8 @@ export default class FeedbackForm extends Component {
             .then(r => {
               console.log('update');
               console.log(this.state.kind);
-              console.log(this.state.topics);
             });
         }
-        // this.props.setTopics(this.state.topics);
         this.setState({
           textInput: [],
           inputData: [],
@@ -160,83 +94,12 @@ export default class FeedbackForm extends Component {
           showTime: false,
           time: null,
           error: null,
-          topics: ['topic 1'],
           kind: null,
         });
       });
-      //   }
     }
   };
 
-  // addValues = (text, index) => {
-  //   let dataArray = this.state.inputData;
-  //   let checkBool = false;
-  //   if (dataArray.length !== 0) {
-  //     dataArray.forEach(element => {
-  //       if (element.index === index) {
-  //         element.text = text;
-  //         checkBool = true;
-  //       }
-  //     });
-  //   }
-  //   if (checkBool) {
-  //     this.setState({
-  //       inputData: dataArray,
-  //     });
-  //   } else {
-  //     dataArray.push({text: text, index: index});
-  //     this.setState({
-  //       inputData: dataArray,
-  //     });
-  //   }
-  // };
-
-  // onChangeDate = (event, selectedDate) => {
-  //   const currentDate = moment(selectedDate).format('DD/MM/YYYY');
-  //   this.setState({
-  //     date: currentDate,
-  //     showDate: false,
-  //     showTime: false,
-  //   });
-  // };
-  // onChangeTime = (event, selectedTime) => {
-  //   const currentTime = moment(selectedTime).format('HH:mm:ss');
-  //   this.setState({
-  //     time: currentTime,
-  //     showDate: false,
-  //     showTime: false,
-  //   });
-  // };
-  // iOSonChangeDate = (event, selectedDate) => {
-  //   const currentDate = moment(selectedDate).format('DD/MM/YYYY');
-  //   this.setState({
-  //     iosdate: currentDate,
-  //   });
-  // };
-  // iOSonChangeTime = (event, selectedDate) => {
-  //   const currentDate = moment(selectedDate).format('HH:mm:ss');
-  //   this.setState({
-  //     iostime: currentDate,
-  //   });
-  // };
-  // doneButton = () => {
-  //   this.setState({
-  //     showDate: false,
-  //     showTime: false,
-  //   });
-  // };
-  // showDatePicker = () => {
-  //   this.setState({
-  //     showDate: true,
-  //     showTime: false,
-  //   });
-  // };
-  // showTimePicker = () => {
-  //   this.setState({
-  //     showDate: false,
-  //     showTime: true,
-  //   });
-  // };
 
   render() {
     return (
@@ -247,25 +110,10 @@ export default class FeedbackForm extends Component {
             Feedback {this.props.feedbackCount + 1}
           </Text>
 
-          {console.log(moment(database().getServerTime()).add(360, 'minutes'))}
-
-          {/* <View style={styles.rowContainer}>
-                        <Text style={styles.topic}> Topics </Text>
-                        <Icon
-                            name='plus-circle'
-                            type='font-awesome'
-                            style={{borderRadius:1}}
-                            onPress={() => this.addTextInput(this.state.textInput.length)}
-                        />
-
-                    </View>
-
-                    {this.state.textInput.map((value) => {
-                        return value
-                    })} */}
           <View style={styles.selector}>
             <SwitchSelector
               onPress={value => {
+                console.log(value)
                 this.setState({kind: value});
               }}
               textColor={'black'}
@@ -277,112 +125,6 @@ export default class FeedbackForm extends Component {
               ]}
             />
           </View>
-
-          {/* <View style={styles.buttonRowContainer}>
-                        <View style={styles.container}>
-                            { Platform.OS==='ios'?
-                                <View>
-                                    <Button titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mydatebutton} onPress={this.showDatePicker} title="Select Date" />
-                                    <Text style={styles.dateTime}> {this.state.iosdate!=null ? this.state.iosdate:""}</Text>
-                                </View>
-                            :
-                                <View>
-                                    <Button titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mydatebutton} onPress={this.showDatePicker} title="Select Date" />
-                                    <Text style={styles.dateTime}> {this.state.date!=null ? this.state.date:""}</Text>
-                                </View>
-                            }
-
-                        </View>
-                        <View style={styles.container}>
-                            {  Platform.OS === 'ios' ?
-                                <View>
-                                    <Button titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mydatebutton}  onPress={this.showTimePicker} title="Select Time" />
-                                    <Text style={styles.dateTime}> {this.state.iostime!=null ? this.state.iostime:""}</Text>
-                                </View>
-                                :
-                                <View>
-                                    <Button titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mydatebutton} onPress={this.showTimePicker} title="Select Time" />
-                                    <Text style={styles.dateTime}> {this.state.time!=null ? this.state.time:""}</Text>
-                                </View>
-                            }
-
-                        </View>
-                    </View>
-
-                    <View>
-                        { this.state.showDate
-                            ?
-                            <View>
-
-                                { Platform.OS==='ios'?
-                                    <View>
-                                        <View>
-                                            <Button  buttonStyle={styles.mydatebutton} titleStyle={{color:'white',fontWeight:'normal'}} onPress={this.doneButton} title="Ok"/>
-                                        </View>
-                                        <DateTimePicker
-                                            testID="datePicker"
-                                            value={moment(this.state.iosdate,"DD/MM/YYYY").toDate()}
-                                            mode={'date'}
-                                            is24Hour={true}
-                                            display="default"
-                                            minimumDate = {moment(database().getServerTime()).toDate()}
-                                            maximumDate = {
-                                                moment(database().getServerTime()).add(30,'days')
-                                                    .toDate()
-                                            }
-                                            onChange={this.iOSonChangeDate}
-                                        />
-                                    </View>
-                                    :
-                                    <DateTimePicker
-                                        testID="datePicker"
-                                        value={moment(database().getServerTime()).toDate()}
-                                        mode={'date'}
-                                        is24Hour={true}
-                                        display="default"
-                                        minimumDate = {moment(database().getServerTime()).toDate()}
-                                        maximumDate = {
-                                            moment(database().getServerTime()).add(30,'days')
-                                                .toDate()
-                                        }
-                                        onChange={this.onChangeDate}
-                                    />
-                                }
-                            </View>
-                            : this.state.showTime
-                            ?
-                            <View>
-                                { Platform.OS==='ios'?
-                                    <View>
-                                        <View>
-                                            <Button buttonStyle={styles.mydatebutton} titleStyle={{color:'white',fontWeight:'normal'}} onPress={this.doneButton} title="Ok"/>
-                                        </View>
-                                        <DateTimePicker
-                                            testID="timePicker"
-                                            value={moment(this.state.iostime,"HH:mm:ss").toDate()}
-                                            mode={'time'}
-                                            is24Hour={true}
-                                            display="default"
-                                            onChange={this.iOSonChangeTime}
-                                        />
-                                    </View>
-                                    :
-                                    <DateTimePicker
-                                        testID="timePicker"
-                                        value={moment(database().getServerTime()).toDate()}
-                                        mode={'time'}
-                                        is24Hour={true}
-                                        display="default"
-                                        onChange={this.onChangeTime}
-                                    />
-                                }
-
-                            </View>
-
-                            :<Text/>
-                        }
-                    </View> */}
-
           <View style={styles.buttonContainer}>
             {this.state.error ? (
               <Text style={styles.errorMessage}>{this.state.error}</Text>
