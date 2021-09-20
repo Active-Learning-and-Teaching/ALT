@@ -13,10 +13,4 @@ jobs:
         run: cd App && npm i
 
       - name: Build Android Release
-        run: cd App && cd android && ./gradlew assembleRelease
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: release
-          path: android/app/build/outputs/apk/release/app-release.apk
+        run: cd App && npx react-native run-android
