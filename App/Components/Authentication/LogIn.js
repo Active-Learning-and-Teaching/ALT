@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth';
 import ErrorMessages from '../../Utils/ErrorMessages';
-import crashlytics from '@react-native-firebase/crashlytics';
+//import crashlytics from '@react-native-firebase/crashlytics';
 import {Button, Text} from 'react-native-elements';
 import {
   StyleSheet,
