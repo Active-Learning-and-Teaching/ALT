@@ -12,9 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install npm dependencies
+      
+      - name: remove ios-deploy
         run: |
-          cd App && npm install --legacy-peer-deps
+          npm install ios-deploy@1.11.4 --save-dev
+      - name: Install npm dependencies 
+        run: |
+          cd App && npm install --production --legacy-peer-deps
       - name: Make Gradlew Executable
         run: |
           cd App && cd android && chmod +x ./gradlew
