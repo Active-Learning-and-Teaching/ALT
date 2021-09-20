@@ -69,4 +69,4 @@ pod install
 `npx react-native run-android`
 
 ## Release ⬇️
-You can install the latest stable version of the app from Releases. The Android app is available as APK and iOS app is available through TestFlight.
+You can install the latest stable version of the app from Releases. The Android app is available on google play and iOS app is available through TestFlight.
