@@ -5,12 +5,12 @@ on:
     branches: [ master ]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: cd App && npm i
+        run: cd App && npm install --legacy-peer-deps
 
       - name: move to location and give permissions and Build
         run: cd App && cd android && chmod +x ./gradlew && ./gradlew assembleRelease
