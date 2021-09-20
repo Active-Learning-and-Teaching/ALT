@@ -35,8 +35,6 @@ export default class MainNavigator extends Component {
       user: null,
     };
     this.setUser = this.setUser.bind(this);
-    this.routeNameRef = React.createRef();
-    this.navigationRef = React.createRef();
   }
 
   // componentDidMount() {
@@ -53,26 +51,8 @@ export default class MainNavigator extends Component {
 
   render() {
     const Stack = createStackNavigator();
-    routeNameRef = this.routeNameRef;
-    navigationRef = this.navigationRef;
     return (
-      <NavigationContainer
-        theme={MyTheme}
-        ref={navigationRef}
-        onReady={() => {
-          routeNameRef.current = navigationRef.current.getCurrentRoute().name;
-        }}
-        onStateChange={async () => {
-          const previousRouteName = routeNameRef.current;
-          const currentRouteName = navigationRef.current.getCurrentRoute().name;
-          if (previousRouteName !== currentRouteName) {
-            await analytics().logScreenView({
-              screen_name: currentRouteName,
-              screen_class: currentRouteName,
-            });
-          }
-          routeNameRef.current = currentRouteName;
-        }}>
+      <NavigationContainer theme={MyTheme}>
         <Stack.Navigator
           initialRouteName="CheckUserLoggedIn"
           screenOptions={{
