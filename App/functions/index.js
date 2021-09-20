@@ -469,7 +469,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
   let vlist = null
   let verifiedStudentList = null
   let studentList = await getStudents(passCode)
-  verifiedStudentList = studentList.filter(student => {student['verified']==1})
+  verifiedStudentList = studentList.filter(student => {return student['verified']==1})
   vlist = verifiedStudentList.map((student) => {return student['key']})
 
   let ans = null
