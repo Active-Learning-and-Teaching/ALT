@@ -12,12 +12,9 @@ jobs:
       - name: Install dependencies
         run: cd App && npm i
 
-      - name: move to location and give permissions
-        run: cd App && cd android && chmod +x ./gradlew
+      - name: move to location and give permissions and Build
+        run: cd App && cd android && chmod +x ./gradlew && ./gradlew assembleRelease
 
-      - name: build android
-        run: ./gradlew assembleRelease
-      
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
