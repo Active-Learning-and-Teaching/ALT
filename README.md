@@ -43,18 +43,30 @@ An open-source mobile application to facilitate teaching and learning in courses
 
 1. Clone the repository to local machine
 ```sh
-git clone https://github.com/SDOS-Winter2021/Team_1_ALT.git
+git clone https://github.com/Active-Learning-and-Teaching/ALT.git
 ```
 2. Install Node Modules
 ```sh
 cd App
 npm install --legacy-peer-deps
 ```
-3. Install CocoaPods
+3. Install CocoaPods 
+
+x86 Architecture
 ```sh
 cd ios
+sudo gem install cocoapods
 pod install
 ```
+
+M1 Architecture
+```sh
+cd ios
+sudo arch -x86_64 gem install ffi
+sudo gem install cocoapods
+arch -x86_64 pod install
+```
+
 4. Download the following files from the Firebase project and place them in their respective folder.
  - `App/config.json`
  - `App/android/app/google-services.json`
