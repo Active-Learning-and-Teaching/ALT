@@ -208,9 +208,17 @@ export default class QuizFacultyPage extends Component{
 
     dbUpdateCorrectAnswer = async () => {
         const option = this.state.option
+        const error= this.state.errorRate
+        
         if (option === "" || option === "*") {
             this.setState({
                 error : "Please type Correct Answer"
+            })
+        }
+        else if(this.state.typeofQuiz ==="numeric" && (isNaN(parseFloat(option)) || isNaN(parseFloat(error))) )
+        {
+            this.setState({
+                error : "Please type Numerical Response"
             })
         }
         else{
@@ -462,7 +470,7 @@ export default class QuizFacultyPage extends Component{
                             />
 
                             <Text style={[styles.heading,{fontSize : 20, }]}>
-                                Provide Error Rate for Auto-grading
+                                Provide acceptable absolute error amount
                             </Text>
                             <TextInput
                                 style={styles.textInput}
