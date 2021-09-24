@@ -51,22 +51,11 @@ cd App
 npm install --legacy-peer-deps
 ```
 3. Install CocoaPods 
-
-x86 Architecture
 ```sh
 cd ios
 sudo gem install cocoapods
 pod install
 ```
-
-M1 Architecture
-```sh
-cd ios
-sudo arch -x86_64 gem install ffi
-sudo gem install cocoapods
-arch -x86_64 pod install
-```
-
 4. Download the following files from the Firebase project and place them in their respective folder.
  - `App/config.json`
  - `App/android/app/google-services.json`
@@ -74,11 +63,16 @@ arch -x86_64 pod install
 
 ## Build ⚙️
 
-### iOS   
-`npx react-native run-ios` 
+### iOS
+ Note : To build on an Macbooks with M1 Chip, open Xcode with Rosetta 2       
+```
+npx react-native run-ios
+```
 
 ### Android       
-`npx react-native run-android`
+```
+npx react-native run-android
+```
 
 ## Release ⬇️
-You can install the latest stable version of the app from Releases. The Android app is available on google play and iOS app is available through TestFlight.
+You can install the latest stable version of the app from Releases. The Android app is available on Google Play Store and iOS app is available through TestFlight.
