@@ -27,7 +27,7 @@ jobs:
         run: echo $ANDROID_DEV_SECRET > App/android/app/google-services.json
       - name : Decode Keystore
         run: |
-          echo "${{ secrets.DEBUG_KEYSTORE })" > debug.keystore.asc
+          echo "${{ secrets.DEBUG_KEYSTORE }}" > debug.keystore.asc
           gpg -d --passphrase "${{ secrets.DEBUG _KEYSTORE_PASSPHRASE }}" --batch debug.keystore.asc > App/android/app/release.keystore
       - name: Make Gradlew Executable
         run: |
