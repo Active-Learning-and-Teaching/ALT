@@ -30,7 +30,7 @@ jobs:
           cd App && cd android && chmod +x ./gradlew
       - name: Build Android Release
         run: |
-          ./gradlew assembleRelease --no-daemon
+          cd App && cd android && ./gradlew assembleRelease --no-daemon
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
