@@ -150,10 +150,8 @@ export default class FeedbackStudentPage extends Component {
   //     });
   //   }
   // }
-
   render() {
     if (!this.state.loading) {
-      if (this.state.error) { (styles.mybutton.marginTop = 5)}
       return (
         
         <SafeAreaView style={styles.safeContainer}>
