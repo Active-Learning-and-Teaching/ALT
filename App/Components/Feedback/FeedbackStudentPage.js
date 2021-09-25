@@ -22,7 +22,7 @@ export default class FeedbackStudentPage extends Component {
       course: this.props.course,
       user: this.props.user,
       responded: false,
-      responses: {},
+      responses: -1,
       error: null,
       loading: true,
       kind: null,
@@ -32,11 +32,13 @@ export default class FeedbackStudentPage extends Component {
   }
 
   studentResponses(value) {
+    console.log("Student response ", value);
     let responses = this.state.responses;
     responses = value;
 
     this.setState({
       responses: responses,
+      error:null,
     });
   }
 
@@ -46,7 +48,7 @@ export default class FeedbackStudentPage extends Component {
       .getFeedbackDetails(this.state.course.passCode)
       .then(async value => {
         if (value !== null) {
-          let responses = {};
+          let responses = -1;
           let responded = false;
 
           const feedbackResponse = new FeedbackResponses();
@@ -73,17 +75,14 @@ export default class FeedbackStudentPage extends Component {
   submitFeedback = async () => {
     const {responses} = this.state;
     var err = false;
-
-    for await (let response of Object.values(responses)) {
-      if (response === -1) {
-        err = true;
-        break;
-      }
+    console.log("Submit Feedback ",responses);
+    if (responses === -1) {
+      err = true;
     }
 
     if (err) {
       await this.setState({
-        error: 'Please enter all responses.',
+        error: 'Please enter a response',
       });
     } else {
       await this.setState({
@@ -131,7 +130,7 @@ export default class FeedbackStudentPage extends Component {
         });
       await this.setState({
         responded: true,
-        responses: {},
+        responses: -1,
         kind: null,
         error: null,
       });
@@ -154,7 +153,9 @@ export default class FeedbackStudentPage extends Component {
 
   render() {
     if (!this.state.loading) {
+      if (this.state.error) { (styles.mybutton.marginTop = 5)}
       return (
+        
         <SafeAreaView style={styles.safeContainer}>
           {this.props.currentFeedback === false ? (
             this.props.beforeFeedback === false ? (
@@ -191,7 +192,7 @@ export default class FeedbackStudentPage extends Component {
                   onFinish={() => {
                     this.setState({
                       responded: false,
-                      responses: {},
+                      responses: -1,
                       error: null,
                     });
                     this.props.setFeedbackState();
@@ -202,7 +203,8 @@ export default class FeedbackStudentPage extends Component {
                   timeLabels={{m: 'Min', s: 'Sec'}}
                 />
                 <Text style={styles.text}> How well did you understand?</Text>
-                <View style={styles.grid}>
+                
+                <View style={[styles.grid]}>
                     <StudentFeedbackCard
                       value="Question"
                       key="0"
@@ -211,10 +213,10 @@ export default class FeedbackStudentPage extends Component {
                       studentResponses={this.studentResponses}
                     />
                 </View>
-
                 <View style={styles.buttonContainer}>
                   {this.state.error ? (
                     <Text style={styles.errorMessage}>{this.state.error}</Text>
+                    
                   ) : (
                     <Text />
                   )}
@@ -222,13 +224,14 @@ export default class FeedbackStudentPage extends Component {
               </View>
               <View style={[styles.buttonContainer]}>
                 <Button
-                  buttonStyle={styles.mybutton}
+                  buttonStyle={[styles.mybutton]}
                   titleStyle={{color: 'white', fontWeight: 'normal'}}
                   style={styles.buttonMessage}
                   title="Submit"
                   onPress={this.submitFeedback}
                 />
               </View>
+              
             </ScrollView>
           )}
         </SafeAreaView>
@@ -251,6 +254,9 @@ const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
     backgroundColor: 'transparent',
+  },
+  extraMargin : {
+    marginTop: 25,
   },
   heading: {
     flex: 1,
@@ -325,9 +331,8 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     color: 'red',
-    marginBottom: 5,
+    marginTop: 65,
     paddingTop: 5,
-    paddingBottom: 10,
   },
   preloader: {
     left: 0,

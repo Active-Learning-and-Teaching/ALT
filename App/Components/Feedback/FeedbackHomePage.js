@@ -27,6 +27,15 @@ export default class FeedbackHomePage extends Component {
     this.isCurrentFeedback();
   }
 
+  cancelFeedback = () => {
+    let feedbackCount = this.state.feedbackCount;
+    this.setState({
+      currentFeedback:false,
+      feedbackCount: feedbackCount-1,
+    })
+  }
+
+
   isCurrentFeedback = () => {
     database()
       .ref('InternalDb/Feedback/')
@@ -95,6 +104,7 @@ export default class FeedbackHomePage extends Component {
             startTime={this.state.startTime}
             feedbackCount={this.state.feedbackCount}
             kind={this.state.kind}
+            cancelFeedback={this.cancelFeedback}
           />
         ) : (
           <FeedbackStudentPage

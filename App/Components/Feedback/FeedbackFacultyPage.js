@@ -28,7 +28,6 @@ export default class FeedbackFacultyPage extends Component {
       user: this.props.user,
       resultPage: false,
       emailStatus: false,
-      // topics: [],
       duration: this.duration,
       date: '',
       results: '',
@@ -107,17 +106,16 @@ export default class FeedbackFacultyPage extends Component {
         duration: this.duration,
         date: '',
         results: '',
+        currentFeedback : false,
       });
 
-      this.props.beforeFeedback = false;
-      this.props.currentFeedback = false;
+      this.props.cancelFeedback()
 
-      feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
+      await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
           const url = Object.keys(values)[0];
           feedback.setFeedback(
             this.state.course.passCode,
-            '',
             '',
             '',
             '',
@@ -136,12 +134,12 @@ export default class FeedbackFacultyPage extends Component {
       endTime = moment(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
         .add(10 + this.state.duration, 'minutes')
         .format('DD/MM/YYYY HH:mm:ss');
-      feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
+      await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
           const url = Object.keys(values)[0];
           feedback.setFeedback(
             this.state.course.passCode,
-            startTime,
+            value.startTime,
             endTime,
             value.kind,
             value.instructor,
@@ -152,7 +150,7 @@ export default class FeedbackFacultyPage extends Component {
         });
       });
     } else {
-      feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
+      await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
           const url = Object.keys(values)[0];
           feedback.setFeedback(
