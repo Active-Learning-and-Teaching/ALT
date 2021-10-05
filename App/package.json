@@ -31,8 +31,6 @@
     "@react-navigation/native": "^5.6.0",
     "@react-navigation/stack": "^5.2.19",
     "crypto-random-string": "^3.2.0",
-    "install": "^0.13.0",
-    "ios-deploy": "^1.11.4",
     "moment": "^2.27.0",
     "npm": "^7.24.0",
     "npm-check-updates": "^11.2.1",

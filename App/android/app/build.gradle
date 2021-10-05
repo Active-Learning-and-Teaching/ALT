@@ -132,10 +132,10 @@ android {
     }
 
     defaultConfig {
-        configurations.all {
-            resolutionStrategy { force 'androidx.browser:browser:1.3.0' }
+    configurations.all {
+    resolutionStrategy { force 'androidx.browser:browser:1.3.0' }
         }
-        applicationId "com.IIITD.ALT"
+        applicationId "com.tls"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
