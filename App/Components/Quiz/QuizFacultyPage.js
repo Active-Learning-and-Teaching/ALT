@@ -31,6 +31,7 @@ export default class QuizFacultyPage extends Component{
             typeofQuiz : "mcq",
             loading : true,
             quizNumber : "",
+            errorRate : "*",
         };
         this.setOption = this.setOption.bind(this);
         this.quizresultData = this.quizresultData.bind(this);
@@ -56,6 +57,7 @@ export default class QuizFacultyPage extends Component{
             }
             if (this.state.correctAnswer===''){this.setState ({resultPage : false})}
         })
+
         console.log(this.state.correctAnswer) 
     }
 
@@ -86,6 +88,7 @@ export default class QuizFacultyPage extends Component{
                             value["endTime"],
                             value["duration"],
                             value["correctAnswer"],
+                            value["errorRate"],
                             value["instructor"],
                             value["quizType"],
                             url,
@@ -98,9 +101,13 @@ export default class QuizFacultyPage extends Component{
 
     startKBC = async (action = "start") => {
 
-
+ 
         if (action==="stop")
         {
+            console.log("Created stop Quiz"); 
+            console.log(this.state.correctAnswer);
+            //console.log(this.state.option);
+            
             this.setState({
                 time : 2,
                 option : "*",
@@ -113,7 +120,6 @@ export default class QuizFacultyPage extends Component{
                 results :"",
                 typeofQuiz : "mcq",
             })
-
             this.props.setQuizState()
             const kbc = new Quiz()
             await kbc.getQuestion(this.state.course.passCode)
@@ -122,6 +128,7 @@ export default class QuizFacultyPage extends Component{
                 const questionCount = Object.values(values)[0].questionCount;
                 kbc.setQuestion(
                     this.state.course.passCode,
+                    '',
                     '',
                     '',
                     '',
@@ -137,7 +144,7 @@ export default class QuizFacultyPage extends Component{
         else
         {
 
-        const {option, time} = this.state;
+        const {option, time, errorRate} = this.state;
 
         if (option === '') {
             this.setState({
@@ -159,6 +166,7 @@ export default class QuizFacultyPage extends Component{
                             endTime,
                             time,
                             option,
+                            errorRate,
                             this.state.user.email,
                             this.state.typeofQuiz
                         ).then(r => {
@@ -174,6 +182,7 @@ export default class QuizFacultyPage extends Component{
                             endTime,
                             time,
                             option,
+                            errorRate,
                             this.state.user.email,
                             this.state.typeofQuiz,
                             url,
@@ -199,9 +208,17 @@ export default class QuizFacultyPage extends Component{
 
     dbUpdateCorrectAnswer = async () => {
         const option = this.state.option
+        const error= this.state.errorRate
+        
         if (option === "" || option === "*") {
             this.setState({
                 error : "Please type Correct Answer"
+            })
+        }
+        else if(this.state.typeofQuiz ==="numeric" && (isNaN(parseFloat(option)) || isNaN(parseFloat(error))) )
+        {
+            this.setState({
+                error : "Please type Numerical Response"
             })
         }
         else{
@@ -220,6 +237,7 @@ export default class QuizFacultyPage extends Component{
                                 value["endTime"],
                                 value["duration"],
                                 this.state.option,
+                                this.state.errorRate,
                                 value["instructor"],
                                 value["quizType"],
                                 url,
@@ -272,27 +290,33 @@ export default class QuizFacultyPage extends Component{
                             options={[
                                 { label: "Single-Correct", value: "mcq", activeColor: 'tomato'},
                                 { label: "Multi-Correct", value: "multicorrect" ,activeColor: 'tomato'},
-                                { label: "Alpha-Numeric", value: "numerical" ,activeColor: 'tomato'},
+                                { label: "Alpha-Numeric", value: "alphaNumerical" ,activeColor: 'tomato'},
+                                { label: "Numeric", value: "numeric" ,activeColor: 'tomato'},
                             ]}
                         />
                     </View>
-                    {this.state.typeofQuiz === "mcq"
+                    {
+                    this.state.typeofQuiz === "mcq"
                     ?
                         <View>
                             <Options optionValue={this.setOption} icon={this.state.icon}/>
                         </View>
                     :
-                        this.state.typeofQuiz ==="numerical"
-                        ?
+                    this.state.typeofQuiz ==="alphaNumerical"
+                    ?
                         <Text/>
-                        :
-                            this.state.typeofQuiz ==="multicorrect"
-                            ?
-                            <View>
-                                <MultiCorrectOptions optionValue={this.setOption}/>
-                            </View>
-                            :
-                            <Text/>
+                    :
+                    this.state.typeofQuiz ==="numeric"
+                    ?
+                        <Text/>
+                    :
+                    this.state.typeofQuiz ==="multicorrect"
+                    ?
+                    <View>
+                        <MultiCorrectOptions optionValue={this.setOption}/>
+                    </View>
+                    :
+                    <Text/>
                     }
 
                     <View style={styles.container}>
@@ -344,7 +368,13 @@ export default class QuizFacultyPage extends Component{
                             />
                             <View style={[
                                 styles.buttonContainer,
-                                { width: this.props.quizType==="numerical"
+                                { width: this.props.quizType==="alphaNumerical"
+                                        ? Dimensions.window.width-50
+                                        :"100%"
+                                }]}>
+                            <View style={[
+                                styles.buttonContainer,
+                                { width: this.props.quizType==="numeric"
                                         ? Dimensions.window.width-50
                                         :"100%"
                                 }]}>
@@ -367,6 +397,7 @@ export default class QuizFacultyPage extends Component{
                                                 quizNumber : "",
                                             })
                                         }}/>
+                            </View>
                             </View>
                             </View>
                         </ScrollView>
@@ -392,7 +423,7 @@ export default class QuizFacultyPage extends Component{
                         <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} title='Cancel' onPress={()=>{
                              this.startKBC("stop").then(r => "")}} />
                     </View>
-                    {this.props.quizType==="numerical"
+                    {this.props.quizType==="alphaNumerical"
                         ?
                         <View>
                             <Text style={[styles.heading,{fontSize : 20, }]}>
@@ -422,12 +453,57 @@ export default class QuizFacultyPage extends Component{
                         :
                         <Text/>
                     }
+                    {this.props.quizType==="numeric"
+                        ?
+                        <View>
+                            <Text style={[styles.heading,{fontSize : 20, }]}>
+                                Provide Answer for Auto-grading
+                            </Text>
+                            <TextInput
+                                style={styles.textInput}
+                                maxLength={30}
+                                textAlign={'center'}
+                                onChangeText={text => {this.setState({
+                                    option : text
+                                })}}
+                                value={this.state.option==="*"?"":this.state.option}
+                            />
+
+                            <Text style={[styles.heading,{fontSize : 20, }]}>
+                                Provide acceptable absolute error amount
+                            </Text>
+                            <TextInput
+                                style={styles.textInput}
+                                maxLength={30}
+                                textAlign={'center'}
+                                onChangeText={text => {this.setState({
+                                    errorRate : text
+                                })}}
+                                value={this.state.errorRate==="*"?"":this.state.errorRate}
+                            />
+
+                            {this.state.error ? <Text style={styles.errorMessage}>{this.state.error}</Text> : <Text/>}
+
+                            <Button style={styles.buttonMessage}
+                                buttonStyle={styles.mybutton}
+                                titleStyle={{color:'white',fontWeight:'normal'}}
+                                title="Submit"
+                                onPress={()=>{
+                                    this.dbUpdateCorrectAnswer()
+                                        .then(r => console.log("Answer Updated"))
+                                }}
+                            />
+                        </View>
+                        :
+                        <Text/>
+                    }
                 </ScrollView>
                 }
             </SafeAreaView>
         )}
         else{
             let that = this;
+            //console.log(this.state.loading);
             setTimeout(function(){that.setState({loading: false})}, 1000);
             return(
                 <View style={styles.preloader}>
