@@ -56,10 +56,10 @@ export default class QuizFacultyPage extends Component {
     await Kbc.getTiming(this.state.course.passCode).then(async value => {
       if (value != null) {
         await this.setState({
-          emailStatus: !value.emailResponse,
+          emailStatus: !value['emailResponse'],
           resultPage: true,
-          correctAnswer: value.correctAnswer,
-          date: value.startTime,
+          correctAnswer: value['correctAnswer'],
+          date: value['startTime'],
         });
       }
       if (this.state.correctAnswer === '') {
@@ -78,9 +78,7 @@ export default class QuizFacultyPage extends Component {
   }
 
   async setOption(value) {
-    if (value === '') {
-      value = '*';
-    }
+    if (value === '') value = '*';
     await this.setState({
       option: value,
       icon: value,
@@ -95,15 +93,15 @@ export default class QuizFacultyPage extends Component {
         const url = Object.keys(values)[0];
         Kbc.setQuestion(
           this.state.course.passCode,
-          value.startTime,
-          value.endTime,
-          value.duration,
-          value.correctAnswer,
-          value.instructor,
-          value.quizType,
+          value['startTime'],
+          value['endTime'],
+          value['duration'],
+          value['correctAnswer'],
+          value['instructor'],
+          value['quizType'],
           url,
           true,
-          value.questionCount,
+          value['questionCount'],
         );
       });
     });
@@ -149,7 +147,9 @@ export default class QuizFacultyPage extends Component {
     } else {
       const {option, time} = this.state;
 
-      if (option === '') {
+      if (option === '*') {
+        //console.log("Please select correct answer.");
+        Toast.show('Please select correct answer');
         this.setState({
           error: 'Please select correct answer.',
         });
@@ -193,6 +193,7 @@ export default class QuizFacultyPage extends Component {
                 questionCount + 1,
               )
               .then(r => {
+                //console.log(this.state);
                 console.log('update');
               });
           }
@@ -209,6 +210,7 @@ export default class QuizFacultyPage extends Component {
 
   dbUpdateCorrectAnswer = async () => {
     const option = this.state.option;
+    console.log('Entering dbUpdateCorrectAnswer');
     if (option === '' || option === '*') {
       this.setState({
         error: 'Please type Correct Answer',
@@ -223,15 +225,15 @@ export default class QuizFacultyPage extends Component {
           const url = Object.keys(values)[0];
           Kbc.setQuestion(
             this.state.course.passCode,
-            value.startTime,
-            value.endTime,
-            value.duration,
+            value['startTime'],
+            value['endTime'],
+            value['duration'],
             this.state.option,
-            value.instructor,
-            value.quizType,
+            value['instructor'],
+            value['quizType'],
             url,
-            value.emailResponse,
-            value.questionCount,
+            value['emailResponse'],
+            value['questionCount'],
           );
           Toast.show('Correct Answer has been recorded!');
         });

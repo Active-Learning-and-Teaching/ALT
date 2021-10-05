@@ -8,9 +8,10 @@
 /* eslint-disable quotes */
 /* eslint-disable indent */
 
+// Testing Workflow of Firebase Functions
+
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-
 
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
@@ -851,8 +852,8 @@ exports.deleteCourse = functions.https.onCall(async (data, context) => {
 exports.deleteStudent = functions.https.onCall((data, context) =>{
   studentID = data.key;
   userUID = data.userUID;
-  console.log("Student ID: " + studentID);
-  console.log("Recieved data");
+  console.log('Student ID: ' + studentID);
+  console.log('Recieved data');
   console.log(data);
   console.log(context);
   dbRef = admin.app().database(url).ref('InternalDb/Student/' + studentID);
@@ -873,14 +874,14 @@ exports.deleteStudent = functions.https.onCall((data, context) =>{
     console.log();
   });
   admin
-  .auth()
-  .deleteUser(userUID)
-  .then(() => {
-    console.log('Successfully deleted user from firebase auth');
-  })
-  .catch((error) => {
-    console.log('Error deleting user from firebase auth:', error);
-  });
+    .auth()
+    .deleteUser(userUID)
+    .then(() => {
+      console.log('Successfully deleted user from firebase auth');
+    })
+    .catch(error => {
+      console.log('Error deleting user from firebase auth:', error);
+    });
 });
 exports.deleteFaculty = functions.https.onCall((data, context) => {
   const key = data.key;
@@ -928,14 +929,14 @@ exports.deleteFaculty = functions.https.onCall((data, context) => {
     console.log();
   });
   admin
-  .auth()
-  .deleteUser(userUID)
-  .then(() => {
-    console.log('Successfully deleted user from firebase auth');
-  })
-  .catch((error) => {
-    console.log('Error deleting user from firebase auth:', error);
-  });
+    .auth()
+    .deleteUser(userUID)
+    .then(() => {
+      console.log('Successfully deleted user from firebase auth');
+    })
+    .catch(error => {
+      console.log('Error deleting user from firebase auth:', error);
+    });
 });
 exports.quizNotification  = functions.database.ref('InternalDb/KBC/{qid}').onWrite(async (change, context) => {
     try {
