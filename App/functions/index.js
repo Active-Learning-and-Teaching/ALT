@@ -21,10 +21,10 @@ const url = 'https://testfortls.firebaseio.com/';
 // ADD CREDENTIALS BEFORE DEPLOYING
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: functions.config().mailingsystem.host,
   auth: {
-    user: "atlapp2021@gmail.com",
-    pass: "",
+    user: functions.config().mailingsystem.email,
+    pass: functions.config().mailingsystem.password,
   },
 });
 
@@ -251,33 +251,43 @@ function emailTemplate(courseName, date, topics, results, type, quizCount, feedb
 }
 async function getURLFromPasscode(passCode) {
   const db_ref = admin.app().database(url).ref('InternalDb/Courses/');
+  let snapshots;
   let courseURL;
-  await db_ref.orderByChild("passCode").equalTo(passCode).once("value",
-    function (snapshot) {
-      courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
-    },
-    function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    },
-  );
+  try {
+    snapshots = await db_ref.orderByChild("passCode").equalTo(passCode).once("value")
+    snapshots.forEach((snapshot) =>  {
+      courseURL = snapshot.key
+    })
+    if(snapshots.numChildren()==0){
+      throw "No courses with passcode: "+passCode
+    }
+    console.log("Inside getURLFromPasscode: ", courseURL)
+  }
+  catch (errorObject) {
+    console.log("The read in getURLFromPasscode failed: ", errorObject);
+  }
   return courseURL;
 }
 async function getEmailFromPasscode(passCode, type) {
 
-  let myurl = null
-  await getURLFromPasscode(passCode).then(value => { myurl = value })
+  let myurl = await getURLFromPasscode(passCode)
   const db_ref = admin.app().database(url).ref('InternalDb/Courses/' + myurl);
   let primary = "";
   let quiz = "";
   let feedback = "";
-
-  await db_ref.once("value",
-    function (snapshot) {
-      const keys = Object(snapshot.val());
-      if ('quizEmail' in keys) { quiz = snapshot.val()['quizEmail'] }
-      if ('feedbackEmail' in keys) { feedback = snapshot.val()['feedbackEmail'] }
-    },
-    function (errorObject) { console.log("The read failed: " + errorObject.code) })
+  let snapshot;
+  try {
+    snapshot = await db_ref.once('value')
+    const course = snapshot.val()
+    if ('quizEmail' in course) {
+      quiz = course['quizEmail']
+    }
+    if ('feedbackEmail' in course) {
+      feedback = course['feedbackEmail']
+    }
+  } catch (errorObject) {
+    console.log("The read in getEmailFromPasscode failed: ", errorObject)
+  }
 
   await admin.app().database(url).ref("InternalDb/Faculty/").orderByChild("courses")
     .once('value', snapshot => {
@@ -303,8 +313,7 @@ async function getEmailFromPasscode(passCode, type) {
   }
 }
 async function getCourseNameFromPasscode(passCode) {
-  let myurl = null
-  await getURLFromPasscode(passCode).then(value => { myurl = value })
+  let myurl = await getURLFromPasscode(passCode)
   const db_ref = admin.app().database(url).ref('InternalDb/Courses/' + myurl);
   let courseName;
   await db_ref.once("value",
@@ -312,7 +321,7 @@ async function getCourseNameFromPasscode(passCode) {
       courseName = snapshot.val()['courseName']
     },
     function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+      console.log("The read failed: ", errorObject);
     },
   );
   return courseName;
@@ -325,7 +334,7 @@ async function getKBCURLFromPasscode(passCode) {
       courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
     },
     function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+      console.log("The read failed: ", errorObject);
     },
   );
   return courseURL;
@@ -469,37 +478,15 @@ async function QuizResponseMailer(list, answer, errorRate, type, passCode, quizN
   }
 }
 async function getAllStudentsforMail(passCode, startTime, endTime) {
-
-  let myurl = null
-  console.log(passCode)
-  await admin.app().database(url)
-    .ref('InternalDb/Courses/')
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
-    .then(snapshot => { myurl = Object.keys(snapshot.val())[0].replace(' ', '') })
-
   let vlist = null
-  await admin.app().database(url)
-    .ref('InternalDb/Student/')
-    .once('value')
-    .then(snapshot => {
-      const list = []
-      snapshot.forEach((data) => {
-        const keys = Object(data.val())
-        const x = data.key
-        if ("verified" in keys) {
-          const arr = data.val()["verified"]
-          if (arr.includes(myurl)) {
-            list.push(x)
-          }
-        }
-      })
-      vlist = list
-    })
+  let verifiedStudentList = null
+  let studentList = await getStudents(passCode)
+  verifiedStudentList = studentList.filter(student => {return student['verified']==1})
+  vlist = verifiedStudentList.map((student) => {return student['key']})
 
   let ans = null
   let attempted = null
+
 
   await admin.app().database(url).ref('InternalDb/KBCResponse/')
     .orderByChild("passCode")
@@ -530,31 +517,15 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
       attempted = b
     })
 
-  let final = null
-  await admin.app().database(url)
-    .ref('InternalDb/Student/')
-    .once('value')
-    .then(snapshot => {
-      const list = []
-      snapshot.forEach((data) => {
-        const x = data.key
-        const keys = Object(data.val())
-        if (vlist.includes(x)) {
-          if (attempted.includes(x)) {
-            list.push(ans[x])
-          }
-          else {
-            let name = keys['name']
-            let email = keys['email']
-            let answer = "N/A"
-            const val = { "Name": name, "Email": email, "Answer": answer }
-            list.push(val)
-          }
-
-        }
-      })
-      final = list
-    })
+  let final = []
+  verifiedStudentList.forEach((student) => {
+    if(attempted.includes(student['key'])){
+      final.push(ans[student['key']])
+    }else{
+      const val = {'Name':student['name'], 'Email':student['email'], 'Answer':'N/A'}
+      final.push(val)
+    }
+  })
 
   return final
 }
@@ -606,7 +577,7 @@ async function getFBURLFromPasscode(passCode) {
       courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
     },
     function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+      console.log("The read failed: ",errorObject);
     },
   );
   return courseURL;
@@ -633,36 +604,46 @@ async function FeedbackResponseMailer(results, passCode, topics, startTime, type
   }
 }
 async function getStudents(passCode) {
-  let studentList = null
   const courseURL = await getURLFromPasscode(passCode)
-  console.log(courseURL)
-  await admin.app().database(url).ref("InternalDb/Student/").orderByChild("courses")
-    .once('value', snapshot => {
-      const list = []
-      snapshot.forEach((data) => {
-        const keys = Object(data.val());
-        if ("courses" in keys) {
-          const arr = data.val()["courses"]
-          if (arr.includes(courseURL)) {
-            const dict = {};
-            dict["name"] = keys["name"]
-            dict["email"] = keys["email"]
-            dict["photo"] = keys["photo"]
-            dict["verified"] = 0
-            if ("verified" in keys) {
-              const arr = data.val()["verified"]
-              if (arr.includes(courseURL)) { dict["verified"] = 1 }
-            }
-            list.push(dict)
-          }
-        }
-      }
-      )
-      list.sort((a, b) => a.name !== undefined && b.name !== undefined
-        ? a.name.toUpperCase() > b.name.toUpperCase() ? 1 : ((b.name.toUpperCase() > a.name.toUpperCase()) ? -1 : 0)
-        : a.email > b.email ? 1 : b.email > a.email ? -1 : 0)
-      studentList = list
+  console.log("Inside getStudents for course: " + courseURL)
+  const db_ref = admin.app().database(url).ref('InternalDb/Courses/' + courseURL + '/students')
+  const studentSnapshots = await db_ref.once('value')
+  let studentPromiseList = []
+  if (studentSnapshots.exists()) {
+    studentSnapshots.forEach((studentSnapshot) => {
+      studentPromiseList.push(admin.app().database(url).ref("InternalDb/Student/" + studentSnapshot.key).once('value'))
     })
+  }
+  let studentSnapshotList = []
+  try {
+    studentSnapshotList = await Promise.all(studentPromiseList)
+  } catch (errorObject) {
+    console.log("Inside getStudents, failed to read students: ", errorObject)
+  }
+  let studentList = []
+  console.log("Student snapshotlist", studentSnapshotList)
+  studentSnapshotList.forEach((student) => {
+    let dict = {}
+    console.log("Student",student)
+    console.log(student.key)
+    console.log(student.val())
+    dict['key'] = student.key
+    dict['name'] = student.val()['name']
+    dict['email'] = student.val()['email']
+    dict['photo'] = student.val()['photo']
+    dict['verified'] = 0
+    if ('verified' in student.val()) {
+      if (student.val()['verified'].includes(courseURL)) {
+        dict['verified'] = 1
+      }
+    }
+    studentList.push(dict)
+  })
+
+  studentList.sort((a, b) => a.name !== undefined && b.name !== undefined
+    ? a.name.toUpperCase() > b.name.toUpperCase() ? 1 : ((b.name.toUpperCase() > a.name.toUpperCase()) ? -1 : 0)
+    : a.email > b.email ? 1 : b.email > a.email ? -1 : 0)
+
   return studentList
 }
 async function StudentListMailer(list, passCode, email) {
@@ -734,27 +715,25 @@ async function CourseMailer(list, passCode, email, announcements, qc, fc) {
 }
 async function deleteAllMatchingKey(table, key, childKey) {
   const db_ref = admin.app().database(url).ref('InternalDb/' + table + '/');
-  db_ref.orderByChild(childKey).equalTo(key).once("value", function (snapshot) {
-    console.log('starting to remove from table ' + table);
-    snapshot.forEach(function (child) {
-      console.log(child.key);
-      child.ref.remove().then(() => {
-        console.log();
-      });
-    });
-  }, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
-  }).then(() => {
-    console.log("Done");
-  }).catch((error) => {
-    console.log(error);
-  });
+  return db_ref.orderByChild(childKey).equalTo(key).once("value")
+    .then((snapshots) => {
+      console.log('starting to remove from table ' + table);
+      let childrenToRemove = []
+      snapshots.forEach((child) => {
+        console.log(child.key)
+        childrenToRemove.push(child.ref.remove())
+      })
+      return Promise.all(childrenToRemove)
+    }).then(() => {
+      console.log("Done")
+    }).catch(errorObject => {
+      console.log(errorObject)
+    })
 }
 async function deleteCourseHelper(passCode, courseURL) {
-  console.log("Starting remove from faculty list");
-  removeCourseFromFacultyList(courseURL);
-  console.log("Starting remove from student list");
-  removeFromStudentList(courseURL);
+  console.log("Inside delete course helper")
+  console.log("Passcode,course: ", passCode, courseURL)
+  await removeFromStudentList(courseURL);
   await deleteAllMatchingKey('Courses', passCode, "passCode");
   await deleteAllMatchingKey('Announcements', passCode, "passCode");
   await deleteAllMatchingKey('KBC', passCode, "passCode");
@@ -762,69 +741,72 @@ async function deleteCourseHelper(passCode, courseURL) {
   await deleteAllMatchingKey('Feedback', passCode, "passCode");
   await deleteAllMatchingKey('FeedbackResponse', passCode, "passCode");
 }
-function removeFromStudentList(courseKey) {
-  const student = admin.app().database(url).ref('InternalDb/Student/');
-  student.once("value", function (snapshot) {
-    snapshot.forEach((el) => {
-      const studentKey = el.ref.path.pieces_.reverse()[0];
-      const thisStudent = admin.app().database(url).ref('InternalDb/Student/' + studentKey + '/courses');
-      thisStudent.once("value", function (snapshot) {
-        snapshot.forEach((el) => {
-          if (el.val() === courseKey) {
-            el.ref.remove().then(() => {
-              console.log();
-            });
-          }
-        });
-      }).then(() => {
-        console.log();
-      });
-    });
-  }).then(() => {
-    console.log();
-  });
+async function removeFromStudentList(courseKey) {
+  console.log('Inside removeFromStudentList')
+  const db = admin.app().database(url)
+  const snapshots = await db.ref('InternalDb/Courses/' + courseKey + '/students/').once('value')
+  let studentsToModify = []
+  if (snapshots.val()) {
+    snapshots.forEach((student) => {
+      console.log("Student: ", student.key)
+      const promise = db.ref('InternalDb/Student/' + student.key + '/courses/').once('value')
+        .then((courses) => {
+          console.log("Courses: ", courses.val())
+          let newCourses = courses.val().filter((course) => { return course !== courseKey })
+          return newCourses
+        })
+        .then((courses) => {
+          console.log("New Courses: ", courses)
+          return db.ref('InternalDb/Student/' + student.key + '/courses/').set(courses)
+        })
+      studentsToModify.push(promise)
+    })
+    return Promise.all(studentsToModify)
+  }
 }
-function removeCourseFromFacultyList(courseKey) {
-  const student = admin.app().database(url).ref('InternalDb/Faculty/');
-  student.once("value", function (snapshot) {
-    snapshot.forEach((el) => {
-      const facultyKey = el.ref.path.pieces_.reverse()[0];
-      const thisStudent = admin.app().database(url).ref('InternalDb/Faculty/' + facultyKey + '/courses');
-      thisStudent.once("value", function (snapshot) {
-        snapshot.forEach((el) => {
-          if (el.val() === courseKey) {
-            el.ref.remove().then(() => {
-              console.log();
-            });
-          }
-        });
-      }).then(() => {
-        console.log();
-      });
-    });
-  }).then(() => {
-    console.log();
-  });
+
+
+
+
+async function removeStudentFromCourses(studentID) {
+  const db = admin.app().database(url)
+  console.log('Removing Student from courses')
+  const snapshots = await db.ref('InternalDb/Student/' + studentID + '/courses').once('value')
+  let removeFromCourses = []
+  const courses = snapshots.val()
+  if (courses) {
+    courses.forEach((course) => {
+      removeFromCourses.push(db.ref('InternalDb/Courses/' + course + '/students/' + studentID).remove())
+    })
+    return Promise.all(removeFromCourses).then(() => { console.log("Done") })
+  }
 }
-function removeFromFacultyList(key) {
-  const faculty = admin.app().database(url).ref('InternalDb/Faculty/' + key + '/courses');
-  faculty.once("value", function (snapshot) {
-    snapshot.forEach((el) => {
-      removeFromStudentList(el.val());
-      el.ref.remove().then(() => {
-        console.log();
-      });
-    });
-  }).then(() => {
-    console.log();
-  });
+
+async function deleteStudentHelper(studentID) {
+  await deleteAllMatchingKey("KBCResponse", studentID, "userID");
+  await deleteAllMatchingKey("FeedbackResponse", studentID, "userID");
+  await removeStudentFromCourses(studentID)
 }
-function delCoursesOfFaculty(facultyKey) {
-  removeFromFacultyList(facultyKey);
-}
-function deleteStudentHelper(studentID) {
-  deleteAllMatchingKey("KBCResponse", studentID, "userID");
-  deleteAllMatchingKey("FeedbackResponse", studentID, "userID");
+
+
+async function deleteFacultyHelper(facultyID) {
+  console.log("Inside Delete Faculty Helper")
+  db = admin.app().database(url)
+  db_ref = admin.app().database(url).ref('InternalDb/Faculty/' + facultyID)
+  let coursesToRemove = []
+  snapshots = await db_ref.child('courses').once('value')
+  const courses = snapshots.val()
+  console.log("Course are: ", courses)
+  if (courses) {
+    courses.forEach((course) => {
+      courseRemovePromise = db.ref('InternalDb/Courses/' + course + '/passCode/').once('value').then((passCode) => {
+
+        return deleteCourseHelper(passCode.val(), course)
+      })
+      coursesToRemove.push(courseRemovePromise)
+    })
+    return Promise.all(coursesToRemove)
+  }
 }
 
 exports.mailingSystem = functions.https.onCall(async (data, context) => {
@@ -880,7 +862,7 @@ exports.deleteCourse = functions.https.onCall(async (data, context) => {
   await deleteCourseHelper(passCode, courseURL);
   return 'done';
 });
-exports.deleteStudent = functions.https.onCall((data, context) => {
+exports.deleteStudent = functions.https.onCall(async (data, context) => {
   studentID = data.key;
   userUID = data.userUID;
   console.log("Student ID: " + studentID);
@@ -888,86 +870,50 @@ exports.deleteStudent = functions.https.onCall((data, context) => {
   console.log(data);
   console.log(context);
   dbRef = admin.app().database(url).ref('InternalDb/Student/' + studentID);
-  dbRef.once("value", function (snapshot) {
+  return dbRef.once('value').then(async (snapshot) => {
     if (snapshot.val()) {
-      deleteStudentHelper(studentID);
-      snapshot.ref.remove().then(() => {
-        console.log();
-      });
-      return "removed";
+      await deleteStudentHelper(studentID)
+      await snapshot.ref.remove()
     } else {
-      return "error while removing";
+      throw new functions.https.HttpsError('unknown', 'error while removing')
     }
-  }, function (errorObject) {
+  }, (errorObject) => {
     console.log("The student read failed: " + errorObject.code);
-    return "Error";
+    throw new functions.https.HttpsError('unknown', 'error while student read')
   }).then(() => {
-    console.log();
-  });
-  admin
-    .auth()
-    .deleteUser(userUID)
-    .then(() => {
-      console.log('Successfully deleted user from firebase auth');
-    })
-    .catch((error) => {
-      console.log('Error deleting user from firebase auth:', error);
-    });
+    return admin.auth().deleteUser(userUID)
+  }, (error) => {
+    console.log('Error deleting user from firebase auth:', error);
+    throw new functions.https.HttpsError('unknown', 'error while deleting user from firebase auth')
+  }).then(() => {
+    console.log("Deleted Student " + studentID)
+  })
 });
 exports.deleteFaculty = functions.https.onCall((data, context) => {
   const key = data.key;
   const userUID = data.uid;
   console.log("Faculty KEY " + key);
   console.log("recieved data");
-  console.log(data);
-  console.log(context);
+
   db_ref = admin.app().database(url).ref('InternalDb/Faculty/' + key);
-  db_ref.once("value", function (snapshot) {
-    console.log(snapshot.val());
-    if (snapshot.val()['courses']) {
-      snapshot.val()['courses'].forEach(function (child) {
-        console.log("Removing course of key " + child);
-        course_ref = admin.app().database(url).ref('InternalDb/Courses/' + child);
-        course_ref.once("value",
-          function (courseSnapshot) {
-            if (courseSnapshot.val()) {
-              var passcode = courseSnapshot.val()['passCode'];
-              deleteCourseHelper(passcode, child);
-            }
-          }
-          ,
-          function (errorObject) {
-            console.log("The Course read failed: " + errorObject.code);
-            return "Error";
-          },
-        ).then(() => {
-          console.log();
-        });
-      });
-      delCoursesOfFaculty(key);
-      snapshot.ref.remove().then(() => {
-        console.log();
-      });
-      context.send("removed");
-      return "removed";
+  return db_ref.once('value').then(async (snapshot) => {
+    if (snapshot.val()) {
+      await deleteFacultyHelper(key)
+      await snapshot.ref.remove()
     } else {
-      return "error while removing";
+      throw new functions.https.HttpsError('unknown', 'error while removing')
     }
-  }, function (errorObject) {
-    console.log("The faculty read failed: " + errorObject.code);
-    return "Error";
+  }, (errorObject) => {
+    console.log("The Faculty read failed: ", errorObject)
+    throw new functions.https.HttpsError('unknown', 'error while faculty read')
   }).then(() => {
-    console.log();
-  });
-  admin
-    .auth()
-    .deleteUser(userUID)
-    .then(() => {
-      console.log('Successfully deleted user from firebase auth');
-    })
-    .catch((error) => {
-      console.log('Error deleting user from firebase auth:', error);
-    });
+    return admin.auth().deleteUser(userUID)
+  }, (errorObject) => {
+    console.log('Error deleting user from firebase auth:', errorObject);
+    throw new functions.https.HttpsError('unknown', 'error while deleting user from firebase auth')
+  }).then(() => {
+    console.log("Deleted Faculty:", key)
+  })
 });
 exports.quizNotification = functions.database.ref('InternalDb/KBC/{qid}').onWrite(async (change, context) => {
   try {
@@ -1042,7 +988,6 @@ exports.announcementsNotification = functions.database.ref('InternalDb/Announcem
     const { after } = change;
     const { _data } = after;
     const courseName = await getCourseNameFromPasscode(_data.passCode)
-
     console.log('Announcement Notification executing');
     const Announce = {
       notification: {
