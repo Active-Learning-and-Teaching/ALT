@@ -64,19 +64,20 @@ export default class FeedbackResultsList extends Component {
             {
               this.props.cancelFB()
             }
-
-            await this.props.feedbackresultData(
-              values,
-              this.state.feedbackNumber,
-            );
-            await this.AvgPoints();
-            if (
-              this.state.course.defaultEmailOption &&
-              this.props.emailStatus
-            ) {
-              await this.props.FeedbackMailer().then();
-            }
-          });
+            else{
+              await this.props.feedbackresultData(
+                values,
+                this.state.feedbackNumber,
+              );
+              this.AvgPoints();
+              if (
+                this.state.course.defaultEmailOption &&
+                this.props.emailStatus
+              ) {
+                await this.props.FeedbackMailer().then();
+              }
+            }});
+  
       })
       .catch(error => {
         console.error(error);
