@@ -7,8 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint .",
-    "postinstall": "patch-package"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@notifee/react-native": "^1.2.1",
@@ -29,10 +28,8 @@
     "@react-navigation/native": "^5.6.0",
     "@react-navigation/stack": "^5.2.19",
     "crypto-random-string": "^3.2.0",
-    "ios-deploy": "^1.11.4",
     "moment": "^2.27.0",
     "npm-check-updates": "^11.2.1",
-    "patch-package": "^6.4.5",
     "react": "16.11.0",
     "react-dom": "^16.13.1",
     "react-firebase-hooks": "^2.2.0",
