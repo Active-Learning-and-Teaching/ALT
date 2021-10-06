@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
 import FeedbackForm from './FeedbackForm';
 import database from '@react-native-firebase/database';
-import {SafeAreaView,ScrollView,StyleSheet,View,Text,ActivityIndicator,} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import Feedback from '../../Databases/Feedback';
 import CountDown from 'react-native-countdown-component';
 import {Button, ListItem} from 'react-native-elements';
@@ -21,7 +28,6 @@ export default class FeedbackFacultyPage extends Component {
       user: this.props.user,
       resultPage: false,
       emailStatus: false,
-      topics: [],
       duration: this.duration,
       date: '',
       results: '',
@@ -29,22 +35,18 @@ export default class FeedbackFacultyPage extends Component {
       feedbackNumber: '',
       kind: null,
     };
-    this.setTopics = this.setTopics.bind(this);
+    // this.setTopics = this.setTopics.bind(this);
     this.setKind = this.setKind.bind(this);
     this.feedbackresultData = this.feedbackresultData.bind(this);
     this.FeedbackMailer = this.FeedbackMailer.bind(this);
   }
 
   feedbackresultData(resultData, feedbackNumber) {
+    // console.log("Result data");
+    // console.log(resultData);
     this.setState({
       results: resultData,
       feedbackNumber: feedbackNumber,
-    });
-  }
-
-  setTopics(topics) {
-    this.setState({
-      topics: topics,
     });
   }
 
@@ -59,16 +61,10 @@ export default class FeedbackFacultyPage extends Component {
     feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
       if (value != null) {
         this.setState({
-          emailStatus: !value['emailResponse'],
+          emailStatus: !value.emailResponse,
           resultPage: true,
-          topics: value['topics'],
-          kind: value['kind'],
-          date: value['startTime'],
-        });
-      }
-      if (this.state.topics.length === 0) {
-        this.setState({
-          resultPage: false,
+          kind: value.kind,
+          date: value.startTime,
         });
       }
     });
@@ -81,14 +77,13 @@ export default class FeedbackFacultyPage extends Component {
         const url = Object.keys(values)[0];
         feedback.setFeedback(
           this.state.course.passCode,
-          value['startTime'],
-          value['endTime'],
-          value['topics'],
-          value['kind'],
-          value['instructor'],
+          value.startTime,
+          value.endTime,
+          value.kind,
+          value.instructor,
           url,
           true,
-          value['feedbackCount'],
+          value.feedbackCount,
         );
       });
     });
@@ -108,16 +103,15 @@ export default class FeedbackFacultyPage extends Component {
       this.setState({
         resultPage: false,
         emailStatus: false,
-        topics: [],
         duration: this.duration,
         date: '',
         results: '',
+        currentFeedback : false,
       });
 
-      this.props.beforeFeedback = false;
-      this.props.currentFeedback = false;
+      this.props.cancelFeedback()
 
-      feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
+      await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
           const url = Object.keys(values)[0];
           feedback.setFeedback(
@@ -126,51 +120,48 @@ export default class FeedbackFacultyPage extends Component {
             '',
             '',
             '',
-            '',
             url,
             false,
-            value['feedbackCount'] - 1,
+            value.feedbackCount - 1,
           );
         });
       });
     } else if (action === 'delay') {
-      console.log('delay')
+      console.log('delay');
       startTime = moment(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
         .add(10, 'minutes')
         .format('DD/MM/YYYY HH:mm:ss');
       endTime = moment(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
         .add(10 + this.state.duration, 'minutes')
         .format('DD/MM/YYYY HH:mm:ss');
-        feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
-          feedback.getFeedback(this.state.course.passCode).then(values => {
-            const url = Object.keys(values)[0];
-            feedback.setFeedback(
-              this.state.course.passCode,
-              startTime,
-              endTime,
-              value['topics'],
-              value['kind'],
-              value['instructor'],
-              url,
-              false,
-              value['feedbackCount'],
-            );
-          });
+      await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
+        feedback.getFeedback(this.state.course.passCode).then(values => {
+          const url = Object.keys(values)[0];
+          feedback.setFeedback(
+            this.state.course.passCode,
+            value.startTime,
+            endTime,
+            value.kind,
+            value.instructor,
+            url,
+            false,
+            value.feedbackCount,
+          );
         });
+      });
     } else {
-      feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
+      await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
           const url = Object.keys(values)[0];
           feedback.setFeedback(
             this.state.course.passCode,
             startTime,
             endTime,
-            value['topics'],
-            value['kind'],
-            value['instructor'],
+            value.kind,
+            value.instructor,
             url,
             false,
-            value['feedbackCount'],
+            value.feedbackCount,
           );
         });
       });
@@ -178,10 +169,19 @@ export default class FeedbackFacultyPage extends Component {
   };
 
   async FeedbackMailer() {
-    console.log('triggering mail for passCode:' + this.state.course.passCode)
+    console.log('triggering mail for passCode:' + this.state.course.passCode);
     Toast.show('Sending Email...');
-    const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:this.state.course.passCode, type:"Feedback"})
-    .catch(function(error) {console.log('There has been a problem with your mail operation: ' + error);})
+    const {data} = firebase
+      .functions()
+      .httpsCallable('mailingSystem')({
+        passCode: this.state.course.passCode,
+        type: 'Feedback',
+      })
+      .catch(function(error) {
+        console.log(
+          'There has been a problem with your mail operation: ' + error,
+        );
+      });
     await this.dbUpdateEmailStatus().then(() => {
       this.setState({
         emailStatus: false,
@@ -189,20 +189,21 @@ export default class FeedbackFacultyPage extends Component {
     });
   }
 
-  load = async() => {
-    await this.checkEmailSent().then(r => {
-      if (!(this.state.topics.length === 0)) {
-        this.setState({
-          resultPage: true,
-        });
-      }
+  setResultPage = () =>
+  {
+    this.setState({
+      resultPage: false
     });
-
   }
 
+  load = async () => {
+    await this.checkEmailSent().then(r => {
+      console.log("Email Sent");
+    });
+  };
+
   componentDidMount() {
-    this.load()
-    console.log(this.state.resultPage);
+    this.load();
   }
 
   render() {
@@ -216,7 +217,6 @@ export default class FeedbackFacultyPage extends Component {
                   feedbackCount={this.props.feedbackCount}
                   course={this.state.course}
                   user={this.state.user}
-                  setTopics={this.setTopics}
                   setKind={this.setKind}
                 />
               ) : (
@@ -224,24 +224,23 @@ export default class FeedbackFacultyPage extends Component {
                   <View style={styles.result}>
                     <FeedbackResultsList
                       course={this.state.course}
-                      topics={this.state.topics}
                       date={this.state.date}
                       emailStatus={this.state.emailStatus}
                       feedbackresultData={this.feedbackresultData}
                       FeedbackMailer={this.FeedbackMailer}
+                      cancelFB = {this.setResultPage}
                     />
                   </View>
                   <View style={[styles.buttonRowContainer]}>
                     <Button
                       style={styles.feedbackButtonMessage}
                       buttonStyle={styles.mybutton}
-                      titleStyle={{color:'white',fontWeight:'normal'}}
+                      titleStyle={{color: 'white', fontWeight: 'normal'}}
                       title={'Start New Feedback'}
                       onPress={() => {
                         this.setState({
                           resultPage: false,
                           emailStatus: false,
-                          topics: [],
                           duration: this.duration,
                           date: '',
                           results: '',
@@ -257,17 +256,7 @@ export default class FeedbackFacultyPage extends Component {
                   <Text style={styles.heading}>
                     Feedback {this.props.feedbackCount}
                   </Text>
-                  <View >
-                    {this.state.topics.map((value, i) => (
-                      <ListItem key={i} containerStyle={styles.listContainer}>
-                        <ListItem.Content>
-                          <ListItem.Title style={styles.title}>
-                            {i + 1 + '. ' + value}
-                          </ListItem.Title>
-                        </ListItem.Content>
-                      </ListItem>
-                    ))}
-                  </View>
+                  
                   <View style={styles.container}>
                     <Text style={styles.text1}>Scheduled to go live in</Text>
                     <CountDown
@@ -288,7 +277,7 @@ export default class FeedbackFacultyPage extends Component {
                   <View style={[styles.buttonContainer]}>
                     <Button
                       buttonStyle={styles.mybutton}
-                      titleStyle={{color:'white',fontWeight:'normal'}}
+                      titleStyle={{color: 'white', fontWeight: 'normal'}}
                       title=" Start Now"
                       onPress={() => {
                         this.startFeedback('start').then(r => '');
@@ -298,7 +287,7 @@ export default class FeedbackFacultyPage extends Component {
                   <View style={[styles.buttonContainer]}>
                     <Button
                       buttonStyle={styles.mybutton}
-                      titleStyle={{color:'white',fontWeight:'normal'}}
+                      titleStyle={{color: 'white', fontWeight: 'normal'}}
                       title="Extend by 10 mins"
                       onPress={() => {
                         this.startFeedback('delay').then(r => '');
@@ -326,14 +315,14 @@ export default class FeedbackFacultyPage extends Component {
                   this.props.setFeedbackState();
                 }}
                 digitStyle={{backgroundColor: '#FFF'}}
-                digitTxtStyle={{ color: 'tomato'}}
+                digitTxtStyle={{color: 'tomato'}}
                 timeToShow={['M', 'S']}
                 timeLabels={{m: 'Min', s: 'Sec'}}
               />
               <View style={[styles.buttonContainer]}>
                 <Button
                   buttonStyle={styles.mybutton}
-                  titleStyle={{color:'white',fontWeight:'normal'}}
+                  titleStyle={{color: 'white', fontWeight: 'normal'}}
                   style={styles.buttonMessage}
                   title="Cancel"
                   onPress={() => {
@@ -390,27 +379,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   shadow: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
-        width: 0,
-        height: 5,
+      width: 0,
+      height: 5,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 1.50,
+    shadowRadius: 1.5,
     elevation: 10,
   },
-  heading : {
-      flex: 1,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      paddingTop : 25,
-      padding: 15,
-      fontSize : 25,
-      fontWeight: "bold",
-      color: 'black',
-      marginTop: 5,
-      textAlign: 'center',
+  heading: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingTop: 25,
+    padding: 15,
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'black',
+    marginTop: 5,
+    textAlign: 'center',
   },
   result: {
     padding: 10,
@@ -460,7 +449,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     marginTop: 30,
-    marginBottom :10,
+    marginBottom: 10,
     alignSelf: 'center',
   },
   buttonMessage: {
@@ -512,25 +501,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
   },
-  mybutton:{
-    backgroundColor: 'tomato', 
-    borderColor : 'black',
-    borderRadius:20,
-    marginTop:30,
-    marginBottom:30,
-},
-subheading : {
-  flex: 1,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  paddingTop : 25,
-  padding: 15,
-  fontSize : 25,
-  fontWeight: "bold",
-  color: 'black',
-  marginTop: 50,
-  marginBottom :25,
-  textAlign: 'center',
-},
+  mybutton: {
+    backgroundColor: 'tomato',
+    borderColor: 'black',
+    borderRadius: 20,
+    marginTop: 30,
+    marginBottom: 30,
+  },
+  subheading: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingTop: 25,
+    padding: 15,
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'black',
+    marginTop: 50,
+    marginBottom: 25,
+    textAlign: 'center',
+  },
 });
