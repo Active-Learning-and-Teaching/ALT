@@ -1,0 +1,48 @@
+name: "React Native Android Build APK"
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting the Repository
+        uses: actions/checkout@v2
+      - name: Installing node
+        uses: actions/setup-node@v1
+      - name: Installing react-native-cli
+        run: |
+           npm install -g react-native-cli
+      - name: Install npm dependencies 
+        run: |
+          cd App && npm install --legacy-peer-deps
+      - name: Decode config.json
+        env:
+          CONFIG_SECRET: ${{ secrets.CONFIG_SECRET}}
+        run: echo $CONFIG_SECRET > App/config.json
+      - name: Decode google-services.json
+        env:
+          ANDROID_DEV_SECRET: ${{ secrets.ANDROID_DEV_SECRET }}
+        run: echo $ANDROID_DEV_SECRET > App/android/app/google-services.json
+      - name : Decode Keystore
+        run: |
+          echo "${{ secrets.DEBUG_KEYSTORE }}" > debug.keystore.asc
+          gpg -d --passphrase "${{ secrets.DEBUG_KEYSTORE_PASSPHRASE }}" --batch debug.keystore.asc > App/android/app/debug.keystore
+      - name: Make Gradlew Executable
+        run: |
+          cd App && cd android && chmod +x ./gradlew
+      - name: Bundle Android Release
+        run: |
+          cd App && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
+      - name: Build Android Release
+        run: |
+          cd App && cd android && ./gradlew :app:assembleDebug --no-daemon
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ALT_Dev.apk
+          path: App/android/app/release/
