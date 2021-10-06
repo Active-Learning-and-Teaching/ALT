@@ -143,13 +143,14 @@ export default class FeedbackStudentPage extends Component {
     });
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.topics != this.props.topics) {
-  //     this.getTopics().then(r => {
-  //       console.log(this.state.topics);
-  //     });
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (prevProps.currentFeedback != this.props.currentFeedback) {
+      this.getTopics().then(r => {
+        console.log("Feedback Started");
+      });
+    }
+  }
+  
   render() {
     if (!this.state.loading) {
       return (
