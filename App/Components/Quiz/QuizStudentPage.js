@@ -61,14 +61,7 @@ export default class QuizStudentPage extends Component {
             this.setState({
                 error: "Please answer"
             })
-        } 
-        else if(this.props.quizType==="numeric" && isNaN(parseFloat(option)))
-        {
-            this.setState({
-                error: "Please Input a Numerical Response"
-            })
-        }
-        else {
+        } else {
             this.setState({
                 error:null
             })
@@ -110,10 +103,7 @@ export default class QuizStudentPage extends Component {
     }
 
     render() {
-        if(!this.state.loading)
-        { 
-            console.log("Debugging");
-            console.log(this.props.quizType);
+        if(!this.state.loading){
         return(
             <SafeAreaView style={styles.safeContainer}>
             {   this.props.currentQuiz === false
@@ -137,7 +127,6 @@ export default class QuizStudentPage extends Component {
                     <ScrollView>
 
                         <Text style={styles.heading}> In-Class Quiz</Text>
-
 
                         <CountDown
                             until={this.props.currentDuration}
@@ -173,7 +162,7 @@ export default class QuizStudentPage extends Component {
                                 </View>
                             </View>
                             :
-                            (this.props.quizType==="alphaNumerical")
+                            this.props.quizType==="numerical"
                             ?
                             <View style={{paddingTop:20}}>
                                 <Text style={[styles.heading,{fontSize : 18, marginTop:15}]}>
@@ -198,33 +187,7 @@ export default class QuizStudentPage extends Component {
                                 </View>
                             </View>
                             :
-                            this.props.quizType==="numeric"
-                            ?
-                            <View style={{paddingTop:20}}>
-                                <Text style={[styles.heading,{fontSize : 18, marginTop:15}]}>
-                                    Please Provide Concise Answer
-                                </Text>
-                                <TextInput
-                                    style={styles.textInput}
-                                    maxLength={30}
-                                    textAlign={'center'}
-                                    type="number"
-                                    onChangeText={text => {this.setState({
-                                        option : text
-                                    })}}
-                                    value={this.state.option}
-                                />
-                                {this.state.error ?
-                                    <Text style={styles.errorMessage}>
-                                        {this.state.error}
-                                    </Text> : <Text/>
-                                }
-                                <View style={[{paddingTop:20}]}>
-                                    <Button style={styles.buttonMessage} titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mybutton} title="Submit" onPress={this.submitResponse}/>
-                                </View>
-                            </View>
-                            :
-                            this.props.quizType==="multicorrect"
+                                this.props.quizType==="multicorrect"
                                 ?
                                     <View style={{paddingRight:20, paddingLeft:20}}>
                                         <MultiCorrectOptions optionValue={this.setOption}/>

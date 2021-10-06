@@ -46,7 +46,7 @@ class Quiz {
     }
 
 
-    setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, errorRate, instructor, quizType, url, emailResponse,questionCount) =>{
+    setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, instructor, quizType, url, emailResponse,questionCount) =>{
         await database()
             .ref('InternalDb/KBC/'+url)
             .set({
@@ -55,7 +55,6 @@ class Quiz {
                 endTime: endTime,
                 duration: duration,
                 correctAnswer: correctAnswer,
-                errorRate: errorRate,
                 instructor: instructor,
                 quizType: quizType,
                 emailResponse: emailResponse,
@@ -67,7 +66,7 @@ class Quiz {
             })
     }
 
-    createQuestion =  async (passCode, startTime, endTime, duration, correctAnswer, errorRate, instructor, quizType) => {
+    createQuestion =  async (passCode, startTime, endTime, duration, correctAnswer, instructor, quizType) => {
         await this.reference
             .push()
             .set({
@@ -76,7 +75,6 @@ class Quiz {
                 endTime: endTime,
                 duration: duration,
                 correctAnswer: correctAnswer,
-                errorRate: errorRate,
                 instructor: instructor,
                 quizType: quizType,
                 emailResponse: false,

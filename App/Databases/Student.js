@@ -122,12 +122,6 @@ class Student {
         this.setCourseStudent(value);
       }
     });
-    try {
-      await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)  
-    } catch (error) {
-      console.log(error)
-    }
-    
   };
 
   deleteCourse = async courseUrl => {
@@ -138,8 +132,6 @@ class Student {
 
         this.setCourseStudent(value);
       }
-    }).then(() => {
-      database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.url).remove()
     });
   };
 
