@@ -189,20 +189,21 @@ export default class FeedbackFacultyPage extends Component {
     });
   }
 
+  setResultPage = () =>
+  {
+    this.setState({
+      resultPage: false
+    });
+  }
+
   load = async () => {
     await this.checkEmailSent().then(r => {
-      // if (!(this.state.topics.length === 0)) {
-      //   this.setState({
-      //     resultPage: true,
-      //   });
-      // }
       console.log("Email Sent");
     });
   };
 
   componentDidMount() {
     this.load();
-    console.log(this.state.resultPage);
   }
 
   render() {
@@ -227,6 +228,7 @@ export default class FeedbackFacultyPage extends Component {
                       emailStatus={this.state.emailStatus}
                       feedbackresultData={this.feedbackresultData}
                       FeedbackMailer={this.FeedbackMailer}
+                      cancelFB = {this.setResultPage}
                     />
                   </View>
                   <View style={[styles.buttonRowContainer]}>

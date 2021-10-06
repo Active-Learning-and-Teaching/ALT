@@ -59,6 +59,12 @@ export default class FeedbackResultsList extends Component {
               feedbackNumber: r.feedbackCount,
               kind: r.kind,
             });
+
+            if(this.state.kind === "")
+            {
+              this.props.cancelFB()
+            }
+
             await this.props.feedbackresultData(
               values,
               this.state.feedbackNumber,
