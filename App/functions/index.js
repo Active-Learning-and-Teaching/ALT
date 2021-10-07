@@ -685,7 +685,7 @@ async function CourseMailer(list, passCode, email, announcements, qc, fc) {
   const studentString = `${studentheaderString}${studentrowString}`;
   const announcementheaderString = 'Announcement Date, Announcement Heading, Announcement Description\n';
   let announcementrowString = ` , , \n`;
-  if (!announcements === "-1") { announcementrowString = await announcements.map((announcement, i) => `${announcement.date},${announcement.heading},${announcement.description}\n`).join(''); }
+  if (announcements !== "-1") { announcementrowString = await announcements.map((announcement, i) => `${announcement.date},${announcement.heading},${announcement.description}\n`).join(''); }
   const announcementString = `${announcementheaderString}${announcementrowString}`;
 
   try {
