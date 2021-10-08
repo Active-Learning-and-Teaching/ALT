@@ -866,7 +866,7 @@ async function CourseMailer(list, passCode, email, announcements, qc, fc) {
   const announcementheaderString =
     'Announcement Date, Announcement Heading, Announcement Description\n';
   let announcementrowString = ` , , \n`;
-  if (!announcements === '-1') {
+  if (announcements !== '-1') {
     announcementrowString = await announcements
       .map(
         (announcement, i) =>
@@ -1027,6 +1027,10 @@ async function deleteFacultyHelper(facultyID) {
 }
 
 exports.mailingSystem = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    return {message: 'Authentication Required!', code: 401};
+  }
+
   type = data.type;
   passCode = data.passCode;
   email = await getEmailFromPasscode(passCode, type);
@@ -1109,6 +1113,9 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
   }
 });
 exports.deleteCourse = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    return {message: 'Authentication Required!', code: 401};
+  }
   const passCode = data.passCode;
   console.log('Got passCode to delete ' + passCode);
   const courseURL = await getURLFromPasscode(passCode);
@@ -1116,6 +1123,9 @@ exports.deleteCourse = functions.https.onCall(async (data, context) => {
   return 'done';
 });
 exports.deleteStudent = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    return {message: 'Authentication Required!', code: 401};
+  }
   studentID = data.key;
   userUID = data.userUID;
   console.log('Student ID: ' + studentID);
@@ -1165,6 +1175,9 @@ exports.deleteStudent = functions.https.onCall(async (data, context) => {
     });
 });
 exports.deleteFaculty = functions.https.onCall((data, context) => {
+  if (!context.auth) {
+    return {message: 'Authentication Required!', code: 401};
+  }
   const key = data.key;
   const userUID = data.uid;
   console.log('Faculty KEY ' + key);
