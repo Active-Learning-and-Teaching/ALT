@@ -339,13 +339,13 @@ async function getEmailFromPasscode(passCode, type) {
     });
 
   if (type === 'Quiz') {
-    if (!quiz === '') {
+    if (quiz !== '') {
       return quiz;
     } else {
       return primary;
     }
   } else if (type === 'Feedback') {
-    if (!feedback === '') {
+    if (feedback !== '') {
       return feedback;
     } else {
       return primary;
