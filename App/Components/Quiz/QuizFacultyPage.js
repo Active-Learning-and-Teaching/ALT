@@ -456,32 +456,36 @@ export default class QuizFacultyPage extends Component{
                     {this.props.quizType==="numeric"
                         ?
                         <View>
-                            <Text style={[styles.heading,{fontSize : 20, }]}>
-                                Provide Answer for Auto-grading
-                            </Text>
-                            <TextInput
-                                style={styles.textInput}
-                                maxLength={30}
-                                textAlign={'center'}
-                                onChangeText={text => {this.setState({
-                                    option : text
-                                })}}
-                                value={this.state.option==="*"?"":this.state.option}
-                            />
-
-                            <Text style={[styles.heading,{fontSize : 20, }]}>
-                                Provide acceptable absolute error amount
-                            </Text>
-                            <TextInput
-                                style={styles.textInput}
-                                maxLength={30}
-                                textAlign={'center'}
-                                onChangeText={text => {this.setState({
-                                    errorRate : text
-                                })}}
-                                value={this.state.errorRate==="*"?"":this.state.errorRate}
-                            />
-
+                            <View style={{flexDirection:'row'}}>
+                                <View style={{width: Dimensions.window.width/2, float:'left'}}>    
+                                    <Text style={[styles.heading,{fontSize : 20, }]}>
+                                        Provide Answer for Auto-grading
+                                    </Text>
+                                    <TextInput
+                                        style={[styles.textInput, {width:'90%'}]}
+                                        maxLength={30}
+                                        textAlign={'center'}
+                                        onChangeText={text => {this.setState({
+                                            option : text
+                                        })}}
+                                        value={this.state.option==="*"?"":this.state.option}
+                                    />
+                                </View>
+                                <View style={{width: Dimensions.window.width/2}}>
+                                    <Text style={[styles.heading,{fontSize : 20, }]}>
+                                        Provide acceptable absolute error amount
+                                    </Text>
+                                    <TextInput
+                                        style={[styles.textInput, {width:'90%'}]}
+                                        maxLength={30}
+                                        textAlign={'center'}
+                                        onChangeText={text => {this.setState({
+                                            errorRate : text
+                                        })}}
+                                        value={this.state.errorRate==="*"?"":this.state.errorRate}
+                                    />
+                                </View>
+                            </View>
                             {this.state.error ? <Text style={styles.errorMessage}>{this.state.error}</Text> : <Text/>}
 
                             <Button style={styles.buttonMessage}
