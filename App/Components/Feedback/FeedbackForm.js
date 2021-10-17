@@ -41,9 +41,7 @@ export default class FeedbackForm extends Component {
       this.setState({
         error: 'Please choose feedback type.',
       });
-    }
-
-    else {
+    } else {
       const feedback = new Feedback();
       const curr = moment(database().getServerTime());
       let startTime = curr.format('DD/MM/YYYY HH:mm:ss');
@@ -100,8 +98,21 @@ export default class FeedbackForm extends Component {
     }
   };
 
-
   render() {
+    let kind = this.state.kind;
+    let kind_text;
+    if (kind == 0) {
+      kind_text = (
+        <Text>
+          {' '}
+          Students will be given options: poor(red), average(yellow),
+          good(green){' '}
+        </Text>
+      );
+    } else if (kind == 1) {
+      kind_text = <Text> Students will be given options: 1, 2, 3, 4, 5 </Text>;
+    }
+
     return (
       <SafeAreaView style={styles.safeContainer}>
         <ScrollView>
@@ -113,7 +124,7 @@ export default class FeedbackForm extends Component {
           <View style={styles.selector}>
             <SwitchSelector
               onPress={value => {
-                console.log(value)
+                console.log(value);
                 this.setState({kind: value});
               }}
               textColor={'black'}
@@ -162,6 +173,7 @@ export default class FeedbackForm extends Component {
                   }}
                   onValueChange={value => this.setState({duration: value})}
                 />
+                <View style={styles.kind_text}>{kind_text}</View>
               </View>
             </View>
             <View>
@@ -192,6 +204,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingTop: 20,
     paddingBottom: 10,
+  },
+  kind_text: {
+    marginTop: 20,
   },
   shadow: {
     shadowColor: '#000',
