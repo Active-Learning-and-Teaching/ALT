@@ -94,7 +94,7 @@ export default class FacultySettings extends Component{
                                 value={this.state.defaultEmailOption}
                             />
                         </View>
-                        <Text style={styles.text}>Current Email for Quiz Results</Text>
+                        <Text style={styles.text}>Email for Quiz Results</Text>
                         <TextInput
                             style={styles.textInput}
                             autoCapitalize="none"
@@ -104,7 +104,7 @@ export default class FacultySettings extends Component{
                             })}}
                             value={this.state.quizEmail}
                         />
-                        <Text style={styles.text}>Current Email for Minute Results</Text>
+                        <Text style={styles.text}>Email for Feedback Results</Text>
                         <TextInput
                             style={styles.textInput}
                             autoCapitalize="none"
