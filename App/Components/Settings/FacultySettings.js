@@ -61,7 +61,7 @@ export default class FacultySettings extends Component {
         course.defaultEmailOption = defaultEmailOption;
         this.state.setCourse(course).then(r => {
           data === 'email'
-            ? Toast.show(`Updated Email Settings`)
+            ? Toast.show('Updated Email Settings')
             : Toast.show(`Updated ${this.state.course.courseName} Settings`);
         });
       });
@@ -107,7 +107,7 @@ export default class FacultySettings extends Component {
               }}
               value={this.state.quizEmail}
             />
-            <Text style={styles.text}>Current Email for Minute Results</Text>
+            <Text style={styles.text}>Current Email for Feedback Results</Text>
             <TextInput
               caretHidden
               style={styles.textInput}
