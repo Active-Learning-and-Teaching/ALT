@@ -135,7 +135,7 @@ android {
     configurations.all {
     resolutionStrategy { force 'androidx.browser:browser:1.3.0' }
         }
-        applicationId "com.tls"
+        applicationId "com.IIITD.ALT"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
