@@ -119,15 +119,15 @@ export default class FeedbackForm extends Component {
           <ListItem containerStyle={styles.listContainer}>
             <ListItem.Content>
               <ListItem.Title style={styles.title}>
-                What are the three most important things you learned during this
-                class?
+                What are the three most important things that you learned during
+                this class?
               </ListItem.Title>
             </ListItem.Content>
           </ListItem>
           <ListItem containerStyle={styles.listContainer}>
             <ListItem.Content>
               <ListItem.Title style={styles.title}>
-                What things remain doubtful?
+                What are the things that remain doubtful?
               </ListItem.Title>
             </ListItem.Content>
           </ListItem>
