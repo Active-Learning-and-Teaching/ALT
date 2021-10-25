@@ -8,7 +8,7 @@ import {
   TextInput,
   Animated,
 } from 'react-native';
-import {Slider, Text, Button} from 'react-native-elements';
+import {Slider, Text, Button, ListItem} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
 import Feedback from '../../Databases/Feedback';
@@ -100,17 +100,44 @@ export default class FeedbackForm extends Component {
 
   render() {
     let kind = this.state.kind;
-    let kind_text;
+    let kindElement;
     if (kind == 0) {
-      kind_text = (
+      kindElement = (
         <Text>
           {' '}
           Students will be given options: poor(red), average(yellow),
-          good(green){' '}
+          good(green)
         </Text>
       );
     } else if (kind == 1) {
-      kind_text = <Text> Students will be given options: 1, 2, 3, 4, 5 </Text>;
+      kindElement = (
+        <Text> Students will be given options: 1, 2, 3, 4, 5 </Text>
+      );
+    } else if (kind == 2) {
+      kindElement = (
+        <View>
+          <ListItem containerStyle={styles.listContainer}>
+            <ListItem.Content>
+              <ListItem.Title style={styles.title}>
+                What are the three most important things you learned during this
+                class?
+              </ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+          <ListItem containerStyle={styles.listContainer}>
+            <ListItem.Content>
+              <ListItem.Title style={styles.title}>
+                What things remain doubtful?
+              </ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+
+          <Text style={styles.minPaperHelperText}>
+            {' '}
+            Students will provide input in text format{' '}
+          </Text>
+        </View>
+      );
     }
 
     return (
@@ -133,6 +160,7 @@ export default class FeedbackForm extends Component {
               options={[
                 {label: 'Color Scale', value: '0', activeColor: 'tomato'},
                 {label: 'Likert Scale', value: '1', activeColor: 'tomato'},
+                {label: 'Minute Paper', value: '2', activeColor: 'tomato'},
               ]}
             />
           </View>
@@ -173,7 +201,7 @@ export default class FeedbackForm extends Component {
                   }}
                   onValueChange={value => this.setState({duration: value})}
                 />
-                <View style={styles.kind_text}>{kind_text}</View>
+                <View style={styles.kindElement}>{kindElement}</View>
               </View>
             </View>
             <View>
@@ -205,7 +233,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 10,
   },
-  kind_text: {
+  kindElement: {
+    marginTop: 20,
+  },
+  minPaperHelperText: {
     marginTop: 20,
   },
   shadow: {
@@ -241,6 +272,23 @@ const styles = StyleSheet.create({
     color: '#333',
     marginTop: 5,
     textAlign: 'center',
+  },
+  listContainer: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 5.0,
+    elevation: 24,
+
+    borderColor: '#2697BF',
+    borderRadius: 8,
+    marginTop: 2,
+    marginBottom: 2,
+    paddingTop: 2,
+    paddingBottom: 2,
   },
   topic: {
     padding: 10,
