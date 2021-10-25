@@ -119,15 +119,14 @@ export default class FeedbackForm extends Component {
           <ListItem containerStyle={styles.listContainer}>
             <ListItem.Content>
               <ListItem.Title style={styles.title}>
-                What are the three most important things you learned during this
-                class?
+                What are the three most important things that you learnt?
               </ListItem.Title>
             </ListItem.Content>
           </ListItem>
           <ListItem containerStyle={styles.listContainer}>
             <ListItem.Content>
               <ListItem.Title style={styles.title}>
-                What things remain doubtful?
+                What are the things that remain doubtful?
               </ListItem.Title>
             </ListItem.Content>
           </ListItem>
@@ -182,7 +181,7 @@ export default class FeedbackForm extends Component {
                   value={this.state.duration}
                   minimumValue={1}
                   step={1}
-                  maximumValue={15}
+                  maximumValue={30}
                   // thumbTouchSize={{width: 100, height: 100}}
                   // thumbTintColor='#2697BF'
                   minimumTrackTintColor="tomato"
