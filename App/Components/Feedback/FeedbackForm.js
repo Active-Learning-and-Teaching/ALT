@@ -232,6 +232,16 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 10,
   },
+  title: {
+    alignSelf: 'flex-start',
+    textAlign: 'left',
+    fontSize: 16,
+    color: 'black',
+    marginTop: 1,
+    paddingTop: 2,
+    marginBottom: 2,
+    paddingBottom: 2,
+  },
   kindElement: {
     marginTop: 20,
   },
