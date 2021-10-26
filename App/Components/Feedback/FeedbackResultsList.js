@@ -219,6 +219,25 @@ export default class FeedbackResultsList extends Component {
         </View>
       );
     }
+    else if ( this.state.kind === "2" ){
+      console.log(this.state.responses)
+      return(
+        <View style = {styles.container}>
+          <Text style = {styles.heading}> 
+            Word Cloud and response results here
+          </Text>
+          {this.state.responses ? (
+            <View>
+              <Text>{this.state.responses[0][0]}</Text>
+              <Text>{this.state.responses[0][1]}</Text>
+            </View>
+            ) : (
+                <Text />
+            )
+          }
+        </View>
+      );
+    }
     else{
       return (
       <View style={styles.container}>

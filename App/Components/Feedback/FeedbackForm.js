@@ -181,7 +181,7 @@ export default class FeedbackForm extends Component {
                   value={this.state.duration}
                   minimumValue={1}
                   step={1}
-                  maximumValue={30}
+                  maximumValue={15}
                   // thumbTouchSize={{width: 100, height: 100}}
                   // thumbTintColor='#2697BF'
                   minimumTrackTintColor="tomato"
