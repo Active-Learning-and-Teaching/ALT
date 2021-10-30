@@ -1,4 +1,4 @@
-package com.tls;
+package com.IIITD.ALT;
 
 import com.facebook.react.ReactActivity;
 
