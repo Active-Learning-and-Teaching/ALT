@@ -36,11 +36,11 @@ export default class StudentFeedbackCard extends Component {
             selectedColor={'white'}
             borderColor={'#383030'}
             options={[
-              {label: 'Not Much', value: '0', activeColor: '#F3460A'},
-              {label: 'Somewhat', value: '1', activeColor: 'orange'},
-              {label: 'Completely', value: '2', activeColor: '#60CA24'},
-            ]}/>
-
+              {label: 'Green', value: '0', activeColor: 'green'},
+              {label: 'Yellow', value: '1', activeColor: 'yellow'},
+              {label: 'Red', value: '2', activeColor: 'red'},
+            ]}
+          />
         </View>
       );
     else
