@@ -46,6 +46,10 @@ export default class StudentFeedbackCard extends Component {
     else
       return (
         <View style={styles.grid}>
+          <View style = {styles.row}>
+            <Text>Low </Text>
+            <Text>High</Text>
+          </View>
           <View style={[styles.column]}>{this.renderScale()}</View>
           <MultiSlider
             values={[1]}
@@ -93,6 +97,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.18,
     shadowRadius: 10.0,
     elevation: 24,
+  },
+  left : {
+    textAlign : "left"
+  },
+  row: {
+    flexDirection: "row",
+    alignSelf: 'stretch',
+    justifyContent : 'space-between',
   },
   listContainer: {
     width: Dimensions.window.width - 10,
