@@ -33,7 +33,7 @@ export default class StudentFeedbackCard extends Component {
               this.props.studentResponses(value);
             }}
             textColor={'#383030'}
-            selectedColor={'white'}
+            selectedColor={'black'}
             borderColor={'#383030'}
             options={[
               {label: 'Green', value: '0', activeColor: 'green'},
@@ -46,7 +46,7 @@ export default class StudentFeedbackCard extends Component {
     else
       return (
         <View style={styles.grid}>
-          <View style = {styles.row}>
+          <View style={styles.row}>
             <Text>Low </Text>
             <Text>High</Text>
           </View>
@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
     shadowRadius: 10.0,
     elevation: 24,
   },
-  left : {
-    textAlign : "left"
+  left: {
+    textAlign: 'left',
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
     alignSelf: 'stretch',
-    justifyContent : 'space-between',
+    justifyContent: 'space-between',
   },
   listContainer: {
     width: Dimensions.window.width - 10,
