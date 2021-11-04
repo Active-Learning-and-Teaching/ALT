@@ -71,7 +71,7 @@ pod install
 
 ### iOS
  Note : To build on an Macbooks with M1 Chip, open Xcode with Rosetta 2       
- If still error come please refere this issue
+ If still error come please refer this issue
  https://github.com/CocoaPods/CocoaPods/issues/10220
 ```
 npx react-native run-ios
