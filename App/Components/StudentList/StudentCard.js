@@ -150,7 +150,7 @@ export default class StudentCard extends Component{
                         </ListItem.Content>
                         <CheckBox
                             style={{flex: 0.05, padding: 10}}
-                            value={this.props.student['verified']===1}
+                            value={this.props.student['verified']===0}
                             onValueChange={ (newValue)=>{ 
                                 if (this.props.student['verified']===0)
                                 {

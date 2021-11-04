@@ -793,10 +793,10 @@ async function getStudents(passCode) {
     dict['name'] = student.val()['name'];
     dict['email'] = student.val()['email'];
     dict['photo'] = student.val()['photo'];
-    dict['verified'] = 0;
+    dict['verified'] = 1;
     if ('verified' in student.val()) {
       if (student.val()['verified'].includes(courseURL)) {
-        dict['verified'] = 1;
+        dict['verified'] = 0;
       }
     }
     studentList.push(dict);
