@@ -103,11 +103,7 @@ export default class FeedbackForm extends Component {
     let kind_text;
     if (kind == 0) {
       kind_text = (
-        <Text>
-          {' '}
-          Students will be given options: poor(red), average(yellow),
-          good(green){' '}
-        </Text>
+        <Text> Students will be given options: green, yellow and red </Text>
       );
     } else if (kind == 1) {
       kind_text = <Text> Students will be given options: 1, 2, 3, 4, 5 </Text>;

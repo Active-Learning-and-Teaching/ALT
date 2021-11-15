@@ -32,13 +32,13 @@ export default class FeedbackStudentPage extends Component {
   }
 
   studentResponses(value) {
-    console.log("Student response ", value);
+    console.log('Student response ', value);
     let responses = this.state.responses;
     responses = value;
 
     this.setState({
       responses: responses,
-      error:null,
+      error: null,
     });
   }
 
@@ -75,7 +75,7 @@ export default class FeedbackStudentPage extends Component {
   submitFeedback = async () => {
     const {responses} = this.state;
     var err = false;
-    console.log("Submit Feedback ",responses);
+    console.log('Submit Feedback ', responses);
     if (responses === -1) {
       err = true;
     }
@@ -146,15 +146,14 @@ export default class FeedbackStudentPage extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.currentFeedback != this.props.currentFeedback) {
       this.getTopics().then(r => {
-        console.log("Feedback Started");
+        console.log('Feedback Started');
       });
     }
   }
-  
+
   render() {
     if (!this.state.loading) {
       return (
-        
         <SafeAreaView style={styles.safeContainer}>
           {this.props.currentFeedback === false ? (
             this.props.beforeFeedback === false ? (
@@ -168,8 +167,7 @@ export default class FeedbackStudentPage extends Component {
                   <CountDown
                     until={this.props.beforeDuration + 5}
                     onFinish={() => {
-                      this.getTopics().then(r => {
-                      });
+                      this.getTopics().then(r => {});
                       this.props.setFeedbackState();
                     }}
                   />
@@ -201,21 +199,20 @@ export default class FeedbackStudentPage extends Component {
                   timeToShow={['M', 'S']}
                   timeLabels={{m: 'Min', s: 'Sec'}}
                 />
-                <Text style={styles.text}> How well did you understand?</Text>
-                
+                <Text style={styles.text}>Please provide your feedback</Text>
+
                 <View style={[styles.grid]}>
-                    <StudentFeedbackCard
-                      value="Question"
-                      key="0"
-                      index="0"
-                      kind={this.state.kind}
-                      studentResponses={this.studentResponses}
-                    />
+                  <StudentFeedbackCard
+                    value="Question"
+                    key="0"
+                    index="0"
+                    kind={this.state.kind}
+                    studentResponses={this.studentResponses}
+                  />
                 </View>
                 <View style={styles.buttonContainer}>
                   {this.state.error ? (
                     <Text style={styles.errorMessage}>{this.state.error}</Text>
-                    
                   ) : (
                     <Text />
                   )}
@@ -230,7 +227,6 @@ export default class FeedbackStudentPage extends Component {
                   onPress={this.submitFeedback}
                 />
               </View>
-              
             </ScrollView>
           )}
         </SafeAreaView>
@@ -254,7 +250,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
   },
-  extraMargin : {
+  extraMargin: {
     marginTop: 25,
   },
   heading: {
