@@ -473,7 +473,7 @@ export default class QuizFacultyPage extends Component{
                                 </View>
                                 <View style={{width: Dimensions.window.width/2}}>
                                     <Text style={[styles.heading,{fontSize : 20, }]}>
-                                        Provide acceptable absolute error amount
+                                        Provide Acceptable Absolute Error Amount
                                     </Text>
                                     <TextInput
                                         style={[styles.textInput, {width:'90%'}]}
