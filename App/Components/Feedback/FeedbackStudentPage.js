@@ -75,14 +75,26 @@ export default class FeedbackStudentPage extends Component {
   submitFeedback = async () => {
     const {responses} = this.state;
     var err = false;
+    let msg = "";
     console.log("Submit Feedback ",responses);
-    if (responses === -1) {
+    if (responses === -1 || !responses) {
       err = true;
+      msg = "Please enter a response";
     }
-
+    if (this.state.kind == 2) {
+      if (!responses[0] || !responses[1] ) {
+        err = true;
+        if (!responses[0]) {
+          msg = "Atleast 1 response needed for Question 1";
+        }
+        else{
+          msg = "Atleast 1 response needed for Question 2";
+        }
+      }
+    }
     if (err) {
       await this.setState({
-        error: 'Please enter a response',
+        error: msg,
       });
     } else {
       await this.setState({

@@ -228,8 +228,8 @@ export default class FeedbackResultsList extends Component {
           </Text>
           {this.state.responses ? (
             <View>
-              <Text>{this.state.responses[0][0]}</Text>
-              <Text>{this.state.responses[0][1]}</Text>
+              <Text>{this.state.responses[0][0][0]}</Text>
+              <Text>{this.state.responses[0][1][0]}</Text>
             </View>
             ) : (
                 <Text />
