@@ -182,3 +182,4 @@ App/ios/GoogleService-Info.plist
 App/android/app/google-services.json
 keystore.jks
 App/ios/Podfile.lock
+App/ios/TLS.xcodeproj/project.pbxproj
