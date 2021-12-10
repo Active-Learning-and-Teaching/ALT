@@ -6,6 +6,7 @@ import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconI from 'react-native-vector-icons/MaterialIcons';
 import MainNavigator from './Components/Navigation/MainNavigator';
 import NotifiactionCentre from './NotificationCenter';
+import NetworkIssue from './Utils/NetworkIssue';
 
 IconF.loadFont();
 IconM.loadFont();
@@ -24,6 +25,7 @@ const App: FC = () => {
     <>
       <MainNavigator />
       <NotifiactionCentre />
+      <NetworkIssue />
     </>
   );
 };
