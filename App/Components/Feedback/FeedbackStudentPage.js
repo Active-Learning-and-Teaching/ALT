@@ -213,8 +213,7 @@ export default class FeedbackStudentPage extends Component {
                   timeToShow={['M', 'S']}
                   timeLabels={{m: 'Min', s: 'Sec'}}
                 />
-                <Text style={styles.text}> How well did you understand?</Text>
-                
+                <Text style={styles.text}> Please provide your Feedback</Text>
                 <View style={[styles.grid]}>
                     <StudentFeedbackCard
                       value="Question"
@@ -328,7 +327,7 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     display: 'flex',
-    padding: 10,
+    padding: 5,
     fontSize: 20,
     color: '#333',
     marginTop: 10,

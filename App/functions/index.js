@@ -116,6 +116,32 @@ function emailTemplate(
       </body>
       </html> 
           `
+    : type === 'Feedback2'
+    ? `
+    <html>
+    <body>
+    <div>
+        <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
+              
+            Following are the results of Minute Paper on ${date} for course ${courseName}
+            <br/> 
+            <br/>
+
+        </p>
+        <div style = "font-family:Arial, Helvetica, sans-serif; text-align:left;">
+          <h4> Question 1 : What are the three most important things that you learnt? </h4> <br/>
+            ${results[0][0]} <br/>
+            ${results[0][1]} <br/>
+            ${results[0][2]} <br/>
+          <h4> Question 2 : What are the things that remain doubtful? </h4> <br/>
+            ${results[1][0]} <br/>
+            ${results[1][1]} <br/>
+            ${results[1][2]} <br/>
+        </div>
+    </div>	
+    </body>
+    </html>
+    `
     : type === 'mcq'
     ? `
       <html>
@@ -682,31 +708,57 @@ async function getFeedbackCount(passCode) {
 }
 async function getFeedbackResponse(passCode, startTime, endTime, type) {
   let ans = null;
-  await admin
-    .app()
+  if (type==='2'){
+    await admin
+    app()
     .database(url)
-    .ref('InternalDb/FeedbackResponse/')
+    .ref('InternalDb/Feedback/')
     .orderByChild('passCode')
     .equalTo(passCode)
     .once('value')
     .then(async snapshot => {
-      let list = {};
-      if (type === '0') list = {0: 0, 1: 0, 2: 0};
-      else list = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+      if (snapshot.val()) {
+        const keys = Object.values(snapshot.val());
+        ans = keys['summary'];
+      }
+    })
+  }
+  else {
+    await admin
+      .app()
+      .database(url)
+      .ref('InternalDb/FeedbackResponse/')
+      .orderByChild('passCode')
+      .equalTo(passCode)
+      .once('value')
+      .then(async snapshot => {
+        let list = {};
+        if (type === '0') list = {0: 0, 1: 0, 2: 0};
+        else if (type === '1') list = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+        else list = [];
 
-      snapshot.forEach(data => {
-        const keys = Object(data.val());
-        const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
-        const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
-        const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
+        snapshot.forEach(data => {
+          const keys = Object(data.val());
+          const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
+          const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
+          const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
 
-        if (temp1 <= temp2 && temp1 >= temp) {
-          list[keys['responses']] += 1;
-        }
+          // if (temp1 <= temp2 && temp1 >= temp) {
+          //   list[keys['responses']] += 1;
+          // }
+          if (kind == "0" || kind == "1"){
+            if (temp1<=temp2 && temp1>=temp){
+                list[keys["responses"]] += 1
+            }
+          }
+          else{
+              list.push(keys["responses"])
+          }
+        });
+        ans = list;
+        console.log(ans);
       });
-      ans = list;
-      console.log(ans);
-    });
+  }
   return ans;
 }
 async function getFBURLFromPasscode(passCode) {
@@ -1086,6 +1138,7 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
           value['endTime'],
           type,
         );
+        // const feedbackKind = ["Color Scale", "Likert Scale", "Minute Paper"];
         return await FeedbackResponseMailer(
           data,
           passCode,
