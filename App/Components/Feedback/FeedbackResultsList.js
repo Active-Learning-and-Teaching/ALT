@@ -42,7 +42,7 @@ export default class FeedbackResultsList extends Component {
     return this.state.responses[index].map((item,i) => {
       return( 
         <Text style = {styles.answers} key={i}>
-          item
+          {item}
         </Text>
       );
     })
@@ -54,6 +54,7 @@ export default class FeedbackResultsList extends Component {
     await feedback
       .getFeedbackDetails(this.state.course.passCode)
       .then(async r => {
+        console.log(r);
         if (r.kind == '0' || r.kind == '1') {
           await feedbackResponses
             .getAllResponse(
@@ -89,8 +90,9 @@ export default class FeedbackResultsList extends Component {
               }});
         } else if(r.kind=="2") {
           if (r.summary){
+            const values = r.summary
             await this.setState({
-              responses: r.summary,
+              responses: values,
               feedbackNumber: r.feedbackCount,
               kind: r.kind,
             });
