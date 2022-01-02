@@ -48,6 +48,30 @@ export default class FeedbackResultsList extends Component {
     })
   }
 
+  handleMinutePaperSummary = (r) => {
+    const values = r.summary
+    this.setState({
+      responses: values,
+      feedbackNumber: r.feedbackCount,
+      kind: r.kind,
+    });
+    if(this.state.kind === ""){
+      this.props.cancelFB()
+    }
+    else{
+      this.props.feedbackresultData(
+        values,
+        this.state.feedbackNumber,
+      );
+      if (
+        this.state.course.defaultEmailOption &&
+        this.props.emailStatus
+      ){
+        this.props.FeedbackMailer().then();
+      }
+    }
+  }
+
   getResponseData = async () => {
     const feedbackResponses = new FeedbackResponses();
     const feedback = new Feedback();
@@ -89,32 +113,17 @@ export default class FeedbackResultsList extends Component {
                 }
               }});
         } else if(r.kind=="2") {
-          if (r.summary){
-            const values = r.summary
-            await this.setState({
-              responses: values,
-              feedbackNumber: r.feedbackCount,
-              kind: r.kind,
-            });
-            if(this.state.kind === ""){
-              this.props.cancelFB()
+          // this.props.summarizeResponses().then(() => {
+            if (r.summary){
+              this.handleMinutePaperSummary(r);
+              console.log("Showing Processed Summary");
             }
             else{
-              await this.props.feedbackresultData(
-                values,
-                this.state.feedbackNumber,
-              );
-              if (
-                this.state.course.defaultEmailOption &&
-                this.props.emailStatus
-              ){
-                await this.props.FeedbackMailer().then();
-              }
+              console.log("Processing Summary");
+              await this.props.summarizeResponses()
+              this.handleMinutePaperSummary(r);
             }
-          }
-          else{
-            console.log("No Summary");
-          }
+          // })
         }   
       })
       .catch(error => {
@@ -257,8 +266,7 @@ export default class FeedbackResultsList extends Component {
         </View>
       );
     }
-    else if ( this.state.kind === "2" ){
-      console.log(this.state.responses)
+    else if ( this.state.kind === "2" && this.state.responses){
       return(
         <View style = {styles.container}>
           <Text style = {styles.heading}> 

@@ -35,6 +35,7 @@ export default class FeedbackFacultyPage extends Component {
       feedbackNumber: '',
       kind: null,
       HTTPFailure: false,
+      processedMinutePaperResponses : false,
     };
     // this.setTopics = this.setTopics.bind(this);
     this.setKind = this.setKind.bind(this);
@@ -193,7 +194,6 @@ export default class FeedbackFacultyPage extends Component {
   }
 
   async sendHTTPTrigger() {
-    let that = this;
     const feedback = new Feedback();
     feedback.getFeedbackDetails(this.state.course.passCode).then(values => {
       const url = `https://us-central1-alt-development-42a78.cloudfunctions.net/minutePaperSummarizer?passCode=${this.state.course.passCode}&startTime=${values.startTime}&endTime=${values.endTime}`;
@@ -209,26 +209,31 @@ export default class FeedbackFacultyPage extends Component {
           return;
         }
         else {
-          this.setState ({
-            HTTPFailure : false,
-          });
+          if (this.state.HTTPFailure) {
+            this.setState ({
+              HTTPFailure : false,
+            });
+          }
         }  
         response.json().then(data => {
           console.log(data);
           console.log(response.status);
-          console.log('trigger sent');  
+          console.log('trigger sent');
         }).then(() => {
           console.log('Heyyyyyy');
           this.setState({
+            processedMinutePaperResponses : true,
+          });
+          this.setState({
             loading : true,
           })
-          this.setState({
-            resultPage: true,
-          });
-          that.checkEmailSent().then(r => {
-            console.log('');
-          });
-          that.props.setFeedbackState();
+          // this.setState({
+          //   resultPage: true,
+          // });
+          // that.checkEmailSent().then(r => {
+          //   console.log('');
+          // });
+          // that.props.setFeedbackState();
         });
       })
     })
@@ -276,6 +281,7 @@ export default class FeedbackFacultyPage extends Component {
                       feedbackresultData={this.feedbackresultData}
                       FeedbackMailer={this.FeedbackMailer}
                       cancelFB = {this.setResultPage}
+                      summarizeResponses = {this.sendHTTPTrigger}
                     />
                   </View>
                   <View style={[styles.buttonRowContainer]}>
@@ -390,10 +396,6 @@ export default class FeedbackFacultyPage extends Component {
                 until={this.props.currentDuration + 5}
                 size={30}
                 onFinish={() => {
-                  if (this.state.kind == "2") {
-                    this.sendHTTPTrigger()
-                  }
-                  else {
                     this.setState({
                       resultPage: true,
                     });
@@ -401,7 +403,6 @@ export default class FeedbackFacultyPage extends Component {
                       console.log('');
                     });
                     this.props.setFeedbackState();
-                }
                 }}
                 digitStyle={{backgroundColor: '#FFF'}}
                 digitTxtStyle={{color: 'tomato'}}
