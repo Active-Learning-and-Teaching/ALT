@@ -17,7 +17,7 @@ const App: FC = () => {
   GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId: config['webClientId'],
-    offlineAccess: true,
+    offlineAccess: false,
   });
 
   return (
