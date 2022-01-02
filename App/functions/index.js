@@ -802,6 +802,7 @@ async function FeedbackResponseMailer(
   const date = startTime;
 
   try {
+    if (type == 'Feedback2') {
     await transporter.sendMail({
       from: 'atlapp2021@gmail.com',
       to: email,
@@ -815,6 +816,15 @@ async function FeedbackResponseMailer(
         },
       ],
     });
+  }else{
+    await transporter.sendMail({
+      from: 'atlapp2021@gmail.com',
+      to: email,
+      subject: 'Feedback Responses : ' + courseName,
+      text: '.',
+      html: emailTemplate(courseName, date, results, type, 0, 0),
+    });
+  }
     return 'Mail sent';
   } catch (error) {
     functions.logger.error(
