@@ -35,6 +35,7 @@ export default class StudentFeedbackCard extends Component {
     const items = [];
     for (let i = 0; i < 3; i++) {
       items.push(
+        <View style = {styles.grid}>
         <TextInput
             key = {i}
             style={styles.textInput}
@@ -49,6 +50,7 @@ export default class StudentFeedbackCard extends Component {
             placeholderTextColor = "grey"
             value={this.state.textResponse1[i]}
           />
+        </View>
       );
     }
     return items;
@@ -58,6 +60,7 @@ export default class StudentFeedbackCard extends Component {
     const items = [];
     for (let i = 0; i < 3; i++) {
       items.push(
+        <View style = {styles.grid}>
         <TextInput
             key = {i}
             style={styles.textInput}
@@ -72,6 +75,7 @@ export default class StudentFeedbackCard extends Component {
             placeholderTextColor = "grey"
             value={this.state.textResponse2[i]}
           />
+        </View>
       );
     }
     return items;
