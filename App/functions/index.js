@@ -75,7 +75,7 @@ function emailTemplate(
               <br/>
               Team ALT
           </p> 
-      </div>	
+      </div>  
       </body>
       </html> 
           `
@@ -110,7 +110,7 @@ function emailTemplate(
               <br/>
               Team ALT
           </p> 
-      </div>	
+      </div>  
       </body>
       </html> 
           `
@@ -151,7 +151,7 @@ function emailTemplate(
               Regards,
               <br/>
               Team ALT   
-      </div>	
+      </div>  
       </body>
       </html>
       `
@@ -601,9 +601,8 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
   let vlist = null;
   let verifiedStudentList = null;
   let studentList = await getStudents(passCode);
-  verifiedStudentList = studentList.filter(student => {
-    return student['verified'] == 1;
-  });
+  // console.log(studentList)
+  verifiedStudentList = studentList
   vlist = verifiedStudentList.map(student => {
     return student['key'];
   });
@@ -633,10 +632,11 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
           let ID = keys['userID'];
           let name = keys['name'] === undefined ? 'N/A' : keys['name'];
           const val = {Name: name, Email: email, Answer: answer};
-          if (vlist.includes(ID)) {
+          // if (vlist.includes(ID)) {
             a[ID] = val;
             b.push(ID);
-          }
+          // }
+          console.log(val)
         }
       });
       ans = a;
@@ -644,6 +644,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
     });
 
   let final = [];
+  console.log("Attempted",attempted)
   verifiedStudentList.forEach(student => {
     if (attempted.includes(student['key'])) {
       final.push(ans[student['key']]);
@@ -656,7 +657,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
       final.push(val);
     }
   });
-
+  console.log(final)
   return final;
 }
 async function getFeedbackCount(passCode) {
@@ -703,7 +704,7 @@ async function getFeedbackResponse(passCode, startTime, endTime, type) {
         }
       });
       ans = list;
-      console.log(ans);
+      // console.log(ans);
     });
   return ans;
 }
@@ -754,51 +755,31 @@ async function FeedbackResponseMailer(
     return 'Error';
   }
 }
-async function getStudents(passCode) {
+
+async function getStudents(passCode){
   const courseURL = await getURLFromPasscode(passCode);
   console.log('Inside getStudents for course: ' + courseURL);
-  const db_ref = admin
-    .app()
-    .database(url)
-    .ref('InternalDb/Courses/' + courseURL + '/students');
+  const db_ref = admin.app().database(url).ref('InternalDb/Student/');
   const studentSnapshots = await db_ref.once('value');
-  let studentPromiseList = [];
-  if (studentSnapshots.exists()) {
-    studentSnapshots.forEach(studentSnapshot => {
-      studentPromiseList.push(
-        admin
-          .app()
-          .database(url)
-          .ref('InternalDb/Student/' + studentSnapshot.key)
-          .once('value'),
-      );
-    });
-  }
-  let studentSnapshotList = [];
-  try {
-    studentSnapshotList = await Promise.all(studentPromiseList);
-  } catch (errorObject) {
-    console.log('Inside getStudents, failed to read students: ', errorObject);
-  }
   let studentList = [];
-  console.log('Student snapshotlist', studentSnapshotList);
-  studentSnapshotList.forEach(student => {
-    let dict = {};
-    console.log('Student', student);
-    console.log(student.key);
-    console.log(student.val());
-    dict['key'] = student.key;
-    dict['name'] = student.val()['name'];
-    dict['email'] = student.val()['email'];
-    dict['photo'] = student.val()['photo'];
-    dict['verified'] = 0;
-    if ('verified' in student.val()) {
-      if (student.val()['verified'].includes(courseURL)) {
-        dict['verified'] = 1;
+  studentSnapshots.forEach(student => {
+    if(student.hasChild('courses')){
+      if(student.child('courses').val().includes(courseURL)){
+        let dict = {};
+        dict['key'] = student.key;
+        dict['name'] = student.val()['name'];
+        dict['email'] = student.val()['email'];
+        dict['photo'] = student.val()['photo'];
+        dict['verified'] = 0;
+        if ('verified' in student.val()) {
+          if (student.val()['verified'].includes(courseURL)) {
+            dict['verified'] = 1;
+          }
+        }
+        studentList.push(dict);
       }
     }
-    studentList.push(dict);
-  });
+  })
 
   studentList.sort((a, b) =>
     a.name !== undefined && b.name !== undefined
@@ -816,6 +797,8 @@ async function getStudents(passCode) {
 
   return studentList;
 }
+
+
 async function StudentListMailer(list, passCode, email) {
   const courseName = await getCourseNameFromPasscode(passCode);
   const path = `${courseName}.csv`;
@@ -916,7 +899,7 @@ async function deleteAllMatchingKey(table, key, childKey) {
       console.log('starting to remove from table ' + table);
       let childrenToRemove = [];
       snapshots.forEach(child => {
-        console.log(child.key);
+        // console.log(child.key);
         childrenToRemove.push(child.ref.remove());
       });
       return Promise.all(childrenToRemove);
@@ -943,13 +926,14 @@ async function removeFromStudentList(courseKey) {
   console.log('Inside removeFromStudentList');
   const db = admin.app().database(url);
   const snapshots = await db
-    .ref('InternalDb/Courses/' + courseKey + '/students/')
+    .ref('InternalDb/Student/')
     .once('value');
   let studentsToModify = [];
   if (snapshots.val()) {
     snapshots.forEach(student => {
       console.log('Student: ', student.key);
-      const promise = db
+      if(student.child('courses').includes(courseKey)){
+        const promise = db
         .ref('InternalDb/Student/' + student.key + '/courses/')
         .once('value')
         .then(courses => {
@@ -966,6 +950,7 @@ async function removeFromStudentList(courseKey) {
             .set(courses);
         });
       studentsToModify.push(promise);
+      }
     });
     return Promise.all(studentsToModify);
   }
