@@ -15,7 +15,7 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
-const url = 'https://testfortls.firebaseio.com/';
+const url = 'https:/alt-development-42a78.firebaseio.com/';
 
 // ADD CREDENTIALS BEFORE DEPLOYING
 
@@ -725,7 +725,7 @@ async function getFeedbackResponse(passCode, startTime, endTime, type) {
           // if (temp1 <= temp2 && temp1 >= temp) {
           //   list[keys['responses']] += 1;
           // }
-          if (kind == '0' || kind == '1') {
+          if (type == '0' || type == '1') {
             if (temp1 <= temp2 && temp1 >= temp) {
               list[keys['responses']] += 1;
             }
@@ -792,9 +792,9 @@ async function getFBURLFromPasscode(passCode) {
 }
 async function FeedbackResponseMailer(
   results,
-  csvContent,
   passCode,
   startTime,
+  endTime,
   type,
   email,
 ) {
@@ -803,28 +803,28 @@ async function FeedbackResponseMailer(
 
   try {
     if (type == 'Feedback2') {
-    await transporter.sendMail({
-      from: 'atlapp2021@gmail.com',
-      to: email,
-      subject: 'Feedback Responses : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, date, results, type, 0, 0),
-      attachments: [
-        {
-          filename: 'Feedback_Response.csv',
-          content: csvContent,
-        },
-      ],
-    });
-  }else{
-    await transporter.sendMail({
-      from: 'atlapp2021@gmail.com',
-      to: email,
-      subject: 'Feedback Responses : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, date, results, type, 0, 0),
-    });
-  }
+      await transporter.sendMail({
+        from: 'atlapp2021@gmail.com',
+        to: email,
+        subject: 'Feedback Responses : ' + courseName,
+        text: '.',
+        html: emailTemplate(courseName, date, results, type, 0, 0),
+        attachments: [
+          {
+            filename: 'Feedback_Response.csv',
+            content: getFeedbackCSV(passCode, startTime, endTime),
+          },
+        ],
+      });
+    } else {
+      await transporter.sendMail({
+        from: 'atlapp2021@gmail.com',
+        to: email,
+        subject: 'Feedback Responses : ' + courseName,
+        text: '.',
+        html: emailTemplate(courseName, date, results, type, 0, 0),
+      });
+    }
     return 'Mail sent';
   } catch (error) {
     functions.logger.error(
@@ -1156,14 +1156,9 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
         type = '0';
         if ('kind' in keys) {
           type = keys['kind'];
+          console.log('Type is: ', type);
         }
         const data = await getFeedbackResponse(
-          passCode,
-          value['startTime'],
-          value['endTime'],
-          type,
-        );
-        const csvContent = await getFeedbackCSV(
           passCode,
           value['startTime'],
           value['endTime'],
@@ -1172,9 +1167,9 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
         // const feedbackKind = ["Color Scale", "Likert Scale", "Minute Paper"];
         return await FeedbackResponseMailer(
           data,
-          csvContent,
           passCode,
           value['startTime'],
+          value['endTime'],
           'Feedback' + type,
           email,
         );
