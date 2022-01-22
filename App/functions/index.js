@@ -72,7 +72,7 @@ function emailTemplate(
               <br/>
               Team ALT
           </p> 
-      </div>	
+      </div>  
       </body>
       </html> 
           `
@@ -101,7 +101,7 @@ function emailTemplate(
               <br/>
               Team ALT
           </p> 
-      </div>	
+      </div>  
       </body>
       </html> 
           `
@@ -160,7 +160,7 @@ function emailTemplate(
               Regards,
               <br/>
               Team ALT   
-      </div>	
+      </div>  
       </body>
       </html>
       `

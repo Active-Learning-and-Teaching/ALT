@@ -74,7 +74,7 @@ export default class QuizStudentPage extends Component {
             })
             Toast.show('Answer has been recorded!');
             const kbcresponse = new QuizResponses()
-            const timestamp = moment(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
+            const timestamp = moment.utc(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
 
             await kbcresponse.getResponse(this.state.user.url, this.state.course.passCode)
                 .then((url) => {

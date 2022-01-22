@@ -22,6 +22,8 @@
 		5940416E05A19B5DD3A6F41D /* libPods-TLS-TLSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D5BE73E6A3D85F09D2E48E /* libPods-TLS-TLSTests.a */; };
 		8C3911A469A19A968D62F58D /* libPods-TLS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DA35EA13167F9AAC586D61D /* libPods-TLS.a */; };
 		B931966AABF3D1AE18E90E61 /* libPods-TLS-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA1FC014A3D7EEE1C57D5EC /* libPods-TLS-tvOSTests.a */; };
+		FBA16D86278B09B9005FD723 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FBA16D85278B09B9005FD723 /* GoogleService-Info.plist */; };
+		FBA16D87278B09B9005FD723 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FBA16D85278B09B9005FD723 /* GoogleService-Info.plist */; };
 		FBE6FF69262CD61A00FFE5A0 /* AppIcons in Resources */ = {isa = PBXBuildFile; fileRef = FBE6FF68262CD61A00FFE5A0 /* AppIcons */; };
 		FBE6FF6A262CD61A00FFE5A0 /* AppIcons in Resources */ = {isa = PBXBuildFile; fileRef = FBE6FF68262CD61A00FFE5A0 /* AppIcons */; };
 /* End PBXBuildFile section */
@@ -72,6 +74,7 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EEEB1AC526394662009C6B3D /* TLS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TLS.entitlements; path = TLS/TLS.entitlements; sourceTree = "<group>"; };
 		F499858C4C33599391A775A6 /* Pods-TLS-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TLS-tvOS.release.xcconfig"; path = "Target Support Files/Pods-TLS-tvOS/Pods-TLS-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		FBA16D85278B09B9005FD723 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FBE6FF68262CD61A00FFE5A0 /* AppIcons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppIcons; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,6 +139,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				FBA16D85278B09B9005FD723 /* GoogleService-Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				308F41852781D14200507556 /* GoogleService-Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -361,7 +365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				308F41862781D14300507556 /* GoogleService-Info.plist in Resources */,
+				FBA16D86278B09B9005FD723 /* GoogleService-Info.plist in Resources */,
 				FBE6FF69262CD61A00FFE5A0 /* AppIcons in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -373,7 +377,7 @@
 			files = (
 				FBE6FF6A262CD61A00FFE5A0 /* AppIcons in Resources */,
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
-				308F41872781D14300507556 /* GoogleService-Info.plist in Resources */,
+				FBA16D87278B09B9005FD723 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,7 +412,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TLS/Pods-TLS-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -472,7 +476,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TLS-TLSTests/Pods-TLS-TLSTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
