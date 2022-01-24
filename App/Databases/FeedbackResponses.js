@@ -39,9 +39,9 @@ class FeedbackResponses {
             .then(snapshot => {
                 if (snapshot.val()){
                     const keys = Object.values(snapshot.val())[0];
-                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp = moment.utc(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment.utc(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment.utc(endTime, "DD/MM/YYYY HH:mm:ss")
 
                     if (temp1<=temp2 && temp1>=temp) {
                         ans = true
@@ -105,9 +105,9 @@ class FeedbackResponses {
                 await snapshot.forEach( (data) => {
                     const keys = Object(data.val())
                     // console.log(keys);
-                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp = moment.utc(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment.utc(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment.utc(endTime, "DD/MM/YYYY HH:mm:ss")
 
                     if (temp1<=temp2 && temp1>=temp){
                         list[keys["responses"]] += 1
