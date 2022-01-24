@@ -158,7 +158,7 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('/Users/ig-rail/Documents/GitHub/Team_1_ALT/keystore.jks')
+            storeFile file('/Users/decentral/Documents/GitHub/ALT/keystore.jks')
             storePassword '123456'
             keyAlias 'testfortls'
             keyPassword '123456'

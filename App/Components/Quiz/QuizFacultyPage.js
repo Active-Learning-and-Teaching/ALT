@@ -290,8 +290,8 @@ export default class QuizFacultyPage extends Component{
                             options={[
                                 { label: "Single-Correct", value: "mcq", activeColor: 'tomato'},
                                 { label: "Multi-Correct", value: "multicorrect" ,activeColor: 'tomato'},
-                                { label: "Alpha-Numeric", value: "alphaNumerical" ,activeColor: 'tomato'},
                                 { label: "Numeric", value: "numeric" ,activeColor: 'tomato'},
+                                { label: "Text", value: "alphaNumerical" ,activeColor: 'tomato'},
                             ]}
                         />
                     </View>
