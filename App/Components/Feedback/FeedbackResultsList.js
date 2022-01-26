@@ -27,7 +27,7 @@ export default class FeedbackResultsList extends Component {
       sum += this.state.responses[i] * i;
       n += this.state.responses[i];
     }
-    
+
     avg_points = sum / n;
     this.setState({
       avg_points: avg_points,
@@ -35,7 +35,10 @@ export default class FeedbackResultsList extends Component {
   }
 
   componentDidMount() {
-    this.getResponseData().then(r => {console.log(`All Feedback Responses`);console.log(this.state.responses)});
+    this.getResponseData().then(r => {
+      console.log(`All Feedback Responses`);
+      console.log(this.state.responses);
+    });
   }
 
   showMinutePaperSummary = (index) => {
@@ -157,23 +160,23 @@ export default class FeedbackResultsList extends Component {
                 <PieChart
                   data={[
                     {
-                      name: ': Not Much',
+                      name: ': Green',
                       responses: this.state.responses[0],
-                      color: '#F3460A',
+                      color: 'green',
                       legendFontColor: 'black',
                       legendFontSize: 15,
                     },
                     {
-                      name: ': Somewhat',
+                      name: ': Yellow',
                       responses: this.state.responses[1],
-                      color: 'orange',
+                      color: 'yellow',
                       legendFontColor: 'black',
                       legendFontSize: 15,
                     },
                     {
-                      name: ': Completely',
+                      name: ': Red',
                       responses: this.state.responses[2],
-                      color: '#60CA24',
+                      color: 'red',
                       legendFontColor: 'black',
                       legendFontSize: 15,
                     },
@@ -255,8 +258,7 @@ export default class FeedbackResultsList extends Component {
                 />
               ) : (
                 <Text />
-                
-              )} 
+              )}
               <Text style={[styles.miniheading]}>
                 {' '}
                 Average Score : {this.state.avg_points}
@@ -298,11 +300,9 @@ export default class FeedbackResultsList extends Component {
     }
     else{
       return (
-      <View style={styles.container}>
-        <Text style={styles.heading}>
-          Fetching Results ...
-        </Text>
-      </View>  
+        <View style={styles.container}>
+          <Text style={styles.heading}>Fetching Results ...</Text>
+        </View>
       );
     }
   }

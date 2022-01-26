@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth'
 import {
@@ -60,8 +61,16 @@ export default class CheckUserLoggedIn extends Component {
                     const student = new Student();
                     await student.getUser(email)
                         .then(async val => {
+                            console.log(val)
                             if (val){
                                 this.props.navigation.navigate('Student DashBoard')
+                            }
+                            else{
+                                console.log('User not found')
+                                this.props.navigation.navigate(
+                                    'Login', {
+                                        getUserType : this.getUserType
+                                    })
                             }
                         })
                 }
