@@ -27,7 +27,7 @@ export default class AnnouncementsAdd extends Component {
         } else {
             heading = heading.charAt(0).toUpperCase() + heading.slice(1)
             const announcement =  new Announcement()
-            const dateAndTime= moment(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
+            const dateAndTime= moment.utc(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
             await announcement.createAnnouncement(
                 this.props.course.passCode,
                 heading,

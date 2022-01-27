@@ -66,8 +66,8 @@ class Announcement {
                 if (snapshot.val()){
                     const list = Object.values(snapshot.val());
                     list.sort(function(a, b) {
-                        const keyA = moment(a.date, 'DD/MM/YYYY HH:mm:ss');
-                        const keyB = moment(b.date, 'DD/MM/YYYY HH:mm:ss');
+                        const keyA = moment.utc(a.date, 'DD/MM/YYYY HH:mm:ss');
+                        const keyB = moment.utc(b.date, 'DD/MM/YYYY HH:mm:ss');
                         if (keyA < keyB) return 1;
                         if (keyA > keyB) return -1;
                         return 0;

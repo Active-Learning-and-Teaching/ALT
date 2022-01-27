@@ -24,10 +24,10 @@ export default class FeedbackForm extends Component {
       user: this.props.user,
       textInput: [],
       inputData: [],
-      date: moment(database().getServerTime())
+      date: moment.utc(database().getServerTime())
         .add(360, 'minutes')
         .format('DD/MM/YYYY'),
-      time: moment(database().getServerTime())
+      time: moment.utc(database().getServerTime())
         .add(360, 'minutes')
         .format('HH:mm:ss'),
       error: null,
@@ -43,7 +43,7 @@ export default class FeedbackForm extends Component {
       });
     } else {
       const feedback = new Feedback();
-      const curr = moment(database().getServerTime());
+      const curr = moment.utc(database().getServerTime());
       let startTime = curr.format('DD/MM/YYYY HH:mm:ss');
 
       let endTime = curr
