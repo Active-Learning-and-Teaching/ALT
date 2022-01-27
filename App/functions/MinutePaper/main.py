@@ -9,14 +9,15 @@ import time
 
 app = Flask(__name__)
 
-# http://localhost:8080/minutePaperSummarizer?passCode=kx65peeg&startTime=02/01/2022 02:30:19&endTime=02/01/2022 02:32:19
+# http://localhost:8080//minutePaperSummarizer?passCode=kywqztbp&startTime=27/01/2022%2014:36:56&endTime=27/01/2022%2014:39:56
+DATABASE_URL = "https://testfortls.firebaseio.com/"
 
 
 def fetch_mp_responses(passCode, start_time, end_time):
     try:
         cred_obj = firebase_admin.credentials.Certificate('cred.json')
         default_app = firebase_admin.initialize_app(
-            cred_obj, {'databaseURL': 'https://alt-development-42a78-default-rtdb.firebaseio.com/'})
+            cred_obj, {'databaseURL': DATABASE_URL})
     except ValueError:
         pass
 
