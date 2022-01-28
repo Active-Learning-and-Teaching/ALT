@@ -183,4 +183,13 @@ App/android/app/google-services.json
 keystore.jks
 App/ios/Podfile.lock
 App/ios/TLS.xcodeproj/project.pbxproj
+
+App/functions/MinutePaper/venv
+App/functions/MinutePaper/cred.json
+App/functions/MinutePaper/*.pyc
+App/functions/MinutePaper/*.pyo
+App/functions/MinutePaper/*.pyd
+App/functions/MinutePaper/__pycache__
+App/functions/MinutePaper/.pytest_cache
+
 App/android/app/release/

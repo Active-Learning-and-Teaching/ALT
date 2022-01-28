@@ -34,11 +34,14 @@ export default class FeedbackFacultyPage extends Component {
       loading: true,
       feedbackNumber: '',
       kind: null,
+      HTTPFailure: false,
+      processedMinutePaperResponses : false,
     };
     // this.setTopics = this.setTopics.bind(this);
     this.setKind = this.setKind.bind(this);
     this.feedbackresultData = this.feedbackresultData.bind(this);
     this.FeedbackMailer = this.FeedbackMailer.bind(this);
+    this.sendHTTPTrigger = this.sendHTTPTrigger.bind(this);
   }
 
   feedbackresultData(resultData, feedbackNumber) {
@@ -84,6 +87,7 @@ export default class FeedbackFacultyPage extends Component {
           url,
           true,
           value.feedbackCount,
+          value.summary,
         );
       });
     });
@@ -189,6 +193,53 @@ export default class FeedbackFacultyPage extends Component {
     });
   }
 
+  async sendHTTPTrigger() {
+    const feedback = new Feedback();
+    feedback.getFeedbackDetails(this.state.course.passCode).then(values => {
+      const url = `https://minute-paper-summarizer-775rx6qcca-uc.a.run.app/minutePaperSummarizer?passCode=${this.state.course.passCode}&startTime=${values.startTime}&endTime=${values.endTime}`;
+      console.log(url);
+      fetch(url).then(response => {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+          this.setState({
+            loading : true,
+            HTTPFailure : true,
+          })
+          return;
+        }
+        else {
+          if (this.state.HTTPFailure) {
+            this.setState ({
+              HTTPFailure : false,
+            });
+          }
+        }  
+        response.json().then(data => {
+          console.log(data);
+          console.log(response.status);
+          console.log('trigger sent');
+        }).then(() => {
+          console.log('Heyyyyyy');
+          this.setState({
+            processedMinutePaperResponses : true,
+          });
+          this.setState({
+            loading : true,
+          })
+          // this.setState({
+          //   resultPage: true,
+          // });
+          // that.checkEmailSent().then(r => {
+          //   console.log('');
+          // });
+          // that.props.setFeedbackState();
+        });
+      })
+    })
+    
+  }
+
   setResultPage = () =>
   {
     this.setState({
@@ -220,6 +271,7 @@ export default class FeedbackFacultyPage extends Component {
                   setKind={this.setKind}
                 />
               ) : (
+                this.state.HTTPFailure === false ? (
                 <ScrollView>
                   <View style={styles.result}>
                     <FeedbackResultsList
@@ -229,6 +281,7 @@ export default class FeedbackFacultyPage extends Component {
                       feedbackresultData={this.feedbackresultData}
                       FeedbackMailer={this.FeedbackMailer}
                       cancelFB = {this.setResultPage}
+                      summarizeResponses = {this.sendHTTPTrigger}
                     />
                   </View>
                   <View style={[styles.buttonRowContainer]}>
@@ -247,8 +300,45 @@ export default class FeedbackFacultyPage extends Component {
                         });
                       }}
                     />
+                    {/* <Button
+                      style={styles.feedbackButtonMessage}
+                      buttonStyle={styles.mybutton}
+                      titleStyle={{color: 'white', fontWeight: 'normal'}}
+                      title={'Send Trigger'}
+                      onPress={() => {
+                        this.sendHTTPTrigger()
+                      }}/> */}
+                  </View>
+                </ScrollView>) : (
+                  <ScrollView>
+                  <View style={[styles.buttonRowContainer]}>
+                    <Button
+                      style={styles.feedbackButtonMessage}
+                      buttonStyle={styles.mybutton}
+                      titleStyle={{color: 'white', fontWeight: 'normal'}}
+                      title={'Retry Fetching Results'}
+                      onPress={() => {
+                        this.sendHTTPTrigger()
+                      }}/>
+                    <Button
+                      style={styles.feedbackButtonMessage}
+                      buttonStyle={styles.mybutton}
+                      titleStyle={{color: 'white', fontWeight: 'normal'}}
+                      title={'Start New Feedback'}
+                      onPress={() => {
+                        this.setState({
+                          resultPage: false,
+                          emailStatus: false,
+                          duration: this.duration,
+                          date: '',
+                          results: '',
+                        });
+                      }}
+                    />
+                    
                   </View>
                 </ScrollView>
+                )
               )
             ) : (
               <ScrollView>
@@ -306,13 +396,13 @@ export default class FeedbackFacultyPage extends Component {
                 until={this.props.currentDuration + 5}
                 size={30}
                 onFinish={() => {
-                  this.setState({
-                    resultPage: true,
-                  });
-                  this.checkEmailSent().then(r => {
-                    console.log('');
-                  });
-                  this.props.setFeedbackState();
+                    this.setState({
+                      resultPage: true,
+                    });
+                    this.checkEmailSent().then(r => {
+                      console.log('');
+                    });
+                    this.props.setFeedbackState();
                 }}
                 digitStyle={{backgroundColor: '#FFF'}}
                 digitTxtStyle={{color: 'tomato'}}
