@@ -191,3 +191,5 @@ App/functions/MinutePaper/*.pyo
 App/functions/MinutePaper/*.pyd
 App/functions/MinutePaper/__pycache__
 App/functions/MinutePaper/.pytest_cache
+
+App/android/app/release/

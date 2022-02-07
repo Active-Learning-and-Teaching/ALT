@@ -105,7 +105,7 @@ export default class FeedbackStudentPage extends Component {
     if (!err) {
       Toast.show('Responses have been recorded!');
       const feedbackResponse = new FeedbackResponses();
-      const timestamp = moment(database().getServerTime()).format(
+      const timestamp = moment.utc(database().getServerTime()).format(
         'DD/MM/YYYY HH:mm:ss',
       );
       console.log(timestamp);

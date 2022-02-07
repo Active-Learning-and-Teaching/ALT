@@ -93,8 +93,8 @@ export default class FeedbackFacultyPage extends Component {
   startFeedback = async action => {
     const feedback = new Feedback();
     let curr = database().getServerTime();
-    let startTime = moment(curr).format('DD/MM/YYYY HH:mm:ss');
-    let endTime = moment(curr)
+    let startTime = moment.utc(curr).format('DD/MM/YYYY HH:mm:ss');
+    let endTime = moment.utc(curr)
       .add(this.state.duration, 'minutes')
       .format('DD/MM/YYYY HH:mm:ss');
 
@@ -129,10 +129,10 @@ export default class FeedbackFacultyPage extends Component {
       });
     } else if (action === 'delay') {
       console.log('delay');
-      startTime = moment(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
+      startTime = moment.utc(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
         .add(10, 'minutes')
         .format('DD/MM/YYYY HH:mm:ss');
-      endTime = moment(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
+      endTime = moment.utc(this.props.startTime, 'DD/MM/YYYY HH:mm:ss')
         .add(10 + this.state.duration, 'minutes')
         .format('DD/MM/YYYY HH:mm:ss');
       await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
