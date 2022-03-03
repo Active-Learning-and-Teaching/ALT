@@ -1,5 +1,6 @@
 import database from '@react-native-firebase/database';
 import moment from 'moment';
+import Quiz from './Quiz';
 
 class QuizResponses {
 
@@ -30,7 +31,7 @@ class QuizResponses {
         return ans
     }
 
-    setResponse = async (passCode, userID, userName, answer, timestamp, name, url) =>{
+    setResponse = async (passCode, userID, userName, answer, timestamp, name, quiz_response_time, url) =>{
         await database()
             .ref('InternalDb/KBCResponse/'+url)
             .set({
@@ -40,14 +41,15 @@ class QuizResponses {
                 userID_passCode : userID+"_"+passCode,
                 answer: answer,
                 timestamp:timestamp,
-                name: name
+                name: name,
+                quiz_response_time: quiz_response_time,
             })
             .then(()=>{
                 console.log("Response modified")
             })
     }
 
-    createResponse =  async (passCode, userID, userName, answer, timestamp, name) => {
+    createResponse =  async (passCode, userID, userName, answer, timestamp, name,quiz_response_time) => {
         await this.reference
             .push()
             .set({
@@ -57,7 +59,8 @@ class QuizResponses {
                 userID_passCode : userID+"_"+passCode,
                 answer: answer,
                 timestamp: timestamp,
-                name: name
+                name: name,
+                quiz_response_time: quiz_response_time,
             })
             .then(() => {
                 console.log('Response Created')
@@ -199,6 +202,7 @@ class QuizResponses {
                         else{
                             dict[answer] = 1
                         }
+                        
                     }
                 })
                 ans = dict

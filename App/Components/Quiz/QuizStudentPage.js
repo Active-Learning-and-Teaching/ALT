@@ -53,28 +53,52 @@ export default class QuizStudentPage extends Component {
         })
     }
 
+    getStartTime = async () => {
+        const Kbc = new Quiz();
+        await Kbc.getTiming(this.state.course.passCode).then(value => {
+          console.log("Output line 92 QuizStudentPage.js"+ value['startTime']);
+          this.setState({
+            date: value['startTime'],
+          });
+        });
+      };
+    
+
+
     submitResponse = async () => {
 
         const {option} = this.state;
-
+    
         if (option === '') {
-            this.setState({
-                error: "Please answer"
-            })
-        } 
-        else if(this.props.quizType==="numeric" && isNaN(parseFloat(option)))
-        {
-            this.setState({
-                error: "Please Input a Numerical Response"
-            })
-        }
-        else {
-            this.setState({
-                error:null
-            })
-            Toast.show('Answer has been recorded!');
-            const kbcresponse = new QuizResponses()
-            const timestamp = moment.utc(database().getServerTime()).format("DD/MM/YYYY HH:mm:ss")
+          this.setState({
+            error: 'Please answer',
+          });
+        } else if (this.props.quizType === 'numeric' && isNaN(parseFloat(option))) {
+          this.setState({
+            error: 'Please Input a Numerical Response',
+          });
+        } else {
+          this.setState({
+            error: null,
+          });
+          Toast.show('Answer has been recorded!');
+          const kbcresponse = new QuizResponses();
+          const timestamp = moment
+            .utc(database().getServerTime())
+            .format('DD/MM/YYYY HH:mm:ss');
+    
+          console.log("Printing Output from QuizStudentpage.js in line 117");
+          await this.getStartTime();
+          console.log("Printing Output from QuizStudentpage.js in line 119 ->" + this.state.date);
+          console.log(this.state.date);
+
+            var date1 = new Date(this.state.date);
+            var date2 = new Date(timestamp);
+            var difference = date2.getTime()-date1.getTime();
+            var quiz_response_time=(difference/60000)*60
+            quiz_response_time = quiz_response_time.toFixed(2);
+        console.log("Response Time added")
+        console.log(quiz_response_time);
 
             await kbcresponse.getResponse(this.state.user.url, this.state.course.passCode)
                 .then((url) => {
@@ -85,9 +109,10 @@ export default class QuizStudentPage extends Component {
                             this.state.user.email,
                             option,
                             timestamp,
-                            this.state.user.name
+                            this.state.user.name,
+                            quiz_response_time,
                         ).then(r => {
-                                console.log("update")
+                            console.log("create")
                             })
                     } else {
                         kbcresponse.setResponse(
@@ -97,9 +122,10 @@ export default class QuizStudentPage extends Component {
                             option,
                             timestamp,
                             this.state.user.name,
-                            url
+                            quiz_response_time,
+                            url,
                         ).then(r => {
-                                console.log("create")
+                            console.log("update")
                             })
 
                     }
@@ -112,8 +138,8 @@ export default class QuizStudentPage extends Component {
     render() {
         if(!this.state.loading)
         { 
-            console.log("Debugging");
-            console.log(this.props.quizType);
+            // console.log("Debugging");
+            // console.log(this.props.quizType);
         return(
             <SafeAreaView style={styles.safeContainer}>
             {   this.props.currentQuiz === false
@@ -130,7 +156,7 @@ export default class QuizStudentPage extends Component {
                                              correctAnswer={this.state.correctAnswer}
                                              date={this.state.date}
                                              quizType={this.props.quizType}
-                                             quizresultData={this.quizresultData} />
+                                             quizresultData={this.quizresultData}/>
                             </View>
                         </ScrollView>
                     :
