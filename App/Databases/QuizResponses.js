@@ -1,5 +1,6 @@
 import database from '@react-native-firebase/database';
 import moment from 'moment';
+import Quiz from './Quiz';
 
 class QuizResponses {
   coursePasscode: string;
@@ -34,6 +35,7 @@ class QuizResponses {
     answer,
     timestamp,
     name,
+    quiz_response_time,
     url,
     opens,
     firstOpen,
@@ -48,6 +50,7 @@ class QuizResponses {
         answer: answer,
         timestamp: timestamp,
         name: name,
+        quiz_response_time: quiz_response_time,
         opens: opens,
         firstOpen: firstOpen,
       })
@@ -63,8 +66,9 @@ class QuizResponses {
     answer,
     timestamp,
     name,
+    quiz_response_time,
     opens,
-    firstOpen
+    firstOpen,
   ) => {
     await this.reference
       .push()
@@ -76,6 +80,7 @@ class QuizResponses {
         answer: answer,
         timestamp: timestamp,
         name: name,
+        quiz_response_time: quiz_response_time,
         opens: opens,
         firstOpen: firstOpen,
       })
@@ -120,9 +125,6 @@ class QuizResponses {
           const temp = moment.utc(startTime, 'DD/MM/YYYY HH:mm:ss');
           const temp1 = moment.utc(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
           const temp2 = moment.utc(endTime, 'DD/MM/YYYY HH:mm:ss');
-
-
-         // reponse = abs(Start-keys[timestamps])
 
           if (temp1 <= temp2 && temp1 >= temp) {
             let answer = keys['answer']

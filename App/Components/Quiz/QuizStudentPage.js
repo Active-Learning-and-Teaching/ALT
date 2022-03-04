@@ -64,7 +64,7 @@ export default class QuizStudentPage extends Component {
           this.props.currentQuiz
         ) {
           console.log('Quiz has come to the foreground!');
-          
+
           this.setState({opens: this.state.opens + 1});
           console.log(this.state.opens);
         }
@@ -127,68 +127,74 @@ export default class QuizStudentPage extends Component {
       this.setState({
         error: null,
       });
-      Toast.show('Answer has been recorded!');
-      const kbcresponse = new QuizResponses();
-      const timestamp = moment
-        .utc(database().getServerTime())
-        .format('DD/MM/YYYY HH:mm:ss');
-
-      console.log('Printing Output from QuizStudentpage.js in line 117');
-      await this.getStartTime();
-      console.log(
-        'Printing Output from QuizStudentpage.js in line 119 ->' +
-          this.state.date,
-      );
-      console.log(this.state.date);
-      await kbcresponse
-        .getResponse(this.state.user.url, this.state.course.passCode)
-        .then(url => {
-          if (url === null) {
-            kbcresponse
-              .createResponse(
-                this.state.course.passCode,
-                this.state.user.url,
-                this.state.user.email,
-                option,
-                timestamp,
-                this.state.user.name,
-                this.state.opens,
-                this.state.firstOpen,
-              )
-              .then(r => {
-                console.log('create');
-              });
-          } else {
-            kbcresponse
-              .setResponse(
-                this.state.course.passCode,
-                this.state.user.url,
-                this.state.user.email,
-                option,
-                timestamp,
-                this.state.user.name,
-                url,
-                this.state.opens,
-                this.state.firstOpen,
-              )
-              .then(r => {
-                console.log('update');
-              });
-          }
-        });
     }
+
+    Toast.show('Answer has been recorded!');
+    const kbcresponse = new QuizResponses();
+    const timestamp = moment
+      .utc(database().getServerTime())
+      .format('DD/MM/YYYY HH:mm:ss');
+
+    console.log('Printing Output from QuizStudentpage.js in line 117');
+    await this.getStartTime();
+    console.log(
+      'Printing Output from QuizStudentpage.js in line 119 ->' +
+        this.state.date,
+    );
+    console.log(this.state.date);
+
+    var date1 = new Date(this.state.date);
+    var date2 = new Date(timestamp);
+    var difference = date2.getTime() - date1.getTime();
+    var quiz_response_time = (difference / 60000) * 60;
+    quiz_response_time = quiz_response_time.toFixed(2);
+    console.log('Response Time added');
+    console.log(quiz_response_time);
+
+    await kbcresponse
+      .getResponse(this.state.user.url, this.state.course.passCode)
+      .then(url => {
+        if (url === null) {
+          kbcresponse
+            .createResponse(
+              this.state.course.passCode,
+              this.state.user.url,
+              this.state.user.email,
+              option,
+              timestamp,
+              this.state.user.name,
+              quiz_response_time,
+              this.state.opens,
+              this.state.firstOpen,
+            )
+            .then(r => {
+              console.log('create');
+            });
+        } else {
+          kbcresponse
+            .setResponse(
+              this.state.course.passCode,
+              this.state.user.url,
+              this.state.user.email,
+              option,
+              timestamp,
+              this.state.user.name,
+              quiz_response_time,
+              url,
+              this.state.opens,
+              this.state.firstOpen,
+            )
+            .then(r => {
+              console.log('update');
+            });
+        }
+      });
   };
 
   render() {
     if (!this.state.loading) {
-      //   console.log(
-      //     'The following is being printed from QuizStudentPage.js -> line no: 131, Printing AppState ' +
-      //       this.state.appState,
-      //   );
-      //   console.log(
-      //     'The following is being printed from QuizStudentPage.js -> line no: 132, Printing App opens ' +
-      //       this.state.opens,
-      //   );
+      // console.log("Debugging");
+      // console.log(this.props.quizType);
       return (
         <SafeAreaView style={styles.safeContainer}>
           {this.props.currentQuiz === false ? (
@@ -222,7 +228,6 @@ export default class QuizStudentPage extends Component {
                     option: '',
                     icon: '',
                     error: null,
-                    opens: 0,
                   });
                   this.props.setQuizState();
                   this.getCorrectAnswer().then(r => {
@@ -364,6 +369,7 @@ export default class QuizStudentPage extends Component {
     }
   }
 }
+
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
