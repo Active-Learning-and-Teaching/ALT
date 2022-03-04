@@ -35,7 +35,7 @@ export default class QuizStudentPage extends Component {
       loading: true,
       appState: AppState.currentState,
       opens: 0,
-      firstOpen: '',
+      firstOpen: 0,
     };
     this.setOption = this.setOption.bind(this);
     this.quizresultData = this.quizresultData.bind(this);
@@ -48,26 +48,12 @@ export default class QuizStudentPage extends Component {
         if (
           this.state.appState.match(/inactive|background/) &&
           nextAppState === 'active' &&
-          this.props.currentQuiz &&
-          this.state.firstOpen === ''
+          this.props.currentQuiz
         ) {
           console.log('Quiz has come to the foreground for First time!');
           this.setState({opens: this.state.opens + 1});
           console.log(this.state.opens);
-          const timestamp_first = moment
-            .utc(database().getServerTime())
-            .format('DD/MM/YYYY HH:mm:ss');
-          this.setState({firstOpen: timestamp_first});
-        } else if (
-          this.state.appState.match(/inactive|background/) &&
-          nextAppState === 'active' &&
-          this.props.currentQuiz
-        ) {
-          console.log('Quiz has come to the foreground!');
-
-          this.setState({opens: this.state.opens + 1});
-          console.log(this.state.opens);
-        }
+        } 
         this.setState({appState: nextAppState});
       },
     );
@@ -143,13 +129,18 @@ export default class QuizStudentPage extends Component {
     );
     console.log(this.state.date);
 
-    var date1 = new Date(this.state.date);
-    var date2 = new Date(timestamp);
-    var difference = date2.getTime() - date1.getTime();
-    var quiz_response_time = (difference / 60000) * 60;
+    const date1 = new Date(this.state.date);
+    const date2 = new Date(timestamp);
+    const date3 = new Date(this.state.firstOpen)
+    const difference = date2.getTime() - date1.getTime();
+    const differenceOpen = date3.getTime() - date1.getTime();
+    let quiz_response_time = (difference / 60000) * 60;
+    let first_open_time = (differenceOpen / 60000) * 60;
     quiz_response_time = quiz_response_time.toFixed(2);
+    first_open_time = first_open_time.toFixed(2);
     console.log('Response Time added');
     console.log(quiz_response_time);
+    console.log(first_open_time);
 
     await kbcresponse
       .getResponse(this.state.user.url, this.state.course.passCode)
@@ -165,7 +156,7 @@ export default class QuizStudentPage extends Component {
               this.state.user.name,
               quiz_response_time,
               this.state.opens,
-              this.state.firstOpen,
+              first_open_time,
             )
             .then(r => {
               console.log('create');
@@ -182,7 +173,7 @@ export default class QuizStudentPage extends Component {
               quiz_response_time,
               url,
               this.state.opens,
-              this.state.firstOpen,
+              first_open_time,
             )
             .then(r => {
               console.log('update');
@@ -193,8 +184,18 @@ export default class QuizStudentPage extends Component {
 
   render() {
     if (!this.state.loading) {
-      // console.log("Debugging");
-      // console.log(this.props.quizType);
+
+      console.log('Printing line-> 197, QuizStudentPage.js');
+      console.log(this.state.opens, this.props.currentQuiz,this.state.appState);
+      if (this.props.currentQuiz && this.state.opens === 0) {
+        const timestamp_first = moment
+          .utc(database().getServerTime())
+          .format('DD/MM/YYYY HH:mm:ss');
+        console.log('Printing line-> 203, QuizStudentPage.js');
+        this.setState({firstOpen: timestamp_first});
+        this.setState({opens: this.state.opens + 1});
+        console.log(this.state.firstOpen);
+      }   
       return (
         <SafeAreaView style={styles.safeContainer}>
           {this.props.currentQuiz === false ? (
@@ -228,6 +229,7 @@ export default class QuizStudentPage extends Component {
                     option: '',
                     icon: '',
                     error: null,
+                    opens: 0,
                   });
                   this.props.setQuizState();
                   this.getCorrectAnswer().then(r => {
