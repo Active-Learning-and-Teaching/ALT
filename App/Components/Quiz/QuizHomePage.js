@@ -34,11 +34,18 @@ export default class QuizHomePage extends Component{
             .on('value', snapshot => {
                 if (snapshot.val()){
                     const values = Object.values(snapshot.val())[0]
-                    const curr = moment(database().getServerTime())
-                    const startTime = moment(values['startTime'], "DD/MM/YYYY HH:mm:ss")
-                    const endTime = moment(values['endTime'], "DD/MM/YYYY HH:mm:ss")
-                    const duration = Math.abs(moment(curr).diff(endTime, "seconds"))
-
+                    // console.log("Non moment")
+                    console.log("serverTime: "+database().getServerTime())
+                    // console.log(moment.utc(database().getServerTime()))
+                    // console.log("startTime"+values['startTime'])
+                    // console.log("endTime"+ values['endTime'])
+                    const curr = moment.utc(database().getServerTime())
+                    const startTime = moment.utc(values['startTime'], "DD/MM/YYYY HH:mm:ss")
+                    const endTime = moment.utc(values['endTime'], "DD/MM/YYYY HH:mm:ss")
+                    const duration = Math.abs(moment.utc(curr).diff(endTime, "seconds"))
+                    console.log(curr)
+                    console.log(startTime)
+                    console.log(endTime)
                     if (curr >= startTime && curr <= endTime){
                         this.setState({
                             currentQuiz : true,

@@ -5,7 +5,7 @@ import Dimensions from '../../Utils/Dimensions';
 import ActionSheet from 'react-native-actionsheet';
 import Announcement from '../../Databases/Announcement';
 import Toast from 'react-native-simple-toast';
-
+import moment from 'moment';
 export default class AnnouncementCard extends Component{
     constructor(props) {
         super(props);
@@ -51,7 +51,7 @@ export default class AnnouncementCard extends Component{
                         </ListItem.Subtitle>
                     </ListItem.Content>
                     <Badge
-                        value = {"  "+this.props.announcement.date+"  "}
+                        value = {"  "+moment(this.props.announcement.date,'DD/MM/YYYY HH:mm:ss').add(moment().utcOffset(), "minutes").format('DD/MM/YYYY HH:mm:ss')+"  "}
                         containerStyle = {styles.date}
                         textStyle={{color:"white", fontSize:10}}
                     />

@@ -17,8 +17,6 @@ const nodemailer = require('nodemailer');
 const moment = require('moment');
 const url = 'https://testfortls.firebaseio.com/';
 
-// ADD CREDENTIALS BEFORE DEPLOYING
-
 const transporter = nodemailer.createTransport({
   host: functions.config().mailingsystem.host,
   auth: {
@@ -37,8 +35,7 @@ function emailTemplate(
   quizCount,
   feedbackCount,
 ) {
-  console.log(type);
-  console.log(results);
+  console.log("Results: ", results);
   if (type === 'Feedback1') {
     avg_points = 0;
     sum = 0;
@@ -56,92 +53,81 @@ function emailTemplate(
           <div>
               <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                   
-                  Following is the results of Colour Scale on ${date} for course ${courseName}
+                  Following are the results of Colour Scale Feedback conducted on ${date} for the course ${courseName}.
                   <br/> 
                   <br/>        
               </p>
-                  <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${
-                    results[0]
-                  }%20Green%27%2C%20%27${results[1]}%20Yellow%27%2C%20%27${
-        results[2]
-      }%20Red%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${
-        results[0]
-      }%2C%20${results[1]}%2C%20${
-        results[2]
-      }%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%23green%27%2C%20%27yellow%27%2C%20%27%23red%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27black%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=40% width = 40%/>
-          <br/><br/><br/><br/>
-          <p>
-              Regards,
+              <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results[0]}%20Green%27%2C%20%27${results[1]}%20Yellow%27%2C%20%27${results[2]}%20Red%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results[0]}%2C%20${results[1]}%2C%20${results[2]}%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27green%27%2C%20%27yellow%27%2C%20%27red%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27black%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=40% width = 40%/>
               <br/>
-              Team ALT
-          </p> 
-      </div>	
+              <br/>
+              <p>
+                  Regards,
+                  <br/>
+                  Team ALT
+              </p> 
+      </div>  
       </body>
       </html> 
           `
     : type === 'Feedback1'
-    ? `
+      ? `
           <html>
           <body>
           <div>
               <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                   
-                  Following is the results of Likert Scale on ${date} for course ${courseName}
+                  Following are the results of Likert Scale Feedback conducted on ${date} for the course ${courseName}. The average response was ${avg_points}.
                   <br/> 
                   <br/>        
               </p>
-                  <h4> Average Points : ${avg_points}<h4/>
-                  <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${
-                    results[1]
-                  }%20One%20Point%27%2C%20%27${
-        results[2]
-      }%20Two%20Points%27%2C%20%27${results[3]}%20Three%20Points%27%2C%20%27${
-        results[4]
-      }%20Four%20Points%27%2C%20%27${
-        results[5]
-      }%20Five%20Points%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${
-        results[1]
-      }%2C%20${results[2]}%2C%20${results[3]}%2C%20${results[4]}%2C%20${
-        results[5]
-      }%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%23F3460A%27%2C%20%27orange%27%2C%20%27pink%27%2C%20%27skyblue%27%2C%20%27%2360CA24%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27black%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=40% width = 40%/>
+              <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results[1]}%20o%27%2C%20%27${results[2]}%20oo%27%2C%20%27${results[3]}%20ooo%27%2C%20%27${results[4]}%20oooo%27%2C%20%27${results[5]}%20ooooo%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results[1]}%2C%20${results[2]}%2C%20${results[3]}%2C%20${results[4]}%2C%20${results[5]}%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%23F3460A%27%2C%20%27orange%27%2C%20%27pink%27%2C%20%27skyblue%27%2C%20%27%2360CA24%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27black%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=40% width = 40%/>
           <br/><br/><br/><br/>
           <p>
               Regards,
               <br/>
               Team ALT
           </p> 
-      </div>	
+      </div>  
       </body>
       </html> 
           `
-    : type === 'mcq'
-    ? `
+      : type === 'Feedback2'
+        ? `
+    <html>
+    <body>
+    <div>
+        <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
+              
+            Following are the results of Minute Paper Feedback conducted on ${date} for the course ${courseName}.
+            <br/> 
+            <br/>
+
+        </p>
+        <div style = "font-family:Arial, Helvetica, sans-serif; text-align:left;">
+          <h4> Question 1 : What are the three most important things that you learnt? </h4> <br/>
+            ${results[0][0]} <br/>
+            ${results[0][1]} <br/>
+            ${results[0][2]} <br/>
+          <h4> Question 2 : What are the things that remain doubtful? </h4> <br/>
+            ${results[1][0]} <br/>
+            ${results[1][1]} <br/>
+            ${results[1][2]} <br/>
+        </div>
+    </div>	
+    </body>
+    </html>
+    `
+        : type === 'mcq'
+          ? `
       <html>
       <body>
       <div>
           <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                 
-              Following are the results of ${type} quiz on ${date} for course ${courseName}
+              Following are the results of ${type} Quiz conducted on ${date} for the course ${courseName}.
               <br/> 
               <br/>        
-<!--                <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['${
-        results['A']
-      } A','${results['B']} B','${results['C']} C','${
-        results['D']
-      } D'], datasets:[{data:[${results['A']},${results['B']},${results['C']},${
-        results['D']
-      }]}]}}" height=50% width = 50%>-->
-              <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${
-                results['A']
-              }%20A%27%2C%20%27${results['B']}%20B%27%2C%20%27${
-        results['C']
-      }%20C%27%2C%27${
-        results['D']
-      }%20D%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${
-        results['A']
-      }%2C%20${results['B']}%2C%20${results['C']}%2C%20${
-        results['D']
-      }%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%234d89f9%27%2C%20%27%2300b88a%27%2C%20%27%23ff9f40%27%2C%27%23ff6384%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27%23fff%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=50% width = 50%>
+              <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results['A']}%20A%27%2C%20%27${results['B']}%20B%27%2C%20%27${results['C']}%20C%27%2C%27${results['D']}%20D%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results['A']}%2C%20${results['B']}%2C%20${results['C']}%2C%20${results['D']}%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%234d89f9%27%2C%20%27%2300b88a%27%2C%20%27%23ff9f40%27%2C%27%23ff6384%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27%23fff%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=50% width = 50%>
           </p>
           <br/><br/><br/><br/>
           PFA. The CSV of answers submitted by the students.
@@ -151,12 +137,12 @@ function emailTemplate(
               Regards,
               <br/>
               Team ALT   
-      </div>	
+      </div>  
       </body>
       </html>
       `
-    : type === 'alphaNumerical' || type === 'multicorrect' || type === 'numeric'
-    ? `
+          : type === 'alphaNumerical' || type === 'multicorrect' || type === 'numeric'
+            ? `
       <html>
           <head>
           <style>
@@ -180,14 +166,14 @@ function emailTemplate(
           <div>
           <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                  
-              Following are the results of ${type} quiz on ${date} for course ${courseName}
+              Following are the results of ${type} Quiz conducted on ${date} for the course ${courseName}.
               <br/> 
               <br/>
           </p>
           <div>
               ${Object.entries(results).map(
-                (value, i) =>
-                  `
+              (value, i) =>
+                `
                   <div class="column">
                       <div class="card">
                         <h3>${i + 1}. Answer- ${value[0]}</h3>
@@ -196,7 +182,7 @@ function emailTemplate(
                   </div> 
                   <br/> 
               `,
-              )}
+            )}
           </div>
           <br/><br/><br/><br/>
           PFA. The CSV of answers submitted by the students.
@@ -211,17 +197,13 @@ function emailTemplate(
       </body>
       </html>
       `
-    : type === 'StudentList'
-    ? `
+            : type === 'StudentList'
+              ? `
       <html>
       <head>
       </head>
       <body>
           <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-                  Respected Professor,
-                  <br/> 
-                  <br/>    
-                  <br/>
                   <br/> 
                   PFA. List of Students registered for course ${courseName}
                   <br/> 
@@ -236,20 +218,17 @@ function emailTemplate(
       </body>
       </html>
       `
-    : type === 'Course'
-    ? `
+              : type === 'Course'
+                ? `
         <html>
         <head>
         </head>
         <body>
             <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-                    Respected Professor,
-                    <br/> 
-                    <br/>    
                     Following are the details of the course ${courseName} :-
                     <br/>
                     <br/>
-                    The course pass code on the app - ${passCode}
+                    The course passcode on the app - ${passCode}
                     <br/>
                     Total Number of Quizzes - ${quizCount}
                     <br/>
@@ -270,8 +249,9 @@ function emailTemplate(
         </body>
         </html>
         `
-    : '';
+                : '';
 }
+
 async function getURLFromPasscode(passCode) {
   const db_ref = admin
     .app()
@@ -361,10 +341,10 @@ async function getCourseNameFromPasscode(passCode) {
   let courseName;
   await db_ref.once(
     'value',
-    function(snapshot) {
+    function (snapshot) {
       courseName = snapshot.val()['courseName'];
     },
-    function(errorObject) {
+    function (errorObject) {
       console.log('The read failed: ', errorObject);
     },
   );
@@ -381,10 +361,10 @@ async function getKBCURLFromPasscode(passCode) {
     .equalTo(passCode)
     .once(
       'value',
-      function(snapshot) {
+      function (snapshot) {
         courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
       },
-      function(errorObject) {
+      function (errorObject) {
         console.log('The read failed: ', errorObject);
       },
     );
@@ -410,7 +390,7 @@ async function getAllAnnouncement(passCode) {
           dict['description'] = keys['description'];
           dict['heading'] = keys['heading'];
           list.push(dict);
-          list.sort(function(a, b) {
+          list.sort(function (a, b) {
             const keyA = moment(a['date'], 'DD/MM/YYYY HH:mm:ss');
             const keyB = moment(b['date'], 'DD/MM/YYYY HH:mm:ss');
             if (keyA < keyB) return 1;
@@ -489,7 +469,7 @@ async function getQuizResponse(passCode, startTime, endTime, type) {
     .once('value')
     .then(snapshot => {
       const dict = {};
-      const list = {A: 0, B: 0, C: 0, D: 0};
+      const list = { A: 0, B: 0, C: 0, D: 0 };
       snapshot.forEach(data => {
         const keys = Object(data.val());
         const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
@@ -536,9 +516,9 @@ async function QuizResponseMailer(
     answer === '*'
       ? 'N/A'
       : answer
-          .trim()
-          .toUpperCase()
-          .replace(/,/g, '');
+        .trim()
+        .toUpperCase()
+        .replace(/,/g, '');
   errorRate =
     (errorRate === '*') | (errorRate == '')
       ? 'N/A'
@@ -556,10 +536,9 @@ async function QuizResponseMailer(
   const rowString = await list
     .map(
       (student, i) =>
-        `${student.Name},${student.Email},${student.Answer.replace(/,/g, '')},${
-          answer === '*'
-            ? 'N/A'
-            : autoGrader(student.Answer, correctAnswer, errorRate, type)
+        `${student.Name},${student.Email},${student.Answer.replace(/,/g, '')},${answer === '*'
+          ? 'N/A'
+          : autoGrader(student.Answer, correctAnswer, errorRate, type)
         }\n`,
     )
     .join('');
@@ -579,8 +558,8 @@ async function QuizResponseMailer(
       from: 'atlapp2021@gmail.com',
       to: email,
       subject: 'Quiz Responses : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, date, '', results, type, 0, 0),
+      text: '',
+      html: emailTemplate(courseName, date, results, type, 0, 0),
       attachments: [
         {
           filename: path,
@@ -601,9 +580,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
   let vlist = null;
   let verifiedStudentList = null;
   let studentList = await getStudents(passCode);
-  verifiedStudentList = studentList.filter(student => {
-    return student['verified'] == 1;
-  });
+  verifiedStudentList = studentList
   vlist = verifiedStudentList.map(student => {
     return student['key'];
   });
@@ -632,11 +609,12 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
           let email = keys['userName'];
           let ID = keys['userID'];
           let name = keys['name'] === undefined ? 'N/A' : keys['name'];
-          const val = {Name: name, Email: email, Answer: answer};
-          if (vlist.includes(ID)) {
-            a[ID] = val;
-            b.push(ID);
-          }
+          const val = { Name: name, Email: email, Answer: answer };
+          // if (vlist.includes(ID)) {
+          a[ID] = val;
+          b.push(ID);
+          // }
+          console.log(val)
         }
       });
       ans = a;
@@ -644,6 +622,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
     });
 
   let final = [];
+  console.log("Attempted", attempted)
   verifiedStudentList.forEach(student => {
     if (attempted.includes(student['key'])) {
       final.push(ans[student['key']]);
@@ -656,7 +635,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
       final.push(val);
     }
   });
-
+  console.log(final)
   return final;
 }
 async function getFeedbackCount(passCode) {
@@ -680,6 +659,59 @@ async function getFeedbackCount(passCode) {
 }
 async function getFeedbackResponse(passCode, startTime, endTime, type) {
   let ans = null;
+  if (type === '2') {
+    await admin
+      .app()
+      .database(url)
+      .ref('InternalDb/Feedback/')
+      .orderByChild('passCode')
+      .equalTo(passCode)
+      .once('value')
+      .then(async snapshot => {
+        if (snapshot.val()) {
+          const keys = Object.values(snapshot.val())[0];
+          ans = keys['summary'];
+        }
+      });
+  } else {
+    await admin
+      .app()
+      .database(url)
+      .ref('InternalDb/FeedbackResponse/')
+      .orderByChild('passCode')
+      .equalTo(passCode)
+      .once('value')
+      .then(async snapshot => {
+        let list = {};
+        if (type === '0') list = { 0: 0, 1: 0, 2: 0 };
+        else if (type === '1') list = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        else list = [];
+
+        snapshot.forEach(data => {
+          const keys = Object(data.val());
+          const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
+          const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
+          const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
+
+          // if (temp1 <= temp2 && temp1 >= temp) {
+          //   list[keys['responses']] += 1;
+          // }
+          if (type == '0' || type == '1') {
+            if (temp1 <= temp2 && temp1 >= temp) {
+              list[keys['responses']] += 1;
+            }
+          } else {
+            list.push(keys['responses']);
+          }
+        });
+        ans = list;
+        // console.log(ans);
+      });
+  }
+  return ans;
+}
+async function getFeedbackCSV(passCode, startTime, endTime) {
+  let list = [];
   await admin
     .app()
     .database(url)
@@ -688,24 +720,24 @@ async function getFeedbackResponse(passCode, startTime, endTime, type) {
     .equalTo(passCode)
     .once('value')
     .then(async snapshot => {
-      let list = {};
-      if (type === '0') list = {0: 0, 1: 0, 2: 0};
-      else list = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-
-      snapshot.forEach(data => {
-        const keys = Object(data.val());
-        const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
-        const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
-        const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
-
-        if (temp1 <= temp2 && temp1 >= temp) {
-          list[keys['responses']] += 1;
-        }
-      });
-      ans = list;
-      console.log(ans);
+      if (snapshot.val()) {
+        snapshot.forEach(data => {
+          const keys = Object(data.val());
+          const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
+          const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
+          const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
+          // generate csv file for feedback responses between start and end time
+          if (temp1 <= temp2 && temp1 >= temp) {
+            list.push(keys['responses']);
+          }
+        });
+      }
     });
-  return ans;
+  let csvHeader = 'Sr. No., Question, Response1, Response2, Response3\n';
+  let csvString = list.map((response, i) => `${i + 1},1,${response[0][0]},${response[0][1]},${response[0][2]}\n${i + 1},2,${response[1][0]},${response[1][1]},${response[1][2]}\n`).join('');
+  let csvContent = `${csvHeader}${csvString}`;
+  console.log(csvContent);
+  return csvContent;
 }
 async function getFBURLFromPasscode(passCode) {
   const db_ref = admin
@@ -718,10 +750,10 @@ async function getFBURLFromPasscode(passCode) {
     .equalTo(passCode)
     .once(
       'value',
-      function(snapshot) {
+      function (snapshot) {
         courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
       },
-      function(errorObject) {
+      function (errorObject) {
         console.log('The read failed: ', errorObject);
       },
     );
@@ -731,20 +763,39 @@ async function FeedbackResponseMailer(
   results,
   passCode,
   startTime,
+  endTime,
   type,
   email,
 ) {
   const courseName = await getCourseNameFromPasscode(passCode);
-  const date = startTime;
+  const date = startTime.replace(/\//g, '-').split(' ')[0];
 
   try {
-    await transporter.sendMail({
-      from: 'atlapp2021@gmail.com',
-      to: email,
-      subject: 'Feedback Responses : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, date, results, type, 0, 0),
-    });
+
+    if (type == 'Feedback2') {
+      const csvContent = await getFeedbackCSV(passCode, startTime, endTime);
+      await transporter.sendMail({
+        from: 'atlapp2021@gmail.com',
+        to: email,
+        subject: 'Feedback Responses : ' + courseName,
+        text: '',
+        html: emailTemplate(courseName, date, results, type, 0, 0),
+        attachments: [
+          {
+            filename: 'Feedback_Response.csv',
+            content: csvContent,
+          },
+        ],
+      });
+    } else {
+      await transporter.sendMail({
+        from: 'atlapp2021@gmail.com',
+        to: email,
+        subject: 'Feedback Responses : ' + courseName,
+        text: '.',
+        html: emailTemplate(courseName, date, results, type, 0, 0),
+      });
+    }
     return 'Mail sent';
   } catch (error) {
     functions.logger.error(
@@ -757,61 +808,40 @@ async function FeedbackResponseMailer(
 async function getStudents(passCode) {
   const courseURL = await getURLFromPasscode(passCode);
   console.log('Inside getStudents for course: ' + courseURL);
-  const db_ref = admin
-    .app()
-    .database(url)
-    .ref('InternalDb/Courses/' + courseURL + '/students');
+  const db_ref = admin.app().database(url).ref('InternalDb/Student/');
   const studentSnapshots = await db_ref.once('value');
-  let studentPromiseList = [];
-  if (studentSnapshots.exists()) {
-    studentSnapshots.forEach(studentSnapshot => {
-      studentPromiseList.push(
-        admin
-          .app()
-          .database(url)
-          .ref('InternalDb/Student/' + studentSnapshot.key)
-          .once('value'),
-      );
-    });
-  }
-  let studentSnapshotList = [];
-  try {
-    studentSnapshotList = await Promise.all(studentPromiseList);
-  } catch (errorObject) {
-    console.log('Inside getStudents, failed to read students: ', errorObject);
-  }
   let studentList = [];
-  console.log('Student snapshotlist', studentSnapshotList);
-  studentSnapshotList.forEach(student => {
-    let dict = {};
-    console.log('Student', student);
-    console.log(student.key);
-    console.log(student.val());
-    dict['key'] = student.key;
-    dict['name'] = student.val()['name'];
-    dict['email'] = student.val()['email'];
-    dict['photo'] = student.val()['photo'];
-    dict['verified'] = 0;
-    if ('verified' in student.val()) {
-      if (student.val()['verified'].includes(courseURL)) {
-        dict['verified'] = 1;
+  studentSnapshots.forEach(student => {
+    if (student.hasChild('courses')) {
+      if (student.child('courses').val().includes(courseURL)) {
+        let dict = {};
+        dict['key'] = student.key;
+        dict['name'] = student.val()['name'];
+        dict['email'] = student.val()['email'];
+        dict['photo'] = student.val()['photo'];
+        dict['verified'] = 0;
+        if ('verified' in student.val()) {
+          if (student.val()['verified'].includes(courseURL)) {
+            dict['verified'] = 1;
+          }
+        }
+        studentList.push(dict);
       }
     }
-    studentList.push(dict);
-  });
+  })
 
   studentList.sort((a, b) =>
     a.name !== undefined && b.name !== undefined
       ? a.name.toUpperCase() > b.name.toUpperCase()
         ? 1
         : b.name.toUpperCase() > a.name.toUpperCase()
-        ? -1
-        : 0
+          ? -1
+          : 0
       : a.email > b.email
-      ? 1
-      : b.email > a.email
-      ? -1
-      : 0,
+        ? 1
+        : b.email > a.email
+          ? -1
+          : 0,
   );
 
   return studentList;
@@ -832,8 +862,8 @@ async function StudentListMailer(list, passCode, email) {
       from: 'atlapp2021@gmail.com',
       to: email,
       subject: 'List Of Students : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, '', '', '', '', 0, 0),
+      text: '',
+      html: emailTemplate(courseName, '', '', '', 0, 0),
       attachments: [
         {
           filename: path,
@@ -868,8 +898,7 @@ async function CourseMailer(list, passCode, email, announcements, qc, fc) {
     announcementrowString = await announcements
       .map(
         (announcement, i) =>
-          `${announcement.date},${announcement.heading},${
-            announcement.description
+          `${announcement.date},${announcement.heading},${announcement.description
           }\n`,
       )
       .join('');
@@ -881,8 +910,8 @@ async function CourseMailer(list, passCode, email, announcements, qc, fc) {
       from: 'atlapp2021@gmail.com',
       to: email,
       subject: 'Course Info : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, '', '', '', 'Course', qc, fc),
+      text: '',
+      html: emailTemplate(courseName, '', '', 'Course', qc, fc),
       attachments: [
         {
           filename: StudentPath,
@@ -916,7 +945,7 @@ async function deleteAllMatchingKey(table, key, childKey) {
       console.log('starting to remove from table ' + table);
       let childrenToRemove = [];
       snapshots.forEach(child => {
-        console.log(child.key);
+        // console.log(child.key);
         childrenToRemove.push(child.ref.remove());
       });
       return Promise.all(childrenToRemove);
@@ -943,34 +972,35 @@ async function removeFromStudentList(courseKey) {
   console.log('Inside removeFromStudentList');
   const db = admin.app().database(url);
   const snapshots = await db
-    .ref('InternalDb/Courses/' + courseKey + '/students/')
+    .ref('InternalDb/Student/')
     .once('value');
   let studentsToModify = [];
   if (snapshots.val()) {
     snapshots.forEach(student => {
       console.log('Student: ', student.key);
-      const promise = db
-        .ref('InternalDb/Student/' + student.key + '/courses/')
-        .once('value')
-        .then(courses => {
-          console.log('Courses: ', courses.val());
-          let newCourses = courses.val().filter(course => {
-            return course !== courseKey;
+      if (student.child('courses').includes(courseKey)) {
+        const promise = db
+          .ref('InternalDb/Student/' + student.key + '/courses/')
+          .once('value')
+          .then(courses => {
+            console.log('Courses: ', courses.val());
+            let newCourses = courses.val().filter(course => {
+              return course !== courseKey;
+            });
+            return newCourses;
+          })
+          .then(courses => {
+            console.log('New Courses: ', courses);
+            return db
+              .ref('InternalDb/Student/' + student.key + '/courses/')
+              .set(courses);
           });
-          return newCourses;
-        })
-        .then(courses => {
-          console.log('New Courses: ', courses);
-          return db
-            .ref('InternalDb/Student/' + student.key + '/courses/')
-            .set(courses);
-        });
-      studentsToModify.push(promise);
+        studentsToModify.push(promise);
+      }
     });
     return Promise.all(studentsToModify);
   }
 }
-
 async function removeStudentFromCourses(studentID) {
   const db = admin.app().database(url);
   console.log('Removing Student from courses');
@@ -992,13 +1022,11 @@ async function removeStudentFromCourses(studentID) {
     });
   }
 }
-
 async function deleteStudentHelper(studentID) {
   await deleteAllMatchingKey('KBCResponse', studentID, 'userID');
   await deleteAllMatchingKey('FeedbackResponse', studentID, 'userID');
   await removeStudentFromCourses(studentID);
 }
-
 async function deleteFacultyHelper(facultyID) {
   console.log('Inside Delete Faculty Helper');
   db = admin.app().database(url);
@@ -1026,7 +1054,7 @@ async function deleteFacultyHelper(facultyID) {
 
 exports.mailingSystem = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
-    return {message: 'Authentication Required!', code: 401};
+    return { message: 'Authentication Required!', code: 401 };
   }
 
   type = data.type;
@@ -1088,6 +1116,7 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
           data,
           passCode,
           value['startTime'],
+          value['endTime'],
           'Feedback' + type,
           email,
         );
@@ -1112,7 +1141,7 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
 });
 exports.deleteCourse = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
-    return {message: 'Authentication Required!', code: 401};
+    return { message: 'Authentication Required!', code: 401 };
   }
   const passCode = data.passCode;
   console.log('Got passCode to delete ' + passCode);
@@ -1122,7 +1151,7 @@ exports.deleteCourse = functions.https.onCall(async (data, context) => {
 });
 exports.deleteStudent = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
-    return {message: 'Authentication Required!', code: 401};
+    return { message: 'Authentication Required!', code: 401 };
   }
   studentID = data.key;
   userUID = data.userUID;
@@ -1174,7 +1203,7 @@ exports.deleteStudent = functions.https.onCall(async (data, context) => {
 });
 exports.deleteFaculty = functions.https.onCall((data, context) => {
   if (!context.auth) {
-    return {message: 'Authentication Required!', code: 401};
+    return { message: 'Authentication Required!', code: 401 };
   }
   const key = data.key;
   const userUID = data.uid;
@@ -1223,12 +1252,13 @@ exports.deleteFaculty = functions.https.onCall((data, context) => {
       console.log('Deleted Faculty:', key);
     });
 });
+
 exports.quizNotification = functions.database
   .ref('InternalDb/KBC/{qid}')
   .onWrite(async (change, context) => {
     try {
-      const {after} = change;
-      const {_data} = after;
+      const { after } = change;
+      const { _data } = after;
       const courseName = await getCourseNameFromPasscode(_data.passCode);
       let type = 'single-correct';
       if (_data.quizType === 'multicorrect') {
@@ -1260,8 +1290,8 @@ exports.feedbackNotification = functions.database
   .ref('InternalDb/Feedback/{id}')
   .onWrite(async (change, context) => {
     try {
-      const {after} = change;
-      const {_data} = after;
+      const { after } = change;
+      const { _data } = after;
       const courseName = await getCourseNameFromPasscode(_data.passCode);
       console.log('Feedback Notification executing');
       var str1 = _data.startTime.substring(0, 10);
@@ -1309,8 +1339,8 @@ exports.announcementsNotification = functions.database
   .ref('InternalDb/Announcements/{a_id}')
   .onWrite(async (change, context) => {
     try {
-      const {after} = change;
-      const {_data} = after;
+      const { after } = change;
+      const { _data } = after;
       const courseName = await getCourseNameFromPasscode(_data.passCode);
       console.log('Announcement Notification executing');
       const Announce = {

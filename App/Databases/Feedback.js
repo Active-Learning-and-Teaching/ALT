@@ -48,6 +48,7 @@ class Feedback {
     url,
     emailResponse,
     feedbackCount,
+    summary,
   ) => {
     await database()
       .ref('InternalDb/Feedback/' + url)
@@ -59,6 +60,7 @@ class Feedback {
         instructor: instructor,
         emailResponse: emailResponse,
         feedbackCount: feedbackCount,
+        summary:summary,
       })
       .then(() => {
         console.log('Feedback modified');

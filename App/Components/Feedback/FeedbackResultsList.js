@@ -41,44 +41,93 @@ export default class FeedbackResultsList extends Component {
     });
   }
 
+  showMinutePaperSummary = (index) => {
+    return this.state.responses[index].map((item,i) => {
+      return( 
+        <Text style = {styles.answers} key={i}>
+          {item}
+        </Text>
+      );
+    })
+  }
+
+  handleMinutePaperSummary = (r) => {
+    const values = r.summary
+    this.setState({
+      responses: values,
+      feedbackNumber: r.feedbackCount,
+      kind: r.kind,
+    });
+    if(this.state.kind === ""){
+      this.props.cancelFB()
+    }
+    else{
+      this.props.feedbackresultData(
+        values,
+        this.state.feedbackNumber,
+      );
+      if (
+        this.state.course.defaultEmailOption &&
+        this.props.emailStatus
+      ){
+        this.props.FeedbackMailer().then();
+      }
+    }
+  }
+
   getResponseData = async () => {
     const feedbackResponses = new FeedbackResponses();
     const feedback = new Feedback();
     await feedback
       .getFeedbackDetails(this.state.course.passCode)
       .then(async r => {
-        await feedbackResponses
-          .getAllResponse(
-            this.state.course.passCode,
-            r.startTime,
-            r.endTime,
-            r.kind,
-          )
-          .then(async values => {
-            // console.log("Logging resp values");
-            // console.log(values);
-            await this.setState({
-              responses: values,
-              feedbackNumber: r.feedbackCount,
-              kind: r.kind,
-            });
+        console.log(r);
+        if (r.kind == '0' || r.kind == '1') {
+          await feedbackResponses
+            .getAllResponse(
+              this.state.course.passCode,
+              r.startTime,
+              r.endTime,
+              r.kind,
+            )
+            .then(async values => {
+              // console.log("Logging resp values");
+              // console.log(values);
+              await this.setState({
+                responses: values,
+                feedbackNumber: r.feedbackCount,
+                kind: r.kind,
+              });
 
-            if (this.state.kind === '') {
-              this.props.cancelFB();
-            } else {
-              await this.props.feedbackresultData(
-                values,
-                this.state.feedbackNumber,
-              );
-              this.AvgPoints();
-              if (
-                this.state.course.defaultEmailOption &&
-                this.props.emailStatus
-              ) {
-                await this.props.FeedbackMailer().then();
+              if(this.state.kind === ""){
+                this.props.cancelFB()
               }
+              else{
+                await this.props.feedbackresultData(
+                  values,
+                  this.state.feedbackNumber,
+                );
+                this.AvgPoints();
+                if (
+                  this.state.course.defaultEmailOption &&
+                  this.props.emailStatus
+                ){
+                  await this.props.FeedbackMailer().then();
+                }
+              }});
+        } else if(r.kind=="2") {
+          // this.props.summarizeResponses().then(() => {
+            if (r.summary){
+              this.handleMinutePaperSummary(r);
+              console.log("Showing Processed Summary");
             }
-          });
+            else{
+              console.log("Processing Summary");
+              await this.props.summarizeResponses()
+              this.handleMinutePaperSummary(r);
+            }
+          // })
+        }   
       })
       .catch(error => {
         console.error(error);
@@ -218,7 +267,38 @@ export default class FeedbackResultsList extends Component {
           </View>
         </View>
       );
-    } else {
+    }
+    else if ( this.state.kind === "2" && this.state.responses){
+      return(
+        <View style = {styles.container}>
+          <Text style = {styles.heading}> 
+            Summary Of Responses
+          </Text>
+          {this.state.responses ? (
+            <View style = {styles.container}>
+              <Text style={[styles.questions, styles.shadow]}>
+                What are the three most important things that you learnt?
+              </Text>
+              {this.showMinutePaperSummary(0)}
+              {/* <Text style = {styles.answers}>Present Value of Future Payments</Text>
+              <Text style = {styles.answers}>Forex Reserves</Text>
+              <Text style = {styles.answers}>Straight Line Depreciation</Text> */}
+              <Text style={[styles.questions, styles.shadow]}>
+                What are the things that remain doubtful?
+              </Text>
+              {/* <Text style = {styles.answers}>Estimating price using Dividend discount model</Text>
+              <Text style = {styles.answers}>Imports and Exports dependence on Forex Rates</Text>
+              <Text style = {styles.answers}>Risk Adjusted Returns</Text> */}
+              {this.showMinutePaperSummary(1)}
+            </View>
+            ) : (
+                <Text />
+            )
+          }
+        </View>
+      );
+    }
+    else{
       return (
         <View style={styles.container}>
           <Text style={styles.heading}>Fetching Results ...</Text>
@@ -262,7 +342,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     paddingTop: 25,
-    padding: 15,
+    padding: 10,
     fontSize: 25,
     fontWeight: 'bold',
     color: 'black',
@@ -301,5 +381,20 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     paddingTop: 2,
     paddingBottom: 2,
+  },
+  questions: {
+    padding: 10,
+    margin: 10,
+    backgroundColor : "white",
+    borderRadius : 10,
+    fontWeight : "bold",
+    width: 350,
+  },
+  answers: {
+    padding: 10,
+    margin: 2,
+    backgroundColor : "#d4d1cf",
+    borderRadius : 10,
+    width: 350,
   },
 });

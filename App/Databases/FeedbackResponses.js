@@ -39,9 +39,9 @@ class FeedbackResponses {
             .then(snapshot => {
                 if (snapshot.val()){
                     const keys = Object.values(snapshot.val())[0];
-                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp = moment.utc(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment.utc(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment.utc(endTime, "DD/MM/YYYY HH:mm:ss")
 
                     if (temp1<=temp2 && temp1>=temp) {
                         ans = true
@@ -99,18 +99,26 @@ class FeedbackResponses {
                 if (kind === "0"){
                     list = {0:0, 1:0, 2:0}
                 }
-                else{
+                else if (kind === "1") {
                     list = {1:0, 2:0, 3:0, 4:0, 5:0}
+                }
+                else {
+                    list = []
                 }
                 await snapshot.forEach( (data) => {
                     const keys = Object(data.val())
                     // console.log(keys);
-                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp = moment.utc(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment.utc(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment.utc(endTime, "DD/MM/YYYY HH:mm:ss")
 
-                    if (temp1<=temp2 && temp1>=temp){
-                        list[keys["responses"]] += 1
+                    if (kind == "0" || kind == "1"){
+                        if (temp1<=temp2 && temp1>=temp){
+                            list[keys["responses"]] += 1
+                        }
+                    }
+                    else{
+                        list.push(keys["responses"])
                     }
                 })
                 ans = list

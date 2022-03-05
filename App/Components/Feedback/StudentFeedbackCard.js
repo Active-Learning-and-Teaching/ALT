@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, TextInput} from 'react-native';
 import {ListItem, Text} from 'react-native-elements';
 import Dimensions from '../../Utils/Dimensions';
 import SwitchSelector from 'react-native-switch-selector';
@@ -8,6 +8,13 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 export default class StudentFeedbackCard extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      textResponse1 : ["","",""],
+      textResponse2 : ["","",""],
+    };
+    // this.state = {
+    //   studentResponses: [],
+    // }
   }
 
   renderScale = () => {
@@ -23,6 +30,57 @@ export default class StudentFeedbackCard extends Component {
     }
     return items;
   };
+  
+  createTextInputsQuestion1 = () => {
+    const items = [];
+    for (let i = 0; i < 3; i++) {
+      items.push(
+        <View style = {styles.grid}>
+        <TextInput
+            key = {i}
+            style={styles.textInput}
+            multiline={true}
+            numberOfLines={2}
+            onChangeText = {value => {
+              let dupTextResponse1 = [...this.state.textResponse1];
+              dupTextResponse1[i] = value;
+              this.setState({textResponse1:dupTextResponse1,})
+              this.props.studentResponses([dupTextResponse1,this.state.textResponse2]);}}
+            placeholder={"Response "+ (i+1)}
+            placeholderTextColor = "grey"
+            value={this.state.textResponse1[i]}
+          />
+        </View>
+      );
+    }
+    return items;
+  }
+  
+  createTextInputsQuestion2 = () => {
+    const items = [];
+    for (let i = 0; i < 3; i++) {
+      items.push(
+        <View style = {styles.grid}>
+        <TextInput
+            key = {i}
+            style={styles.textInput}
+            multiline={true}
+            numberOfLines={2}
+            onChangeText = {value => {
+              let dupTextResponse2 = [...this.state.textResponse2];
+              dupTextResponse2[i] = value;
+              this.setState({textResponse2:dupTextResponse2,})
+              this.props.studentResponses([this.state.textResponse1,dupTextResponse2]);}}
+            placeholder={"Response "+ (i+1)}
+            placeholderTextColor = "grey"
+            value={this.state.textResponse2[i]}
+          />
+        </View>
+      );
+    }
+    return items;
+  }
+
 
   render() {
     if (this.props.kind === '0')
@@ -43,7 +101,7 @@ export default class StudentFeedbackCard extends Component {
           />
         </View>
       );
-    else
+    else if (this.props.kind==='1')
       return (
         <View style={styles.grid}>
           <View style={styles.row}>
@@ -66,6 +124,47 @@ export default class StudentFeedbackCard extends Component {
             snapped={true}
           />
         </View>
+      );
+    else if (this.props.kind==='2')
+      return (
+        <View style={styles.grid}>
+          <Text style={[styles.questions, styles.shadow]}>
+            What are the three most important things that you learnt?
+          </Text>
+          {/* <TextInput
+            style={styles.textInput}
+            multiline={true}
+            numberOfLines={2}
+            onChangeText = {value => {
+              dupTextResponse1 = [...this.state.textResponse1];
+              dupTextResponse1[0] = value;
+              this.setState({textResponse1:dupTextResponse1,})
+              this.props.studentResponses([dupTextResponse1,this.state.textResponse2]);}}
+            placeholder="Response for Question 1"
+            placeholderTextColor = "grey"
+            value={this.state.textResponse1[0]}
+          /> */}
+          {this.createTextInputsQuestion1()}
+          <Text style={[styles.questions, styles.shadow]}>
+            What are the things that remain doubtful?
+          </Text>
+          {/* <TextInput
+            style={styles.textInput}
+            placeholder="Response for Question 2"
+            multiline={true}
+            onChangeText = {value => {
+              this.setState({textResponse2:value,})
+              this.props.studentResponses([this.state.textResponse1,value]);}}
+            numberOfLines={2}
+            placeholderTextColor = "grey"
+            value={this.state.textResponse2}
+          /> */}
+          {this.createTextInputsQuestion2()}
+        </View>
+      );
+    else
+     return (
+       <Text>No feedback</Text>
       );
   }
 }
@@ -156,5 +255,20 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: 5,
     textAlign: 'center',
+  },
+  questions: {
+    padding: 10,
+    margin: 10,
+    backgroundColor : "white",
+    borderRadius : 10,
+    fontWeight : "bold",
+    width: 350,
+  },
+  textInput: {
+    color : 'black',
+    width: 325,
+    alignSelf: "center",
+    borderColor: "#ccc",
+    borderBottomWidth: 1
   },
 });

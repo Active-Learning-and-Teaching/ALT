@@ -66,7 +66,8 @@ export default class LogIn extends Component {
 
     signInWithGoogle = async () => {
         try
-        {
+        {   
+            console.log("Signing in with Google")
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
@@ -109,6 +110,8 @@ export default class LogIn extends Component {
             this.setState({
                 error : message
             })
+            console.log(this.state.error)
+            console.log("Error",error)
         }
     };
 

@@ -75,14 +75,26 @@ export default class FeedbackStudentPage extends Component {
   submitFeedback = async () => {
     const {responses} = this.state;
     var err = false;
-    console.log('Submit Feedback ', responses);
-    if (responses === -1) {
+    let msg = "";
+    console.log("Submit Feedback ",responses);
+    if (responses === -1 || !responses) {
       err = true;
+      msg = "Please enter a response";
     }
-
+    if (this.state.kind == 2) {
+      if (!responses[0] || !responses[1] ) {
+        err = true;
+        if (!responses[0]) {
+          msg = "Atleast 1 response needed for Question 1";
+        }
+        else{
+          msg = "Atleast 1 response needed for Question 2";
+        }
+      }
+    }
     if (err) {
       await this.setState({
-        error: 'Please enter a response',
+        error: msg,
       });
     } else {
       await this.setState({
@@ -93,7 +105,7 @@ export default class FeedbackStudentPage extends Component {
     if (!err) {
       Toast.show('Responses have been recorded!');
       const feedbackResponse = new FeedbackResponses();
-      const timestamp = moment(database().getServerTime()).format(
+      const timestamp = moment.utc(database().getServerTime()).format(
         'DD/MM/YYYY HH:mm:ss',
       );
       console.log(timestamp);
@@ -199,8 +211,7 @@ export default class FeedbackStudentPage extends Component {
                   timeToShow={['M', 'S']}
                   timeLabels={{m: 'Min', s: 'Sec'}}
                 />
-                <Text style={styles.text}>Please provide your feedback</Text>
-
+                <Text style={styles.text}> Please provide your Feedback</Text>
                 <View style={[styles.grid]}>
                   <StudentFeedbackCard
                     value="Question"
@@ -312,7 +323,7 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     display: 'flex',
-    padding: 10,
+    padding: 5,
     fontSize: 20,
     color: '#333',
     marginTop: 10,

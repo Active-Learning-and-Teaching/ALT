@@ -103,9 +103,9 @@ class QuizResponses {
     //             const b = []
     //             snapshot.forEach( (data) => {
     //                 const keys = Object(data.val())
-    //                 const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-    //                 const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-    //                 const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+    //                 const temp = moment.utc(startTime, "DD/MM/YYYY HH:mm:ss")
+    //                 const temp1 = moment.utc(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+    //                 const temp2 = moment.utc(endTime, "DD/MM/YYYY HH:mm:ss")
 
     //                 if (temp1<=temp2 && temp1>=temp){
     //                     let answer = keys['answer'].trim().toUpperCase()
@@ -163,9 +163,9 @@ class QuizResponses {
                 const list = {'A':0,'B':0,'C':0,'D':0}
                 snapshot.forEach( (data) => {
                     const keys = Object(data.val())
-                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp = moment.utc(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment.utc(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment.utc(endTime, "DD/MM/YYYY HH:mm:ss")
 
                     if (temp1<=temp2 && temp1>=temp){
                         list[keys["answer"]] += 1
@@ -186,9 +186,9 @@ class QuizResponses {
                 const dict = {}
                 snapshot.forEach( (data) => {
                     const keys = Object(data.val())
-                    const temp = moment(startTime, "DD/MM/YYYY HH:mm:ss")
-                    const temp1 = moment(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
-                    const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp = moment.utc(startTime, "DD/MM/YYYY HH:mm:ss")
+                    const temp1 = moment.utc(keys["timestamp"], "DD/MM/YYYY HH:mm:ss")
+                    const temp2 = moment.utc(endTime, "DD/MM/YYYY HH:mm:ss")
 
                     if (temp1<=temp2 && temp1>=temp){
                         let answer = keys["answer"].trim().toUpperCase().replace(/,/g,"")

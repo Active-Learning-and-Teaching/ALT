@@ -154,8 +154,8 @@ export default class QuizFacultyPage extends Component{
         else {
             const kbc = new Quiz()
             const curr = database().getServerTime()
-            const startTime = moment(curr).format("DD/MM/YYYY HH:mm:ss")
-            const endTime = moment(curr).add(time, 'minutes').format("DD/MM/YYYY HH:mm:ss")
+            const startTime = moment.utc(curr).format("DD/MM/YYYY HH:mm:ss")
+            const endTime = moment.utc(curr).add(time, 'minutes').format("DD/MM/YYYY HH:mm:ss")
 
             await kbc.getQuestion(this.state.course.passCode)
                 .then((values)=>{
@@ -290,8 +290,8 @@ export default class QuizFacultyPage extends Component{
                             options={[
                                 { label: "Single-Correct", value: "mcq", activeColor: 'tomato'},
                                 { label: "Multi-Correct", value: "multicorrect" ,activeColor: 'tomato'},
-                                { label: "Alpha-Numeric", value: "alphaNumerical" ,activeColor: 'tomato'},
                                 { label: "Numeric", value: "numeric" ,activeColor: 'tomato'},
+                                { label: "Text", value: "alphaNumerical" ,activeColor: 'tomato'},
                             ]}
                         />
                     </View>

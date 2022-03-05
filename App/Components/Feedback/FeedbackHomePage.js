@@ -44,13 +44,13 @@ export default class FeedbackHomePage extends Component {
       .on('value', snapshot => {
         if (snapshot.val()) {
           const values = Object.values(snapshot.val())[0];
-          const curr = moment(database().getServerTime());
-          const startTime = moment(values.startTime, 'DD/MM/YYYY HH:mm:ss');
-          const endTime = moment(values.endTime, 'DD/MM/YYYY HH:mm:ss');
+          const curr = moment.utc(database().getServerTime());
+          const startTime = moment.utc(values.startTime, 'DD/MM/YYYY HH:mm:ss');
+          const endTime = moment.utc(values.endTime, 'DD/MM/YYYY HH:mm:ss');
           const beforeDuration = Math.abs(
-            moment(curr).diff(startTime, 'seconds'),
+            moment.utc(curr).diff(startTime, 'seconds'),
           );
-          const duration = Math.abs(moment(curr).diff(endTime, 'seconds'));
+          const duration = Math.abs(moment.utc(curr).diff(endTime, 'seconds'));
 
           if (curr >= startTime && curr <= endTime) {
             this.setState({

@@ -1,6 +1,6 @@
 # Firebase cloud functions
 
-Firebase cloud functions is a serverless framework that lets us run backend code in response to events by https requests. In this we use cloud funtions for features such as mailing, account deletion, notifications, etc.
+Firebase cloud functions is a serverless framework that lets us run backend code in response to events by https requests. In this we use cloud funtions for features such as mailing, account deletion, notifications, etc. Run the following commands inside the functions folder.
 
 ## Deploying functions
 
@@ -25,21 +25,27 @@ firebase use <Name of your project>
 4. Install dependencies
 
 ```sh
-cd App/functions
 npm install
-cd ../
 ```
 
 5. Setup environment secrets. Right now environment secrets contain the email address, password and smtp provider.
 
 ```sh
 firebase functions:config:set mailingsystem.host="Your smtp provider" mailingsystem.email="Your Email" mailingsystem.password="Your password"
+firebase functions:config:get > .runtimeconfig.json
 ```
 
-6. Deploy the functions to firebase
+6. Test the functions locally (Comment out authentication)
 
 ```sh
-firebase deploy --only:functions
+npm run serve
+npm start
+```
+
+7. Deploy the functions to firebase
+
+```sh
+npm run deploy
 ```
 
 ## Indexing
