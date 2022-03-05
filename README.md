@@ -4,7 +4,7 @@
 [![React Native](https://img.shields.io/badge/-ReactNative-black?style=flat&logo=react)]()
 [![Firebase](https://img.shields.io/badge/-Firebase-blue?style=flat&logo=firebase)]()
 
-An open-source mobile application to facilitate teaching and learning in courses, including taking quizzes and feedbacks efficiently in classes.
+ALT (Active Learning and Teaching) is a mobile App that allows active learning through instant quizzes and feedback during lectures. The quizzes and feedback questions are given to students as part of the lecture without breaking the flow of the class. The students can respond on the app and the results are summarised by the app for the faculty to understand the state of class and engagement. The app aims to promote data privacy and security by storing minimal user information.
 
 <!-- <img width="731" alt="Screenshot 2021-04-30 at 18 16 51" src="https://user-images.githubusercontent.com/42066451/116697230-8e4b4c80-a9e0-11eb-860d-6fca12a876f5.png"> -->
 
@@ -39,20 +39,27 @@ An open-source mobile application to facilitate teaching and learning in courses
 ├── README.md
 ```
 
+## Architecture 🛠
+
+<p align="center">
+  <img width="640" alt="logo" src="https://user-images.githubusercontent.com/42066451/137106844-dd12c428-31fc-4895-9a39-85ceb3279428.jpeg">
+</p>
+                                                                                                                                        
 ## Setup 📥
 
 1. Clone the repository to local machine
 ```sh
-git clone https://github.com/SDOS-Winter2021/Team_1_ALT.git
+git clone https://github.com/Active-Learning-and-Teaching/ALT.git
 ```
 2. Install Node Modules
 ```sh
 cd App
 npm install --legacy-peer-deps
 ```
-3. Install CocoaPods
+3. Install CocoaPods 
 ```sh
 cd ios
+sudo gem install cocoapods
 pod install
 ```
 4. Download the following files from the Firebase project and place them in their respective folder.
@@ -62,11 +69,17 @@ pod install
 
 ## Build ⚙️
 
-### iOS   
-`npx react-native run-ios` 
+### iOS
+ Note : To build on an Macbooks with M1 Chip, open Xcode with Rosetta 2       
+ If errors persist, refer this [issue](https://github.com/CocoaPods/CocoaPods/issues/10220)
+```
+npx react-native run-ios
+```
 
 ### Android       
-`npx react-native run-android`
+```
+npx react-native run-android
+```
 
 ## Release ⬇️
-You can install the latest stable version of the app from Releases. The Android app is available as APK and iOS app is available through TestFlight.
+You can install the latest stable version of the app from Releases. The Android app is available on [Google Play Store](https://play.google.com/store/apps/details?id=com.IIITD.ALT) and iOS app is available through [TestFlight](https://testflight.apple.com/join/j232DKdv).
