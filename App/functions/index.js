@@ -1563,3 +1563,21 @@ exports.announcementsNotification = functions.database
       return console.error('Error:', ex.toString());
     }
   });
+exports.countStudentChanges = functions.database
+  .ref('InternalDb/KBCResponse/{response_id}')
+  .onUpdate((change,context)=>
+  {
+    const after = change.after.val()
+    const before = change.before.val()
+    if (after['answer']!=before['answer']){
+      if('updateCount' in after){
+      updateCount= after['updateCount']+1}
+      else{
+        updateCount =1
+      }
+      return change.after.ref.update({updateCount:updateCount},(error)=> {if(error){console.log(error)}})
+    }
+    else{
+      return null
+    }
+  })
