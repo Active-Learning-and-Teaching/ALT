@@ -36,6 +36,7 @@ class QuizResponses {
     timestamp,
     name,
     quiz_response_time,
+    normalised_response_time,
     url,
     opens,
     firstOpen,
@@ -51,6 +52,7 @@ class QuizResponses {
         timestamp: timestamp,
         name: name,
         quiz_response_time: quiz_response_time,
+        normalised_response_time: normalised_response_time,
         opens: opens,
         firstOpen: firstOpen,
       })
@@ -67,6 +69,7 @@ class QuizResponses {
     timestamp,
     name,
     quiz_response_time,
+    normalised_response_time,
     opens,
     firstOpen,
   ) => {
@@ -81,6 +84,7 @@ class QuizResponses {
         timestamp: timestamp,
         name: name,
         quiz_response_time: quiz_response_time,
+        normalised_response_time:normalised_response_time,
         opens: opens,
         firstOpen: firstOpen,
       })

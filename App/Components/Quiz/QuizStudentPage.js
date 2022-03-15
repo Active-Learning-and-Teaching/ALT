@@ -36,6 +36,7 @@ export default class QuizStudentPage extends Component {
       appState: AppState.currentState,
       opens: 0,
       firstOpen: 0,
+      duration: '',
     };
     this.setOption = this.setOption.bind(this);
     this.quizresultData = this.quizresultData.bind(this);
@@ -88,6 +89,19 @@ export default class QuizStudentPage extends Component {
     });
   };
 
+  getDuration = async () =>{
+    const Kbc = new Quiz()
+    await Kbc.getTiming(this.state.course.passCode).then(value => {
+      console.log("Printing duration finally")
+      console.log(value);
+      console.log(value['duration']);
+
+        this.setState({
+            duration: value['duration'],
+        })
+    })
+}
+
   getStartTime = async () => {
     const Kbc = new Quiz();
     await Kbc.getTiming(this.state.course.passCode).then(value => {
@@ -123,17 +137,30 @@ export default class QuizStudentPage extends Component {
 
     console.log('Printing Output from QuizStudentpage.js in line 117');
     await this.getStartTime();
+
     console.log(
       'Printing Output from QuizStudentpage.js in line 119 ->' +
         this.state.date,
     );
+
+    await this.getDuration();
+
     console.log(this.state.date);
 
-    const date1 = new Date(this.state.date);
-    const date2 = new Date(timestamp);
-    const date3 = new Date(this.state.firstOpen)
+
+    let temp1 = moment.utc(timestamp, 'DD/MM/YYYY HH:mm:ss');
+    let temp = moment.utc(this.state.date, 'DD/MM/YYYY HH:mm:ss');
+    let temp2 = moment.utc(this.state.firstOpen,'DD/MM/YYYY HH:mm:ss');
+    let date3 = new Date(temp2)
+    let date1 = new Date(temp);
+    let  date2 = new Date(temp1);
+    
+    // console.log('The dates are as follows ->');
+    // console.log(date1,date2);
+
     const difference = date2.getTime() - date1.getTime();
     const differenceOpen = date3.getTime() - date1.getTime();
+    // console.log("The difference is"+ difference);
     let quiz_response_time = (difference / 60000) * 60;
     let first_open_time = (differenceOpen / 60000) * 60;
     quiz_response_time = quiz_response_time.toFixed(2);
@@ -141,6 +168,21 @@ export default class QuizStudentPage extends Component {
     console.log('Response Time added');
     console.log(quiz_response_time);
     console.log(first_open_time);
+
+    console.log("Printing duration of Quiz")
+    console.log(this.state.duration);
+
+    var duration_seconds=parseInt(this.state.duration);
+    console.log(duration_seconds);
+
+    var normalised_response_time=quiz_response_time/duration_seconds;
+    normalised_response_time = normalised_response_time.toFixed(2);
+    console.log('Response Time added');
+    console.log(quiz_response_time);
+    console.log(first_open_time);
+
+    console.log("Printing Normalised Response Time");
+    console.log(normalised_response_time);
 
     await kbcresponse
       .getResponse(this.state.user.url, this.state.course.passCode)
@@ -155,6 +197,7 @@ export default class QuizStudentPage extends Component {
               timestamp,
               this.state.user.name,
               quiz_response_time,
+              normalised_response_time,
               this.state.opens,
               first_open_time,
             )
@@ -171,6 +214,7 @@ export default class QuizStudentPage extends Component {
               timestamp,
               this.state.user.name,
               quiz_response_time,
+              normalised_response_time,
               url,
               this.state.opens,
               first_open_time,
