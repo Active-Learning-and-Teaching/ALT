@@ -26,6 +26,9 @@ export default class FeedbackStudentPage extends Component {
       error: null,
       loading: true,
       kind: null,
+      firstOpen: 0,
+      date: '',
+      opens: 0,
     };
     this.getTopics = this.getTopics.bind(this);
     this.studentResponses = this.studentResponses.bind(this);
@@ -72,23 +75,34 @@ export default class FeedbackStudentPage extends Component {
       });
   }
 
+  getStartTime = async () => {
+    const feedback = new Feedback();
+    await feedback
+      .getFeedbackDetails(this.state.course.passCode)
+      .then(value => {
+        console.log('Output line 82 FeedbackStudent.js' + value['startTime']);
+        this.setState({
+          date: value['startTime'],
+        });
+      });
+  };
+
   submitFeedback = async () => {
     const {responses} = this.state;
     var err = false;
-    let msg = "";
-    console.log("Submit Feedback ",responses);
+    let msg = '';
+    console.log('Submit Feedback ', responses);
     if (responses === -1 || !responses) {
       err = true;
-      msg = "Please enter a response";
+      msg = 'Please enter a response';
     }
     if (this.state.kind == 2) {
-      if (!responses[0] || !responses[1] ) {
+      if (!responses[0] || !responses[1]) {
         err = true;
         if (!responses[0]) {
-          msg = "Atleast 1 response needed for Question 1";
-        }
-        else{
-          msg = "Atleast 1 response needed for Question 2";
+          msg = 'Atleast 1 response needed for Question 1';
+        } else {
+          msg = 'Atleast 1 response needed for Question 2';
         }
       }
     }
@@ -105,10 +119,26 @@ export default class FeedbackStudentPage extends Component {
     if (!err) {
       Toast.show('Responses have been recorded!');
       const feedbackResponse = new FeedbackResponses();
-      const timestamp = moment.utc(database().getServerTime()).format(
-        'DD/MM/YYYY HH:mm:ss',
-      );
+      const timestamp = moment
+        .utc(database().getServerTime())
+        .format('DD/MM/YYYY HH:mm:ss');
       console.log(timestamp);
+      await this.getStartTime();
+
+      let temp = moment.utc(this.state.date, 'DD/MM/YYYY HH:mm:ss');
+      let temp1 = moment.utc(this.state.firstOpen, 'DD/MM/YYYY HH:mm:ss');
+
+      console.log('Printing line-> 130, FeedbackStudentPage.js');
+      console.log(temp1, temp);
+
+      let date1 = new Date(temp);
+      let date2 = new Date(temp1);
+
+      const differenceOpen = date2.getTime() - date1.getTime();
+      let first_open_time = (differenceOpen / 60000) * 60;
+      first_open_time = first_open_time.toFixed(2);
+      console.log('Printing line-> 136, FeedbackStudentPage.js');
+      console.log(first_open_time);
 
       await feedbackResponse
         .getFeedbackResponse(this.state.user.url, this.state.course.passCode)
@@ -121,6 +151,7 @@ export default class FeedbackStudentPage extends Component {
                 this.state.user.email,
                 this.state.responses,
                 timestamp,
+                first_open_time,
               )
               .then(r => {
                 console.log('create');
@@ -134,6 +165,7 @@ export default class FeedbackStudentPage extends Component {
                 this.state.responses,
                 timestamp,
                 url,
+                first_open_time,
               )
               .then(r => {
                 console.log('update');
@@ -165,6 +197,18 @@ export default class FeedbackStudentPage extends Component {
 
   render() {
     if (!this.state.loading) {
+
+      if (this.props.currentFeedback && this.state.opens === 0) {
+        console.log('Printing line-> 202, FeedbackStudentPage.js');
+        const timestamp_first = moment
+          .utc(database().getServerTime())
+          .format('DD/MM/YYYY HH:mm:ss');
+
+        this.setState({firstOpen: timestamp_first});
+        this.setState({opens: this.state.opens + 1});
+        console.log(this.state.firstOpen);
+      }
+
       return (
         <SafeAreaView style={styles.safeContainer}>
           {this.props.currentFeedback === false ? (
