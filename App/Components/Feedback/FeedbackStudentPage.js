@@ -32,12 +32,12 @@ export default class FeedbackStudentPage extends Component {
   }
 
   studentResponses(value) {
-    if(this.state.kind==2){
-      for(let i =0 ; i<value.length; i++){
-        value[i] = value[i].map(s => s.trim()); 
-        value[i] = value[i].map(s => s.replaceAll(',', ' ')); 
-      }
-    }
+    // if(this.state.kind==2){
+    //   for(let i =0 ; i<value.length; i++){
+    //     value[i] = value[i].map(s => s.trim()); 
+    //     value[i] = value[i].map(s => s.replaceAll(',', ' ')); 
+    //   }
+    // }
     console.log('Student response ', value);
 
     this.setState({
