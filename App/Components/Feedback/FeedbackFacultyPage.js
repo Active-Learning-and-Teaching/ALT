@@ -193,7 +193,7 @@ export default class FeedbackFacultyPage extends Component {
   async sendHTTPTrigger() {
 	  return new Promise((resolve, reject) => {
       const feedback = new Feedback();
-      feedback.getFeedbackDetails(this.state.course.passCode).then(values => {
+      await feedback.getFeedbackDetails(this.state.course.passCode).then(values => {
         const url = `https://minute-paper-summarizer-775rx6qcca-uc.a.run.app/minutePaperSummarizer?passCode=${this.state.course.passCode}&startTime=${values.startTime}&endTime=${values.endTime}`;
         console.log(url);
         fetch(url).then(response => {
