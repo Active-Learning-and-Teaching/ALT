@@ -765,7 +765,7 @@ async function getFeedbackCSV(passCode, startTime, endTime) {
       }
     });
   let csvHeader = 'Sr. No., Question, Response1, Response2, Response3\n';
-  let csvString = list.map((response, i) => `${i + 1},1,${response[0][0]},${response[0][1]},${response[0][2]}\n${i + 1},2,${response[1][0]},${response[1][1]},${response[1][2]}\n`).join('');
+  let csvString = list.map((response, i) => `${i + 1},1,${response[0][0].replace(/,/g,' ').replace(/\n/g,' ')},${response[0][1].replace(/,/g,' ').replace(/\n/g,' ')},${response[0][2].replace(/,/g,' ').replace(/\n/g,' ')}\n${i + 1},2,${response[1][0].replace(/,/g,' ').replace(/\n/g,' ')},${response[1][1].replace(/,/g,' ').replace(/\n/g,' ')},${response[1][2].replace(/,/g,' ').replace(/\n/g,' ')}\n`).join('');
   let csvContent = `${csvHeader}${csvString}`;
   console.log(csvContent);
   return csvContent;

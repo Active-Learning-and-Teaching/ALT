@@ -68,7 +68,8 @@ export default class FeedbackResultsList extends Component {
       );
       if (
         this.state.course.defaultEmailOption &&
-        this.props.emailStatus
+        this.props.emailStatus &&
+        r.summary
       ){
         this.props.FeedbackMailer().then(console.log("Sending Email"));
       }
