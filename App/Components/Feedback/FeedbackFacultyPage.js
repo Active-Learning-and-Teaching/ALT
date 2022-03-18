@@ -172,7 +172,7 @@ export default class FeedbackFacultyPage extends Component {
   async FeedbackMailer() {
     console.log('triggering mail for passCode:' + this.state.course.passCode);
     Toast.show('Sending Email...');
-    const {data} = firebase
+    const {data} = await firebase
       .functions()
       .httpsCallable('mailingSystem')({
         passCode: this.state.course.passCode,
@@ -191,12 +191,12 @@ export default class FeedbackFacultyPage extends Component {
   }
 
   async sendHTTPTrigger() {
-	  return new Promise((resolve, reject) => {
+	  // return new Promise((resolve, reject) => {
       const feedback = new Feedback();
       await feedback.getFeedbackDetails(this.state.course.passCode).then(values => {
         const url = `https://minute-paper-summarizer-775rx6qcca-uc.a.run.app/minutePaperSummarizer?passCode=${this.state.course.passCode}&startTime=${values.startTime}&endTime=${values.endTime}`;
         console.log(url);
-        fetch(url).then(response => {
+        await fetch(url).then(response => {
           if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code: ' +
               response.status);
@@ -235,7 +235,7 @@ export default class FeedbackFacultyPage extends Component {
           });
         })
       })
-    });
+    // });
       
   }
 
