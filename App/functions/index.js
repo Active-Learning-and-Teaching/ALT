@@ -15,9 +15,7 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
-const url = 'https://testfortls.firebaseio.com/';
-
-// ADD CREDENTIALS BEFORE DEPLOYING
+const url = 'https://alt-development-42a78-default-rtdb.firebaseio.com/';
 
 const transporter = nodemailer.createTransport({
   host: functions.config().mailingsystem.host,
@@ -37,8 +35,7 @@ function emailTemplate(
   quizCount,
   feedbackCount,
 ) {
-  console.log(type);
-  console.log(results);
+  console.log("Results: ", results);
   if (type === 'Feedback1') {
     avg_points = 0;
     sum = 0;
@@ -56,22 +53,18 @@ function emailTemplate(
           <div>
               <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                   
-                  Following is the results of Colour Scale on ${date} for course ${courseName}
+                  Following are the results of Colour Scale Feedback conducted on ${date} for the course ${courseName}.
                   <br/> 
                   <br/>        
               </p>
-                  <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results[0]
-    }%20Not%20Much%27%2C%20%27${results[1]
-    }%20Somewhat%27%2C%20%27${results[2]
-    }%20Completely%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results[0]
-    }%2C%20${results[1]}%2C%20${results[2]
-    }%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%23F3460A%27%2C%20%27orange%27%2C%20%27%2360CA24%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27black%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=40% width = 40%/>
-          <br/><br/><br/><br/>
-          <p>
-              Regards,
+              <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results[0]}%20Green%27%2C%20%27${results[1]}%20Yellow%27%2C%20%27${results[2]}%20Red%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results[0]}%2C%20${results[1]}%2C%20${results[2]}%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27green%27%2C%20%27yellow%27%2C%20%27red%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27black%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=40% width = 40%/>
               <br/>
-              Team ALT
-          </p> 
+              <br/>
+              <p>
+                  Regards,
+                  <br/>
+                  Team ALT
+              </p> 
       </div>  
       </body>
       </html> 
@@ -83,18 +76,11 @@ function emailTemplate(
           <div>
               <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                   
-                  Following is the results of Likert Scale on ${date} for course ${courseName}
+                  Following are the results of Likert Scale Feedback conducted on ${date} for the course ${courseName}. The average response was ${avg_points}.
                   <br/> 
                   <br/>        
               </p>
-                  <h4> Average Points : ${avg_points}<h4/>
-                  <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results[1]
-      }%20One%20Point%27%2C%20%27${results[2]
-      }%20Two%20Points%27%2C%20%27${results[3]}%20Three%20Points%27%2C%20%27${results[4]
-      }%20Four%20Points%27%2C%20%27${results[5]
-      }%20Five%20Points%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results[1]
-      }%2C%20${results[2]}%2C%20${results[3]}%2C%20${results[4]}%2C%20${results[5]
-      }%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%23F3460A%27%2C%20%27orange%27%2C%20%27pink%27%2C%20%27skyblue%27%2C%20%27%2360CA24%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27black%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=40% width = 40%/>
+              <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results[1]}%20o%27%2C%20%27${results[2]}%20oo%27%2C%20%27${results[3]}%20ooo%27%2C%20%27${results[4]}%20oooo%27%2C%20%27${results[5]}%20ooooo%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results[1]}%2C%20${results[2]}%2C%20${results[3]}%2C%20${results[4]}%2C%20${results[5]}%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%23F3460A%27%2C%20%27orange%27%2C%20%27pink%27%2C%20%27skyblue%27%2C%20%27%2360CA24%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27black%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=40% width = 40%/>
           <br/><br/><br/><br/>
           <p>
               Regards,
@@ -112,7 +98,7 @@ function emailTemplate(
     <div>
         <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
               
-            Following are the results of Minute Paper on ${date} for course ${courseName}
+            Following are the results of Minute Paper Feedback conducted on ${date} for the course ${courseName}.
             <br/> 
             <br/>
 
@@ -138,19 +124,10 @@ function emailTemplate(
       <div>
           <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                 
-              Following are the results of ${type} quiz on ${date} for course ${courseName}
+              Following are the results of ${type} Quiz conducted on ${date} for the course ${courseName}.
               <br/> 
               <br/>        
-<!--                <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['${results['A']
-          } A','${results['B']} B','${results['C']} C','${results['D']
-          } D'], datasets:[{data:[${results['A']},${results['B']},${results['C']},${results['D']
-          }]}]}}" height=50% width = 50%>-->
-              <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results['A']
-          }%20A%27%2C%20%27${results['B']}%20B%27%2C%20%27${results['C']
-          }%20C%27%2C%27${results['D']
-          }%20D%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results['A']
-          }%2C%20${results['B']}%2C%20${results['C']}%2C%20${results['D']
-          }%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%234d89f9%27%2C%20%27%2300b88a%27%2C%20%27%23ff9f40%27%2C%27%23ff6384%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27%23fff%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=50% width = 50%>
+              <img src="https://quickchart.io/chart?bkg=white&c=%7B%0A%20%20%20%20type%3A%20%27pie%27%2C%0A%20%20%20%20data%3A%20%7B%0A%20%20%20%20%20%20%20%20labels%3A%20%5B%27${results['A']}%20A%27%2C%20%27${results['B']}%20B%27%2C%20%27${results['C']}%20C%27%2C%27${results['D']}%20D%27%5D%2C%0A%20%20%20%20%20%20%20%20datasets%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20data%3A%20%5B${results['A']}%2C%20${results['B']}%2C%20${results['C']}%2C%20${results['D']}%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20backgroundColor%3A%20%5B%27%234d89f9%27%2C%20%27%2300b88a%27%2C%20%27%23ff9f40%27%2C%27%23ff6384%27%5D%0A%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%7D%2C%0A%20%20%20%20options%3A%20%7B%0A%20%20%20%20%20%20%20%20legend%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%27right%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20align%3A%20%27start%27%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20plugins%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20datalabels%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%27%23fff%27%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20doughnutlabel%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20labels%3A%20%5B%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%27Donut%27%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20size%3A%2020%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D" height=50% width = 50%>
           </p>
           <br/><br/><br/><br/>
           PFA. The CSV of answers submitted by the students.
@@ -189,7 +166,7 @@ function emailTemplate(
           <div>
           <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
                  
-              Following are the results of ${type} quiz on ${date} for course ${courseName}
+              Following are the results of ${type} Quiz conducted on ${date} for the course ${courseName}.
               <br/> 
               <br/>
           </p>
@@ -227,10 +204,6 @@ function emailTemplate(
       </head>
       <body>
           <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-                  Respected Professor,
-                  <br/> 
-                  <br/>    
-                  <br/>
                   <br/> 
                   PFA. List of Students registered for course ${courseName}
                   <br/> 
@@ -252,13 +225,10 @@ function emailTemplate(
         </head>
         <body>
             <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-                    Respected Professor,
-                    <br/> 
-                    <br/>    
                     Following are the details of the course ${courseName} :-
                     <br/>
                     <br/>
-                    The course pass code on the app - ${passCode}
+                    The course passcode on the app - ${passCode}
                     <br/>
                     Total Number of Quizzes - ${quizCount}
                     <br/>
@@ -281,6 +251,7 @@ function emailTemplate(
         `
                 : '';
 }
+
 async function getURLFromPasscode(passCode) {
   const db_ref = admin
     .app()
@@ -541,6 +512,7 @@ async function QuizResponseMailer(
   endTime,
   email,
 ) {
+
   const correctAnswer =
     answer === '*'
       ? 'N/A'
@@ -587,8 +559,8 @@ async function QuizResponseMailer(
       from: 'atlapp2021@gmail.com',
       to: email,
       subject: 'Quiz Responses : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, date, '', results, type, 0, 0),
+      text: '',
+      html: emailTemplate(courseName, date, results, type, 0, 0),
       attachments: [
         {
           filename: path,
@@ -609,7 +581,6 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
   let vlist = null;
   let verifiedStudentList = null;
   let studentList = await getStudents(passCode);
-  // console.log(studentList)
   verifiedStudentList = studentList
   vlist = verifiedStudentList.map(student => {
     return student['key'];
@@ -639,7 +610,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
           let email = keys['userName'];
           let ID = keys['userID'];
           let name = keys['name'] === undefined ? 'N/A' : keys['name'];
-          const val = { Name: name, Email: email, Answer: answer };
+          const val = { Name: name, Email: email, Answer: answer,responseTime : temp1-temp };
           // if (vlist.includes(ID)) {
           a[ID] = val;
           b.push(ID);
@@ -661,6 +632,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
         Name: student['name'],
         Email: student['email'],
         Answer: 'N/A',
+        responseTime:0
       };
       final.push(val);
     }
@@ -740,7 +712,6 @@ async function getFeedbackResponse(passCode, startTime, endTime, type) {
   }
   return ans;
 }
-
 async function getFeedbackCSV(passCode, startTime, endTime) {
   let list = [];
   await admin
@@ -770,7 +741,6 @@ async function getFeedbackCSV(passCode, startTime, endTime) {
   console.log(csvContent);
   return csvContent;
 }
-
 async function getFBURLFromPasscode(passCode) {
   const db_ref = admin
     .app()
@@ -800,7 +770,7 @@ async function FeedbackResponseMailer(
   email,
 ) {
   const courseName = await getCourseNameFromPasscode(passCode);
-  const date = startTime;
+  const date = startTime.replace(/\//g, '-').split(' ')[0];
 
   try {
 
@@ -810,7 +780,7 @@ async function FeedbackResponseMailer(
         from: 'atlapp2021@gmail.com',
         to: email,
         subject: 'Feedback Responses : ' + courseName,
-        text: '.',
+        text: '',
         html: emailTemplate(courseName, date, results, type, 0, 0),
         attachments: [
           {
@@ -837,7 +807,6 @@ async function FeedbackResponseMailer(
     return 'Error';
   }
 }
-
 async function getStudents(passCode) {
   const courseURL = await getURLFromPasscode(passCode);
   console.log('Inside getStudents for course: ' + courseURL);
@@ -879,8 +848,6 @@ async function getStudents(passCode) {
 
   return studentList;
 }
-
-
 async function StudentListMailer(list, passCode, email) {
   const courseName = await getCourseNameFromPasscode(passCode);
   const path = `${courseName}.csv`;
@@ -897,8 +864,8 @@ async function StudentListMailer(list, passCode, email) {
       from: 'atlapp2021@gmail.com',
       to: email,
       subject: 'List Of Students : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, '', '', '', '', 0, 0),
+      text: '',
+      html: emailTemplate(courseName, '', '', '', 0, 0),
       attachments: [
         {
           filename: path,
@@ -945,8 +912,8 @@ async function CourseMailer(list, passCode, email, announcements, qc, fc) {
       from: 'atlapp2021@gmail.com',
       to: email,
       subject: 'Course Info : ' + courseName,
-      text: '.',
-      html: emailTemplate(courseName, '', '', '', 'Course', qc, fc),
+      text: '',
+      html: emailTemplate(courseName, '', '', 'Course', qc, fc),
       attachments: [
         {
           filename: StudentPath,
@@ -1036,7 +1003,6 @@ async function removeFromStudentList(courseKey) {
     return Promise.all(studentsToModify);
   }
 }
-
 async function removeStudentFromCourses(studentID) {
   const db = admin.app().database(url);
   console.log('Removing Student from courses');
@@ -1058,13 +1024,11 @@ async function removeStudentFromCourses(studentID) {
     });
   }
 }
-
 async function deleteStudentHelper(studentID) {
   await deleteAllMatchingKey('KBCResponse', studentID, 'userID');
   await deleteAllMatchingKey('FeedbackResponse', studentID, 'userID');
   await removeStudentFromCourses(studentID);
 }
-
 async function deleteFacultyHelper(facultyID) {
   console.log('Inside Delete Faculty Helper');
   db = admin.app().database(url);
@@ -1089,6 +1053,199 @@ async function deleteFacultyHelper(facultyID) {
     return Promise.all(coursesToRemove);
   }
 }
+function quizHash(startTime,date){
+  return 
+}
+async function quizResearchLogger(
+  list,
+  answer,
+  errorRate,
+  type,
+  passCode,
+  quizNumber,
+  startTime,
+  endTime,
+  email,){
+  // 
+  curr_time = moment.utc()
+  // console.log(curr_time)
+  // console.log(answer)
+  console.log(list)
+  db_ref = admin
+    .app()
+    .database(url)
+    .ref('InternalDb/Lectures/')
+   // getting lecture timings
+
+  // finding which class is going on currently
+
+timings = await db_ref.orderByChild('passCode').equalTo(passCode).once('value')
+timings = timings.val()
+if (!timings) {return}
+
+// console.log(timings)
+// console.log(curr_time.day())
+var starTime = null;
+var endTime = null;
+var lecNo = null;
+for (const [key, value] of Object.entries(timings)) {
+  // 
+  // console.log(value['day']+' '+curr_time.day())
+  if (value['day']==curr_time.day()){
+    console.log(key, value);
+    startTime = value['startTime']
+    endTime = value['endTime']
+
+  }
+}
+startTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
+endTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
+// console.log('func ends')
+// Making a table : stud_email-starTime-passCode
+// iterating over all responses
+await Promise.all(list.map(async(student)=> {
+  // student = list[i]
+  const grade = autoGrader(student.Answer,answer,errorRate,type)
+  
+  // getting reference
+  reference = await admin
+    .app()
+    .database(url)
+  // check if exists
+  db_ref = await admin
+    .app()
+    .database(url)
+    .ref('InternalDb/StudentResearch/')
+  snapshot = await db_ref.orderByChild('email-startTime-passCode').equalTo(student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode).once('value')
+  if (!snapshot.val()){
+
+    await db_ref.push({
+      'email':student.Email,
+      'passCode': passCode,
+      'startTime': startTime.format('DD/MM/YYYY HH:mm:ss'),
+      'attempted_quizzes': student.Answer=='N/A'?0:1,
+      'not_attempted_quizzes':student.Answer=='N/A'?1:0,
+      'correct_quizzes': grade=='1' ? 1 : 0,
+      'feedbacks_attended':0,
+      'responseTime':student.responseTime ,
+      'email-startTime-passCode':student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode
+    })
+  }
+  else{
+    entries = Object.entries(snapshot.val());
+    [key,value] = entries[0];
+
+    await db_ref.child(key)
+    .update({'attempted_quizzes':student.Answer=='N/A'?value['attempted_quizzes']:value['attempted_quizzes']+1,
+      'correct_quizzes':grade=='1'?value['correct_quizzes']+ 1 : value['correct_quizzes'],
+      'responseTime':value['responseTime'] + student.responseTime,
+      'not_attempted_quizzes':student.Answer=='N/A'?value['not_attempted_quizzes']+1:value['not_attempted_quizzes']},(error) => {if(error){console.log(error)}})
+  }
+
+
+
+
+
+})
+)}
+async function feedbackResearchLogger(
+          passCode,
+          startTime,
+          endTime){
+  list = await admin
+    .app()
+    .database(url)
+    .ref('InternalDb/FeedbackResponse/')
+    .orderByChild('passCode')
+    .equalTo(passCode)
+    .once('value')
+    .then(async snapshot => {
+      let list = [];
+      snapshot.forEach(data => {
+          const keys = Object(data.val());
+          const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
+          const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
+          const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
+
+          // if (temp1 <= temp2 && temp1 >= temp) {
+          //   list[keys['responses']] += 1;
+          // }
+
+            if (temp1 <= temp2 && temp1 >= temp) {
+              list.push({Email:keys['userName']})
+            }
+          }         );
+        return list
+    })
+  console.log(list)
+
+  curr_time = moment.utc()
+  db_ref = admin
+    .app()
+    .database(url)
+    .ref('InternalDb/Lectures/')
+  timings = await db_ref.orderByChild('passCode').equalTo(passCode).once('value')
+  timings = timings.val()
+  if (!timings) {return}
+
+  console.log(timings)
+  console.log(curr_time.day())
+  var starTime = null;
+  var endTime = null;
+  var lecNo = null;
+  for (const [key, value] of Object.entries(timings)) {
+    // 
+    console.log(value['day']+' '+curr_time.day())
+    if (value['day']==curr_time.day()){
+      console.log(key, value);
+      startTime = value['startTime']
+      endTime = value['endTime']
+
+    }
+  }
+  startTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
+  endTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
+  console.log('func ends')
+  await Promise.all(list.map(async(student)=> {
+    // student = list[i]
+
+    // getting reference
+    reference = await admin
+      .app()
+      .database(url)
+    // check if exists
+    db_ref = await admin
+      .app()
+      .database(url)
+      .ref('InternalDb/StudentResearch/')
+    snapshot = await db_ref.orderByChild('email-startTime-passCode').equalTo(student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode).once('value')
+    if (!snapshot.val()){
+
+      await db_ref.push({
+        'email':student.Email,
+        'passCode': passCode,
+        'startTime': startTime.format('DD/MM/YYYY HH:mm:ss'),
+        'attempted_quizzes': 0,
+        'not_attempted_quizzes':0,
+        'correct_quizzes': 0,
+        'feedbacks_attended':1,
+        'responseTime':0 ,
+        'email-startTime-passCode':student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode
+      })
+    }
+    else{
+      entries = Object.entries(snapshot.val());
+      [key,value] = entries[0];
+      // console.log(key)
+      // console.log(value)
+      // console.log('Feedback attended by key '+ key)
+      await db_ref.child(key)
+      .update({'feedbacks_attended':value['feedbacks_attended']+1},(error) => {if(error){console.log(error)}})
+
+    }
+}))
+}
+
 
 exports.mailingSystem = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
@@ -1109,12 +1266,21 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
       .ref('InternalDb/KBC/' + coursequizurl)
       .once('value')
       .then(async snapshot => {
-        value = snapshot.val();
+        const value = snapshot.val();
         const data = await getAllStudentsforMail(
           passCode,
           value['startTime'],
           value['endTime'],
         );
+        await quizResearchLogger(data,
+          value['correctAnswer'],
+          value['errorRate'],
+          value['quizType'],
+          value['passCode'],
+          value['questionCount'],
+          value['startTime'],
+          value['endTime'],
+          email,)
         return await QuizResponseMailer(
           data,
           value['correctAnswer'],
@@ -1138,7 +1304,7 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
       .ref('InternalDb/Feedback/' + coursefburl)
       .once('value')
       .then(async snapshot => {
-        value = snapshot.val();
+        const value = snapshot.val();
         const keys = Object(snapshot.val());
         type = '0';
         if ('kind' in keys) {
@@ -1150,6 +1316,10 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
           value['endTime'],
           type,
         );
+        await feedbackResearchLogger(
+          passCode,
+          value['startTime'],
+          value['endTime'])
         return await FeedbackResponseMailer(
           data,
           passCode,
@@ -1290,6 +1460,7 @@ exports.deleteFaculty = functions.https.onCall((data, context) => {
       console.log('Deleted Faculty:', key);
     });
 });
+
 exports.quizNotification = functions.database
   .ref('InternalDb/KBC/{qid}')
   .onWrite(async (change, context) => {
@@ -1392,3 +1563,21 @@ exports.announcementsNotification = functions.database
       return console.error('Error:', ex.toString());
     }
   });
+exports.countStudentChanges = functions.database
+  .ref('InternalDb/KBCResponse/{response_id}')
+  .onUpdate((change,context)=>
+  {
+    const after = change.after.val()
+    const before = change.before.val()
+    if (after['answer']!=before['answer']){
+      if('updateCount' in after){
+      updateCount= after['updateCount']+1}
+      else{
+        updateCount =1
+      }
+      return change.after.ref.update({updateCount:updateCount},(error)=> {if(error){console.log(error)}})
+    }
+    else{
+      return null
+    }
+  })
