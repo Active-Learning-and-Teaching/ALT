@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import FeedbackResponses from '../../Databases/FeedbackResponses';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { PieChart } from 'react-native-chart-kit';
+import { Text } from 'react-native-elements';
 import Feedback from '../../Databases/Feedback';
-import {StyleSheet, View} from 'react-native';
-import {ListItem, Text} from 'react-native-elements';
+import FeedbackResponses from '../../Databases/FeedbackResponses';
 import Dimensions from '../../Utils/Dimensions';
-import {PieChart} from 'react-native-chart-kit';
 
 export default class FeedbackResultsList extends Component {
   constructor(props) {
@@ -68,9 +68,10 @@ export default class FeedbackResultsList extends Component {
       );
       if (
         this.state.course.defaultEmailOption &&
-        this.props.emailStatus
+        this.props.emailStatus &&
+        r.summary
       ){
-        this.props.FeedbackMailer().then();
+        this.props.FeedbackMailer().then(console.log("Sending Email"));
       }
     }
   }
@@ -123,8 +124,10 @@ export default class FeedbackResultsList extends Component {
             }
             else{
               console.log("Processing Summary");
-              await this.props.summarizeResponses()
-              this.handleMinutePaperSummary(r);
+              this.props.summarizeResponses().then(() => {
+                console.log("Handle MP Summary");
+                this.handleMinutePaperSummary(r);
+              });
             }
           // })
         }   

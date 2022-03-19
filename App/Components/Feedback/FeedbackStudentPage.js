@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
+import database from '@react-native-firebase/database';
+import moment from 'moment';
+import React, { Component } from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from 'react-native';
-import Feedback from '../../Databases/Feedback';
-import {Button, Text} from 'react-native-elements';
 import CountDown from 'react-native-countdown-component';
-import StudentFeedbackCard from './StudentFeedbackCard';
+import { Button, Text } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
+import Feedback from '../../Databases/Feedback';
 import FeedbackResponses from '../../Databases/FeedbackResponses';
-import moment from 'moment';
-import database from '@react-native-firebase/database';
+import StudentFeedbackCard from './StudentFeedbackCard';
 
 export default class FeedbackStudentPage extends Component {
   constructor(props) {
@@ -35,12 +35,16 @@ export default class FeedbackStudentPage extends Component {
   }
 
   studentResponses(value) {
+    // if(this.state.kind==2){
+    //   for(let i =0 ; i<value.length; i++){
+    //     value[i] = value[i].map(s => s.trim()); 
+    //     value[i] = value[i].map(s => s.replaceAll(',', ' ')); 
+    //   }
+    // }
     console.log('Student response ', value);
-    let responses = this.state.responses;
-    responses = value;
 
     this.setState({
-      responses: responses,
+      responses: value,
       error: null,
     });
   }
@@ -51,8 +55,7 @@ export default class FeedbackStudentPage extends Component {
       .getFeedbackDetails(this.state.course.passCode)
       .then(async value => {
         if (value !== null) {
-          let responses = -1;
-          let responded = false;
+          let respondedValue = false;
 
           const feedbackResponse = new FeedbackResponses();
           await feedbackResponse
@@ -63,12 +66,11 @@ export default class FeedbackStudentPage extends Component {
               value.endTime,
             )
             .then(r => {
-              responded = r;
+              respondedValue = r;
             });
 
-          await this.setState({
-            responses: responses,
-            responded: responded,
+          this.setState({
+            responded: respondedValue,
             kind: value.kind,
           });
         }
@@ -88,30 +90,41 @@ export default class FeedbackStudentPage extends Component {
   };
 
   submitFeedback = async () => {
-    const {responses} = this.state;
+    var {responses} = this.state;
     var err = false;
-    let msg = '';
-    console.log('Submit Feedback ', responses);
-    if (responses === -1 || !responses) {
+
+    let msg = "";
+    console.log("Submit Feedback ",responses);
+    if (this.state.responses === -1 || !responses) {
+
       err = true;
       msg = 'Please enter a response';
     }
     if (this.state.kind == 2) {
-      if (!responses[0] || !responses[1]) {
-        err = true;
-        if (!responses[0]) {
-          msg = 'Atleast 1 response needed for Question 1';
-        } else {
-          msg = 'Atleast 1 response needed for Question 2';
+
+      responses = [...this.state.responses];
+      if(Array.isArray(this.state.responses)){
+        if (!responses[0] || !responses[1] ) {
+          err = true;
+          if (!responses[0]) {
+            msg = "Atleast 1 response needed for Question 1";
+          }
+          else{
+            msg = "Atleast 1 response needed for Question 2";
+          }
         }
+      }
+      else{
+        err = true;
+        msg = "Expected an array of responses. Got " + String(responses);
       }
     }
     if (err) {
-      await this.setState({
+      this.setState({
         error: msg,
       });
     } else {
-      await this.setState({
+      this.setState({
         error: null,
       });
     }
@@ -123,6 +136,7 @@ export default class FeedbackStudentPage extends Component {
         .utc(database().getServerTime())
         .format('DD/MM/YYYY HH:mm:ss');
       console.log(timestamp);
+
       await this.getStartTime();
 
       let temp = moment.utc(this.state.date, 'DD/MM/YYYY HH:mm:ss');
@@ -150,6 +164,10 @@ export default class FeedbackStudentPage extends Component {
       console.log('Printing line-> 136, FeedbackStudentPage.js');
       console.log(first_open_time);
 
+
+      console.log(this.state.responses);
+      const studentResponses = this.state.responses;
+
       await feedbackResponse
         .getFeedbackResponse(this.state.user.url, this.state.course.passCode)
         .then(url => {
@@ -159,7 +177,7 @@ export default class FeedbackStudentPage extends Component {
                 this.state.course.passCode,
                 this.state.user.url,
                 this.state.user.email,
-                this.state.responses,
+                studentResponses,
                 timestamp,
                 first_open_time,
                 feedback_response_time,
@@ -173,7 +191,7 @@ export default class FeedbackStudentPage extends Component {
                 this.state.course.passCode,
                 this.state.user.url,
                 this.state.user.email,
-                this.state.responses,
+                studentResponses,
                 timestamp,
                 url,
                 first_open_time,
@@ -183,13 +201,15 @@ export default class FeedbackStudentPage extends Component {
                 console.log('update');
               });
           }
-        });
-      await this.setState({
-        responded: true,
-        responses: -1,
-        kind: null,
-        error: null,
-      });
+        })
+        .then(
+          this.setState({
+            responded: true,
+            responses: -1,
+            kind: null,
+            error: null,
+          })
+        );
     }
   };
 
@@ -250,7 +270,6 @@ export default class FeedbackStudentPage extends Component {
             <ScrollView>
               <View style={styles.container}>
                 <Text style={styles.heading}> Feedback </Text>
-
                 <CountDown
                   until={this.props.currentDuration + 2}
                   size={24}
