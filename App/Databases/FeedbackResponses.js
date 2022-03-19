@@ -63,6 +63,7 @@ class FeedbackResponses {
     timestamp,
     url,
     firstOpen,
+    feedback_response_time,
   ) => {
     await database()
       .ref('InternalDb/FeedbackResponse/' + url)
@@ -74,6 +75,7 @@ class FeedbackResponses {
         responses: responses,
         timestamp: timestamp,
         firstOpen: firstOpen,
+        feedback_response_time: feedback_response_time,
       })
       .then(() => {
         console.log('Response modified');
@@ -87,6 +89,7 @@ class FeedbackResponses {
     responses,
     timestamp,
     firstOpen,
+    feedback_response_time,
   ) => {
     await this.reference
       .push()
@@ -98,6 +101,7 @@ class FeedbackResponses {
         responses: responses,
         timestamp: timestamp,
         firstOpen: firstOpen,
+        feedback_response_time: feedback_response_time,
       })
       .then(() => {
         console.log('Response Created');

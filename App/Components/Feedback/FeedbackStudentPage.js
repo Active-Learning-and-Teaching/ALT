@@ -127,14 +127,24 @@ export default class FeedbackStudentPage extends Component {
 
       let temp = moment.utc(this.state.date, 'DD/MM/YYYY HH:mm:ss');
       let temp1 = moment.utc(this.state.firstOpen, 'DD/MM/YYYY HH:mm:ss');
+      let temp3 = moment.utc(timestamp, 'DD/MM/YYYY HH:mm:ss');
 
       console.log('Printing line-> 130, FeedbackStudentPage.js');
       console.log(temp1, temp);
 
       let date1 = new Date(temp);
       let date2 = new Date(temp1);
+      let date3 = new Date(temp3)
 
+
+      const difference = date3.getTime() - date1.getTime();
       const differenceOpen = date2.getTime() - date1.getTime();
+
+      let feedback_response_time = (difference / 60000) * 60;
+      feedback_response_time = feedback_response_time.toFixed(2);
+      console.log('Response Time added');
+      console.log(feedback_response_time);
+
       let first_open_time = (differenceOpen / 60000) * 60;
       first_open_time = first_open_time.toFixed(2);
       console.log('Printing line-> 136, FeedbackStudentPage.js');
@@ -152,6 +162,7 @@ export default class FeedbackStudentPage extends Component {
                 this.state.responses,
                 timestamp,
                 first_open_time,
+                feedback_response_time,
               )
               .then(r => {
                 console.log('create');
@@ -166,6 +177,7 @@ export default class FeedbackStudentPage extends Component {
                 timestamp,
                 url,
                 first_open_time,
+                feedback_response_time,
               )
               .then(r => {
                 console.log('update');
