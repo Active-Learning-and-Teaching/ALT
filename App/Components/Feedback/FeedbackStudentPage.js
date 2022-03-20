@@ -278,6 +278,7 @@ export default class FeedbackStudentPage extends Component {
                       responded: false,
                       responses: -1,
                       error: null,
+                      opens:0,
                     });
                     this.props.setFeedbackState();
                   }}
