@@ -39,6 +39,8 @@ class Quiz {
             .then(snapshot => {
                 if (snapshot.val()){
                     const keys = Object.values(snapshot.val());
+                    console.log("Finding Issues")
+                    console.log(keys);
                     ans = keys[0]
                 }
             })

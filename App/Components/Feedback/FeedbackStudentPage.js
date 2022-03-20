@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
+import database from '@react-native-firebase/database';
+import moment from 'moment';
+import React, { Component } from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from 'react-native';
-import Feedback from '../../Databases/Feedback';
-import {Button, Text} from 'react-native-elements';
 import CountDown from 'react-native-countdown-component';
-import StudentFeedbackCard from './StudentFeedbackCard';
+import { Button, Text } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
+import Feedback from '../../Databases/Feedback';
 import FeedbackResponses from '../../Databases/FeedbackResponses';
-import moment from 'moment';
-import database from '@react-native-firebase/database';
+import StudentFeedbackCard from './StudentFeedbackCard';
 
 export default class FeedbackStudentPage extends Component {
   constructor(props) {
@@ -26,18 +26,25 @@ export default class FeedbackStudentPage extends Component {
       error: null,
       loading: true,
       kind: null,
+      firstOpen: 0,
+      date: '',
+      opens: 0,
     };
     this.getTopics = this.getTopics.bind(this);
     this.studentResponses = this.studentResponses.bind(this);
   }
 
   studentResponses(value) {
+    // if(this.state.kind==2){
+    //   for(let i =0 ; i<value.length; i++){
+    //     value[i] = value[i].map(s => s.trim()); 
+    //     value[i] = value[i].map(s => s.replaceAll(',', ' ')); 
+    //   }
+    // }
     console.log('Student response ', value);
-    let responses = this.state.responses;
-    responses = value;
 
     this.setState({
-      responses: responses,
+      responses: value,
       error: null,
     });
   }
@@ -48,8 +55,7 @@ export default class FeedbackStudentPage extends Component {
       .getFeedbackDetails(this.state.course.passCode)
       .then(async value => {
         if (value !== null) {
-          let responses = -1;
-          let responded = false;
+          let respondedValue = false;
 
           const feedbackResponse = new FeedbackResponses();
           await feedbackResponse
@@ -60,44 +66,65 @@ export default class FeedbackStudentPage extends Component {
               value.endTime,
             )
             .then(r => {
-              responded = r;
+              respondedValue = r;
             });
 
-          await this.setState({
-            responses: responses,
-            responded: responded,
+          this.setState({
+            responded: respondedValue,
             kind: value.kind,
           });
         }
       });
   }
 
+  getStartTime = async () => {
+    const feedback = new Feedback();
+    await feedback
+      .getFeedbackDetails(this.state.course.passCode)
+      .then(value => {
+        console.log('Output line 82 FeedbackStudent.js' + value['startTime']);
+        this.setState({
+          date: value['startTime'],
+        });
+      });
+  };
+
   submitFeedback = async () => {
-    const {responses} = this.state;
+    var {responses} = this.state;
     var err = false;
+
     let msg = "";
     console.log("Submit Feedback ",responses);
-    if (responses === -1 || !responses) {
+    if (this.state.responses === -1 || !responses) {
+
       err = true;
-      msg = "Please enter a response";
+      msg = 'Please enter a response';
     }
     if (this.state.kind == 2) {
-      if (!responses[0] || !responses[1] ) {
+
+      responses = [...this.state.responses];
+      if(Array.isArray(this.state.responses)){
+        if (!responses[0] || !responses[1] ) {
+          err = true;
+          if (!responses[0]) {
+            msg = "Atleast 1 response needed for Question 1";
+          }
+          else{
+            msg = "Atleast 1 response needed for Question 2";
+          }
+        }
+      }
+      else{
         err = true;
-        if (!responses[0]) {
-          msg = "Atleast 1 response needed for Question 1";
-        }
-        else{
-          msg = "Atleast 1 response needed for Question 2";
-        }
+        msg = "Expected an array of responses. Got " + String(responses);
       }
     }
     if (err) {
-      await this.setState({
+      this.setState({
         error: msg,
       });
     } else {
-      await this.setState({
+      this.setState({
         error: null,
       });
     }
@@ -105,10 +132,41 @@ export default class FeedbackStudentPage extends Component {
     if (!err) {
       Toast.show('Responses have been recorded!');
       const feedbackResponse = new FeedbackResponses();
-      const timestamp = moment.utc(database().getServerTime()).format(
-        'DD/MM/YYYY HH:mm:ss',
-      );
+      const timestamp = moment
+        .utc(database().getServerTime())
+        .format('DD/MM/YYYY HH:mm:ss');
       console.log(timestamp);
+
+      await this.getStartTime();
+
+      let temp = moment.utc(this.state.date, 'DD/MM/YYYY HH:mm:ss');
+      let temp1 = moment.utc(this.state.firstOpen, 'DD/MM/YYYY HH:mm:ss');
+      let temp3 = moment.utc(timestamp, 'DD/MM/YYYY HH:mm:ss');
+
+      console.log('Printing line-> 130, FeedbackStudentPage.js');
+      console.log(temp1, temp);
+
+      let date1 = new Date(temp);
+      let date2 = new Date(temp1);
+      let date3 = new Date(temp3)
+
+
+      const difference = date3.getTime() - date1.getTime();
+      const differenceOpen = date2.getTime() - date1.getTime();
+
+      let feedback_response_time = (difference / 60000) * 60;
+      feedback_response_time = feedback_response_time.toFixed(2);
+      console.log('Response Time added');
+      console.log(feedback_response_time);
+
+      let first_open_time = (differenceOpen / 60000) * 60;
+      first_open_time = first_open_time.toFixed(2);
+      console.log('Printing line-> 136, FeedbackStudentPage.js');
+      console.log(first_open_time);
+
+
+      console.log(this.state.responses);
+      const studentResponses = this.state.responses;
 
       await feedbackResponse
         .getFeedbackResponse(this.state.user.url, this.state.course.passCode)
@@ -119,8 +177,10 @@ export default class FeedbackStudentPage extends Component {
                 this.state.course.passCode,
                 this.state.user.url,
                 this.state.user.email,
-                this.state.responses,
+                studentResponses,
                 timestamp,
+                first_open_time,
+                feedback_response_time,
               )
               .then(r => {
                 console.log('create');
@@ -131,21 +191,25 @@ export default class FeedbackStudentPage extends Component {
                 this.state.course.passCode,
                 this.state.user.url,
                 this.state.user.email,
-                this.state.responses,
+                studentResponses,
                 timestamp,
                 url,
+                first_open_time,
+                feedback_response_time,
               )
               .then(r => {
                 console.log('update');
               });
           }
-        });
-      await this.setState({
-        responded: true,
-        responses: -1,
-        kind: null,
-        error: null,
-      });
+        })
+        .then(
+          this.setState({
+            responded: true,
+            responses: -1,
+            kind: null,
+            error: null,
+          })
+        );
     }
   };
 
@@ -165,6 +229,18 @@ export default class FeedbackStudentPage extends Component {
 
   render() {
     if (!this.state.loading) {
+
+      if (this.props.currentFeedback && this.state.opens === 0) {
+        console.log('Printing line-> 202, FeedbackStudentPage.js');
+        const timestamp_first = moment
+          .utc(database().getServerTime())
+          .format('DD/MM/YYYY HH:mm:ss');
+
+        this.setState({firstOpen: timestamp_first});
+        this.setState({opens: this.state.opens + 1});
+        console.log(this.state.firstOpen);
+      }
+
       return (
         <SafeAreaView style={styles.safeContainer}>
           {this.props.currentFeedback === false ? (
@@ -194,7 +270,6 @@ export default class FeedbackStudentPage extends Component {
             <ScrollView>
               <View style={styles.container}>
                 <Text style={styles.heading}> Feedback </Text>
-
                 <CountDown
                   until={this.props.currentDuration + 2}
                   size={24}
@@ -203,6 +278,7 @@ export default class FeedbackStudentPage extends Component {
                       responded: false,
                       responses: -1,
                       error: null,
+                      opens:0,
                     });
                     this.props.setFeedbackState();
                   }}

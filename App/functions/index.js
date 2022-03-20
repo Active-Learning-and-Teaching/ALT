@@ -15,7 +15,7 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
-const url = 'https://testfortls.firebaseio.com/';
+const url = 'https://alt-development-42a78-default-rtdb.firebaseio.com/';
 
 const transporter = nodemailer.createTransport({
   host: functions.config().mailingsystem.host,
@@ -512,6 +512,7 @@ async function QuizResponseMailer(
   endTime,
   email,
 ) {
+
   const correctAnswer =
     answer === '*'
       ? 'N/A'
@@ -609,7 +610,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
           let email = keys['userName'];
           let ID = keys['userID'];
           let name = keys['name'] === undefined ? 'N/A' : keys['name'];
-          const val = { Name: name, Email: email, Answer: answer };
+          const val = { Name: name, Email: email, Answer: answer,responseTime : temp1-temp };
           // if (vlist.includes(ID)) {
           a[ID] = val;
           b.push(ID);
@@ -631,6 +632,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
         Name: student['name'],
         Email: student['email'],
         Answer: 'N/A',
+        responseTime:0
       };
       final.push(val);
     }
@@ -734,7 +736,7 @@ async function getFeedbackCSV(passCode, startTime, endTime) {
       }
     });
   let csvHeader = 'Sr. No., Question, Response1, Response2, Response3\n';
-  let csvString = list.map((response, i) => `${i + 1},1,${response[0][0]},${response[0][1]},${response[0][2]}\n${i + 1},2,${response[1][0]},${response[1][1]},${response[1][2]}\n`).join('');
+  let csvString = list.map((response, i) => `${i + 1},1,${response[0][0].replace(/,/g,' ').replace(/\n/g,' ')},${response[0][1].replace(/,/g,' ').replace(/\n/g,' ')},${response[0][2].replace(/,/g,' ').replace(/\n/g,' ')}\n${i + 1},2,${response[1][0].replace(/,/g,' ').replace(/\n/g,' ')},${response[1][1].replace(/,/g,' ').replace(/\n/g,' ')},${response[1][2].replace(/,/g,' ').replace(/\n/g,' ')}\n`).join('');
   let csvContent = `${csvHeader}${csvString}`;
   console.log(csvContent);
   return csvContent;
@@ -1051,6 +1053,199 @@ async function deleteFacultyHelper(facultyID) {
     return Promise.all(coursesToRemove);
   }
 }
+function quizHash(startTime,date){
+  return 
+}
+async function quizResearchLogger(
+  list,
+  answer,
+  errorRate,
+  type,
+  passCode,
+  quizNumber,
+  startTime,
+  endTime,
+  email,){
+  // 
+  curr_time = moment.utc()
+  // console.log(curr_time)
+  // console.log(answer)
+  console.log(list)
+  db_ref = admin
+    .app()
+    .database(url)
+    .ref('InternalDb/Lectures/')
+   // getting lecture timings
+
+  // finding which class is going on currently
+
+timings = await db_ref.orderByChild('passCode').equalTo(passCode).once('value')
+timings = timings.val()
+if (!timings) {return}
+
+// console.log(timings)
+// console.log(curr_time.day())
+var starTime = null;
+var endTime = null;
+var lecNo = null;
+for (const [key, value] of Object.entries(timings)) {
+  // 
+  // console.log(value['day']+' '+curr_time.day())
+  if (value['day']==curr_time.day()){
+    console.log(key, value);
+    startTime = value['startTime']
+    endTime = value['endTime']
+
+  }
+}
+startTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
+endTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
+// console.log('func ends')
+// Making a table : stud_email-starTime-passCode
+// iterating over all responses
+await Promise.all(list.map(async(student)=> {
+  // student = list[i]
+  const grade = autoGrader(student.Answer,answer,errorRate,type)
+  
+  // getting reference
+  reference = await admin
+    .app()
+    .database(url)
+  // check if exists
+  db_ref = await admin
+    .app()
+    .database(url)
+    .ref('InternalDb/StudentResearch/')
+  snapshot = await db_ref.orderByChild('email-startTime-passCode').equalTo(student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode).once('value')
+  if (!snapshot.val()){
+
+    await db_ref.push({
+      'email':student.Email,
+      'passCode': passCode,
+      'startTime': startTime.format('DD/MM/YYYY HH:mm:ss'),
+      'attempted_quizzes': student.Answer=='N/A'?0:1,
+      'not_attempted_quizzes':student.Answer=='N/A'?1:0,
+      'correct_quizzes': grade=='1' ? 1 : 0,
+      'feedbacks_attended':0,
+      'responseTime':student.responseTime ,
+      'email-startTime-passCode':student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode
+    })
+  }
+  else{
+    entries = Object.entries(snapshot.val());
+    [key,value] = entries[0];
+
+    await db_ref.child(key)
+    .update({'attempted_quizzes':student.Answer=='N/A'?value['attempted_quizzes']:value['attempted_quizzes']+1,
+      'correct_quizzes':grade=='1'?value['correct_quizzes']+ 1 : value['correct_quizzes'],
+      'responseTime':value['responseTime'] + student.responseTime,
+      'not_attempted_quizzes':student.Answer=='N/A'?value['not_attempted_quizzes']+1:value['not_attempted_quizzes']},(error) => {if(error){console.log(error)}})
+  }
+
+
+
+
+
+})
+)}
+async function feedbackResearchLogger(
+          passCode,
+          startTime,
+          endTime){
+  list = await admin
+    .app()
+    .database(url)
+    .ref('InternalDb/FeedbackResponse/')
+    .orderByChild('passCode')
+    .equalTo(passCode)
+    .once('value')
+    .then(async snapshot => {
+      let list = [];
+      snapshot.forEach(data => {
+          const keys = Object(data.val());
+          const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
+          const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
+          const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
+
+          // if (temp1 <= temp2 && temp1 >= temp) {
+          //   list[keys['responses']] += 1;
+          // }
+
+            if (temp1 <= temp2 && temp1 >= temp) {
+              list.push({Email:keys['userName']})
+            }
+          }         );
+        return list
+    })
+  console.log(list)
+
+  curr_time = moment.utc()
+  db_ref = admin
+    .app()
+    .database(url)
+    .ref('InternalDb/Lectures/')
+  timings = await db_ref.orderByChild('passCode').equalTo(passCode).once('value')
+  timings = timings.val()
+  if (!timings) {return}
+
+  console.log(timings)
+  console.log(curr_time.day())
+  var starTime = null;
+  var endTime = null;
+  var lecNo = null;
+  for (const [key, value] of Object.entries(timings)) {
+    // 
+    console.log(value['day']+' '+curr_time.day())
+    if (value['day']==curr_time.day()){
+      console.log(key, value);
+      startTime = value['startTime']
+      endTime = value['endTime']
+
+    }
+  }
+  startTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
+  endTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
+  console.log('func ends')
+  await Promise.all(list.map(async(student)=> {
+    // student = list[i]
+
+    // getting reference
+    reference = await admin
+      .app()
+      .database(url)
+    // check if exists
+    db_ref = await admin
+      .app()
+      .database(url)
+      .ref('InternalDb/StudentResearch/')
+    snapshot = await db_ref.orderByChild('email-startTime-passCode').equalTo(student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode).once('value')
+    if (!snapshot.val()){
+
+      await db_ref.push({
+        'email':student.Email,
+        'passCode': passCode,
+        'startTime': startTime.format('DD/MM/YYYY HH:mm:ss'),
+        'attempted_quizzes': 0,
+        'not_attempted_quizzes':0,
+        'correct_quizzes': 0,
+        'feedbacks_attended':1,
+        'responseTime':0 ,
+        'email-startTime-passCode':student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode
+      })
+    }
+    else{
+      entries = Object.entries(snapshot.val());
+      [key,value] = entries[0];
+      // console.log(key)
+      // console.log(value)
+      // console.log('Feedback attended by key '+ key)
+      await db_ref.child(key)
+      .update({'feedbacks_attended':value['feedbacks_attended']+1},(error) => {if(error){console.log(error)}})
+
+    }
+}))
+}
+
 
 exports.mailingSystem = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
@@ -1071,12 +1266,21 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
       .ref('InternalDb/KBC/' + coursequizurl)
       .once('value')
       .then(async snapshot => {
-        value = snapshot.val();
+        const value = snapshot.val();
         const data = await getAllStudentsforMail(
           passCode,
           value['startTime'],
           value['endTime'],
         );
+        await quizResearchLogger(data,
+          value['correctAnswer'],
+          value['errorRate'],
+          value['quizType'],
+          value['passCode'],
+          value['questionCount'],
+          value['startTime'],
+          value['endTime'],
+          email,)
         return await QuizResponseMailer(
           data,
           value['correctAnswer'],
@@ -1100,7 +1304,7 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
       .ref('InternalDb/Feedback/' + coursefburl)
       .once('value')
       .then(async snapshot => {
-        value = snapshot.val();
+        const value = snapshot.val();
         const keys = Object(snapshot.val());
         type = '0';
         if ('kind' in keys) {
@@ -1112,6 +1316,10 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
           value['endTime'],
           type,
         );
+        await feedbackResearchLogger(
+          passCode,
+          value['startTime'],
+          value['endTime'])
         return await FeedbackResponseMailer(
           data,
           passCode,
@@ -1355,3 +1563,21 @@ exports.announcementsNotification = functions.database
       return console.error('Error:', ex.toString());
     }
   });
+exports.countStudentChanges = functions.database
+  .ref('InternalDb/KBCResponse/{response_id}')
+  .onUpdate((change,context)=>
+  {
+    const after = change.after.val()
+    const before = change.before.val()
+    if (after['answer']!=before['answer']){
+      if('updateCount' in after){
+      updateCount= after['updateCount']+1}
+      else{
+        updateCount =1
+      }
+      return change.after.ref.update({updateCount:updateCount},(error)=> {if(error){console.log(error)}})
+    }
+    else{
+      return null
+    }
+  })

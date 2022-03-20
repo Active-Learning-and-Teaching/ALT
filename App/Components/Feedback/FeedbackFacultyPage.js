@@ -1,22 +1,19 @@
-import React, {Component} from 'react';
-import FeedbackForm from './FeedbackForm';
 import database from '@react-native-firebase/database';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
-  ActivityIndicator,
-} from 'react-native';
-import Feedback from '../../Databases/Feedback';
-import CountDown from 'react-native-countdown-component';
-import {Button, ListItem} from 'react-native-elements';
-import Dimensions from '../../Utils/Dimensions';
+import { firebase } from '@react-native-firebase/functions';
 import moment from 'moment';
-import FeedbackResultsList from './FeedbackResultsList';
+import React, { Component } from 'react';
+import {
+  ActivityIndicator, SafeAreaView,
+  ScrollView,
+  StyleSheet, Text, View
+} from 'react-native';
+import CountDown from 'react-native-countdown-component';
+import { Button } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import {firebase} from '@react-native-firebase/functions';
+import Feedback from '../../Databases/Feedback';
+import Dimensions from '../../Utils/Dimensions';
+import FeedbackForm from './FeedbackForm';
+import FeedbackResultsList from './FeedbackResultsList';
 export default class FeedbackFacultyPage extends Component {
   // TODO change duration at deployment
   duration = 5;
@@ -175,7 +172,7 @@ export default class FeedbackFacultyPage extends Component {
   async FeedbackMailer() {
     console.log('triggering mail for passCode:' + this.state.course.passCode);
     Toast.show('Sending Email...');
-    const {data} = firebase
+    const {data} = await firebase
       .functions()
       .httpsCallable('mailingSystem')({
         passCode: this.state.course.passCode,
@@ -194,50 +191,52 @@ export default class FeedbackFacultyPage extends Component {
   }
 
   async sendHTTPTrigger() {
-    const feedback = new Feedback();
-    feedback.getFeedbackDetails(this.state.course.passCode).then(values => {
-      const url = `https://minute-paper-summarizer-775rx6qcca-uc.a.run.app/minutePaperSummarizer?passCode=${this.state.course.passCode}&startTime=${values.startTime}&endTime=${values.endTime}`;
-      console.log(url);
-      fetch(url).then(response => {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-          this.setState({
-            loading : true,
-            HTTPFailure : true,
-          })
-          return;
-        }
-        else {
-          if (this.state.HTTPFailure) {
-            this.setState ({
-              HTTPFailure : false,
-            });
+	  // return new Promise((resolve, reject) => {
+      const feedback = new Feedback();
+      await feedback.getFeedbackDetails(this.state.course.passCode).then(async values => {
+        const url = `https://minute-paper-summarizer-775rx6qcca-uc.a.run.app/minutePaperSummarizer?passCode=${this.state.course.passCode}&startTime=${values.startTime}&endTime=${values.endTime}`;
+        console.log(url);
+        await fetch(url).then(response => {
+          if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+              response.status);
+            this.setState({
+              loading : true,
+              HTTPFailure : true,
+            })
+            return;
           }
-        }  
-        response.json().then(data => {
-          console.log(data);
-          console.log(response.status);
-          console.log('trigger sent');
-        }).then(() => {
-          console.log('Heyyyyyy');
-          this.setState({
-            processedMinutePaperResponses : true,
+          else {
+            if (this.state.HTTPFailure) {
+              this.setState ({
+                HTTPFailure : false,
+              });
+            }
+          }  
+          response.json().then(data => {
+            console.log(data);
+            console.log(response.status);
+            console.log('trigger sent');
+          }).then(() => {
+            console.log('Heyyyyyy');
+            this.setState({
+              processedMinutePaperResponses : true,
+            });
+            this.setState({
+              loading : true,
+            })
+            this.setState({
+              resultPage: true,
+            });
+            this.checkEmailSent().then(r => {
+              console.log('');
+            });
+            this.props.setFeedbackState();
           });
-          this.setState({
-            loading : true,
-          })
-          // this.setState({
-          //   resultPage: true,
-          // });
-          // that.checkEmailSent().then(r => {
-          //   console.log('');
-          // });
-          // that.props.setFeedbackState();
-        });
+        })
       })
-    })
-    
+    // });
+      
   }
 
   setResultPage = () =>
@@ -249,7 +248,7 @@ export default class FeedbackFacultyPage extends Component {
 
   load = async () => {
     await this.checkEmailSent().then(r => {
-      console.log("Email Sent");
+      console.log("Load : Email Sent");
     });
   };
 

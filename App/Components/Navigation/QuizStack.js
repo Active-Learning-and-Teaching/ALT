@@ -1,6 +1,7 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {Component} from 'react';
 import QuizHomePage from '../Quiz/QuizHomePage';
+import {useRoute} from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 

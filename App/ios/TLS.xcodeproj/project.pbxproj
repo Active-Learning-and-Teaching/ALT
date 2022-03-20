@@ -17,11 +17,11 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* TLSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TLSTests.m */; };
+		30F4802827C01934006C60BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30F4802727C01934006C60BB /* GoogleService-Info.plist */; };
+		30F4802927C01934006C60BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30F4802727C01934006C60BB /* GoogleService-Info.plist */; };
 		5940416E05A19B5DD3A6F41D /* libPods-TLS-TLSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D5BE73E6A3D85F09D2E48E /* libPods-TLS-TLSTests.a */; };
 		8C3911A469A19A968D62F58D /* libPods-TLS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DA35EA13167F9AAC586D61D /* libPods-TLS.a */; };
 		B931966AABF3D1AE18E90E61 /* libPods-TLS-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA1FC014A3D7EEE1C57D5EC /* libPods-TLS-tvOSTests.a */; };
-		FB97F57A27A40FC5009600FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB97F57927A40FC5009600FC /* GoogleService-Info.plist */; };
-		FB97F57B27A40FC5009600FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB97F57927A40FC5009600FC /* GoogleService-Info.plist */; };
 		FBE6FF69262CD61A00FFE5A0 /* AppIcons in Resources */ = {isa = PBXBuildFile; fileRef = FBE6FF68262CD61A00FFE5A0 /* AppIcons */; };
 		FBE6FF6A262CD61A00FFE5A0 /* AppIcons in Resources */ = {isa = PBXBuildFile; fileRef = FBE6FF68262CD61A00FFE5A0 /* AppIcons */; };
 /* End PBXBuildFile section */
@@ -57,6 +57,7 @@
 		2D02E47B1E0B4A5D006451C7 /* TLS-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TLS-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* TLS-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TLS-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DD3240D36455D4F29E6A119 /* libPods-TLS-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TLS-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		30F4802727C01934006C60BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4DA35EA13167F9AAC586D61D /* libPods-TLS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TLS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5178CD80B26280E4FF86CF86 /* Pods-TLS-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TLS-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-TLS-tvOSTests/Pods-TLS-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		5275CEB45733BD6B91192931 /* Pods-TLS-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TLS-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-TLS-tvOS/Pods-TLS-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -71,7 +72,6 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EEEB1AC526394662009C6B3D /* TLS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TLS.entitlements; path = TLS/TLS.entitlements; sourceTree = "<group>"; };
 		F499858C4C33599391A775A6 /* Pods-TLS-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TLS-tvOS.release.xcconfig"; path = "Target Support Files/Pods-TLS-tvOS/Pods-TLS-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		FB97F57927A40FC5009600FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "TLS/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FBE6FF68262CD61A00FFE5A0 /* AppIcons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppIcons; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -135,8 +135,8 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				FB97F57927A40FC5009600FC /* GoogleService-Info.plist */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				30F4802727C01934006C60BB /* GoogleService-Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
@@ -360,7 +360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				FB97F57A27A40FC5009600FC /* GoogleService-Info.plist in Resources */,
+				30F4802827C01934006C60BB /* GoogleService-Info.plist in Resources */,
 				FBE6FF69262CD61A00FFE5A0 /* AppIcons in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -372,7 +372,7 @@
 			files = (
 				FBE6FF6A262CD61A00FFE5A0 /* AppIcons in Resources */,
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
-				FB97F57B27A40FC5009600FC /* GoogleService-Info.plist in Resources */,
+				30F4802927C01934006C60BB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
