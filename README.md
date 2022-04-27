@@ -10,35 +10,6 @@ ALT (Active Learning and Teaching) is a mobile App that allows active learning t
 
 <img width="1440" alt="Screenshot 2021-08-10 at 04 30 57" src="https://user-images.githubusercontent.com/42066451/128784943-4d3ad9d0-d575-4dfc-9be7-6522114db8ef.png">
 
-
-## Folder Structure 📁
-
-```
-├── App
-│   ├── App.js
-│   ├── Assets
-│   ├── Components
-│   ├── Databases
-│   ├── NotificationCenter.tsx
-│   ├── Utils
-│   ├── __tests__
-│   ├── android
-│   ├── app.json
-│   ├── babel.config.js
-│   ├── config.json
-│   ├── firebase.json
-│   ├── functions
-│   ├── index.js
-│   ├── ios
-│   ├── metro.config.js
-│   ├── node_modules
-│   ├── package-lock.json
-│   ├── package.json
-│   └── patches
-├── Architecture.jpeg
-├── README.md
-```
-
 ## Architecture 🛠
 
 <p align="center">
