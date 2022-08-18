@@ -42,7 +42,7 @@ ALT (Active Learning and Teaching) is a mobile App that allows active learning t
 ## Architecture 🛠
 
 <p align="center">
-  <img width="640" alt="logo" src="https://user-images.githubusercontent.com/42066451/137106844-dd12c428-31fc-4895-9a39-85ceb3279428.jpeg">
+  <img width="650" alt="logo" src="https://user-images.githubusercontent.com/42066451/137106844-dd12c428-31fc-4895-9a39-85ceb3279428.jpeg">
 </p>
                                                                                                                                         
 ## Setup 📥
