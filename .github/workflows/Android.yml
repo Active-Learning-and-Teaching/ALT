@@ -10,7 +10,7 @@ on:
 jobs:
 
   build-android:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Getting the Repository
         uses: actions/checkout@v2
