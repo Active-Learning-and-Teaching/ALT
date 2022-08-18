@@ -47,4 +47,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: ALT_Dev.apk
-          path: App/android/app/release/
+          path: App/android/app/releases/
