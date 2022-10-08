@@ -53,4 +53,4 @@ npx react-native run-android
 ```
 
 ## Release ⬇️
-You can install the latest stable version of the app from Releases. The Android app is available on [Google Play Store](https://play.google.com/store/apps/details?id=com.IIITD.ALT) and iOS app is available through [TestFlight](https://testflight.apple.com/join/j232DKdv).
+You can install the latest stable version of the app from Releases. The Android app is available on [Google Play Store](https://play.google.com/store/apps/details?id=com.IIITD.ALT) and iOS app is available through [TestFlight](https://testflight.apple.com/join/3FtNkSRV).
