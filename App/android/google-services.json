@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "50954815215",
+    "firebase_url": "https://alt-development-42a78-default-rtdb.firebaseio.com",
+    "project_id": "alt-development-42a78",
+    "storage_bucket": "alt-development-42a78.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50954815215:android:e109ee41dfbb7f792e3d1a",
+        "android_client_info": {
+          "package_name": "com.IIITD.ALT"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50954815215-5gca0n6g39h2m5he03bt34tq2rj1jefl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IIITD.ALT",
+            "certificate_hash": "1d19ca985cce7ad4edec1e0edfbd4aeafd66413a"
+          }
+        },
+        {
+          "client_id": "50954815215-nmndogittp58jvj65qk7vntqk53430oq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZdlLM4w-I4aVo8XO3jswMCqu0QTLg8Gg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50954815215-nmndogittp58jvj65qk7vntqk53430oq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "50954815215-rcfk923tprhd56ak6j096cro9u784srs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.IIITD.ALT"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

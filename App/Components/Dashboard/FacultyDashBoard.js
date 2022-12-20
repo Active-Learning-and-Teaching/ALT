@@ -160,9 +160,9 @@ export default class FacultyDashBoard extends Component {
 
     render(){
         return(
-            <SafeAreaView style={styles.safeContainer}>
+            <SafeAreaView className='flex-1 bg-transparent '>
                 <ScrollView>
-                    <View style={styles.grid}>
+                    <View className='mt-2 mb-2 pb-2 pt-2 items-center'>
                         {this.state.courseList.map((item,i)=> (
                             <CourseCard
                                 course = {item}
@@ -182,17 +182,6 @@ export default class FacultyDashBoard extends Component {
 }
 
 const styles = StyleSheet.create({
-    safeContainer: {
-        flex: 1,
-        backgroundColor: 'transparent',
-    },
-    grid: {
-        marginTop: 10,
-        marginBottom: 10,
-        paddingTop : 10,
-        paddingBottom : 10,
-        alignItems: 'center',
-    },
     container: {
         flex: 1,
         display: "flex",

@@ -35,11 +35,13 @@ export default class StudentList extends Component{
                 const list = []
 
                 snapshot.forEach( (data) => {
+                    const url = Object(data.key)
                     const keys = Object(data.val())
                     if ("courses" in keys){
                         const arr = data.val()["courses"]
                         if (arr.includes(this.state.courseURL)){
                             const dict = {}
+                            dict["url"]=url
                             dict["name"] = keys["name"]
                             dict["email"] = keys["email"]
                             dict["photo"] = keys["photo"]

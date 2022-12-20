@@ -2,7 +2,6 @@ import database from '@react-native-firebase/database';
 import Courses from './Courses';
 
 class Student {
-
   name: string;
   email: string;
   url: string;
@@ -101,7 +100,21 @@ class Student {
     return ans;
   };
 
-  setCourseStudent = async courses => {
+  getTaCoursesStudent = async () => {
+    let ans = [];
+    await database()
+      .ref('InternalDb/Student/' + this.url)
+      .once('value')
+      .then(snapshot => {
+        if (snapshot.val()) {
+          const keys = Object(snapshot.val());
+          if ('tacourses' in keys) ans = keys['tacourses'].map(x => x);
+        }
+      });
+    return ans;
+  };
+
+  setCourseStudent = async (courses,tacourses) => {
     await database()
       .ref('InternalDb/Student/' + this.url)
       .set({
@@ -109,6 +122,7 @@ class Student {
         email: this.getEmail(),
         photo: 0,
         courses: courses,
+        tacourses:tacourses,
       })
       .then(() => {
         console.log('Courses set');
@@ -116,14 +130,33 @@ class Student {
   };
 
   addCourseStudent = async courseUrl => {
-    await this.getCourseStudent().then(value => {
+    let courses = await this.getCourseStudent().then(value => {
       if (!value.includes(courseUrl)) {
         value.push(courseUrl);
-        this.setCourseStudent(value);
       }
     });
+    let tacourses = await this.getTaCoursesStudent();
+
+    this.setCourseStudent(courses,tacourses)
+    
     try {
       await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)  
+    } catch (error) {
+      console.log(error)
+    }
+    
+  };
+
+  addTaCourseStudent = async courseUrl => {
+    let courses = await this.getCourseStudent();
+    let tacourses = await this.getTaCoursesStudent().then(value => {
+      if (!value.includes(courseUrl)) {
+        value.push(courseUrl);
+      }
+    });
+    this.setCourseStudent(courses,tacourses)
+    try {
+      await database().ref('InternalDb/Courses/'+courseUrl+'/TAs/'+this.getUrl()).set(true)  
     } catch (error) {
       console.log(error)
     }

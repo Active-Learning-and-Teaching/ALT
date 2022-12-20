@@ -6,6 +6,7 @@ class Courses {
   room: string;
   passCode: string;
   instructors = [];
+  TAs=[];
   imageURL: string;
   instructor: string;
 
@@ -56,6 +57,48 @@ class Courses {
     this.instructor = faculty.getName();
   }
 
+
+  addTAs= async(TaURL,courseURL)=> {
+    let TaList = await this.getTAs(courseURL).then(value => {
+      if (!value.includes(TaURL)) {
+        value.push(TaURL);
+      }
+    });
+
+    this.setTAs(courseURL,TaList)
+    
+    try {
+      await database().ref('InternalDb/Courses/'+courseURL+'/TAs/'+TaURL).set(true)  
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  getTAs=async (url)=>{
+    let ans = [];
+    await database()
+      .ref('InternalDb/Courses/' + url)
+      .once('value')
+      .then(snapshot => {
+        if (snapshot.val()) {
+          const keys = Object(snapshot.val());
+          if ('TAs' in keys) ans = keys['TAs'].map(x => x);
+        }
+      });
+    return ans;
+  }
+
+
+  setTAs= async (url,TaList) => {
+    await database()
+      .ref(`InternalDb/Courses/${url}/TAs`)
+      .set(TaList)
+      .then(() => {
+        console.log('Courses Tas set');
+      });
+  }
+  
   reference = database().ref('InternalDb/Courses/');
 
   getCourse = async passCode => {
@@ -82,6 +125,7 @@ class Courses {
         room: this.room,
         passCode: this.passCode,
         instructors: this.instructors,
+        TAs:this.TAs,
         imageURL: this.imageURL,
         instructor: this.instructor,
       })
@@ -108,6 +152,7 @@ class Courses {
     room,
     passCode,
     instructors,
+    TAs,
     imageURL,
     instructor,
     quizEmail,
@@ -125,6 +170,7 @@ class Courses {
         instructors: instructors,
         imageURL: imageURL,
         instructor: instructor,
+        TAs:TAs,
         quizEmail: quizEmail,
         feedbackEmail: feedbackEmail,
         defaultEmailOption: defaultEmailOption,

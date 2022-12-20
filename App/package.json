@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator='iPhone 14'",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
@@ -30,10 +30,11 @@
     "caniuse-lite": "^1.0.30001309",
     "crypto-random-string": "^3.2.0",
     "moment": "^2.27.0",
+    "nativewind": "^2.0.11",
     "npm-check-updates": "^11.2.1",
     "patch-package": "^6.4.5",
-    "react": "16.11.0",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "17.0.2",
     "react-firebase-hooks": "^2.2.0",
     "react-native": "^0.62.2",
     "react-native-actionsheet": "^2.4.2",
@@ -67,7 +68,8 @@
     "metro-react-native-babel-preset": "0.59.0",
     "modal-react-native-web": "^0.2.0",
     "react-navigation": "^4.3.9",
-    "react-test-renderer": "16.11.0"
+    "react-test-renderer": "16.11.0",
+    "tailwindcss": "^3.2.4"
   },
   "jest": {
     "preset": "react-native"

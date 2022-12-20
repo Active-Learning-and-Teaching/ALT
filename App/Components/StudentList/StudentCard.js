@@ -18,6 +18,8 @@ export default class StudentCard extends Component{
         this.ActionSheet.show();
     };
 
+
+
     createTitle = (name,email)=>{
         if(name!==undefined){
             name = name.replace(/\s+/g,' ').trim();
@@ -45,6 +47,26 @@ export default class StudentCard extends Component{
                         .then(r => Toast.show('Student removed'))
                 })
         })
+    }
+
+    makeTA = async ()=>{
+        const courses = new Courses();
+        const students = new Student();
+
+        const course = this.props.course;
+        const student = this.props.student;
+
+        const courseURL = this.props.courseURL;
+        const facultyURL = course.instructors[0];
+        const studentURL = student.url;
+
+        await courses.addTAs(`${facultyURL}_${studentURL}`,courseURL)
+
+        if (course) {
+            await students.addTaCourseStudent(courseURL)
+            .then(r => console.log('Added Course to Student'));
+            this.props.toggle();
+        }
     }
 
     verifyStudent = async (email,courseUrl) => {
@@ -176,16 +198,22 @@ export default class StudentCard extends Component{
                     </ListItem>
                     <ActionSheet
                         ref={o => (this.ActionSheet = o)}
-                        title={'Do you want to remove this student?'}
+                        title={'Options'}
                         options={[`Remove ${this.props.student.name!==undefined
                             ?this.props.student.name
-                            :this.props.student.email}`, 'Cancel']}
+                            :this.props.student.email}`,
+                            `Make ${this.props.student.name!==undefined
+                                ?this.props.student.name
+                                :this.props.student.email} Course TA`
+                            ,'Cancel']}
 
-                        cancelButtonIndex={1}
+                        cancelButtonIndex={2}
                         destructiveButtonIndex={0}
                         onPress={index => {
                             if(index===0)
                             this.removeStudent().then(()=>"")
+                            if(index===1)
+                            this.makeTA()
                         }}
                     />
                 </View>
