@@ -12,6 +12,7 @@ import Student from '../../Databases/Student';
 import {CommonActions} from "@react-navigation/native";
 
 
+
 export default class CheckUserLoggedIn extends Component {
 
     constructor() {
