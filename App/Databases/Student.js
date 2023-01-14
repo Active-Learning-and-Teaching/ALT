@@ -177,12 +177,20 @@ class Student {
 
   // };
 
+  // addCourseStudent = async courseUrl => {
+  //   await this.reference2
+  //       .doc(this.url)
+  //       .collection('Courses')
+  //       .doc(courseUrl)
+  //       .set({});
+
   addCourseStudent = async courseUrl => {
     await this.reference2
         .doc(this.url)
-        .collection('Courses')
-        .doc(courseUrl)
-        .set({});
+        .update({
+          'courses' : firestore.FieldValue.arrayUnion(courseUrl)
+        });
+
     // try {
     //   await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)
     // } catch (error) {
@@ -207,9 +215,9 @@ class Student {
   deleteCourse = async courseUrl => {
     await this.reference2
     .doc(this.url)
-    .collection('Courses')
-    .doc(courseUrl)
-    .delete();
+    .update({
+      'courses' : firestore.FieldValue.arrayRemove(courseUrl)
+    });
 
     // .then(() => {
     //   database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.url).remove()
