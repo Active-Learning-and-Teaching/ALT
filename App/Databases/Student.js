@@ -1,5 +1,7 @@
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 import Courses from './Courses';
+
 
 class Student {
 
@@ -43,41 +45,86 @@ class Student {
   }
 
   reference = database().ref('InternalDb/Student/');
+  reference2 = firestore().collection('Student');
 
   //Login
+  // getUser = async email => {
+  //   let ans = false;
+  //   await this.reference
+  //     .orderByChild('email')
+  //     .equalTo(email)
+  //     .once('value')
+  //     .then(snapshot => {
+  //       if (snapshot.val()) {
+  //         ans = true;
+  //       }
+  //     });
+  //   return ans;
+  // };
+
   getUser = async email => {
     let ans = false;
-    await this.reference
-      .orderByChild('email')
-      .equalTo(email)
-      .once('value')
-      .then(snapshot => {
-        if (snapshot.val()) {
-          ans = true;
-        }
-      });
+    // const query = this.reference2.where('email', '==', email);
+    await  this.reference2
+        .where('email', '==', email)
+        .get()
+        .then(snapshot => {
+          if(!snapshot.empty){
+            ans = true;
+          }
+        })
     return ans;
   };
+
+  // getStudent = async email => {
+  //   let ans = '';
+  //   await this.reference
+  //     .orderByChild('email')
+  //     .equalTo(email)
+  //     .once('value')
+  //     .then(snapshot => {
+  //       if (snapshot.val()) {
+  //         const keys = Object.keys(snapshot.val());
+  //         ans = keys[ 0];
+  //         console.log('ok ok',ans);
+  //       }
+  //     });
+  //   return ans;
+  // };
 
   getStudent = async email => {
     let ans = '';
-    await this.reference
-      .orderByChild('email')
-      .equalTo(email)
-      .once('value')
-      .then(snapshot => {
-        if (snapshot.val()) {
-          const keys = Object.keys(snapshot.val());
-          ans = keys[0];
-        }
-      });
+
+    await this.reference2
+    .where('email', '==', email)
+    .get().then(snapshot => {
+      if (!snapshot.empty) {
+        snapshot.forEach(doc => {
+          ans = doc.id;
+        });
+      }
+    });
     return ans;
   };
 
+
+
+  // createUser = async (name, email) => {
+  //   await this.reference
+  //     .push()
+  //     .set({
+  //       name: name,
+  //       email: email,
+  //       photo: '0',
+  //     })
+  //     .then(() => {
+  //       console.log('Data added');
+  //     });
+  // };
+
   createUser = async (name, email) => {
-    await this.reference
-      .push()
-      .set({
+    await this.reference2
+      .add({
         name: name,
         email: email,
         photo: '0',
@@ -87,60 +134,86 @@ class Student {
       });
   };
 
-  getCourseStudent = async () => {
-    let ans = [];
-    await database()
-      .ref('InternalDb/Student/' + this.url)
-      .once('value')
-      .then(snapshot => {
-        if (snapshot.val()) {
-          const keys = Object(snapshot.val());
-          if ('courses' in keys) ans = keys['courses'].map(x => x);
-        }
-      });
-    return ans;
-  };
+  // getCourseStudent = async () => {
+  //   let ans = [];
+  //   await database()
+  //     .ref('InternalDb/Student/' + this.url)
+  //     .once('value')
+  //     .then(snapshot => {
+  //       if (snapshot.val()) {
+  //         const keys = Object(snapshot.val());
+  //         if ('courses' in keys) ans = keys['courses'].map(x => x);
+  //       }
+  //     });
+  //   return ans;
+  // };
 
-  setCourseStudent = async courses => {
-    await database()
-      .ref('InternalDb/Student/' + this.url)
-      .set({
-        name: this.getName(),
-        email: this.getEmail(),
-        photo: 0,
-        courses: courses,
-      })
-      .then(() => {
-        console.log('Courses set');
-      });
-  };
+  // setCourseStudent = async courses => {
+  //   await database()
+  //     .ref('InternalDb/Student/' + this.url)
+  //     .set({
+  //       name: this.getName(),
+  //       email: this.getEmail(),
+  //       photo: 0,
+  //       courses: courses,
+  //     })
+  //     .then(() => {
+  //       console.log('Courses set');
+  //     });
+  // };
+
+  // addCourseStudent = async courseUrl => {
+  //   await this.getCourseStudent().then(value => {
+  //     if (!value.includes(courseUrl)) {
+  //       value.push(courseUrl);
+  //       this.setCourseStudent(value);
+  //     }
+  //   });
+  //   try {
+  //     await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+
+  // };
 
   addCourseStudent = async courseUrl => {
-    await this.getCourseStudent().then(value => {
-      if (!value.includes(courseUrl)) {
-        value.push(courseUrl);
-        this.setCourseStudent(value);
-      }
-    });
-    try {
-      await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)  
-    } catch (error) {
-      console.log(error)
-    }
-    
+    await this.reference2
+        .doc(this.url)
+        .collection('Courses')
+        .doc(courseUrl)
+        .set({});
+    // try {
+    //   await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)
+    // } catch (error) {
+    //   console.log(error)
+    // }
+
   };
 
-  deleteCourse = async courseUrl => {
-    await this.getCourseStudent().then(value => {
-      if (value.includes(courseUrl)) {
-        const index = value.indexOf(courseUrl);
-        value.splice(index, 1);
+  // deleteCourse = async courseUrl => {
+  //   await this.getCourseStudent().then(value => {
+  //     if (value.includes(courseUrl)) {
+  //       const index = value.indexOf(courseUrl);
+  //       value.splice(index, 1);
 
-        this.setCourseStudent(value);
-      }
-    }).then(() => {
-      database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.url).remove()
-    });
+  //       this.setCourseStudent(value);
+  //     }
+  //   }).then(() => {
+  //     database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.url).remove()
+  //   });
+  // };
+
+  deleteCourse = async courseUrl => {
+    await this.reference2
+    .doc(this.url)
+    .collection('Courses')
+    .doc(courseUrl)
+    .delete();
+
+    // .then(() => {
+    //   database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.url).remove()
+    // });
   };
 
   getAllStudents = async passCode => {
