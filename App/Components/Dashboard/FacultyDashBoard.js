@@ -9,6 +9,7 @@ import Courses from '../../Databases/Courses';
 import CourseCard from './CourseCard';
 import {CommonActions} from '@react-navigation/native';
 import {firebase} from '@react-native-firebase/functions';
+import firestore from '@react-native-firebase/firestore';
 export default class FacultyDashBoard extends Component {
     constructor() {
         super();
@@ -107,18 +108,57 @@ export default class FacultyDashBoard extends Component {
             })
     }
 
+    // getAllCourses = ()=>{
+    //     database()
+    //         .ref('InternalDb/Faculty/'+this.state.currentUser.url)
+    //         .on('value', snapshot => {
+    //             if (snapshot.val()){
+    //                 const keys = Object(snapshot.val());
+
+    //                 this.setState({
+    //                     courseList : []
+    //                 })
+    //                 if ("courses" in keys) {
+    //                     const arr = snapshot.val()["courses"].filter(n=>n)
+    //                     const course = new Courses()
+    //                     const courses = []
+
+    //                     for(var i=0; i<arr.length; i++){
+    //                         course.getCourseByUrl(arr[i])
+    //                             .then(r => {
+    //                                 if(!("quizEmail" in r))
+    //                                     r.quizEmail = this.state.currentUser.email
+
+    //                                 if(!("feedbackEmail" in r))
+    //                                     r.feedbackEmail = this.state.currentUser.email
+
+    //                                 if(!("defaultEmailOption" in r))
+    //                                     r.defaultEmailOption = true
+
+    //                                 courses.push(r)
+    //                                 this.setState({
+    //                                     courseList : courses
+    //                                 })
+    //                             })
+    //                     }
+    //                 }
+    //             }
+    //         })
+    // }
+
+
     getAllCourses = ()=>{
-        database()
-            .ref('InternalDb/Faculty/'+this.state.currentUser.url)
-            .on('value', snapshot => {
-                if (snapshot.val()){
-                    const keys = Object(snapshot.val());
+        firestore()
+            .collection('Faculty')
+            .doc(this.state.currentUser.url)
+            .onSnapshot(snapshot => {
+                if (!snapshot.empty){
 
                     this.setState({
                         courseList : []
                     })
-                    if ("courses" in keys) {
-                        const arr = snapshot.val()["courses"].filter(n=>n)
+                    if (snapshot.data().courses && snapshot.data().courses.length) {
+                        const arr = snapshot.data().courses;
                         const course = new Courses()
                         const courses = []
 
@@ -144,6 +184,7 @@ export default class FacultyDashBoard extends Component {
                 }
             })
     }
+
 
 
     componentDidMount(){

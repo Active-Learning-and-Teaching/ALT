@@ -166,8 +166,8 @@ class Courses {
     defaultEmailOption,
     url,
   ) => {
-    await database()
-      .ref('InternalDb/Courses/' + url)
+    await this.reference
+      .doc(url)
       .set({
         courseName: courseName,
         courseCode: courseCode,

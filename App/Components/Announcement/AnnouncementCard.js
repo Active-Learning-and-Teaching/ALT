@@ -17,14 +17,21 @@ export default class AnnouncementCard extends Component{
 
 
     //@Vishwesh
+    // deleteAnnouncement = async () =>{
+    //     const announcement = new Announcement()
+    //     await announcement.getAnnouncementUrl(this.props.course.passCode, this.props.announcement.date)
+    //         .then(async url=>{
+    //             await announcement.deleteAnnouncement(url)
+    //                 .then(r=>{Toast.show('Announcement deleted')
+    //             })
+    //         })
+    // }
+
     deleteAnnouncement = async () =>{
         const announcement = new Announcement()
-        await announcement.getAnnouncementUrl(this.props.course.passCode, this.props.announcement.date)
-            .then(async url=>{
-                await announcement.deleteAnnouncement(url)
-                    .then(r=>{Toast.show('Announcement deleted')
-                })
-            })
+        await announcement.deleteAnnouncement(this.props.announcement.id)
+            .then(r=>{Toast.show('Announcement deleted')
+        });           
     }
 
     render(){

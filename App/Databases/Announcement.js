@@ -102,7 +102,7 @@ class Announcement {
             .get()
             .then(snapshot => {
                 if (!snapshot.empty){
-                    const list = Object.values(snapshot.val());
+                    const list = snapshot.docs.map(doc=>doc.data());;
                     list.sort(function(a, b) {
                         const keyA = moment.utc(a.date, 'DD/MM/YYYY HH:mm:ss');
                         const keyB = moment.utc(b.date, 'DD/MM/YYYY HH:mm:ss');
@@ -116,6 +116,7 @@ class Announcement {
             return ans
     }
 
+    // deprecated
     getAnnouncementUrl = async (passCode, date)=>{
         let ans = ""
         await this.reference
