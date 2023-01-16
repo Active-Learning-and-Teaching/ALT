@@ -74,7 +74,7 @@ export default class FeedbackFacultyPage extends Component {
     const feedback = new Feedback();
     feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
       feedback.getFeedback(this.state.course.passCode).then(values => {
-        const url = Object.keys(values)[0];
+        const url = values.id;
         feedback.setFeedback(
           this.state.course.passCode,
           value.startTime,
@@ -114,7 +114,7 @@ export default class FeedbackFacultyPage extends Component {
 
       await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
-          const url = Object.keys(values)[0];
+          const url = values.id;
           feedback.setFeedback(
             this.state.course.passCode,
             '',
@@ -137,7 +137,7 @@ export default class FeedbackFacultyPage extends Component {
         .format('DD/MM/YYYY HH:mm:ss');
       await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
-          const url = Object.keys(values)[0];
+          const url = values.id;
           feedback.setFeedback(
             this.state.course.passCode,
             value.startTime,
@@ -153,7 +153,7 @@ export default class FeedbackFacultyPage extends Component {
     } else {
       await feedback.getFeedbackDetails(this.state.course.passCode).then(value => {
         feedback.getFeedback(this.state.course.passCode).then(values => {
-          const url = Object.keys(values)[0];
+          const url = values.id;
           feedback.setFeedback(
             this.state.course.passCode,
             startTime,

@@ -66,8 +66,8 @@ export default class FeedbackForm extends Component {
               console.log(this.state.kind);
             });
         } else {
-          const url = Object.keys(values)[0];
-          const feedbackCount = Object.values(values)[0].feedbackCount;
+          const url = values.id;
+          const feedbackCount = values.feedbackCount;
           feedback
             .setFeedback(
               this.state.course.passCode,

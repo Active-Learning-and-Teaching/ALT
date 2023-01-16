@@ -4,6 +4,7 @@ import FeedbackStudentPage from './FeedbackStudentPage';
 import FeedbackFacultyPage from './FeedbackFacultyPage';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
+import firestore from '@react-native-firebase/firestore';
 
 export default class FeedbackHomePage extends Component {
   constructor(props) {
@@ -36,14 +37,62 @@ export default class FeedbackHomePage extends Component {
   }
 
 
+  // isCurrentFeedback = () => {
+  //   database()
+  //     .ref('InternalDb/Feedback/')
+  //     .orderByChild('passCode')
+  //     .equalTo(this.state.course.passCode)
+  //     .on('value', snapshot => {
+  //       if (snapshot.val()) {
+  //         const values = Object.values(snapshot.val())[0];
+  //         const curr = moment.utc(database().getServerTime());
+  //         const startTime = moment.utc(values.startTime, 'DD/MM/YYYY HH:mm:ss');
+  //         const endTime = moment.utc(values.endTime, 'DD/MM/YYYY HH:mm:ss');
+  //         const beforeDuration = Math.abs(
+  //           moment.utc(curr).diff(startTime, 'seconds'),
+  //         );
+  //         const duration = Math.abs(moment.utc(curr).diff(endTime, 'seconds'));
+
+  //         if (curr >= startTime && curr <= endTime) {
+  //           this.setState({
+  //             beforeFeedback: false,
+  //             currentFeedback: true,
+  //             currentDuration: duration,
+  //             beforeDuration: 0,
+  //             feedbackCount: values.feedbackCount,
+  //             kind: values.kind,
+  //           });
+  //         } else if (curr < startTime) {
+  //           this.setState({
+  //             beforeFeedback: true,
+  //             currentFeedback: false,
+  //             currentDuration: 0,
+  //             beforeDuration: beforeDuration,
+  //             startTime: startTime,
+  //             feedbackCount: values.feedbackCount,
+  //             kind: values.kind,
+  //           });
+  //         } else {
+  //           this.setState({
+  //             beforeFeedback: false,
+  //             currentFeedback: false,
+  //             currentDuration: 0,
+  //             beforeDuration: 0,
+  //             feedbackCount: values.feedbackCount,
+  //             kind: values.kind,
+  //           });
+  //         }
+  //       }
+  //     });
+  // };
+
   isCurrentFeedback = () => {
-    database()
-      .ref('InternalDb/Feedback/')
-      .orderByChild('passCode')
-      .equalTo(this.state.course.passCode)
-      .on('value', snapshot => {
-        if (snapshot.val()) {
-          const values = Object.values(snapshot.val())[0];
+    firestore()
+      .collection('Feedback')
+      .where('passCode', '==', this.state.course.passCode)
+      .onSnapshot(snapshot => {
+        if (!snapshot.empty) {
+          const values = snapshot.docs[0].data();
           const curr = moment.utc(database().getServerTime());
           const startTime = moment.utc(values.startTime, 'DD/MM/YYYY HH:mm:ss');
           const endTime = moment.utc(values.endTime, 'DD/MM/YYYY HH:mm:ss');
