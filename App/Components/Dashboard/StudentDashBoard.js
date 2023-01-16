@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 import {StyleSheet, View, Alert, ScrollView, SafeAreaView} from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import CourseCard from './CourseCard';
@@ -120,39 +121,77 @@ export default class StudentDashBoard extends Component {
       });
   };
 
-  getAllCourses = () => {
-    database()
-      .ref('InternalDb/Student/' + this.state.currentUser.url)
-      .on('value', snapshot => {
-        if (snapshot.val()) {
-          const keys = Object(snapshot.val());
+//  getAllCourses2 = () => {
+//    database()
+//      .ref('InternalDb/Student/' + this.state.currentUser.url)
+//      .on('value', snapshot => {
+//        console.log(snapshot.val())
+//        if (snapshot.val()) {
+//          const keys = Object(snapshot.val());
+//
+//          this.setState({
+//            courseList: [],
+//          });
+//          if ('courses' in keys) {
+//            const arr = snapshot.val()['courses'].filter(n => n);
+//            const course = new Courses();
+//            const courses = [];
+//
+//            for (var i = 0; i < arr.length; i++) {
+//              course.getCourseByUrl(arr[i]).then(r => {
+//                courses.push(r);
+//                messaging()
+//                  .subscribeToTopic(r.passCode)
+//                  .then(() =>
+//                    console.log(`Subscribed to topic! ${r.passCode}`),
+//                  );
+//
+//                this.setState({
+//                  courseList: courses,
+//                });
+//              });
+//            }
+//          }
+//        }
+//      });
+//  };
 
-          this.setState({
-            courseList: [],
-          });
-          if ('courses' in keys) {
-            const arr = snapshot.val()['courses'].filter(n => n);
-            const course = new Courses();
-            const courses = [];
-
-            for (var i = 0; i < arr.length; i++) {
-              course.getCourseByUrl(arr[i]).then(r => {
-                courses.push(r);
-                messaging()
-                  .subscribeToTopic(r.passCode)
-                  .then(() =>
-                    console.log(`Subscribed to topic! ${r.passCode}`),
-                  );
+ getAllCourses = () => {
+    firestore().collection('Student')
+        .doc(this.state.currentUser.url)
+        .onSnapshot(doc => {
+            if(doc.exists){
+                console.log(doc.data());
+                const keys = Object(doc.data());
 
                 this.setState({
-                  courseList: courses,
+                courseList: [],
                 });
-              });
+                 if ('courses' in keys) {
+                    const arr = doc.data()['courses'].filter(n => n);
+                    const course = new Courses();
+                    const courses = [];
+
+                    for (var i = 0; i < arr.length; i++) {
+                        course.getCourseByUrl(arr[i]).then(r => {
+                            courses.push(r);
+                            messaging()
+                              .subscribeToTopic(r.passCode)
+                              .then(() =>
+                                console.log(`Subscribed to topic! ${r.passCode}`),
+                              );
+
+                            this.setState({
+                                courseList: courses,
+                            });
+                        });
+                    }
+                }
             }
-          }
         }
-      });
-  };
+        );
+ }
+
 
   componentDidMount() {
     this.getCurrentUser().then(() => {

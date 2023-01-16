@@ -48,19 +48,19 @@ class Student {
   reference2 = firestore().collection('Student');
 
   //Login
-  // getUser = async email => {
-  //   let ans = false;
-  //   await this.reference
-  //     .orderByChild('email')
-  //     .equalTo(email)
-  //     .once('value')
-  //     .then(snapshot => {
-  //       if (snapshot.val()) {
-  //         ans = true;
-  //       }
-  //     });
-  //   return ans;
-  // };
+//   getUser = async email => {
+//     let ans = false;
+//     await this.reference
+//       .orderByChild('email')
+//       .equalTo(email)
+//       .once('value')
+//       .then(snapshot => {
+//         if (snapshot.val()) {
+//           ans = true;
+//         }
+//       });
+//     return ans;
+//   };
 
   getUser = async email => {
     let ans = false;
@@ -76,21 +76,21 @@ class Student {
     return ans;
   };
 
-  // getStudent = async email => {
-  //   let ans = '';
-  //   await this.reference
-  //     .orderByChild('email')
-  //     .equalTo(email)
-  //     .once('value')
-  //     .then(snapshot => {
-  //       if (snapshot.val()) {
-  //         const keys = Object.keys(snapshot.val());
-  //         ans = keys[ 0];
-  //         console.log('ok ok',ans);
-  //       }
-  //     });
-  //   return ans;
-  // };
+//   getStudent = async email => {
+//     let ans = '';
+//     await this.reference
+//       .orderByChild('email')
+//       .equalTo(email)
+//       .once('value')
+//       .then(snapshot => {
+//         if (snapshot.val()) {
+//           const keys = Object.keys(snapshot.val());
+//           ans = keys[ 0];
+//           console.log('ok ok',ans);
+//         }
+//       });
+//     return ans;
+//   };
 
   getStudent = async email => {
     let ans = '';
@@ -190,6 +190,20 @@ class Student {
         .update({
           'courses' : firestore.FieldValue.arrayUnion(courseUrl)
         });
+    
+    try{
+        var obj = {}
+        obj['students.' + this.url] = true;
+        await firestore()
+            .collection('Courses')
+            .doc(courseUrl)
+            .update(obj)
+            .then(() => {
+                  console.log('student updated');
+            });
+    } catch (error) {
+      console.log(error)
+    }
 
     // try {
     //   await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)

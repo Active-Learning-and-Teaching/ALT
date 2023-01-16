@@ -1,4 +1,5 @@
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 class Quiz {
 
@@ -15,42 +16,75 @@ class Quiz {
 
 
     reference = database().ref('InternalDb/KBC/')
+    reference2 = firestore().collection('KBC');
 
-    getQuestion  = async (passCode)=> {
-        let ans = null
-        await this.reference
-            .orderByChild("passCode")
-            .equalTo(passCode)
-            .once('value')
-            .then(snapshot => {
-                if (snapshot.val()){
-                    ans = snapshot.val()
-                }
-            })
-        return ans
-    }
+//    getQuestion  = async (passCode)=> {
+//        let ans = null
+//        await this.reference
+//            .orderByChild("passCode")
+//            .equalTo(passCode)
+//            .once('value')
+//            .then(snapshot => {
+//                if (snapshot.val()){
+//                    ans = snapshot.val()
+//                }
+//            })
+//        return ans
+//    }
 
-    getTiming  = async (passCode)=> {
-        let ans = null
-        await this.reference
-            .orderByChild("passCode")
-            .equalTo(passCode)
-            .once('value')
+    getQuestion = async (passCode) => {
+        let ans = null;
+        await this.reference2
+            .where("passCode", "==", passCode)
+            .get()
             .then(snapshot => {
-                if (snapshot.val()){
-                    const keys = Object.values(snapshot.val());
-                    console.log("Finding Issues")
-                    console.log(keys);
-                    ans = keys[0]
-                }
-            })
-        return ans
+            if (!snapshot.empty) {
+                ans = snapshot.docs[0].data();
+            }
+        });
+        return ans;
+    };
+
+//    getTiming  = async (passCode)=> {
+//        let ans = null
+//        await this.reference
+//            .orderByChild("passCode")
+//            .equalTo(passCode)
+//            .once('value')
+//            .then(snapshot => {
+//                if (snapshot.val()){
+//                    const keys = Object.values(snapshot.val());
+//                    console.log("Finding Issues")
+//                    console.log(keys);
+//                    ans = keys[0]
+//                }
+//            })
+//        return ans
+//    }
+
+    getTiming = async (passCode) => {
+    let ans = null;
+    await this.reference2
+        .where("passCode", "==", passCode)
+        .get()
+        .then(snapshot => {
+        if (!snapshot.empty) {
+            const keys = snapshot.docs[0].data();
+            console.log("Finding Issues");
+            console.log(keys);
+            ans = keys;
+            }
+        })
+
+    return ans;
     }
 
 
     setQuestion = async (passCode, startTime, endTime, duration, correctAnswer, errorRate, instructor, quizType, url, emailResponse,questionCount) =>{
-        await database()
-            .ref('InternalDb/KBC/'+url)
+        // await database()
+        //     .ref('InternalDb/KBC/'+url)
+        await this.reference2
+        .doc(url)
             .set({
                 passCode: passCode,
                 startTime: startTime,
@@ -70,9 +104,11 @@ class Quiz {
     }
 
     createQuestion =  async (passCode, startTime, endTime, duration, correctAnswer, errorRate, instructor, quizType) => {
-        await this.reference
-            .push()
-            .set({
+        // await this.reference
+        //     .push()
+        //     .set({
+        await this.reference2
+            .add({
                 passCode: passCode,
                 startTime: startTime,
                 endTime: endTime,
