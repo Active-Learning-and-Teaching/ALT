@@ -362,8 +362,8 @@ function autoGrader(studentAnswer,correctAnswer,type){
           return 0;
   }
   else{
-      studentAnswer = studentAnswer.trim().toUpperCase().replace(/,/g,"")
-      correctAnswer = correctAnswer.trim().toUpperCase().replace(/,/g,"")
+      studentAnswer = studentAnswer.trim().replace(/,/g,"")
+      correctAnswer = correctAnswer.trim().replace(/,/g,"")
                   
       if(studentAnswer===correctAnswer)
           return 1;
@@ -412,7 +412,7 @@ async function getQuizResponse(passCode,startTime,endTime,type){
 }
 async function QuizResponseMailer(list,answer,type,passCode,quizNumber,startTime,endTime,email){
   
-  const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase().replace(/,/g,"");
+  const correctAnswer = answer === "*" ? 'N/A' : answer.trim().replace(/,/g,"");
   max = answer==="*"?'N/A':1
   const date = startTime.replace(/\//g,"-").split(" ")[0]
   const fileName = passCode+"_"+date+"_"+"Quiz-"+quizNumber
