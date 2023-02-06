@@ -3,9 +3,9 @@
 buildscript {
     ext {
         buildToolsVersion = "28.0.3"
-        minSdkVersion = 16
-        compileSdkVersion = 30
-        targetSdkVersion = 30
+        minSdkVersion = 21
+        compileSdkVersion = 33
+        targetSdkVersion = 33
         androidXCore = "1.7.0"
     }
     repositories {
@@ -13,8 +13,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath('com.android.tools.build:gradle:4.1.0')
-        classpath("com.google.gms:google-services:4.3.5")
+        classpath('com.android.tools.build:gradle:7.1.2')
+        classpath('com.google.gms:google-services:4.3.10')
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -37,4 +37,18 @@ allprojects {
         jcenter()
         maven { url 'https://www.jitpack.io' }
       }
+
+    def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
+
+    configurations.all {
+        resolutionStrategy {
+            force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+        }
+    }
+}
+
+subprojects { subproject ->
+    if(project['name'] == 'react-native-reanimated'){
+        project.configurations { compile { } }
+    }
 }
