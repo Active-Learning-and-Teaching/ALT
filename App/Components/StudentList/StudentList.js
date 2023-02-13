@@ -3,6 +3,7 @@ import {Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import database from '@react-native-firebase/database';
 import Courses from '../../Databases/Courses';
 import StudentCard from './StudentCard';
+import firestore from '@react-native-firebase/firestore';
 
 export default class StudentList extends Component{
 
@@ -28,32 +29,29 @@ export default class StudentList extends Component{
     }
 
     getStudents = () => {
-        database()
-            .ref('InternalDb/Student/')
-            .orderByChild("courses")
-            .on('value', snapshot => {
+        firestore()
+            .collection('Student')
+            .where("courses", 'array-contains', this.state.courseURL)
+            .onSnapshot(snapshot => {
                 const list = []
 
-                snapshot.forEach( (data) => {
-                    const keys = Object(data.val())
-                    if ("courses" in keys){
-                        const arr = data.val()["courses"]
-                        if (arr.includes(this.state.courseURL)){
-                            const dict = {}
-                            dict["name"] = keys["name"]
-                            dict["email"] = keys["email"]
-                            dict["photo"] = keys["photo"]
-                            dict["verified"] = 0
+                snapshot.docs.forEach((doc) => {
+                    const data = doc.data();
+                    
+                    const dict = {}
+                    dict["name"] = data["name"]
+                    dict["email"] = data["email"]
+                    dict["photo"] = data["photo"]
+                    dict["verified"] = 1
 
-                            if ("verified" in keys){
-                                const arr = data.val()["verified"]
-                                if (arr.includes(this.state.courseURL)){
-                                    dict["verified"] = 1
-                                }
-                            }
-                            list.push(dict)
-                        }
-                    }
+                    // if ("verified" in keys){
+                    //     const arr = data.val()["verified"]
+                    //     if (arr.includes(this.state.courseURL)){
+                    //         dict["verified"] = 1
+                    //     }
+                    // }
+                    list.push(dict)
+                        
                 })
                 list.sort((a,b) =>
                     a.name!==undefined && b.name!==undefined

@@ -71,7 +71,7 @@ export default class FeedbackResultsList extends Component {
         this.props.emailStatus &&
         r.summary
       ){
-        this.props.FeedbackMailer().then(console.log("Sending Email"));
+        // this.props.FeedbackMailer().then(console.log("Sending Email"));
       }
     }
   }
@@ -82,8 +82,9 @@ export default class FeedbackResultsList extends Component {
     await feedback
       .getFeedbackDetails(this.state.course.passCode)
       .then(async r => {
-        console.log(r);
+        
         if (r.kind == '0' || r.kind == '1') {
+          console.log("check here", r);
           await feedbackResponses
             .getAllResponse(
               this.state.course.passCode,
@@ -92,8 +93,8 @@ export default class FeedbackResultsList extends Component {
               r.kind,
             )
             .then(async values => {
-              // console.log("Logging resp values");
-              // console.log(values);
+              console.log("Logging resp values");
+              console.log(values);
               await this.setState({
                 responses: values,
                 feedbackNumber: r.feedbackCount,
@@ -113,9 +114,12 @@ export default class FeedbackResultsList extends Component {
                   this.state.course.defaultEmailOption &&
                   this.props.emailStatus
                 ){
-                  await this.props.FeedbackMailer().then();
+                  // await this.props.FeedbackMailer().then();
                 }
-              }});
+              }})
+              .catch((err)=>{
+                console.log("failed somehow", err);
+              });
         } else if(r.kind=="2") {
           // this.props.summarizeResponses().then(() => {
             if (r.summary){

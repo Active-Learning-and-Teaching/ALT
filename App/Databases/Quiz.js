@@ -39,7 +39,8 @@ class Quiz {
             .get()
             .then(snapshot => {
             if (!snapshot.empty) {
-                ans = snapshot.docs[0].data();
+                const id = snapshot.docs[0].id;
+                ans = {...snapshot.docs[0].data(),id};
             }
         });
         return ans;

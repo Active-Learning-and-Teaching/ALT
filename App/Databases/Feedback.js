@@ -63,6 +63,7 @@ class Feedback {
   
   getFeedbackDetails = async passCode => {
     let ans = null;
+    console.log("error in getFeedbackDetails");
     await this.reference
       .where('passCode', '==', passCode)
       .get()

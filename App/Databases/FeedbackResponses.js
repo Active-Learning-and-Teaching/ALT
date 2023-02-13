@@ -244,12 +244,12 @@ class FeedbackResponses {
 
   getAllResponse = async (passCode, startTime, endTime, kind) => {
     let ans = null;
-    // console.log('Getting all Feedback Responses')
+    console.log("checking", passCode);
     await this.reference
       .where('passCode', '==', passCode)
+      .get()
       .then(async snapshot => {
         let list = {};
-        // console.log("Snapshot "  + snapshot.val());
         if (kind === '0') {
           list = {0: 0, 1: 0, 2: 0};
         } else if (kind === '1') {
