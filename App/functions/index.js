@@ -362,10 +362,11 @@ function autoGrader(studentAnswer,correctAnswer,type){
           return 0;
   }
   else{
-      studentAnswer = studentAnswer.trim().toUpperCase().replace(/,/g,"")
-      correctAnswer = correctAnswer.trim().toUpperCase().replace(/,/g,"")
+      studentAnswer = studentAnswer.trim().replace(/,/g,"")               // trum.toupper
+      correctAnswer = correctAnswer.trim().replace(/,/g,"")               // trim.toupper
                   
       if(studentAnswer===correctAnswer)
+
           return 1;
       else if(!studentAnswer.search(correctAnswer)===-1)
           return 1;
@@ -398,7 +399,7 @@ async function getQuizResponse(passCode,startTime,endTime,type){
 
                   if (type==="mcq"){list[keys["answer"]] += 1}
                   else{
-                  let answer = keys["answer"].trim().toUpperCase().replace(/,/g,"")
+                  let answer = keys["answer"].trim().replace(/,/g,"")       // toupper
                   if(answer in dict){dict[answer]+=1}
                   else{dict[answer] = 1}
                   }
@@ -412,7 +413,7 @@ async function getQuizResponse(passCode,startTime,endTime,type){
 }
 async function QuizResponseMailer(list,answer,type,passCode,quizNumber,startTime,endTime,email){
   
-  const correctAnswer = answer === "*" ? 'N/A' : answer.trim().toUpperCase().replace(/,/g,"");
+  const correctAnswer = answer === "*" ? 'N/A' : answer.trim().replace(/,/g,"");  // toupper
   max = answer==="*"?'N/A':1
   const date = startTime.replace(/\//g,"-").split(" ")[0]
   const fileName = passCode+"_"+date+"_"+"Quiz-"+quizNumber
@@ -494,7 +495,7 @@ async function getAllStudentsforMail(passCode, startTime, endTime){
               const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
 
               if (temp1<=temp2 && temp1>=temp){
-                  let answer = keys['answer'].trim().toUpperCase()
+                  let answer = keys['answer'].trim()  // toupper
                   let email = keys['userName']
                   let ID = keys['userID']
                   let name = keys['name']===undefined? "N/A": keys["name"]
