@@ -16,13 +16,20 @@ export default class StudentStack extends Component {
             user: this.props.route.params.user,
             course: this.props.route.params.course,
             studentList : [],
+            talist: [],
         }
         this.getStudentListData = this.getStudentListData.bind(this);
+        this.getTAStudentListData = this.getTAStudentListData.bind(this);
     }
 
     getStudentListData(studentData){
         this.setState({
             studentList : studentData
+        })
+    }
+    getTAStudentListData(TAData){
+        this.setState({
+            talist : TAData
         })
     }
 
@@ -87,6 +94,7 @@ export default class StudentStack extends Component {
                            user: this.state.user,
                            course: this.state.course,
                            getStudentListData : this.getStudentListData,
+                           getTAStudentListData: this.getTAStudentListData,
                        }}
                 />
             </Stack.Navigator>

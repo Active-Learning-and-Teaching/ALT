@@ -1,5 +1,4 @@
 import database from '@react-native-firebase/database';
-
 class Courses {
   courseName: string;
   courseCode: string;
@@ -62,10 +61,9 @@ class Courses {
     let TaList = await this.getTAs(courseURL).then(value => {
       if (!value.includes(TaURL)) {
         value.push(TaURL);
+        this.setTAs(courseURL,TaList);
       }
     });
-
-    this.setTAs(courseURL,TaList)
     
     try {
       await database().ref('InternalDb/Courses/'+courseURL+'/TAs/'+TaURL).set(true)  
@@ -82,7 +80,7 @@ class Courses {
       .once('value')
       .then(snapshot => {
         if (snapshot.val()) {
-          const keys = Object(snapshot.val());
+          const keys = Object.keys(snapshot.val());
           if ('TAs' in keys) ans = keys['TAs'].map(x => x);
         }
       });
@@ -92,8 +90,8 @@ class Courses {
 
   setTAs= async (url,TaList) => {
     await database()
-      .ref(`InternalDb/Courses/${url}/TAs`)
-      .set(TaList)
+      .ref(`InternalDb/Courses/${url}`)
+      .update({TAs:TaList})
       .then(() => {
         console.log('Courses Tas set');
       });

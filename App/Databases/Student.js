@@ -2,6 +2,7 @@ import database from '@react-native-firebase/database';
 import Courses from './Courses';
 
 class Student {
+
   name: string;
   email: string;
   url: string;
@@ -100,7 +101,7 @@ class Student {
     return ans;
   };
 
-  getTaCoursesStudent = async () => {
+  getTACourseStudent = async () => {
     let ans = [];
     await database()
       .ref('InternalDb/Student/' + this.url)
@@ -108,20 +109,26 @@ class Student {
       .then(snapshot => {
         if (snapshot.val()) {
           const keys = Object(snapshot.val());
-          if ('tacourses' in keys) ans = keys['tacourses'].map(x => x);
+          if ('courses' in keys) ans = keys['tacourses'].map(x => x);
         }
       });
     return ans;
   };
 
-  setCourseStudent = async (courses,tacourses) => {
+  setCourseStudent = async (courses) => {
     await database()
       .ref('InternalDb/Student/' + this.url)
-      .set({
-        name: this.getName(),
-        email: this.getEmail(),
-        photo: 0,
+      .update({
         courses: courses,
+      })
+      .then(() => {
+        console.log('Courses set');
+      });
+  };
+  setTACourseStudent = async (tacourses) => {
+    await database()
+      .ref('InternalDb/Student/' + this.url)
+      .update({
         tacourses:tacourses,
       })
       .then(() => {
@@ -129,38 +136,23 @@ class Student {
       });
   };
 
+
   addCourseStudent = async courseUrl => {
     let courses = await this.getCourseStudent().then(value => {
       if (!value.includes(courseUrl)) {
         value.push(courseUrl);
+        this.setCourseStudent(value);
       }
     });
-    let tacourses = await this.getTaCoursesStudent();
-
-    this.setCourseStudent(courses,tacourses)
-    
-    try {
-      await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)  
-    } catch (error) {
-      console.log(error)
-    }
-    
   };
 
-  addTaCourseStudent = async courseUrl => {
-    let courses = await this.getCourseStudent();
-    let tacourses = await this.getTaCoursesStudent().then(value => {
+  addTACourseStudent = async courseUrl => {
+    let tacourses = await this.getTACourseStudent().then(value => {
       if (!value.includes(courseUrl)) {
         value.push(courseUrl);
+        this.setTACourseStudent(value);
       }
-    });
-    this.setCourseStudent(courses,tacourses)
-    try {
-      await database().ref('InternalDb/Courses/'+courseUrl+'/TAs/'+this.getUrl()).set(true)  
-    } catch (error) {
-      console.log(error)
-    }
-    
+    });  
   };
 
   deleteCourse = async courseUrl => {
@@ -169,10 +161,19 @@ class Student {
         const index = value.indexOf(courseUrl);
         value.splice(index, 1);
 
+        this.setTACourseStudent(value);
+      }
+    });
+  };
+
+  deleteCourseTA = async courseUrl => {
+    await this.getTACourseStudent().then(value => {
+      if (value.includes(courseUrl)) {
+        const index = value.indexOf(courseUrl);
+        value.splice(index, 1);
+
         this.setCourseStudent(value);
       }
-    }).then(() => {
-      database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.url).remove()
     });
   };
 

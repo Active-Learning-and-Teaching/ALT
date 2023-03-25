@@ -1,74 +1,78 @@
-import React, {Component} from 'react';
-
+import React, {useState} from 'react';
 import {StyleSheet,Text,View,TextInput,} from 'react-native';
 import {Button} from 'react-native-elements';
-
 import Courses from '../../Databases/Courses';
 
-export default class StudentAddCourseForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      passCode: '',
-      error: null,
-    };
-  }
+function StudentAddCourseForm({toggle,student}) {
+  
+  const [passCode,setPassCode] = useState('')
+  const [error,setError] = useState(null)
 
-  joinCourse = async () => {
-    let {passCode, error} = this.state;
+  const joinCourse = async () => {
     passCode = passCode.replace(/\s+/g, ' ').trim();
+    console.log(passCode);
 
-    if (passCode === '') {
-      this.setState({
-        error: 'Please Enter Course Pass Code.',
-      });
-    } else {
+    if (passCode === '')
+      setError('Please Enter Course Pass Code.')
+    else {
       const courses = new Courses();
       await courses.getCourse(passCode).then(async value => {
         console.log(courses.getCourse(passCode));
         console.log(value);
+        
         if (value) {
-          await this.props.student
+          await student
             .addCourseStudent(value)
             .then(r => console.log('Added Course to Student'));
-          this.props.toggle();
-        } else {
-          this.setState({
-            error: 'Incorrect Code',
-          });
-        }
+          toggle();
+        } 
+        else
+          setError('Incorrect Code')
       });
-
-      this.setState({
-        passCode: '',
-      });
+      setPassCode('')
     }
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.textCreate}>New Course</Text>
+  return (
+    <View style={styles.container}>
 
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          placeholder="Pass Code"
-          placeholderTextColor="grey"
-          onChangeText={passCode => this.setState({passCode})}
-          value={this.state.passCode}
-        />
-        {this.state.error ? (
-          <Text style={styles.errorMessage}>{this.state.error}</Text>
-        ) : (
-          <Text />
-        )}
-                <Button style={styles.buttonMessage} titleStyle={{color:'white',fontWeight:'normal'}} buttonStyle={styles.mybutton} title="Join" onPress={this.joinCourse} />
+      <Text 
+        style={styles.textCreate}>
+        New Course
+      </Text>
 
-            </View>
-        );
-    }
+      <TextInput
+        style={styles.textInput}
+        autoCapitalize="none"
+        placeholder="Pass Code"
+        placeholderTextColor="grey"
+        onChangeText={passCodeText => setPassCode(passCodeText)}
+        value={passCode}
+      />
+
+      {error ?
+        <Text 
+          style={styles.errorMessage}>
+          {error}
+        </Text>: 
+        <Text />}
+
+      <Button 
+        style={styles.buttonMessage} 
+        titleStyle={{
+          color:'white',
+          fontWeight:'normal'
+        }} 
+        buttonStyle={styles.mybutton} 
+        title="Join" 
+        onPress={joinCourse} 
+      />
+
+    </View>
+  );
 }
+
+export default StudentAddCourseForm
 
 const styles = StyleSheet.create({
     container: {

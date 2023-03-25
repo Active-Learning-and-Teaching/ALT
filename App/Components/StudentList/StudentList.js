@@ -3,6 +3,7 @@ import {Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import database from '@react-native-firebase/database';
 import Courses from '../../Databases/Courses';
 import StudentCard from './StudentCard';
+import TACard from './TACard';
 
 export default class StudentList extends Component{
 
@@ -13,6 +14,7 @@ export default class StudentList extends Component{
             course : this.props.route.params.course,
             user : this.props.route.params.user,
             studentList : [],
+            taList : [],
             courseURL : ''
         };
     }
@@ -33,7 +35,6 @@ export default class StudentList extends Component{
             .orderByChild("courses")
             .on('value', snapshot => {
                 const list = []
-
                 snapshot.forEach( (data) => {
                     const url = Object(data.key)
                     const keys = Object(data.val())
@@ -78,9 +79,60 @@ export default class StudentList extends Component{
             })
     }
 
+    getTAs = () => {
+        database()
+            .ref('InternalDb/Student/')
+            .orderByChild("tacourses")
+            .on('value', snapshot => {
+                const list = []
+                snapshot.forEach( (data) => {
+                    const url = Object(data.key)
+                    const keys = Object(data.val())
+                    if ("tacourses" in keys){
+                        const arr = data.val()["tacourses"]
+                        if (arr.includes(this.state.courseURL)){
+                            const dict = {}
+                            dict["url"]=url
+                            dict["name"] = keys["name"]
+                            dict["email"] = keys["email"]
+                            dict["photo"] = keys["photo"]
+                            dict["verified"] = 0
+
+                            if ("verified" in keys){
+                                const arr = data.val()["verified"]
+                                if (arr.includes(this.state.courseURL)){
+                                    dict["verified"] = 1
+                                }
+                            }
+                            list.push(dict)
+                        }
+                    }
+                })
+                list.sort((a,b) =>
+                    a.name!==undefined && b.name!==undefined
+                    ? a.name.toUpperCase() > b.name.toUpperCase()
+                        ? 1
+                        : ((b.name.toUpperCase()  > a.name.toUpperCase())
+                            ? -1
+                            : 0)
+                    : a.email > b.email
+                        ? 1
+                        : b.email > a.email
+                            ? -1
+                            : 0
+                );
+
+                this.setState({
+                    taList : list,
+                })
+                this.props.route.params.getTAStudentListData(list)
+            })
+    }
+
     componentDidMount() {
         this.getCourseURL().then(()=>{
             this.getStudents()
+            this.getTAs()
         })
     }
 
@@ -88,6 +140,21 @@ export default class StudentList extends Component{
         return(
             <SafeAreaView style={styles.safeContainer}>
                 <ScrollView>
+                    <View style={styles.grid}>
+                        <Text style={styles.text}>
+                            {this.state.taList.length===0
+                            ?"No TA"
+                            :"Total TA : "+this.state.taList.length}
+                        </Text>
+                        {this.state.taList.map((student,i)=> (
+                            <TACard      student={student}
+                                         key={i}
+                                         type={this.state.type}
+                                         course={this.state.course}
+                                         courseURL={this.state.courseURL}
+                            />
+                        ))}
+                    </View>
                     <View style={styles.grid}>
                         <Text style={styles.text}>
                             {this.state.studentList.length===0

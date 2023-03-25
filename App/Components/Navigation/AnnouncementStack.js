@@ -6,18 +6,30 @@ import CourseAdd from '../Dashboard/CourseAdd';
 const Stack = createStackNavigator();
 
 export default class AnnouncementStack extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
+            isTA: null,
             type: this.props.route.params.type,
             user: this.props.route.params.user,
-            course: this.props.route.params.course
+            course: this.props.route.params.course,
         }
+    }
+    async setIsTA() {
+        const AllTAs = Object.keys(this.state.course.TAs)
+        AllTAs.forEach(element => {
+            isTA=false||element.includes(this.state.user.url)
+        });
+        await this.setState({
+            isTA: isTA,
+        })
+        console.log(this.state.isTA)
+    }
+    componentDidMount(){
+        this.setIsTA()
     }
 
     render() {
-
         return (
             <Stack.Navigator>
                 <Stack.Screen name='Announcements'
@@ -27,7 +39,7 @@ export default class AnnouncementStack extends Component {
                            headerShown : true,
                            headerBackTitle: '',
                            headerRight : ()=>(
-                               this.state.type==='faculty' ?
+                               this.state.type==='faculty'||this.state.isTA ?
                                    <CourseAdd
                                        course ={this.state.course}
                                    />

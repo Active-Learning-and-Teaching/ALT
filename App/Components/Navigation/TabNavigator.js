@@ -34,6 +34,7 @@ export default class TabNavigator extends Component{
                             ),
                         }}
                         initialParams={{
+                            isTA : this.props.route.params.isTA,
                             type : this.state.type,
                             user: this.state.user,
                             course: this.state.course

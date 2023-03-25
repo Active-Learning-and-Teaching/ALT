@@ -7,6 +7,7 @@ import IconI from 'react-native-vector-icons/MaterialIcons';
 import MainNavigator from './Components/Navigation/MainNavigator';
 import NotifiactionCentre from './NotificationCenter';
 import {BackHandler} from 'react-native';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 IconF.loadFont();
 IconM.loadFont();
@@ -28,7 +29,9 @@ const App: FC = () => {
 
   return (
     <>
-      <MainNavigator />
+      <ActionSheetProvider>
+        <MainNavigator />
+      </ActionSheetProvider>
       <NotifiactionCentre />
     </>
   );

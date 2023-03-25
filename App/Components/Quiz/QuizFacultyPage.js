@@ -17,6 +17,7 @@ export default class QuizFacultyPage extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            isTA:this.props.isTA,
             course : this.props.course,
             user : this.props.user,
             time : 2,
@@ -72,7 +73,6 @@ export default class QuizFacultyPage extends Component{
             option : value,
             icon : value,
         })
-        console.log(this.state.option)
     }
 
     dbUpdateEmailStatus = async () =>{

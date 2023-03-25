@@ -9,7 +9,7 @@ import Student from '../../Databases/Student';
 import CheckBox from '@react-native-community/checkbox';
 import database from '@react-native-firebase/database';
 
-export default class StudentCard extends Component{
+export default class TACard extends Component{
     constructor(props) {
         super(props);
     }
@@ -49,25 +49,6 @@ export default class StudentCard extends Component{
         })
     }
 
-    makeTA = async ()=>{
-        const courses = new Courses();
-        const course = this.props.course;
-        const student = new Student()
-        student.setEmail(this.props.student.email)
-        student.setUrl();
-
-        const courseURL = this.props.courseURL;
-        const facultyURL = course.instructors[0];
-        const studentURL = this.props.student.url;
-        await courses.addTAs(`${facultyURL}_${studentURL}`,courseURL)
-
-        if (course) {
-            await student.addTACourseStudent(courseURL)
-            .then(r => console.log('Added Course to Student'));
-            this.props.toggle();
-        }
-    }
-
     removeTA =async () => {
         const courses = new Courses()
         const student = new Student()
@@ -77,7 +58,7 @@ export default class StudentCard extends Component{
             await courses.getCourse(this.props.course.passCode)
                 .then(async courseUrl => {
                     await student.deleteCourse(courseUrl)
-                        .then(r => Toast.show('Student removed'))
+                        .then(r => Toast.show('TA removed'))
                 })
         })
     }
@@ -215,7 +196,7 @@ export default class StudentCard extends Component{
                         options={[`Remove ${this.props.student.name!==undefined
                             ?this.props.student.name
                             :this.props.student.email}`,
-                            `Make ${this.props.student.name!==undefined
+                            `Remove ${this.props.student.name!==undefined
                                 ?this.props.student.name
                                 :this.props.student.email} Course TA`
                             ,'Cancel']}
@@ -226,7 +207,7 @@ export default class StudentCard extends Component{
                             if(index===0)
                             this.removeStudent().then(()=>"")
                             if(index===1)
-                            this.makeTA()
+                            this.removeTA()
                         }}
                     />
                 </View>
