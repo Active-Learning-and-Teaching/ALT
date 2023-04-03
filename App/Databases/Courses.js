@@ -75,21 +75,20 @@ class Courses {
   //   return ans;
   // };
 
-  getCourse = async (passCode) => {
-    
+  getCourse = async passCode => {
     let ans = '';
-    
+
     await this.reference
-              .where('passCode', '==', passCode)
-              .get()
-              .then((snapshot)=>{
-                if(!snapshot.empty) {
-                  ans = snapshot.docs[0].id;
-                }
-              });
+      .where('passCode', '==', passCode)
+      .get()
+      .then(snapshot => {
+        if (!snapshot.empty) {
+          ans = snapshot.docs[0].id;
+        }
+      });
 
     return ans;
-  } 
+  };
 
   // createCourse = () => {
   //   this.reference
@@ -111,19 +110,19 @@ class Courses {
 
   createCourse = async () => {
     this.reference
-        .add({
-          courseName: this.courseName,
-          courseCode: this.courseCode,
-          room: this.room,
-          passCode: this.passCode,
-          instructors: this.instructors,
-          imageURL: this.imageURL,
-          instructor: this.instructor,
-        })
-        .then(() => {
-          console.log("Course Added");
-        });
-  }
+      .add({
+        courseName: this.courseName,
+        courseCode: this.courseCode,
+        room: this.room,
+        passCode: this.passCode,
+        instructors: this.instructors,
+        imageURL: this.imageURL,
+        instructor: this.instructor,
+      })
+      .then(() => {
+        console.log('Course Added');
+      });
+  };
 
   // getCourseByUrl = async courseUrl => {
   //   let ans = {};
@@ -136,22 +135,20 @@ class Courses {
   //   return ans;
   // };
 
-  getCourseByUrl = async (courseUrl) => {
-
+  getCourseByUrl = async courseUrl => {
     let ans = {};
 
     await this.reference
-              .doc(courseUrl)
-              .get()
-              .then((doc) => {
-                if(!doc.empty){
-                  ans = doc.data();
-                }
-              });
-    
-    return ans;
+      .doc(courseUrl)
+      .get()
+      .then(doc => {
+        if (!doc.empty) {
+          ans = doc.data();
+        }
+      });
 
-  }
+    return ans;
+  };
 
   setCourseData = async (
     courseName,

@@ -1,18 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import database from '@react-native-firebase/database';
+import moment from 'moment';
+import React, { Component } from 'react';
 import {
+  Animated,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
   TextInput,
-  Animated,
+  View,
 } from 'react-native';
-import {Slider, Text, Button, ListItem} from 'react-native-elements';
-import database from '@react-native-firebase/database';
-import moment from 'moment';
-import Feedback from '../../Databases/Feedback';
+import { Button, ListItem, Slider, Text } from 'react-native-elements';
 import SwitchSelector from 'react-native-switch-selector';
+import Feedback from '../../Databases/Feedback';
 import Dimensions from '../../Utils/Dimensions';
 export default class FeedbackForm extends Component {
   // TODO change duration based on slider position
@@ -102,38 +102,39 @@ export default class FeedbackForm extends Component {
     let kind = this.state.kind;
     let kindElement;
     if (kind == 0) {
-      kind_text = (
+      kindElement = (
         <Text> Students will be given options: green, yellow and red </Text>
       );
     } else if (kind == 1) {
       kindElement = (
         <Text> Students will be given options: 1, 2, 3, 4, 5 </Text>
       );
-    } else if (kind == 2) {
-      kindElement = (
-        <View>
-          <ListItem containerStyle={styles.listContainer}>
-            <ListItem.Content>
-              <ListItem.Title style={styles.title}>
-                What are the three most important things that you learnt?
-              </ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
-          <ListItem containerStyle={styles.listContainer}>
-            <ListItem.Content>
-              <ListItem.Title style={styles.title}>
-                What are the things that remain doubtful?
-              </ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
+      }
+    // } else if (kind == 2) {
+    //   kindElement = (
+    //     <View>
+    //       <ListItem containerStyle={styles.listContainer}>
+    //         <ListItem.Content>
+    //           <ListItem.Title style={styles.title}>
+    //             What are the three most important things that you learnt?
+    //           </ListItem.Title>
+    //         </ListItem.Content>
+    //       </ListItem>
+    //       <ListItem containerStyle={styles.listContainer}>
+    //         <ListItem.Content>
+    //           <ListItem.Title style={styles.title}>
+    //             What are the things that remain doubtful?
+    //           </ListItem.Title>
+    //         </ListItem.Content>
+    //       </ListItem>
 
-          <Text style={styles.minPaperHelperText}>
-            {' '}
-            Students will provide input in text format{' '}
-          </Text>
-        </View>
-      );
-    }
+    //       <Text style={styles.minPaperHelperText}>
+    //         {' '}
+    //         Students will provide input in text format{' '}
+    //       </Text>
+    //     </View>
+    //   );
+    // }
 
     return (
       <SafeAreaView style={styles.safeContainer}>
@@ -155,7 +156,7 @@ export default class FeedbackForm extends Component {
               options={[
                 {label: 'Color Scale', value: '0', activeColor: 'tomato'},
                 {label: 'Likert Scale', value: '1', activeColor: 'tomato'},
-                {label: 'Minute Paper', value: '2', activeColor: 'tomato'},
+                // {label: 'Minute Paper', value: '2', activeColor: 'tomato'},
               ]}
             />
           </View>
