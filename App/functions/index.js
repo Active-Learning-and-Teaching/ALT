@@ -25,6 +25,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
 admin.initializeApp(functions.config().firebase);
 
 function emailTemplate(
@@ -279,43 +280,36 @@ async function getURLFromPasscode(passCode) {
   return courseURL;
 }
 async function getEmailFromPasscode(passCode, type) {
-  let myurl = await getURLFromPasscode(passCode);
+  let docId = await getURLFromPasscode(passCode);
   const db_ref = admin
     .app()
-    .database(url)
-    .ref('InternalDb/Courses/' + myurl);
+    .firestore()
+    .collection("Courses")
+    .doc(docId);
+
   let primary = '';
   let quiz = '';
   let feedback = '';
   let snapshot;
   try {
-    snapshot = await db_ref.once('value');
-    const course = snapshot.val();
-    if ('quizEmail' in course) {
-      quiz = course['quizEmail'];
-    }
-    if ('feedbackEmail' in course) {
-      feedback = course['feedbackEmail'];
-    }
+    snapshot = await db_ref.get();
+    const course = snapshot.data();
+    quiz = course['quizEmail'] || '';
+    feedback = course['feedbackEmail'] || '';
   } catch (errorObject) {
     console.log('The read in getEmailFromPasscode failed: ', errorObject);
   }
 
   await admin
     .app()
-    .database(url)
-    .ref('InternalDb/Faculty/')
-    .orderByChild('courses')
-    .once('value', snapshot => {
-      snapshot.forEach(data => {
-        const keys = Object(data.val());
-        if ('courses' in keys) {
-          const arr = data.val()['courses'];
-          if (arr.includes(myurl)) {
-            primary = data.val()['email'];
-          }
-        }
-      });
+    .firestore()
+    .collection('Faculty/')
+    .where('courses', 'array-contains', docId)
+    .get()
+    .then(snapshot => {
+      if(!snapshot.empty){
+        primary = snapshot.docs[0].data().email || '';
+      }
     });
 
   if (type === 'Quiz') {
@@ -361,13 +355,13 @@ async function getCourseNameFromPasscode(passCode) {
 async function getKBCURLFromPasscode(passCode) {
   const db_ref = admin
     .app()
-    .database(url)
-    .ref('InternalDb/KBC/');
+    .firestore()
+    .collection('KBC');
   let courseURL;
   await db_ref
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once(
+    .where('passCode', '==', passCode)
+    .get()
+    .then(
       'value',
       function (snapshot) {
         courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
@@ -381,18 +375,17 @@ async function getKBCURLFromPasscode(passCode) {
 async function getAllAnnouncement(passCode) {
   const db_ref = admin
     .app()
-    .database(url)
-    .ref('InternalDb/Announcements/');
+    .firestore()
+    .collection('Announcements');
   let ans = '';
   await db_ref
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
+    .where('passCode', '==', passCode)
+    .get()
     .then(snapshot => {
-      if (snapshot.val()) {
+      if (!snapshot.empty) {
         const list = [];
-        snapshot.forEach(data => {
-          const keys = Object(data.val());
+        snapshot.docs.forEach(doc => {
+          const keys = doc.data();
           const dict = {};
           dict['date'] = keys['date'];
           dict['description'] = keys['description'];
@@ -450,17 +443,15 @@ function autoGrader(studentAnswer, correctAnswer, errorRate, type) {
 async function getQuizCount(passCode) {
   const db_ref = admin
     .app()
-    .database(url)
-    .ref('InternalDb/KBC/');
+    .firestore()
+    .collection('KBC');
   let ans = null;
   await db_ref
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
+    .where('passCode', '==', passCode)
+    .get()
     .then(snapshot => {
-      if (snapshot.val()) {
-        const keys = Object.values(snapshot.val());
-        ans = keys[0];
+      if (!snapshot.empty) {
+        ans = snapshot.docs[0].data();
       }
     });
   let count = ans === null ? '0' : ans['questionCount'];
@@ -470,16 +461,15 @@ async function getQuizResponse(passCode, startTime, endTime, type) {
   let ans = null;
   await admin
     .app()
-    .database(url)
-    .ref('InternalDb/KBCResponse/')
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
+    .firestore()
+    .collection('KBCResponse')
+    .where('passCode', '==', passCode)
+    .get()
     .then(snapshot => {
       const dict = {};
       const list = { A: 0, B: 0, C: 0, D: 0 };
-      snapshot.forEach(data => {
-        const keys = Object(data.val());
+      snapshot.docs.forEach(doc => {
+        const keys = doc.data();
         const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
         const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
         const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
@@ -599,16 +589,15 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
 
   await admin
     .app()
-    .database(url)
-    .ref('InternalDb/KBCResponse/')
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
+    .firestore()
+    .collection('KBCResponse')
+    .where('passCode', '==', passCode)
+    .get()
     .then(snapshot => {
       const a = {};
       const b = [];
-      snapshot.forEach(data => {
-        const keys = Object(data.val());
+      snapshot.docs.forEach(doc => {
+        const keys = doc.data();
         const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
         const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
         const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
@@ -651,17 +640,16 @@ async function getAllStudentsforMail(passCode, startTime, endTime) {
 async function getFeedbackCount(passCode) {
   const db_ref = admin
     .app()
-    .database(url)
-    .ref('InternalDb/Feedback/');
+    .firestore()
+    .collection('Feedback');
+
   let ans = null;
   await db_ref
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
+    .where('passCode', '==', passCode)
+    .get()
     .then(snapshot => {
-      if (snapshot.val()) {
-        const keys = Object.values(snapshot.val());
-        ans = keys[0];
+      if (!snapshot.empty) {
+        ans = snapshot.docs[0].data();
       }
     });
   let count = ans === null ? '0' : ans['feedbackCount'];
@@ -672,40 +660,33 @@ async function getFeedbackResponse(passCode, startTime, endTime, type) {
   if (type === '2') {
     await admin
       .app()
-      .database(url)
-      .ref('InternalDb/Feedback/')
-      .orderByChild('passCode')
-      .equalTo(passCode)
-      .once('value')
+      .firestore()
+      .collection('Feedback')
+      .where('passCode', '==', passCode)
+      .get()
       .then(async snapshot => {
-        if (snapshot.val()) {
-          const keys = Object.values(snapshot.val())[0];
-          ans = keys['summary'];
+        if(!snapshot.empty){
+          ans = snapshot.docs[0].data();
         }
       });
   } else {
     await admin
       .app()
-      .database(url)
-      .ref('InternalDb/FeedbackResponse/')
-      .orderByChild('passCode')
-      .equalTo(passCode)
-      .once('value')
+      .firebase()
+      .collection('FeedbackResponse')
+      .where('passCode', '==', passCode)
+      .get()
       .then(async snapshot => {
         let list = {};
         if (type === '0') list = { 0: 0, 1: 0, 2: 0 };
         else if (type === '1') list = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         else list = [];
 
-        snapshot.forEach(data => {
-          const keys = Object(data.val());
+        snapshot.docs.forEach(doc => {
+          const keys = doc.data();
           const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
           const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
           const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
-
-          // if (temp1 <= temp2 && temp1 >= temp) {
-          //   list[keys['responses']] += 1;
-          // }
           if (type == '0' || type == '1') {
             if (temp1 <= temp2 && temp1 >= temp) {
               list[keys['responses']] += 1;
@@ -724,15 +705,14 @@ async function getFeedbackCSV(passCode, startTime, endTime) {
   let list = [];
   await admin
     .app()
-    .database(url)
-    .ref('InternalDb/FeedbackResponse/')
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
+    .firestore()
+    .collection('FeedbackResponse')
+    .where('passCode', '==', passCode)
+    .get()
     .then(async snapshot => {
-      if (snapshot.val()) {
-        snapshot.forEach(data => {
-          const keys = Object(data.val());
+      if (!snapshot.empty) {
+        snapshot.docs.forEach(doc => {
+          const keys = doc.data();
           const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
           const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
           const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
@@ -752,22 +732,23 @@ async function getFeedbackCSV(passCode, startTime, endTime) {
 async function getFBURLFromPasscode(passCode) {
   const db_ref = admin
     .app()
-    .database(url)
-    .ref('InternalDb/Feedback/');
-  let courseURL;
+    .firestore()
+    .collection('Feedback');
+  let feedbackURL;
   await db_ref
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once(
-      'value',
-      function (snapshot) {
-        courseURL = Object.keys(snapshot.val())[0].replace(' ', '');
+    .where('passCode', '==', passCode)
+    .get()
+    .then((snapshot) => {
+        if(snapshot.empty){
+          console.log('No such feedback document!');
+        }
+        feedbackURL = snapshot.docs[0].id;
       },
       function (errorObject) {
         console.log('The read failed: ', errorObject);
       },
     );
-  return courseURL;
+  return feedbackURL;
 }
 async function FeedbackResponseMailer(
   results,
@@ -818,27 +799,32 @@ async function FeedbackResponseMailer(
 async function getStudents(passCode) {
   const courseURL = await getURLFromPasscode(passCode);
   console.log('Inside getStudents for course: ' + courseURL);
-  const db_ref = admin.app().database(url).ref('InternalDb/Student/');
-  const studentSnapshots = await db_ref.once('value');
+  const db_ref = admin.app().firestore().collection("Student");
   let studentList = [];
-  studentSnapshots.forEach(student => {
-    if (student.hasChild('courses')) {
-      if (student.child('courses').val().includes(courseURL)) {
-        let dict = {};
-        dict['key'] = student.key;
-        dict['name'] = student.val()['name'];
-        dict['email'] = student.val()['email'];
-        dict['photo'] = student.val()['photo'];
-        dict['verified'] = 0;
-        if ('verified' in student.val()) {
-          if (student.val()['verified'].includes(courseURL)) {
-            dict['verified'] = 1;
+  await db_ref
+        .where("courses", 'array-contains', courseURL)
+        .get()
+        .then((snapshot)=>{
+          if(!snapshot.empty){
+            snapshot.docs.map((doc)=>{
+              let dict = {};
+              dict['key'] = doc.id;
+              dict['name'] = doc.data()['name'];
+              dict['email'] = doc.data()['email'];
+              dict['photo'] = doc.data()['photo'];
+              dict['verified'] = 0;
+              if ('verified' in doc.data()) {
+                if (doc.data()['verified'].includes(courseURL)) {
+                  dict['verified'] = 1;
+                }
+              }
+              studentList.push(dict);
+            })
           }
-        }
-        studentList.push(dict);
-      }
-    }
-  })
+          else{
+            console.log("No student enrolled in the course in getStudents");
+          }
+        });
 
   studentList.sort((a, b) =>
     a.name !== undefined && b.name !== undefined
@@ -1046,9 +1032,7 @@ async function deleteFacultyHelper(facultyID) {
     return Promise.all(coursesToRemove);
   }
 }
-function quizHash(startTime,date){
-  return 
-}
+
 async function quizResearchLogger(
   list,
   answer,
@@ -1058,163 +1042,187 @@ async function quizResearchLogger(
   quizNumber,
   startTime,
   endTime,
-  email,){
-  // 
-  curr_time = moment.utc()
+  email,
+) {
+
+  curr_time = moment.utc();
   // console.log(curr_time)
   // console.log(answer)
-  console.log(list)
+  console.log(list);
   db_ref = admin
     .app()
-    .database(url)
-    .ref('InternalDb/Lectures/')
-   // getting lecture timings
+    .firestore()
+    .collection('Lectures');
+  // getting lecture timings
 
   // finding which class is going on currently
 
-timings = await db_ref.orderByChild('passCode').equalTo(passCode).once('value')
-timings = timings.val()
-if (!timings) {return}
+  timings = await db_ref
+    .where('passCode', '==', passCode)
+    .get();
 
-// console.log(timings)
-// console.log(curr_time.day())
-var starTime = null;
-var endTime = null;
-var lecNo = null;
-for (const [key, value] of Object.entries(timings)) {
-  // 
-  // console.log(value['day']+' '+curr_time.day())
-  if (value['day']==curr_time.day()){
-    console.log(key, value);
-    startTime = value['startTime']
-    endTime = value['endTime']
-
+  if (timings.empty) {
+    return;
   }
+
+  // console.log(timings)
+  // console.log(curr_time.day())
+  var starTime = null;
+  var endTime = null;
+  var lecNo = null;
+
+  timings.docs.forEach(doc => {
+    const value = doc.data();
+    if (value['day'] == curr_time.day()) {
+      startTime = value['startTime'];
+      endTime = value['endTime'];
+    }
+  });
+
+  startTime = moment.utc(
+    curr_time.format('DD/MM/YYYY') + ' ' + startTime,
+    'DD/MM/YYYY HH:mm:ss',
+  );
+  endTime = moment.utc(
+    curr_time.format('DD/MM/YYYY') + ' ' + startTime,
+    'DD/MM/YYYY HH:mm:ss',
+  );
+  // console.log('func ends')
+  // Making a table : stud_email-starTime-passCode
+  // iterating over all responses
+  await Promise.all(
+    list.map(async student => {
+      // student = list[i]
+      const grade = autoGrader(student.Answer, answer, errorRate, type);
+
+      // check if exists
+      const db_ref = admin
+        .app()
+        .firestore()
+        .collection('StudentResearch');
+
+      const snapshot = await db_ref
+        .where(
+          'email-startTime-passCode',
+          '==',
+          student.Email +
+            '-' +
+            startTime.format('DD/MM/YYYY HH:mm:ss') +
+            '-' +
+            passCode,
+        )
+        .get();
+      if (snapshot.empty) {
+        await db_ref.add({
+          email: student.Email,
+          passCode: passCode,
+          startTime: startTime.format('DD/MM/YYYY HH:mm:ss'),
+          attempted_quizzes: student.Answer == 'N/A' ? 0 : 1,
+          not_attempted_quizzes: student.Answer == 'N/A' ? 1 : 0,
+          correct_quizzes: grade == '1' ? 1 : 0,
+          feedbacks_attended: 0,
+          responseTime: student.responseTime,
+          'email-startTime-passCode':
+            student.Email +
+            '-' +
+            startTime.format('DD/MM/YYYY HH:mm:ss') +
+            '-' +
+            passCode,
+        });
+      } else {
+        const docId = snapshot.docs[0].id;
+        const value = snapshot.docs[0].data();
+        await db_ref
+          .doc(docId)
+          .update(
+            {
+              attempted_quizzes:
+                student.Answer == 'N/A'
+                  ? value['attempted_quizzes']
+                  : value['attempted_quizzes'] + 1,
+              correct_quizzes:
+                grade == '1'
+                  ? value['correct_quizzes'] + 1
+                  : value['correct_quizzes'],
+              responseTime: value['responseTime'] + student.responseTime,
+              not_attempted_quizzes:
+                student.Answer == 'N/A'
+                  ? value['not_attempted_quizzes'] + 1
+                  : value['not_attempted_quizzes'],
+            },
+            error => {
+              if (error) {
+                console.log(error);
+              }
+            },
+          );
+      }
+    }),
+  );
 }
-startTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
-endTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
-// console.log('func ends')
-// Making a table : stud_email-starTime-passCode
-// iterating over all responses
-await Promise.all(list.map(async(student)=> {
-  // student = list[i]
-  const grade = autoGrader(student.Answer,answer,errorRate,type)
-  
-  // getting reference
-  reference = await admin
-    .app()
-    .database(url)
-  // check if exists
-  db_ref = await admin
-    .app()
-    .database(url)
-    .ref('InternalDb/StudentResearch/')
-  snapshot = await db_ref.orderByChild('email-startTime-passCode').equalTo(student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode).once('value')
-  if (!snapshot.val()){
-
-    await db_ref.push({
-      'email':student.Email,
-      'passCode': passCode,
-      'startTime': startTime.format('DD/MM/YYYY HH:mm:ss'),
-      'attempted_quizzes': student.Answer=='N/A'?0:1,
-      'not_attempted_quizzes':student.Answer=='N/A'?1:0,
-      'correct_quizzes': grade=='1' ? 1 : 0,
-      'feedbacks_attended':0,
-      'responseTime':student.responseTime ,
-      'email-startTime-passCode':student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode
-    })
-  }
-  else{
-    entries = Object.entries(snapshot.val());
-    [key,value] = entries[0];
-
-    await db_ref.child(key)
-    .update({'attempted_quizzes':student.Answer=='N/A'?value['attempted_quizzes']:value['attempted_quizzes']+1,
-      'correct_quizzes':grade=='1'?value['correct_quizzes']+ 1 : value['correct_quizzes'],
-      'responseTime':value['responseTime'] + student.responseTime,
-      'not_attempted_quizzes':student.Answer=='N/A'?value['not_attempted_quizzes']+1:value['not_attempted_quizzes']},(error) => {if(error){console.log(error)}})
-  }
-
-
-
-
-
-})
-)}
 async function feedbackResearchLogger(
           passCode,
           startTime,
           endTime){
-  list = await admin
+  const list = await admin
     .app()
-    .database(url)
-    .ref('InternalDb/FeedbackResponse/')
-    .orderByChild('passCode')
-    .equalTo(passCode)
-    .once('value')
+    .firestore()
+    .collection('FeedbackResponse')
+    .where('passCode', '==', passCode)
+    .get()
     .then(async snapshot => {
       let list = [];
-      snapshot.forEach(data => {
-          const keys = Object(data.val());
+      snapshot.docs.forEach(doc => {
+          const keys = doc.data();
           const temp = moment(startTime, 'DD/MM/YYYY HH:mm:ss');
           const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
           const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
-
-          // if (temp1 <= temp2 && temp1 >= temp) {
-          //   list[keys['responses']] += 1;
-          // }
-
             if (temp1 <= temp2 && temp1 >= temp) {
               list.push({Email:keys['userName']})
             }
-          }         );
-        return list
+      });
+      return list;
     })
   console.log(list)
 
   curr_time = moment.utc()
   db_ref = admin
     .app()
-    .database(url)
-    .ref('InternalDb/Lectures/')
-  timings = await db_ref.orderByChild('passCode').equalTo(passCode).once('value')
-  timings = timings.val()
-  if (!timings) {return}
+    .firestore()
+    .collection('Lectures');
+  timings = await db_ref.where('passCode', '==', passCode).get();
+
+  if (snapshot.empty) return;
 
   console.log(timings)
   console.log(curr_time.day())
   var starTime = null;
   var endTime = null;
   var lecNo = null;
-  for (const [key, value] of Object.entries(timings)) {
-    // 
-    console.log(value['day']+' '+curr_time.day())
-    if (value['day']==curr_time.day()){
-      console.log(key, value);
-      startTime = value['startTime']
-      endTime = value['endTime']
 
+  timings.docs.forEach(doc => {
+    const value = doc.data();
+    if (value['day'] == curr_time.day()) {
+      startTime = value['startTime'];
+      endTime = value['endTime'];
     }
-  }
+  });
+
   startTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
   endTime = moment.utc(curr_time.format('DD/MM/YYYY')+' ' + startTime,'DD/MM/YYYY HH:mm:ss')
   console.log('func ends')
   await Promise.all(list.map(async(student)=> {
-    // student = list[i]
 
-    // getting reference
-    reference = await admin
-      .app()
-      .database(url)
     // check if exists
-    db_ref = await admin
+    db_ref = admin
       .app()
-      .database(url)
-      .ref('InternalDb/StudentResearch/')
-    snapshot = await db_ref.orderByChild('email-startTime-passCode').equalTo(student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' +passCode).once('value')
-    if (!snapshot.val()){
+      .firestore()
+      .collection('StudentResearch');
 
-      await db_ref.push({
+    snapshot = await db_ref.where('email-startTime-passCode', '==', student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' + passCode).get();
+    if(snapshot.empty){
+
+      await db_ref.add({
         'email':student.Email,
         'passCode': passCode,
         'startTime': startTime.format('DD/MM/YYYY HH:mm:ss'),
@@ -1227,12 +1235,12 @@ async function feedbackResearchLogger(
       })
     }
     else{
-      entries = Object.entries(snapshot.val());
-      [key,value] = entries[0];
+      const docId = snapshot.docs[0].id;
+      const value = snapshot.docs[0].data();
       // console.log(key)
       // console.log(value)
       // console.log('Feedback attended by key '+ key)
-      await db_ref.child(key)
+      await db_ref.doc(docId)
       .update({'feedbacks_attended':value['feedbacks_attended']+1},(error) => {if(error){console.log(error)}})
 
     }
@@ -1241,9 +1249,9 @@ async function feedbackResearchLogger(
 
 
 exports.mailingSystem = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    return { message: 'Authentication Required!', code: 401 };
-  }
+  // if (!context.auth) {
+  //   return { message: 'Authentication Required!', code: 401 };
+  // }
 
   type = data.type;
   passCode = data.passCode;
@@ -1252,75 +1260,86 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
   console.log(email);
 
   if (type === 'Quiz') {
-    coursequizurl = await getKBCURLFromPasscode(passCode);
+
     return admin
       .app()
-      .database(url)
-      .ref('InternalDb/KBC/' + coursequizurl)
-      .once('value')
+      .firestore()
+      .collection('KBC')
+      .where('passCode', '==', passCode)
+      .get()
       .then(async snapshot => {
-        const value = snapshot.val();
-        const data = await getAllStudentsforMail(
-          passCode,
-          value['startTime'],
-          value['endTime'],
-        );
-        await quizResearchLogger(data,
-          value['correctAnswer'],
-          value['errorRate'],
-          value['quizType'],
-          value['passCode'],
-          value['questionCount'],
-          value['startTime'],
-          value['endTime'],
-          email,)
-        return await QuizResponseMailer(
-          data,
-          value['correctAnswer'],
-          value['errorRate'],
-          value['quizType'],
-          value['passCode'],
-          value['questionCount'],
-          value['startTime'],
-          value['endTime'],
-          email,
-        );
+        if(!snapshot.empty){
+          const value = snapshot.docs[0].data();
+          const data = await getAllStudentsforMail(
+            passCode,
+            value['startTime'],
+            value['endTime'],
+          );
+          await quizResearchLogger(data,
+            value['correctAnswer'],
+            value['errorRate'],
+            value['quizType'],
+            value['passCode'],
+            value['questionCount'],
+            value['startTime'],
+            value['endTime'],
+            email,)
+          return await QuizResponseMailer(
+            data,
+            value['correctAnswer'],
+            value['errorRate'],
+            value['quizType'],
+            value['passCode'],
+            value['questionCount'],
+            value['startTime'],
+            value['endTime'],
+            email,
+          );
+        }
+        else{
+          console.log("No quiz found for the given passcode");
+        }
       })
       .catch(error => {
         console.log(error);
       });
+
   } else if (type === 'Feedback') {
     coursefburl = await getFBURLFromPasscode(passCode);
     return admin
       .app()
-      .database(url)
-      .ref('InternalDb/Feedback/' + coursefburl)
-      .once('value')
+      .firestore()
+      .collection('Feedback')
+      .where('passCode', '==', passCode)
+      .get()
       .then(async snapshot => {
-        const value = snapshot.val();
-        const keys = Object(snapshot.val());
-        type = '0';
-        if ('kind' in keys) {
-          type = keys['kind'];
+
+        if(!snapshot.empty){
+          const values = snapshot.docs[0].data();
+          type = values.kind || '0';
+          const data = await getFeedbackResponse(
+            passCode,
+            value['startTime'],
+            value['endTime'],
+            type,
+          );
+          await feedbackResearchLogger(
+            passCode,
+            value['startTime'],
+            value['endTime'])
+          return await FeedbackResponseMailer(
+            data,
+            passCode,
+            value['startTime'],
+            value['endTime'],
+            'Feedback' + type,
+            email,
+          );
         }
-        const data = await getFeedbackResponse(
-          passCode,
-          value['startTime'],
-          value['endTime'],
-          type,
-        );
-        await feedbackResearchLogger(
-          passCode,
-          value['startTime'],
-          value['endTime'])
-        return await FeedbackResponseMailer(
-          data,
-          passCode,
-          value['startTime'],
-          value['endTime'],
-          'Feedback' + type,
-          email,
-        );
+        else{
+          console.log('No feedback available for the given passCode');
+        }
+
       })
       .catch(error => {
         console.log(error);
