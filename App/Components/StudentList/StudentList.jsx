@@ -8,7 +8,7 @@ import { useRoute,useFocusEffect } from '@react-navigation/native';
 
 function StudentList() {
     const route = useRoute()
-    const {type,course,getStudentListData,getTAStudentListData} = route.params
+    const {type,course,} = route.params
     const [studentList,setStudentList] = useState([])
     const [taList,setTaList] = useState([])
     const [courseURL,setCourseURL] = useState('')
@@ -57,7 +57,6 @@ function StudentList() {
                 );
                 console.log(list)
                 setStudentList(list)
-                getStudentListData(list)
             })
     }
 
@@ -105,7 +104,6 @@ function StudentList() {
                 );
                 console.log(list)
                 setTaList(list)
-                getTAStudentListData(list)
             })
     }
 

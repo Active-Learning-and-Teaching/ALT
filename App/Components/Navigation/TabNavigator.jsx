@@ -4,7 +4,7 @@ import {Icon} from 'react-native-elements';
 import AnnouncementStack from './AnnouncementStack';
 import QuizStack from './QuizStack';
 import FeedbackStack from './FeedbackStack';
-import StudentStack from './StudentStack';
+import StudentStack from './StudentStack.jsx';
 import SettingsStack from './SettingsStack';
 import { useRoute } from '@react-navigation/native';
 
