@@ -136,10 +136,10 @@ function StudentDashBoard({navigation:{navigate}}) {
 				if (snapshot.val()) {
 					const keys = Object(snapshot.val());
 					if ('courses' in keys) {
-						const arr = snapshot.val()['tacourses'].filter(n => n);
+						const arr = snapshot.val()['tacourses']?.filter(n => n);
 						const course = new Courses();
 						setTAcourseList([])
-						for (var i = 0; i < arr.length; i++) {
+						for (var i = 0; i < arr?.length; i++) {
 							course.getCourseByUrl(arr[i]).then(r => {
 								messaging()
 								.subscribeToTopic(r.passCode)
