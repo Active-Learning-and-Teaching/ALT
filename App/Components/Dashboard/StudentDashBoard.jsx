@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {View, Alert, ScrollView, SafeAreaView, Text} from 'react-native';
@@ -12,22 +12,13 @@ import messaging from '@react-native-firebase/messaging';
 import {Button} from 'react-native-elements';
 
 function StudentDashBoard({navigation:{navigate}}) {
-
 	const route = useRoute()
+	const {setUser} = route.params
 	const [currentUser,setCurrentUser] = useState(null)
 	const [courseList,setCourseList] = useState([])
 	const [TAcourseList,setTAcourseList] = useState([])
 
-	const getCurrentUser = async () => {
-			const curr = await auth().currentUser;
-			const student = new Student();
-			await student.setName(curr.displayName);
-			await student.setEmail(curr.email);
-			await student.setUrl()
-			setCurrentUser(student)
-	};
-
-	const  unSubscribe_Notifications = () => {
+	const unSubscribe_Notifications = () => {
 			for (let i = 0; i < courseList.length; i++) {
 				messaging()
 					.unsubscribeFromTopic(courseList[i].passCode)
@@ -39,157 +30,150 @@ function StudentDashBoard({navigation:{navigate}}) {
 			}
 		};
 
-		const deleteAccount = async (url, uid) => {
-			//Unsubscribing to notification and then calling the delete end point of the Cloud Function.
-			unSubscribe_Notifications();
-			const {data} = firebase
-				.functions()
-				.httpsCallable('deleteStudent')({
-					key: url,
-					userUID: uid,
-				})
-				.catch(function(error) {
-					console.log(
-						'There has been a problem with your fetch operation: ' + error,
-					);
-				});
-			console.log(currentUser.url);
-			console.log('Deleted Account');
-		};
+	const deleteAccount = async (url, uid) => {
+		//Unsubscribing to notification and then calling the delete end point of the Cloud Function.
+		unSubscribe_Notifications();
+		const {data} = firebase
+			.functions()
+			.httpsCallable('deleteStudent')({
+				key: url,
+				userUID: uid,
+			})
+			.catch(function(error) {
+				console.log(
+					'There has been a problem with your fetch operation: ' + error,
+				);
+			});
+		console.log(currentUser.url);
+		console.log('Deleted Account');
+	};
 
-		const showAlert = () =>{
-			Alert.alert(
-				'Are you sure you want to delete account?',
-				'This will delete all the data associated with the account',
-				[
-					{
-						text: 'Cancel',
-						onPress: () => {
-							console.log('Cancel Pressed');
-						},
-						style: 'cancel',
+	const showAlert = () =>{
+		Alert.alert(
+			'Are you sure you want to delete account?',
+			'This will delete all the data associated with the account',
+			[
+				{
+					text: 'Cancel',
+					onPress: () => {
+						console.log('Cancel Pressed');
 					},
-					{
-						text: 'Confirm',
-						onPress: () => {
-							const studenURL = currentUser.url;
-							const uid = auth().currentUser.uid;
-							console.log(auth().currentUser);
-							deleteAccount(studenURL, uid);
-							navigate.dispatch(
-								CommonActions.reset({
-									index: 1,
-									routes: [{name: 'Login'}],
-								}),
-							);
-						},
+					style: 'cancel',
+				},
+				{
+					text: 'Confirm',
+					onPress: () => {
+						const studenURL = currentUser.url;
+						const uid = auth().currentUser.uid;
+						console.log(auth().currentUser);
+						deleteAccount(studenURL, uid);
+						navigate.dispatch(
+							CommonActions.reset({
+								index: 1,
+								routes: [{name: 'Login'}],
+							}),
+						);
 					},
-				],
-			);
+				},
+			],
+		);
+	}
+
+	const signOut = async () => {
+		// Unsubcribing to notifications before signout
+		unSubscribe_Notifications();
+		auth()
+			.signOut()
+			.then(async r => {
+				await navigate.dispatch(
+					CommonActions.reset({
+						index: 1,
+						routes: [{name: 'Login'}],
+					}),
+				);
+
+				try {
+					await GoogleSignin.revokeAccess();
+					await GoogleSignin.signOut();
+				} catch (err) {
+					console.log(err);
+				}
+			})
+			.catch(err => {
+				console.log(err.message);
+			});
+	};
+
+	const getAllCourses = (currentUser) => {
+		database()
+			.ref('InternalDb/Student/' + currentUser.url)
+			.on('value', snapshot => {
+				if (snapshot.val()) {
+					const keys = Object(snapshot.val());
+					setCourseList([]) 
+					if ('courses' in keys) {
+						const arr = snapshot.val()['courses'].filter(n => n);
+						const course = new Courses();
+						for (var i = 0; i < arr.length; i++) {
+							course.getCourseByUrl(arr[i]).then(r => {
+								setCourseList(prev=>[...prev,r]);
+								messaging()
+									.subscribeToTopic(r.passCode)
+									.then(() =>
+										console.log(`Subscribed to topic! ${r.passCode}`),
+									);
+							});
+						}
+					}
+				}
+			});
+	};
+
+	const getAllTACourses = (currentUser) => {
+		database()
+			.ref('InternalDb/Student/' + currentUser.url)
+			.on('value', snapshot => {
+				if (snapshot.val()) {
+					const keys = Object(snapshot.val());
+					if ('courses' in keys) {
+						const arr = snapshot.val()['tacourses'].filter(n => n);
+						const course = new Courses();
+						setTAcourseList([])
+						for (var i = 0; i < arr.length; i++) {
+							course.getCourseByUrl(arr[i]).then(r => {
+								messaging()
+								.subscribeToTopic(r.passCode)
+								.then(() =>
+								console.log(`Subscribed to topic! ${r.passCode}`),
+								);
+								setTAcourseList(prev=>[...prev,r]);
+							});
+						}
+					}
+				}
+			});
+	};
+
+	useEffect(() => {	
+		const onLoad = async() =>{
+			const curr = await auth().currentUser;
+			const student = new Student();
+			await student.setName(curr.displayName);
+			await student.setEmail(curr.email);
+			await student.setUrl()
+			setCurrentUser(student)
+			getAllCourses(student);
+			getAllTACourses(student);
+			setUser(student)
 		}
 
-		const signOut = async () => {
-			// Unsubcribing to notifications before signout
-			unSubscribe_Notifications();
-			auth()
-				.signOut()
-				.then(async r => {
-					await navigate.dispatch(
-						CommonActions.reset({
-							index: 1,
-							routes: [{name: 'Login'}],
-						}),
-					);
-
-					try {
-						await GoogleSignin.revokeAccess();
-						await GoogleSignin.signOut();
-					} catch (err) {
-						console.log(err);
-					}
-				})
-				.catch(err => {
-					console.log(err.message);
-				});
-		};
-
-		const getAllCourses = () => {
-			database()
-				.ref('InternalDb/Student/' + currentUser.url)
-				.on('value', snapshot => {
-					if (snapshot.val()) {
-						const keys = Object(snapshot.val());
-						setCourseList([])
-						if ('courses' in keys) {
-							const arr = snapshot.val()['courses'].filter(n => n);
-							const course = new Courses();
-							const courses = [];
-
-							for (var i = 0; i < arr.length; i++) {
-								course.getCourseByUrl(arr[i]).then(r => {
-									courses.push(r);
-									messaging()
-										.subscribeToTopic(r.passCode)
-										.then(() =>
-											console.log(`Subscribed to topic! ${r.passCode}`),
-										);
-									setCourseList(courses)
-								});
-							}
-						}
-					}
-				});
-		};
-
-		const getAllTACourses = () => {
-			database()
-				.ref('InternalDb/Student/' + currentUser.url)
-				.on('value', snapshot => {
-					if (snapshot.val()) {
-						const keys = Object(snapshot.val());
-						setCourseList([])
-						if ('courses' in keys) {
-							const arr = snapshot.val()['tacourses'].filter(n => n);
-							const course = new Courses();
-							const courses = [];
-
-							for (var i = 0; i < arr.length; i++) {
-								course.getCourseByUrl(arr[i]).then(r => {
-									courses.push(r);
-									messaging()
-										.subscribeToTopic(r.passCode)
-										.then(() =>
-											console.log(`Subscribed to topic! ${r.passCode}`),
-										);
-									setTAcourseList(courses)
-								});
-							}
-						}
-					}
-				});
-		};
-
-		useEffect(() => {
-			const onLoad = () => {
-				getCurrentUser().then(() => {
-					if (currentUser.url == '') {
-						onLoad();
-					}
-					getAllCourses();
-					getAllTACourses();
-					route.params
-						.setUser(currentUser)
-						.then(() => console.log());
-				});
-				console.log('Student Dashboard');
-			}
-			onLoad()
-		}, [])
+		onLoad()
+	},[])
 
 	return (
 		<SafeAreaView className='flex-1 bg-transparent'>
 			<ScrollView>
-				<View className='my-10 py-10 items-center '>
+				<View className='my-2 items-center '>
 					<Text 
 						h2 
 						className='font-bold text-2xl'>
@@ -207,7 +191,7 @@ function StudentDashBoard({navigation:{navigate}}) {
 				))}
 				</View>
 
-				<View className='my-10 py-10 items-center '>
+				<View className='my-3 items-center '>
 					<Text 
 						h2 
 						className='font-bold text-2xl'>

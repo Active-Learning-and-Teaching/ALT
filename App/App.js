@@ -8,6 +8,7 @@ import MainNavigator from './Components/Navigation/MainNavigator';
 import NotifiactionCentre from './NotificationCenter';
 import {BackHandler} from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { NavigationContainer } from '@react-navigation/native';
 
 IconF.loadFont();
 IconM.loadFont();

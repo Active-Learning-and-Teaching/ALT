@@ -1,35 +1,19 @@
-import React, {Component} from 'react';
+import React, {useState, useCallback} from 'react';
 import {Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import database from '@react-native-firebase/database';
 import Courses from '../../Databases/Courses';
 import StudentCard from './StudentCard';
-import TACard from './TACard';
+import TACard from './TACard.jsx';
+import { useRoute,useFocusEffect } from '@react-navigation/native';
 
-export default class StudentList extends Component{
+function StudentList() {
+    const route = useRoute()
+    const {type,course,getStudentListData,getTAStudentListData} = route.params
+    const [studentList,setStudentList] = useState([])
+    const [taList,setTaList] = useState([])
+    const [courseURL,setCourseURL] = useState('')
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            type : this.props.route.params.type,
-            course : this.props.route.params.course,
-            user : this.props.route.params.user,
-            studentList : [],
-            taList : [],
-            courseURL : ''
-        };
-    }
-
-    getCourseURL = async () => {
-        const course = new Courses()
-        await course.getCourse(this.state.course.passCode)
-            .then(async url=>{
-                this.setState({
-                    courseURL : url  
-                })
-            })
-    }
-
-    getStudents = () => {
+    const getStudents = (courseURL) => {
         database()
             .ref('InternalDb/Student/')
             .orderByChild("courses")
@@ -40,7 +24,7 @@ export default class StudentList extends Component{
                     const keys = Object(data.val())
                     if ("courses" in keys){
                         const arr = data.val()["courses"]
-                        if (arr.includes(this.state.courseURL)){
+                        if (arr.includes(courseURL)){
                             const dict = {}
                             dict["url"]=url
                             dict["name"] = keys["name"]
@@ -50,7 +34,7 @@ export default class StudentList extends Component{
 
                             if ("verified" in keys){
                                 const arr = data.val()["verified"]
-                                if (arr.includes(this.state.courseURL)){
+                                if (arr.includes(courseURL)){
                                     dict["verified"] = 1
                                 }
                             }
@@ -71,15 +55,13 @@ export default class StudentList extends Component{
                             ? -1
                             : 0
                 );
-
-                this.setState({
-                    studentList : list,
-                })
-                this.props.route.params.getStudentListData(list)
+                console.log(list)
+                setStudentList(list)
+                getStudentListData(list)
             })
     }
 
-    getTAs = () => {
+    const getTAs = (courseURL) => {
         database()
             .ref('InternalDb/Student/')
             .orderByChild("tacourses")
@@ -90,7 +72,7 @@ export default class StudentList extends Component{
                     const keys = Object(data.val())
                     if ("tacourses" in keys){
                         const arr = data.val()["tacourses"]
-                        if (arr.includes(this.state.courseURL)){
+                        if (arr.includes(courseURL)){
                             const dict = {}
                             dict["url"]=url
                             dict["name"] = keys["name"]
@@ -100,7 +82,7 @@ export default class StudentList extends Component{
 
                             if ("verified" in keys){
                                 const arr = data.val()["verified"]
-                                if (arr.includes(this.state.courseURL)){
+                                if (arr.includes(courseURL)){
                                     dict["verified"] = 1
                                 }
                             }
@@ -121,62 +103,66 @@ export default class StudentList extends Component{
                             ? -1
                             : 0
                 );
-
-                this.setState({
-                    taList : list,
-                })
-                this.props.route.params.getTAStudentListData(list)
+                console.log(list)
+                setTaList(list)
+                getTAStudentListData(list)
             })
     }
 
-    componentDidMount() {
-        this.getCourseURL().then(()=>{
-            this.getStudents()
-            this.getTAs()
-        })
-    }
+    useFocusEffect(
+    useCallback(() => {
+        const onLoad = async () =>{
+            const courseObj = new Courses()
+            const url = await courseObj.getCourse(course.passCode)
+            setCourseURL(url)
+            getStudents(url)
+            getTAs(url)
+        }
+        onLoad()
+    }, []))
 
-    render(){
-        return(
-            <SafeAreaView style={styles.safeContainer}>
-                <ScrollView>
-                    <View style={styles.grid}>
-                        <Text style={styles.text}>
-                            {this.state.taList.length===0
-                            ?"No TA"
-                            :"Total TA : "+this.state.taList.length}
-                        </Text>
-                        {this.state.taList.map((student,i)=> (
-                            <TACard      student={student}
-                                         key={i}
-                                         type={this.state.type}
-                                         course={this.state.course}
-                                         courseURL={this.state.courseURL}
-                            />
-                        ))}
-                    </View>
-                    <View style={styles.grid}>
-                        <Text style={styles.text}>
-                            {this.state.studentList.length===0
-                            ?""
-                            :"Total Students : "+this.state.studentList.length}
-                        </Text>
-                        {this.state.studentList.map((student,i)=> (
-                            <StudentCard student={student}
-                                         key={i}
-                                         type={this.state.type}
-                                         course={this.state.course}
-                                         courseURL={this.state.courseURL}
-                            />
-                        ))}
-                    </View>
-                </ScrollView>
-            </SafeAreaView>
+    return(
+        <SafeAreaView style={styles.safeContainer}>
+            <ScrollView>
+                <View style={styles.grid}>
+                    <Text style={styles.text}>
+                        {taList.length===0
+                        ?"No TA"
+                        :"Total TA : "+taList.length}
+                    </Text>
+                    {taList.map((student,i)=> (
+                        <TACard      
+                            student={student}
+                            key={i}
+                            type={type}
+                            course={course}
+                            courseURL={courseURL}
+                        />
+                    ))}
+                </View>
+                <View style={styles.grid}>
+                    <Text style={styles.text}>
+                        {studentList.length===0
+                        ?"No Students"
+                        :"Total Students : "+studentList.length}
+                    </Text>
+                    {studentList.map((student,i)=> (
+                        <StudentCard 
+                            student={student}
+                            key={i}
+                            type={type}
+                            course={course}
+                            courseURL={courseURL}
+                        />
+                    ))}
+                </View>
+            </ScrollView>
+        </SafeAreaView>
 
-        )
-    }
-
+    )
 }
+
+export default StudentList
 
 const styles = StyleSheet.create({
     safeContainer: {

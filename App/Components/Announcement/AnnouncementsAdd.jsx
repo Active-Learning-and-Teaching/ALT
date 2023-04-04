@@ -39,7 +39,7 @@ function AnnouncementsAdd({course,toggle}) {
     }
 
     return(
-        <View className=' flex-1 flex-col justify-center p-35 bg-white'>
+        <View className=' flex-1 flex-col justify-center p-5 bg-white'>
             <Text className="text-center font-bold mb-10 self-center text-gray-700 text-xl">
                 New Announcement
             </Text>

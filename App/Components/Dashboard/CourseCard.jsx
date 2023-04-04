@@ -6,9 +6,11 @@ import {CoursePics} from '../../Utils/CoursePics';
 import Courses from '../../Databases/Courses';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import Toast from 'react-native-simple-toast';
+import { useNavigation } from '@react-navigation/native';
 import {firebase} from '@react-native-firebase/functions';
 
-function CourseCard({type,user,course,navigation:{navigate}}) {
+function CourseCard({type,user,course}) {
+    const navigation = useNavigation();
     const [image,setImage] = useState("")
     const [courseState,setCourseState] = useState(course)
     const { showActionSheetWithOptions } = useActionSheet();
@@ -113,13 +115,13 @@ function CourseCard({type,user,course,navigation:{navigate}}) {
             style={styles.container}
         >
             <Avatar
-                onPress={()=>{
-                    navigate('Course', {
+                onPress={()=>
+                   navigation.navigate('Course', {
                         type : type,
                         user : user,
                         course : courseState,
                         setCourse : setCourseState,
-                })}}
+                })}
                 onLongPress={()=>{showActionSheet()}}
                 title = {courseState.courseCode + " "+ courseState.courseName}
                 titleStyle={styles.title}
