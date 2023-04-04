@@ -23,7 +23,7 @@ const MyTheme = {
 };
 
 function MainNavigator() {
-	const [user,setUser] = useState(null)
+	const [user,setUser] = useState()
 	const Stack = createStackNavigator();
 
 	return (

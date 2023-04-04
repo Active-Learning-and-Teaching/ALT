@@ -109,10 +109,10 @@ function CourseCard({type,user,course}) {
 
     return(
         <ImageBackground
+            className='flex-1 w-[calc(100%-20px)] h-[calc(100vh/3.5)] my-2 py-2 shadow-md'
             source={image}
             loadingIndicatorSource={require('../../Assets/LoadingImage.jpg')}
             borderRadius={20}
-            style={styles.container}
         >
             <Avatar
                 onPress={()=>
@@ -124,12 +124,29 @@ function CourseCard({type,user,course}) {
                 })}
                 onLongPress={()=>{showActionSheet()}}
                 title = {courseState.courseCode + " "+ courseState.courseName}
-                titleStyle={styles.title}
-                containerStyle={styles.container}
+                titleStyle={{
+                    textAlign: 'left',
+                    position: 'absolute',
+                    left: 15,
+                    top: 0,
+                    fontSize: 20,
+                    fontWeight : "bold",
+                }}
+                containerStyle={{
+                    width : Dimensions.window.width-20,
+                    height : Dimensions.window.height/(6),
+                    margin: 6,
+                    shadowOffset: {
+                        width: 0,
+                        height: 3,
+                    },
+                    shadowOpacity: 0.05,
+                    borderRadius: 25,
+                }}
                 activeOpacity={0.2}
             />
             <Text 
-                style={styles.name}>
+                className='absolute left-5 bottom-5 text-18 text-white'>
                 {courseState.instructor}
             </Text>
         </ImageBackground>
@@ -137,42 +154,3 @@ function CourseCard({type,user,course}) {
 }
 
 export default CourseCard
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        width : Dimensions.window.width-20,
-        height : Dimensions.window.height/(3.5),
-        marginTop: 10,
-        marginBottom: 10,
-        paddingTop : 10,
-        paddingBottom : 10,
-        shadowColor: "#000",
-        shadowOpacity: 0.20,
-        elevation: 24,
-    },
-    imageContainer: {
-        width : Dimensions.window.width-20,
-        height : Dimensions.window.height/(3.5),
-        borderRadius: 20,
-        overflow: 'hidden',
-    },
-    title: {
-        alignSelf:'flex-start',
-        textAlign: 'left',
-        position: 'absolute',
-        left: 15,
-        right: 15,
-        fontSize: 20,
-        top: 0,
-        color:'white',
-        fontWeight : "bold",
-    },
-    name: {
-        position: 'absolute',
-        left: 15,
-        bottom: 25,
-        fontSize: 18,
-        color:'white',
-    },
-})

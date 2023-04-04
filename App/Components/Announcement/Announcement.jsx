@@ -12,10 +12,8 @@ import moment from 'moment';
 
 
 function Announcement() {
-    const route = useRoute()
-    const [type,setType] = useState(route.params.type)
-    const [course,setCourse] = useState(route.params.course)
-    const [user,setuser] = useState(route.params.user)
+    const routes = useRoute()
+    const {type,course,user} = routes.params
     const [image,setImage] = useState("")
     const [announcementList,setAnnouncementList] = useState([])
 
@@ -57,7 +55,7 @@ function Announcement() {
                         source={image}
                         loadingIndicatorSource={require('../../Assets/LoadingImage.jpg')}
                         borderRadius={20}
-                        className="mb-2 h-[calc(100vh/5)] p-2 shadow-md"
+                        className="mb-2 h-[calc(100vh/5)] p-2 shadow-md "
                         style={{
                             width : Dimensions.window.width-20,
                             height : Dimensions.window.height/(4)
@@ -65,6 +63,7 @@ function Announcement() {
                     >
                         <Avatar
                             onPress={()=>{
+                                console.log(course.passCode)
                                 Clipboard.setString(course.passCode)
                                 Toast.show('Passcode Copied to Clipboard');
                             }}
@@ -73,7 +72,6 @@ function Announcement() {
                                 course.courseName + " (" +
                                 course.passCode + ")"
                             }
-                            className="absolute left-15 right-5 top-15 text-white text-20 self-start text-left"
                             activeOpacity={0.5}
                         />
                         <Text className="absolute left-5 bottom-5 text-white text-18">{course.instructor}</Text>

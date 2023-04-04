@@ -9,15 +9,15 @@ function StudentAddCourseForm({toggle,student}) {
   const [error,setError] = useState(null)
 
   const joinCourse = async () => {
-    passCode = passCode.replace(/\s+/g, ' ').trim();
-    console.log(passCode);
+    const newPassCode = passCode.replace(/\s+/g, ' ').trim();
+    console.log(newPassCode);
 
-    if (passCode === '')
+    if (newPassCode === '')
       setError('Please Enter Course Pass Code.')
     else {
       const courses = new Courses();
-      await courses.getCourse(passCode).then(async value => {
-        console.log(courses.getCourse(passCode));
+      await courses.getCourse(newPassCode).then(async value => {
+        console.log(courses.getCourse(newPassCode));
         console.log(value);
         
         if (value) {

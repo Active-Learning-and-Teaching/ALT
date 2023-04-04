@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Avatar, Icon, ListItem} from 'react-native-elements';
 import {Linking, StyleSheet, View} from 'react-native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -8,6 +8,7 @@ import Toast from 'react-native-simple-toast';
 import Student from '../../Databases/Student';
 import CheckBox from '@react-native-community/checkbox';
 import database from '@react-native-firebase/database';
+
 
 function TACard({course, type, key, courseURL, student}) {
 
@@ -173,7 +174,7 @@ function TACard({course, type, key, courseURL, student}) {
                         rounded
                     />
                     <ListItem.Content>
-                        <ListItem.Title style={styles.title}>
+                        <ListItem.Title className='absolute left-5 bottom-5 text-18 text-white'>
                             {student.name!==undefined && student.name.replace(/\s+/g,' ').trim().length!==0
                                 ? student.name.replace(/\s+/g,' ').trim()
                                 : student.email}
@@ -228,7 +229,7 @@ function TACard({course, type, key, courseURL, student}) {
                         rounded
                     />
                     <ListItem.Content>
-                        <ListItem.Title style={styles.title}>
+                        <ListItem.Title className='absolute left-5 bottom-5 text-18 text-white'>
                             {student.name!==undefined && student.name.replace(/\s+/g,' ').trim().length!==0
                                 ? student.name.replace(/\s+/g,' ').trim()
                                 : student.email}
