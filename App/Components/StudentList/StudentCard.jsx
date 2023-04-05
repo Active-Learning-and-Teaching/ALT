@@ -22,10 +22,10 @@ function StudentCard({toggle, course, type, key, courseURL, student}) {
                 ?student.name
                 :student.email}`,
 
-                `Make 
-                ${student.name!==undefined
-                ?student.name
-                :student.email} Course TA`,
+                `Make Course TA
+                ${student.name!==undefined?
+                student.name
+                :student.email}`,
 
                 'Cancel'],
             cancelButtonIndex:2,
@@ -74,13 +74,11 @@ function StudentCard({toggle, course, type, key, courseURL, student}) {
     const makeTA = async ()=>{
         const coursesObj = new Courses();
         const studentObj = new Student()
-        studentObj.setEmail(student.email)
-        studentObj.setUrl();
-
+        await studentObj.setEmail(student.email)
+        await studentObj.setUrl();
         const facultyURL = course.instructors[0];
         const studentURL = student.url;
         await coursesObj.addTAs(`${facultyURL}_${studentURL}`,courseURL)
-
         if (course) {
             await studentObj.addTACourseStudent(courseURL)
             .then(r => console.log('Added Course to Student'));

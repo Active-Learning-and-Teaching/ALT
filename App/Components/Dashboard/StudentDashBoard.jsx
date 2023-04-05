@@ -173,21 +173,21 @@ function StudentDashBoard({navigation:{navigate}}) {
 	return (
 		<SafeAreaView className='flex-1 bg-transparent'>
 			<ScrollView>
-				<View className='my-2 items-center '>
+				<View className='my-2 items-center'>
 					<Text 
 						h2 
 						className='font-bold text-2xl'>
 						Courses
 					</Text>
-							{courseList.filter(item=>!TAcourseList.includes(item))
-																.map((item, i) => (
-						<CourseCard
-							course={item}
-							type={'student'}
-							user={currentUser}
-							navigation={navigate}
-							key={i}
-						/>
+					{courseList.filter(item=>!TAcourseList.includes(item))
+															.map((item, i) => (
+					<CourseCard
+						course={item}
+						type={'student'}
+						user={currentUser}
+						navigation={navigate}
+						key={i}
+					/>
 				))}
 				</View>
 

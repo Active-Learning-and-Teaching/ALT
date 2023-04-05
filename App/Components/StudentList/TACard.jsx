@@ -174,7 +174,7 @@ function TACard({course, type, key, courseURL, student}) {
                         rounded
                     />
                     <ListItem.Content>
-                        <ListItem.Title className='absolute left-5 bottom-5 text-18 text-white'>
+                        <ListItem.Title style={styles.title}>
                             {student.name!==undefined && student.name.replace(/\s+/g,' ').trim().length!==0
                                 ? student.name.replace(/\s+/g,' ').trim()
                                 : student.email}

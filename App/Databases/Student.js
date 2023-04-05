@@ -109,7 +109,7 @@ class Student {
       .then(snapshot => {
         if (snapshot.val()) {
           const keys = Object(snapshot.val());
-          if ('courses' in keys) ans = keys['tacourses'].map(x => x);
+          if ('tacourses' in keys) ans = keys['tacourses'].map(x => x);
         }
       });
     return ans;
@@ -125,22 +125,25 @@ class Student {
         console.log('Courses set');
       });
   };
+
+
   setTACourseStudent = async (tacourses) => {
+    console.log(tacourses)
     await database()
       .ref('InternalDb/Student/' + this.url)
       .update({
         tacourses:tacourses,
       })
       .then(() => {
-        console.log('Courses set');
+        console.log(tacourses,'Courses set');
       });
   };
 
 
   addCourseStudent = async courseUrl => {
     let courses = await this.getCourseStudent().then(value => {
-      if (!value.includes(courseUrl)) {
-        value.push(courseUrl);
+      if (!value?.includes(courseUrl)) {
+        value?.push(courseUrl);
         this.setCourseStudent(value);
       }
     });
@@ -148,8 +151,8 @@ class Student {
 
   addTACourseStudent = async courseUrl => {
     let tacourses = await this.getTACourseStudent().then(value => {
-      if (!value.includes(courseUrl)) {
-        value.push(courseUrl);
+      if (!value?.includes(courseUrl)) {
+        value?.push(courseUrl);
         this.setTACourseStudent(value);
       }
     });  
@@ -157,9 +160,9 @@ class Student {
 
   deleteCourse = async courseUrl => {
     await this.getCourseStudent().then(value => {
-      if (value.includes(courseUrl)) {
-        const index = value.indexOf(courseUrl);
-        value.splice(index, 1);
+      if (value?.includes(courseUrl)) {
+        const index = value?.indexOf(courseUrl);
+        value?.splice(index, 1);
 
         this.setTACourseStudent(value);
       }
@@ -168,9 +171,9 @@ class Student {
 
   deleteCourseTA = async courseUrl => {
     await this.getTACourseStudent().then(value => {
-      if (value.includes(courseUrl)) {
-        const index = value.indexOf(courseUrl);
-        value.splice(index, 1);
+      if (value?.includes(courseUrl)) {
+        const index = value?.indexOf(courseUrl);
+        value?.splice(index, 1);
 
         this.setCourseStudent(value);
       }
