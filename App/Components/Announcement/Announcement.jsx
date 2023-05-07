@@ -9,7 +9,7 @@ import {CoursePics} from '../../Utils/CoursePics';
 import database from '@react-native-firebase/database';
 import AnnouncementCard from './AnnouncementCard';
 import moment from 'moment';
-
+import firestore from '@react-native-firebase/firestore';
 
 function Announcement() {
     const routes = useRoute()
@@ -22,23 +22,33 @@ function Announcement() {
     }
         
     const getAnnouncements = () => {
-        database()
-        .ref('InternalDb/Announcements/')
-        .orderByChild("passCode")
-        .equalTo(course.passCode)
-        .on('value', snapshot => {
-            if (snapshot.val()){
-                const list = Object.values(snapshot.val());
-                list.sort(function(a, b) {
-                    const keyA = moment.utc(a.date, 'DD/MM/YYYY HH:mm:ss');
-                    const keyB = moment.utc(b.date, 'DD/MM/YYYY HH:mm:ss');
-                    if (keyA < keyB) return 1;
-                    if (keyA > keyB) return -1;
-                    return 0;
-                });
-                setAnnouncementList(list)
-            }
-        })
+        firestore()
+            .collection('Announcements')
+            .where("passCode", "==", this.state.course.passCode)
+            .onSnapshot(snapshot => {
+                this.setState({
+                    announcementList : []
+                })
+                if (!snapshot.empty){
+                    const list = snapshot.docs.map((doc)=>{
+                        let id = doc.id
+                        return {
+                            ...doc.data(),
+                            id
+                        }
+                    });
+                    list.sort(function(a, b) {
+                        const keyA = moment.utc(a.date, 'DD/MM/YYYY HH:mm:ss');
+                        const keyB = moment.utc(b.date, 'DD/MM/YYYY HH:mm:ss');
+                        if (keyA < keyB) return 1;
+                        if (keyA > keyB) return -1;
+                        return 0;
+                    });
+                    this.setState({
+                        announcementList : list
+                    })
+                }
+            })
     }
 
     useEffect(() =>{

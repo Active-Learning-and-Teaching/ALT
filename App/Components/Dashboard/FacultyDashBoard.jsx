@@ -9,7 +9,7 @@ import Courses from '../../Databases/Courses';
 import CourseCard from './CourseCard';
 import {CommonActions, useRoute} from '@react-navigation/native';
 import {firebase} from '@react-native-firebase/functions';
-
+import firestore from '@react-native-firebase/firestore';
 function FacultyDashBoard({navigation:{navigate}}) {
 
     const route = useRoute()
@@ -93,30 +93,37 @@ function FacultyDashBoard({navigation:{navigate}}) {
     }
 
     const getAllCourses = (currentUser) =>{
-        database()
-            .ref('InternalDb/Faculty/'+currentUser.url)
-            .on('value', snapshot => {
-                if (snapshot.val()){
-                    const keys = Object(snapshot.val());
-                    if ("courses" in keys) {
-                        const arr = snapshot.val()["courses"].filter(n=>n)
+        firestore()
+            .collection('Faculty')
+            .doc(this.state.currentUser.url)
+            .onSnapshot(snapshot => {
+                if (!snapshot.empty){
+
+                    this.setState({
+                        courseList : []
+                    })
+                    if (snapshot.data().courses && snapshot.data().courses.length) {
+                        const arr = snapshot.data().courses;
                         const course = new Courses()
-                        console.log(arr)
-                        // setCourseList([])
+                        const courses = []
+
                         for(var i=0; i<arr.length; i++){
                             course.getCourseByUrl(arr[i])
-                            .then(r => {
-                                if(!("quizEmail" in r))
-                                    r.quizEmail = currentUser.email
+                                .then(r => {
+                                    if(!("quizEmail" in r))
+                                        r.quizEmail = this.state.currentUser.email
 
-                                if(!("feedbackEmail" in r))
-                                    r.feedbackEmail = currentUser.email
+                                    if(!("feedbackEmail" in r))
+                                        r.feedbackEmail = this.state.currentUser.email
 
-                                if(!("defaultEmailOption" in r))
-                                    r.defaultEmailOption = true
+                                    if(!("defaultEmailOption" in r))
+                                        r.defaultEmailOption = true
 
-                                setCourseList(prev=>[...prev,r]);
-                            })
+                                    courses.push(r)
+                                    this.setState({
+                                        courseList : courses
+                                    })
+                                })
                         }
                     }
                 }
