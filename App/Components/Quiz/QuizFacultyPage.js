@@ -12,6 +12,7 @@ import Dimensions from '../../Utils/Dimensions';
 import database from "@react-native-firebase/database";
 import MultiCorrectOptions from './MultiCorrectOptions';
 import {firebase} from '@react-native-firebase/functions';
+import firestore from '@react-native-firebase/firestore';
 
 export default class QuizFacultyPage extends Component{
     constructor(props) {
@@ -81,7 +82,7 @@ export default class QuizFacultyPage extends Component{
             .then(value => {
                 Kbc.getQuestion(this.state.course.passCode)
                     .then(values => {
-                        const url = Object.keys(values)[0];
+                        const url = values.id;
                         Kbc.setQuestion(
                             this.state.course.passCode,
                             value["startTime"],
@@ -124,8 +125,8 @@ export default class QuizFacultyPage extends Component{
             const kbc = new Quiz()
             await kbc.getQuestion(this.state.course.passCode)
             .then((values)=>{
-                const url = Object.keys(values)[0];
-                const questionCount = Object.values(values)[0].questionCount;
+                const url = values.id;
+                const questionCount = values.questionCount;
                 kbc.setQuestion(
                     this.state.course.passCode,
                     '',
@@ -174,8 +175,8 @@ export default class QuizFacultyPage extends Component{
                             })
                     }
                     else{
-                        const url = Object.keys(values)[0];
-                        const questionCount = Object.values(values)[0].questionCount
+                        const url = values.id;
+                        const questionCount = values.questionCount
                         kbc.setQuestion(
                             this.state.course.passCode,
                             startTime,
@@ -230,7 +231,7 @@ export default class QuizFacultyPage extends Component{
                 .then(value => {
                     Kbc.getQuestion(this.state.course.passCode)
                         .then(values => {
-                            const url = Object.keys(values)[0];
+                            const url = values.id;
                             Kbc.setQuestion(
                                 this.state.course.passCode,
                                 value["startTime"],

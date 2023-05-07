@@ -1,4 +1,6 @@
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
+
 class Courses {
   courseName: string;
   courseCode: string;
@@ -57,6 +59,7 @@ class Courses {
   }
 
 
+
   addTAs= async(TaURL,courseURL)=> {
     let TaList = await this.getTAs(courseURL).then(value => {
       if (!value.includes(TaURL)) {
@@ -97,27 +100,48 @@ class Courses {
       });
   }
   
-  reference = database().ref('InternalDb/Courses/');
+  // reference = database().ref('InternalDb/Courses/');
+
+  // reference = database().ref('InternalDb/Courses/');
+  reference = firestore().collection('Courses');
+
 
   getCourse = async passCode => {
     let ans = '';
+
     await this.reference
-      .orderByChild('passCode')
-      .equalTo(passCode)
-      .once('value')
+      .where('passCode', '==', passCode)
+      .get()
       .then(snapshot => {
-        if (snapshot.val()) {
-          const keys = Object.keys(snapshot.val());
-          ans = keys[0];
+        if (!snapshot.empty) {
+          ans = snapshot.docs[0].id;
         }
       });
+
     return ans;
   };
 
-  createCourse = () => {
+  // createCourse = () => {
+  //   this.reference
+  //     .push()
+  //     .set({
+  //       courseName: this.courseName,
+  //       courseCode: this.courseCode,
+  //       room: this.room,
+  //       passCode: this.passCode,
+  //       instructors: this.instructors,
+  //       imageURL: this.imageURL,
+  //       instructor: this.instructor,
+  //     })
+  //     .then(() => {
+  //       console.log('Data added');
+  //       console.log(this.passCode);
+  //     });
+  // };
+
+  createCourse = async () => {
     this.reference
-      .push()
-      .set({
+      .add({
         courseName: this.courseName,
         courseCode: this.courseCode,
         room: this.room,
@@ -128,19 +152,33 @@ class Courses {
         instructor: this.instructor,
       })
       .then(() => {
-        console.log('Data added');
-        console.log(this.passCode);
+        console.log('Course Added');
       });
   };
 
+  // getCourseByUrl = async courseUrl => {
+  //   let ans = {};
+  //   await database()
+  //     .ref('InternalDb/Courses/' + courseUrl)
+  //     .once('value')
+  //     .then(snapshot => {
+  //       if (snapshot.val()) ans = snapshot.val();
+  //     });
+  //   return ans;
+  // };
+
   getCourseByUrl = async courseUrl => {
     let ans = {};
-    await database()
-      .ref('InternalDb/Courses/' + courseUrl)
-      .once('value')
-      .then(snapshot => {
-        if (snapshot.val()) ans = snapshot.val();
+
+    await this.reference
+      .doc(courseUrl)
+      .get()
+      .then(doc => {
+        if (!doc.empty) {
+          ans = doc.data();
+        }
       });
+
     return ans;
   };
 
@@ -158,8 +196,8 @@ class Courses {
     defaultEmailOption,
     url,
   ) => {
-    await database()
-      .ref('InternalDb/Courses/' + url)
+    await this.reference
+      .doc(url)
       .set({
         courseName: courseName,
         courseCode: courseCode,

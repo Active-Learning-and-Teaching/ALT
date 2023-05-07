@@ -1,6 +1,6 @@
 import database from '@react-native-firebase/database';
-import {firebase} from '@react-native-firebase/functions'
-
+import {firebase} from '@react-native-firebase/functions';
+import firestore from '@react-native-firebase/firestore';
 class Faculty {
 
     name :string
@@ -35,92 +35,143 @@ class Faculty {
         return this.url
     }
 
-    reference = database().ref('InternalDb/Faculty/')
+    // reference = database().ref('InternalDb/Faculty/')
+    reference = firestore().collection('Faculty');
 
     //Login
-    getUser  = async (email)=> {
-        let ans = false
-        await this.reference
-            .orderByChild("email")
-            .equalTo(email)
-            .once('value')
+    // getUser  = async (email)=> {
+    //     let ans = false
+    //     await this.reference
+    //         .orderByChild("email")
+    //         .equalTo(email)
+    //         .once('value')
+    //         .then(snapshot => {
+    //             if (snapshot.val()){
+    //                 ans = true
+    //             }
+    //         })
+    //     return ans
+    // }
+
+    getUser = async email => {
+        let ans = false;
+        await  this.reference
+            .where('email', '==', email)
+            .get()
             .then(snapshot => {
-                if (snapshot.val()){
-                    ans = true
-                }
+            if(!snapshot.empty){
+                ans = true;
+            }
             })
-        return ans
-    }
+        return ans;
+    };
 
     //Getting Faculty Url for Course Signature
-    getFaculty  = async (email)=> {
-        let ans = ""
+    // getFaculty  = async (email)=> {
+    //     let ans = ""
+    //     await this.reference
+    //         .orderByChild("email")
+    //         .equalTo(email)
+    //         .once('value')
+    //         .then(snapshot => {
+    //             if (snapshot.val()){
+    //                 const keys = Object.keys(snapshot.val());
+    //                 ans = keys[0]
+    //             }
+    //         })
+    //     return ans
+    // }
+
+    getFaculty = async (email) => {
+        let ans = '';
         await this.reference
-            .orderByChild("email")
-            .equalTo(email)
-            .once('value')
-            .then(snapshot => {
-                if (snapshot.val()){
-                    const keys = Object.keys(snapshot.val());
-                    ans = keys[0]
-                }
-            })
-        return ans
-    }
+        .where('email', '==', email)
+        .get()
+        .then(snapshot => {
+            if (!snapshot.empty) {
+                // snapshot.forEach(doc => {
+                //     console.log("snapshot doc faculty", doc);
+                //     ans = doc.id;
+                // });
+                ans = snapshot.docs[0].id;
+            }
+        });
+        return ans;
 
+    };
 
-    createUser =  async (name, email)=>{
+    // createUser =  async (name, email)=>{
 
+    //     await this.reference
+    //         .push()
+    //         .set({
+    //             name : name,
+    //             email : email,
+    //             photo : 0,
+    //             courses : []
+    //         })
+    //         .then(()=>{
+    //             console.log('Data added')
+    //         })
+    // }
+
+    createUser = async (name, email) => {
         await this.reference
-            .push()
-            .set({
-                name : name,
-                email : email,
-                photo : 0,
-                courses : []
-            })
-            .then(()=>{
-                console.log('Data added')
-            })
-    }
+        .add({
+            name: name,
+            email: email,
+            photo: '0',
+        })
+        .then(() => {
+            console.log('Data added');
+        });
+    };
 
 
-    getCourseFaculty = async () =>{
-        let ans = []
-        await database()
-            .ref('InternalDb/Faculty/'+this.url)
-            .once('value')
-            .then(snapshot => {
-                if (snapshot.val()){
-                    const keys = Object(snapshot.val());
-                    if ("courses" in keys)
-                        ans = keys["courses"].map(x=>x)
-                }
-            })
-        return ans
-    }
+    // getCourseFaculty = async () =>{
+    //     let ans = []
+    //     await database()
+    //         .ref('InternalDb/Faculty/'+this.url)
+    //         .once('value')
+    //         .then(snapshot => {
+    //             if (snapshot.val()){
+    //                 const keys = Object(snapshot.val());
+    //                 if ("courses" in keys)
+    //                     ans = keys["courses"].map(x=>x)
+    //             }
+    //         })
+    //     return ans
+    // }
 
-    setCourseFaculty = async (courses) =>{
-        await database()
-            .ref('InternalDb/Faculty/'+this.url)
-            .set({
-                name : this.getName(),
-                email : this.getEmail(),
-                photo : 0,
-                courses : courses
-            })
-            .then(()=>{
-                console.log("Courses set")
-            })
-    }
+    // setCourseFaculty = async (courses) =>{
+    //     await database()
+    //         .ref('InternalDb/Faculty/'+this.url)
+    //         .set({
+    //             name : this.getName(),
+    //             email : this.getEmail(),
+    //             photo : 0,
+    //             courses : courses
+    //         })
+    //         .then(()=>{
+    //             console.log("Courses set")
+    //         })
+    // }
+
+    // addCourseFaculty = async (courseUrl) => {
+    //     await this.getCourseFaculty().then(
+    //         value => {
+    //             value.push(courseUrl)
+    //             this.setCourseFaculty(value)
+    //         }
+    //     )
+    // }
 
     addCourseFaculty = async (courseUrl) => {
-        await this.getCourseFaculty().then(
-            value => {
-                value.push(courseUrl)
-                this.setCourseFaculty(value)
-            }
-        )
+        await this.reference
+              .doc(this.url)
+              .update({
+                'courses' : firestore.FieldValue.arrayUnion(courseUrl)
+              });
     }
 
     //@Vishwesh

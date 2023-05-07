@@ -4,6 +4,7 @@ import moment from 'moment';
 import database from '@react-native-firebase/database';
 import QuizFacultyPage from './QuizFacultyPage';
 import QuizStudentPage from './QuizStudentPage';
+import firestore from '@react-native-firebase/firestore';
 
 export default class QuizHomePage extends Component{
     constructor(props) {
@@ -28,13 +29,12 @@ export default class QuizHomePage extends Component{
     }
 
     ifCurrentQuiz = ()=>{
-        database()
-            .ref('InternalDb/KBC/')
-            .orderByChild('passCode')
-            .equalTo(this.state.course.passCode)
-            .on('value', snapshot => {
-                if (snapshot.val()){
-                    const values = Object.values(snapshot.val())[0]
+        firestore()
+            .collection('KBC')
+            .where('passCode', '==', this.state.course.passCode)
+            .onSnapshot(snapshot => {
+                if (!snapshot.empty){
+                    const values = snapshot.docs[0].data();
                     console.log("serverTime: "+database().getServerTime())
                     const curr = moment.utc(database().getServerTime())
                     const startTime = moment.utc(values['startTime'], "DD/MM/YYYY HH:mm:ss")
