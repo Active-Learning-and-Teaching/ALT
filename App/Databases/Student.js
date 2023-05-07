@@ -148,42 +148,84 @@ class Student {
   //   return ans;
   // };
 
-  // setCourseStudent = async courses => {
-  //   await database()
-  //     .ref('InternalDb/Student/' + this.url)
-  //     .set({
-  //       name: this.getName(),
-  //       email: this.getEmail(),
-  //       photo: 0,
-  //       courses: courses,
-  //     })
-  //     .then(() => {
-  //       console.log('Courses set');
-  //     });
-  // };
 
-  // addCourseStudent = async courseUrl => {
+  getTACourseStudent = async () => {
+    let ans = [];
+    await database()
+      .ref('InternalDb/Student/' + this.url)
+      .once('value')
+      .then(snapshot => {
+        if (snapshot.val()) {
+          const keys = Object(snapshot.val());
+          if ('tacourses' in keys) ans = keys['tacourses'].map(x => x);
+        }
+      });
+    return ans;
+  };
+
+  setCourseStudent = async (courses) => {
+    await database()
+      .ref('InternalDb/Student/' + this.url)
+      .update({
+        courses: courses,
+      })
+      .then(() => {
+        console.log('Courses set');
+      });
+  };
+
+
+
+  setTACourseStudent = async (tacourses) => {
+    console.log(tacourses)
+    await database()
+      .ref('InternalDb/Student/' + this.url)
+      .update({
+        tacourses:tacourses,
+      })
+      .then(() => {
+        console.log(tacourses,'Courses set');
+      });
+  };
+
+
+  addCourseStudent = async courseUrl => {
+    let courses = await this.getCourseStudent().then(value => {
+      if (!value?.includes(courseUrl)) {
+        value?.push(courseUrl);
+        this.setCourseStudent(value);
+      }
+    });
+  };
+
+  addTACourseStudent = async courseUrl => {
+    let tacourses = await this.getTACourseStudent().then(value => {
+      if (!value?.includes(courseUrl)) {
+        value?.push(courseUrl);
+        this.setTACourseStudent(value);
+      }
+    });  
+  };
+
+  // deleteCourse = async courseUrl => {
   //   await this.getCourseStudent().then(value => {
-  //     if (!value.includes(courseUrl)) {
-  //       value.push(courseUrl);
-  //       this.setCourseStudent(value);
+  //     if (value?.includes(courseUrl)) {
+  //       const index = value?.indexOf(courseUrl);
+  //       value?.splice(index, 1);
+
+  //       this.setTACourseStudent(value);
   //     }
   //   });
-  //   try {
-  //     await database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.getUrl()).set(true)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-
   // };
 
-  // addCourseStudent = async courseUrl => {
-  //   await this.reference2
-  //       .doc(this.url)
-  //       .collection('Courses')
-  //       .doc(courseUrl)
-  //       .set({});
+  // deleteCourseTA = async courseUrl => {
+  //   await this.getTACourseStudent().then(value => {
+  //     if (value?.includes(courseUrl)) {
+  //       const index = value?.indexOf(courseUrl);
+  //       value?.splice(index, 1);
 
+  //       this.setCourseStudent(value);
+  //     }
   addCourseStudent = async courseUrl => {
     await this.reference2
         .doc(this.url)
@@ -213,18 +255,7 @@ class Student {
 
   };
 
-  // deleteCourse = async courseUrl => {
-  //   await this.getCourseStudent().then(value => {
-  //     if (value.includes(courseUrl)) {
-  //       const index = value.indexOf(courseUrl);
-  //       value.splice(index, 1);
 
-  //       this.setCourseStudent(value);
-  //     }
-  //   }).then(() => {
-  //     database().ref('InternalDb/Courses/'+courseUrl+'/students/'+this.url).remove()
-  //   });
-  // };
 
   deleteCourse = async courseUrl => {
     await this.reference2

@@ -12,15 +12,18 @@ import Dimensions from '../../Utils/Dimensions';
 import database from "@react-native-firebase/database";
 import MultiCorrectOptions from './MultiCorrectOptions';
 import {firebase} from '@react-native-firebase/functions';
-import firestore from '@react-native-firebase/firestore';
+import { useState } from 'react';
+import { useCallback } from 'react';
+import { useEffect } from 'react';
 
-export default class QuizFacultyPage extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            isTA:this.props.isTA,
-            course : this.props.course,
-            user : this.props.user,
+
+const QuizFacultyPage = (props) => {
+    
+
+    const [state, setState] = useState({
+        isTA:props.isTA,
+            course : props.course,
+            user : props.user,
             time : 2,
             option : "*",
             icon : "",
@@ -34,57 +37,74 @@ export default class QuizFacultyPage extends Component{
             loading : true,
             quizNumber : "",
             errorRate : "*",
-        };
-        this.setOption = this.setOption.bind(this);
-        this.quizresultData = this.quizresultData.bind(this);
-        this.QuizMailer = this.QuizMailer.bind(this);
-    }
+    })
 
-    quizresultData(resultData, quizNumber){
-        this.setState({
+    const quizresultData = useCallback(() => {
+        setState(prevState => ({
+            ...prevState,
             results: resultData,
             quizNumber: quizNumber
-        })
-    }
+
+        }))
+    },[resultData,quizNumber])
+    
     checkEmailSent = async () =>{
         const Kbc = new Quiz()
-        await Kbc.getTiming(this.state.course.passCode).then( async value => {
+        await Kbc.getTiming(state.course.passCode).then( async value => {
             if(value!=null){
-                await this.setState({
+                await setState (prevState => ({
+                    ...prevState,
                     emailStatus : !value["emailResponse"],
                     resultPage: true,
                     correctAnswer : value["correctAnswer"],
                     date : value["startTime"]
-                })
+
+                }))
+               
             }
-            if (this.state.correctAnswer===''){this.setState ({resultPage : false})}
+            if (state.correctAnswer===''){
+                setState(prevState => ({
+                    ...prevState,
+                    resultPage : false
+
+                }))
+                }
         })
 
-        console.log(this.state.correctAnswer) 
+        console.log(state.correctAnswer) 
     }
 
-    componentDidMount() {
-        this.checkEmailSent().then(r=>{if (this.state.correctAnswer===''){this.setState ({resultPage : false})}})  
-    }
-
-    async setOption(value){
+    useEffect(() => {
+        checkEmailSent().then(r=>{if (state.correctAnswer===''){
+            setState(prevState => ({
+                ...prevState,
+                resultPage : false
+            }))
+            }})  
+    },[])
+   
+    const setOption = useCallback(() => {
         if(value==="")
             value="*"
-        await this.setState({
+         setState(prevState => ({
+            ...prevState,
             option : value,
             icon : value,
-        })
-    }
+        }))
+
+    },[value])
+
+    
 
     dbUpdateEmailStatus = async () =>{
         const Kbc = new Quiz()
-        Kbc.getTiming(this.state.course.passCode)
+        Kbc.getTiming(state.course.passCode)
             .then(value => {
-                Kbc.getQuestion(this.state.course.passCode)
+                Kbc.getQuestion(state.course.passCode)
                     .then(values => {
-                        const url = values.id;
+                        const url = Object.keys(values)[0];
                         Kbc.setQuestion(
-                            this.state.course.passCode,
+                            state.course.passCode,
                             value["startTime"],
                             value["endTime"],
                             value["duration"],
@@ -106,10 +126,11 @@ export default class QuizFacultyPage extends Component{
         if (action==="stop")
         {
             console.log("Created stop Quiz"); 
-            console.log(this.state.correctAnswer);
-            //console.log(this.state.option);
+            console.log(state.correctAnswer);
+            //console.log(state.option);
             
-            this.setState({
+            setState (prevState => ({
+                ...prevState,
                 time : 2,
                 option : "*",
                 icon : "",
@@ -120,21 +141,23 @@ export default class QuizFacultyPage extends Component{
                 date : "",
                 results :"",
                 typeofQuiz : "mcq",
-            })
-            this.props.setQuizState()
+
+            }))
+        
+            props.setQuizState()
             const kbc = new Quiz()
-            await kbc.getQuestion(this.state.course.passCode)
+            await kbc.getQuestion(state.course.passCode)
             .then((values)=>{
-                const url = values.id;
-                const questionCount = values.questionCount;
+                const url = Object.keys(values)[0];
+                const questionCount = Object.values(values)[0].questionCount;
                 kbc.setQuestion(
-                    this.state.course.passCode,
+                    state.course.passCode,
                     '',
                     '',
                     '',
                     '',
                     '',
-                    this.state.user.email,
+                    state.user.email,
                     '',
                     url,
                     false,
@@ -145,12 +168,15 @@ export default class QuizFacultyPage extends Component{
         else
         {
 
-        const {option, time, errorRate} = this.state;
+        const {option, time, errorRate} = state;
 
         if (option === '') {
-            this.setState({
+            setState(prevState => ({
+                ...prevState,
                 error: "Please select correct answer."
-            })
+
+            }))
+
         }
         else {
             const kbc = new Quiz()
@@ -158,34 +184,34 @@ export default class QuizFacultyPage extends Component{
             const startTime = moment.utc(curr).format("DD/MM/YYYY HH:mm:ss")
             const endTime = moment.utc(curr).add(time, 'minutes').format("DD/MM/YYYY HH:mm:ss")
 
-            await kbc.getQuestion(this.state.course.passCode)
+            await kbc.getQuestion(state.course.passCode)
                 .then((values)=>{
                     if (values===null){
                         kbc.createQuestion(
-                            this.state.course.passCode,
+                            state.course.passCode,
                             startTime,
                             endTime,
                             time,
                             option,
                             errorRate,
-                            this.state.user.email,
-                            this.state.typeofQuiz
+                            state.user.email,
+                            state.typeofQuiz
                         ).then(r => {
                                 console.log("create")
                             })
                     }
                     else{
-                        const url = values.id;
-                        const questionCount = values.questionCount
+                        const url = Object.keys(values)[0];
+                        const questionCount = Object.values(values)[0].questionCount
                         kbc.setQuestion(
-                            this.state.course.passCode,
+                            state.course.passCode,
                             startTime,
                             endTime,
                             time,
                             option,
                             errorRate,
-                            this.state.user.email,
-                            this.state.typeofQuiz,
+                            state.user.email,
+                            state.typeofQuiz,
                             url,
                             false,
                             questionCount+1
@@ -194,12 +220,15 @@ export default class QuizFacultyPage extends Component{
                             })
 
                     }
-                    this.setState({
+                    setState(prevState => ({
+                        ...prevState,
                         time: 2,
                         option: "*",
                         icon: "",
                         error: null
-                    })
+
+                    }))
+            
 
                 })
 
@@ -208,37 +237,46 @@ export default class QuizFacultyPage extends Component{
     }
 
     dbUpdateCorrectAnswer = async () => {
-        const option = this.state.option
-        const error= this.state.errorRate
+        const option = state.option
+        const error= state.errorRate
         
         if (option === "" || option === "*") {
-            this.setState({
-                error : "Please type Correct Answer"
-            })
+            setState(prevState => ({
+                ...prevState,
+                error: "Please type correct answer."
+
+            }))
+           
         }
-        else if(this.state.typeofQuiz ==="numeric" && (isNaN(parseFloat(option)) || isNaN(parseFloat(error))) )
+        else if(state.typeofQuiz ==="numeric" && (isNaN(parseFloat(option)) || isNaN(parseFloat(error))) )
         {
-            this.setState({
-                error : "Please type Numerical Response"
-            })
+            setState(prevState => ({
+                ...prevState,
+                error: "Please type Numerical Response"
+
+            }))
+            
         }
         else{
-            this.setState({
-                error: null,
-            })
+            setState(prevState => ({
+                ...prevState,
+                error: null
+
+            }))
+            
             const Kbc = new Quiz()
-            Kbc.getTiming(this.state.course.passCode)
+            Kbc.getTiming(state.course.passCode)
                 .then(value => {
-                    Kbc.getQuestion(this.state.course.passCode)
+                    Kbc.getQuestion(state.course.passCode)
                         .then(values => {
-                            const url = values.id;
+                            const url = Object.keys(values)[0];
                             Kbc.setQuestion(
-                                this.state.course.passCode,
+                                state.course.passCode,
                                 value["startTime"],
                                 value["endTime"],
                                 value["duration"],
-                                this.state.option,
-                                this.state.errorRate,
+                                state.option,
+                                state.errorRate,
                                 value["instructor"],
                                 value["quizType"],
                                 url,
@@ -251,37 +289,46 @@ export default class QuizFacultyPage extends Component{
         }
     }
 
-    async QuizMailer(){
-        console.log('triggering mail for passCode:' + this.state.course.passCode)
+    const QuizMailer = useCallback(async () => {
+        console.log('triggering mail for passCode:' + state.course.passCode)
         Toast.show('Sending Email...');
-        const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:this.state.course.passCode, type:"Quiz"})
+        const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:state.course.passCode, type:"Quiz"})
         .catch(function(error) {console.log('There has been a problem with your mail operation: ' + error);})
-        await this.dbUpdateEmailStatus().then(() => {this.setState({emailStatus : false,})})
+        await dbUpdateEmailStatus().then(() => {
+            setState(prevState => ({
+                ...prevState,
+                emailStatus: false,
+            }))
+            })
         console.log("Email Status Updated")
-    }
+    },[])
 
-    render(){
-        if(!this.state.loading){
+  
+    
+        if(!state.loading){
         return(
             <SafeAreaView style={styles.safeContainer}>
 
-                { this.props.currentQuiz === false
+                { props.currentQuiz === false
                 ?
-                    this.state.resultPage === false
+                    state.resultPage === false
                     ?
                 <ScrollView>
                     <View style={{padding:20}}>
-                    <Text style={styles.heading}>Quiz {this.props.questionCount + 1} </Text>
+                    <Text style={styles.heading}>Quiz {props.questionCount + 1} </Text>
                     <View style={styles.selector}>
                         <SwitchSelector
                             initial={0}
                             onPress={value => {
-                                this.setState({
+                                setState(prevState => ({
+                                    ...prevState,
                                     typeofQuiz : value,
                                     option : "*",
                                     icon : "",
                                     correctAnswer : "*",
-                                })
+
+                                }))
+                               
                             }}
                             textStyle={{fontSize:12}}
                             textColor={'black'}
@@ -297,24 +344,24 @@ export default class QuizFacultyPage extends Component{
                         />
                     </View>
                     {
-                    this.state.typeofQuiz === "mcq"
+                    state.typeofQuiz === "mcq"
                     ?
                         <View>
-                            <Options optionValue={this.setOption} icon={this.state.icon}/>
+                            <Options optionValue={setOption} icon={state.icon}/>
                         </View>
                     :
-                    this.state.typeofQuiz ==="alphaNumerical"
+                    state.typeofQuiz ==="alphaNumerical"
                     ?
                         <Text/>
                     :
-                    this.state.typeofQuiz ==="numeric"
+                    state.typeofQuiz ==="numeric"
                     ?
                         <Text/>
                     :
-                    this.state.typeofQuiz ==="multicorrect"
+                    state.typeofQuiz ==="multicorrect"
                     ?
                     <View>
-                        <MultiCorrectOptions optionValue={this.setOption}/>
+                        <MultiCorrectOptions optionValue={setOption}/>
                     </View>
                     :
                     <Text/>
@@ -323,10 +370,10 @@ export default class QuizFacultyPage extends Component{
                     <View style={styles.container}>
                         <View style={styles.slider}>
 
-                            <Text style={styles.sliderText}> Timer: {this.state.time} min</Text>
+                            <Text style={styles.sliderText}> Timer: {state.time} min</Text>
 
                             <Slider
-                                value={this.state.time}
+                                value={state.time}
                                 minimumValue={1}
                                 step={1}
                                 maximumValue={15}
@@ -342,13 +389,19 @@ export default class QuizFacultyPage extends Component{
                                         uri: 'https://i.ibb.co/Qn6nGyx/Clock.png',
                                     },
                                 }}
-                                onValueChange={(value) => this.setState({time: value})}
+                                onValueChange={(value) => 
+                                    setState(prevState => ({
+                                        ...prevState,
+                                        time: value,
+    
+                                    }))
+                                    }
                             />
 
 
                             <View style>
                                 <View style={{paddingTop:10, marginTop:10}}>
-                                    <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} title="Begin" onPress={this.startKBC} />
+                                    <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} title="Begin" onPress={startKBC} />
                                 </View>
                             </View>
                         </View>
@@ -358,24 +411,24 @@ export default class QuizFacultyPage extends Component{
                         :
                         <ScrollView>
                             <View style = {[{paddingRight:10,paddingLeft:10}]}>
-                            <QuizResultGraph passCode={this.state.course.passCode}
-                                             course={this.props.course}
-                                             correctAnswer={this.state.correctAnswer}
-                                             date={this.state.date}
-                                             quizType={this.props.quizType}
-                                             emailStatus={this.state.emailStatus}
-                                             quizresultData={this.quizresultData}
-                                             QuizMailer = {this.QuizMailer}
+                            <QuizResultGraph passCode={state.course.passCode}
+                                             course={props.course}
+                                             correctAnswer={state.correctAnswer}
+                                             date={state.date}
+                                             quizType={props.quizType}
+                                             emailStatus={state.emailStatus}
+                                             quizresultData={quizresultData}
+                                             QuizMailer = {QuizMailer}
                             />
                             <View style={[
                                 styles.buttonContainer,
-                                { width: this.props.quizType==="alphaNumerical"
+                                { width: props.quizType==="alphaNumerical"
                                         ? Dimensions.window.width-50
                                         :"100%"
                                 }]}>
                             <View style={[
                                 styles.buttonContainer,
-                                { width: this.props.quizType==="numeric"
+                                { width: props.quizType==="numeric"
                                         ? Dimensions.window.width-50
                                         :"100%"
                                 }]}>
@@ -384,7 +437,8 @@ export default class QuizFacultyPage extends Component{
                                         style={styles.buttonMessage}
                                         title={"Start Another Quiz"}
                                         onPress={()=>{
-                                            this.setState({
+                                            setState(prevState => ({
+                                                ...prevState,
                                                 time : 2,
                                                 option : "*",
                                                 icon : "",
@@ -396,7 +450,10 @@ export default class QuizFacultyPage extends Component{
                                                 results :"",
                                                 typeofQuiz : "mcq",
                                                 quizNumber : "",
-                                            })
+                                                
+            
+                                            }))
+                                           
                                         }}/>
                             </View>
                             </View>
@@ -404,16 +461,20 @@ export default class QuizFacultyPage extends Component{
                         </ScrollView>
                 :
                 <ScrollView>
-                    <Text style={styles.subheading}> Quiz {this.props.questionCount} in Progress</Text>
+                    <Text style={styles.subheading}> Quiz {props.questionCount} in Progress</Text>
                     <CountDown
-                        until={this.props.currentDuration}
+                        until={props.currentDuration}
                         size={30}
                         onFinish={() =>  {
-                            this.setState({
-                                resultPage : true
-                            })
-                            this.checkEmailSent().then(r=>{console.log("")})
-                            this.props.setQuizState()
+                            setState(prevState => ({
+                                ...prevState,
+                               resultPage: true,
+                                
+
+                            }))
+                           
+                            checkEmailSent().then(r=>{console.log("")})
+                            props.setQuizState()
                         }}
                         digitStyle={{backgroundColor: '#FFF'}}
                         digitTxtStyle={{color: 'tomato'}}
@@ -422,9 +483,9 @@ export default class QuizFacultyPage extends Component{
                     />
                     <View>
                         <Button buttonStyle={styles.mybutton} titleStyle={{color:'white',fontWeight:'normal'}} title='Cancel' onPress={()=>{
-                             this.startKBC("stop").then(r => "")}} />
+                             startKBC("stop").then(r => "")}} />
                     </View>
-                    {this.props.quizType==="alphaNumerical"
+                    {props.quizType==="alphaNumerical"
                         ?
                         <View>
                             <Text style={[styles.heading,{fontSize : 20, }]}>
@@ -434,19 +495,22 @@ export default class QuizFacultyPage extends Component{
                                 style={styles.textInput}
                                 maxLength={30}
                                 textAlign={'center'}
-                                onChangeText={text => {this.setState({
-                                    option : text
-                                })}}
-                                value={this.state.option==="*"?"":this.state.option}
+                                onChangeText={text => {
+                                    setState(prevState => ({
+                                        ...prevState,
+                                       option: text
+                                    }))
+                                   }}
+                                value={state.option==="*"?"":state.option}
                             />
-                            {this.state.error ? <Text style={styles.errorMessage}>{this.state.error}</Text> : <Text/>}
+                            {state.error ? <Text style={styles.errorMessage}>{state.error}</Text> : <Text/>}
 
                             <Button style={styles.buttonMessage}
                                 buttonStyle={styles.mybutton}
                                 titleStyle={{color:'white',fontWeight:'normal'}}
                                 title="Submit"
                                 onPress={()=>{
-                                    this.dbUpdateCorrectAnswer()
+                                    dbUpdateCorrectAnswer()
                                         .then(r => console.log("Answer Updated"))
                                 }}
                             />
@@ -454,7 +518,7 @@ export default class QuizFacultyPage extends Component{
                         :
                         <Text/>
                     }
-                    {this.props.quizType==="numeric"
+                    {props.quizType==="numeric"
                         ?
                         <View>
                             <View style={{flexDirection:'row'}}>
@@ -466,10 +530,13 @@ export default class QuizFacultyPage extends Component{
                                         style={[styles.textInput, {width:'90%'}]}
                                         maxLength={30}
                                         textAlign={'center'}
-                                        onChangeText={text => {this.setState({
-                                            option : text
-                                        })}}
-                                        value={this.state.option==="*"?"":this.state.option}
+                                        onChangeText={text => {
+                                            setState(prevState => ({
+                                                ...prevState,
+                                                option: text
+                                            }))
+                                           }}
+                                        value={state.option==="*"?"":state.option}
                                     />
                                 </View>
                                 <View style={{width: Dimensions.window.width/2}}>
@@ -480,21 +547,25 @@ export default class QuizFacultyPage extends Component{
                                         style={[styles.textInput, {width:'90%'}]}
                                         maxLength={30}
                                         textAlign={'center'}
-                                        onChangeText={text => {this.setState({
-                                            errorRate : text
-                                        })}}
-                                        value={this.state.errorRate==="*"?"":this.state.errorRate}
+                                        onChangeText={text => {
+                                            setState(prevState => ({
+                                                ...prevState,
+                                               errorRate: text
+            
+                                            }))
+                                           }}
+                                        value={state.errorRate==="*"?"":state.errorRate}
                                     />
                                 </View>
                             </View>
-                            {this.state.error ? <Text style={styles.errorMessage}>{this.state.error}</Text> : <Text/>}
+                            {state.error ? <Text style={styles.errorMessage}>{state.error}</Text> : <Text/>}
 
                             <Button style={styles.buttonMessage}
                                 buttonStyle={styles.mybutton}
                                 titleStyle={{color:'white',fontWeight:'normal'}}
                                 title="Submit"
                                 onPress={()=>{
-                                    this.dbUpdateCorrectAnswer()
+                                    dbUpdateCorrectAnswer()
                                         .then(r => console.log("Answer Updated"))
                                 }}
                             />
@@ -507,16 +578,22 @@ export default class QuizFacultyPage extends Component{
             </SafeAreaView>
         )}
         else{
-            let that = this;
-            //console.log(this.state.loading);
-            setTimeout(function(){that.setState({loading: false})}, 1000);
+
+            
+            //console.log(state.loading);
+            setTimeout(function(){
+                setState(prevState => ({
+                    ...prevState,
+                    loading: false,
+                }) )
+                }, 1000);
             return(
                 <View style={styles.preloader}>
                     <ActivityIndicator size="large" color="#9E9E9E"/>
                 </View>
             )
         }
-    }
+    
 
 }
 const styles = StyleSheet.create({
@@ -655,4 +732,6 @@ const styles = StyleSheet.create({
     }
 
 })
+
+export default QuizFacultyPage;
 

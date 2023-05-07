@@ -10,6 +10,7 @@ export default class QuizHomePage extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            isTA: null,
             type : this.props.route.params.type,
             course : this.props.route.params.course,
             user : this.props.route.params.user,
@@ -61,15 +62,26 @@ export default class QuizHomePage extends Component{
                 }
             })
     }
+    async setIsTA() {
+        const AllTAs = Object.keys(this.state.course.TAs)
+        AllTAs.forEach(element => {
+            isTA=false||element.includes(this.state.user.url)
+        });
+        await this.setState({
+            isTA: isTA,
+        })
+        console.log(this.state.isTA)
+    }
 
     componentDidMount(){
         this.ifCurrentQuiz()
+        this.setIsTA()
     }
 
     render(){
         return(
             <SafeAreaView style={styles.safeContainer}>
-                {this.state.type === "faculty" ?
+                {this.state.type === "faculty" ||this.state.isTA ?
                     <QuizFacultyPage
                         currentQuiz = {this.state.currentQuiz}
                         currentDuration = {this.state.currentDuration}
@@ -84,6 +96,7 @@ export default class QuizHomePage extends Component{
                         currentQuiz = {this.state.currentQuiz}
                         currentDuration = {this.state.currentDuration}
                         user = {this.state.user}
+                        isTA = {this.state.isTA}
                         course = {this.state.course}
                         setQuizState = {this.setQuizState}
                         quizType = {this.state.quizType}
