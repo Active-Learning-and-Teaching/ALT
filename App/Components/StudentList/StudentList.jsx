@@ -16,7 +16,7 @@ function StudentList() {
     const getStudents = (courseURL) => {
         firestore()
             .collection('Student')
-            .where("courses", 'array-contains', this.state.courseURL)
+            .where("courses", 'array-contains', courseURL)
             .onSnapshot(snapshot => {
                 const list = []
 
@@ -52,10 +52,7 @@ function StudentList() {
                             : 0
                 );
 
-                this.setState({
-                    studentList : list,
-                })
-                this.props.route.params.getStudentListData(list)
+                setStudentList(list);
             })
     }
 

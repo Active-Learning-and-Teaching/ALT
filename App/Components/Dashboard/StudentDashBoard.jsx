@@ -105,15 +105,11 @@ function StudentDashBoard({navigation: {navigate}}) {
   const getAllCourses = currentUser => {
     firestore()
       .collection('Student')
-      .doc(this.state.currentUser.url)
+      .doc(currentUser.url)
       .onSnapshot(doc => {
         if (doc.exists) {
           console.log(doc.data());
           const keys = Object(doc.data());
-
-          this.setState({
-            courseList: [],
-          });
           if ('courses' in keys) {
             const arr = doc.data()['courses'].filter(n => n);
             const course = new Courses();
@@ -127,10 +123,7 @@ function StudentDashBoard({navigation: {navigate}}) {
                   .then(() =>
                     console.log(`Subscribed to topic! ${r.passCode}`),
                   );
-
-                this.setState({
-                  courseList: courses,
-                });
+                setCourseList(courses);
               });
             }
           }

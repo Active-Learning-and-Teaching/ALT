@@ -1249,9 +1249,9 @@ async function feedbackResearchLogger(
 
 
 exports.mailingSystem = functions.https.onCall(async (data, context) => {
-  // if (!context.auth) {
-  //   return { message: 'Authentication Required!', code: 401 };
-  // }
+  if (!context.auth) {
+    return { message: 'Authentication Required!', code: 401 };
+  }
 
   type = data.type;
   passCode = data.passCode;
@@ -1360,16 +1360,6 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
   }
 });
 
-// exports.deleteCourse = functions.https.onCall(async (data, context) => {
-//   if (!context.auth) {
-//     return { message: 'Authentication Required!', code: 401 };
-//   }
-//   const passCode = data.passCode;
-//   console.log('Got passCode to delete ' + passCode);
-//   const courseURL = await getURLFromPasscode(passCode);
-//   await deleteCourseHelper(passCode, courseURL);
-//   return 'done';
-// });
 
 exports.deleteCourse = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
@@ -1382,58 +1372,6 @@ exports.deleteCourse = functions.https.onCall(async (data, context) => {
   return 'done';
 });
 
-// exports.deleteStudent = functions.https.onCall(async (data, context) => {
-//   if (!context.auth) {
-//     return { message: 'Authentication Required!', code: 401 };
-//   }
-//   studentID = data.key;
-//   userUID = data.userUID;
-//   console.log('Student ID: ' + studentID);
-//   console.log('Recieved data');
-//   console.log(data);
-//   console.log(context);
-//   dbRef = admin
-//     .app()
-//     .database(url)
-//     .ref('InternalDb/Student/' + studentID);
-//   return dbRef
-//     .once('value')
-//     .then(
-//       async snapshot => {
-//         if (snapshot.val()) {
-//           await deleteStudentHelper(studentID);
-//           await snapshot.ref.remove();
-//         } else {
-//           throw new functions.https.HttpsError(
-//             'unknown',
-//             'error while removing',
-//           );
-//         }
-//       },
-//       errorObject => {
-//         console.log('The student read failed: ' + errorObject.code);
-//         throw new functions.https.HttpsError(
-//           'unknown',
-//           'error while student read',
-//         );
-//       },
-//     )
-//     .then(
-//       () => {
-//         return admin.auth().deleteUser(userUID);
-//       },
-//       error => {
-//         console.log('Error deleting user from firebase auth:', error);
-//         throw new functions.https.HttpsError(
-//           'unknown',
-//           'error while deleting user from firebase auth',
-//         );
-//       },
-//     )
-//     .then(() => {
-//       console.log('Deleted Student ' + studentID);
-//     });
-// });
 
 exports.deleteStudent = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
@@ -1488,57 +1426,7 @@ exports.deleteStudent = functions.https.onCall(async (data, context) => {
     });
 });
 
-// exports.deleteFaculty = functions.https.onCall((data, context) => {
-//   if (!context.auth) {
-//     return { message: 'Authentication Required!', code: 401 };
-//   }
-//   const key = data.key;
-//   const userUID = data.uid;
-//   console.log('Faculty KEY ' + key);
-//   console.log('recieved data');
 
-//   db_ref = admin
-//     .app()
-//     .database(url)
-//     .ref('InternalDb/Faculty/' + key);
-//   return db_ref
-//     .once('value')
-//     .then(
-//       async snapshot => {
-//         if (snapshot.val()) {
-//           await deleteFacultyHelper(key);
-//           await snapshot.ref.remove();
-//         } else {
-//           throw new functions.https.HttpsError(
-//             'unknown',
-//             'error while removing',
-//           );
-//         }
-//       },
-//       errorObject => {
-//         console.log('The Faculty read failed: ', errorObject);
-//         throw new functions.https.HttpsError(
-//           'unknown',
-//           'error while faculty read',
-//         );
-//       },
-//     )
-//     .then(
-//       () => {
-//         return admin.auth().deleteUser(userUID);
-//       },
-//       errorObject => {
-//         console.log('Error deleting user from firebase auth:', errorObject);
-//         throw new functions.https.HttpsError(
-//           'unknown',
-//           'error while deleting user from firebase auth',
-//         );
-//       },
-//     )
-//     .then(() => {
-//       console.log('Deleted Faculty:', key);
-//     });
-// });
 
 exports.deleteFaculty = functions.https.onCall((data, context) => {
   if (!context.auth) {
@@ -1592,39 +1480,6 @@ exports.deleteFaculty = functions.https.onCall((data, context) => {
     });
 });
 
-// exports.quizNotification = functions.firestore
-//   .document('KBC/{qid}')
-//   .onWrite(async (change, context) => {
-//     try {
-//       const { after } = change;
-//       const { _fieldsProto } = after;
-//       const courseName = await getCourseNameFromPasscode(_fieldsProto.passCode.stringValue);
-//       let type = 'single-correct';
-//       if (_fieldsProto.quizType.stringValue === 'multicorrect') {
-//         type = 'multi-correct';
-//       }
-//       if (_fieldsProto.quizType.stringValue === 'alphaNumerical') {
-//         type = 'alpha-numeric';
-//       }
-//       if (_fieldsProto.quizType.stringValue === 'numeric') {
-//         type = 'numeric';
-//       }
-
-//       console.log('Quiz Notification executing');
-//       if (!_fieldsProto.emailResponse.booleanValue && _fieldsProto.quizType.stringValue != '') {
-//         const payload = {
-//           notification: {
-//             title: 'Quiz',
-//             body: `A new ${type} quiz has been started in ${courseName}!`,
-//           },
-//           topic: _fieldsProto.passCode.stringValue, // Passing the path params along with the notification to the device. [optional]
-//         };
-//         return await admin.messaging().send(payload);
-//       }
-//     } catch (ex) {
-//       return console.error('Error:', ex.toString());
-//     }
-//   });
 
 exports.quizNotificationFirestore = functions.firestore
 .document('KBC/{qid}')
@@ -1660,55 +1515,6 @@ exports.quizNotificationFirestore = functions.firestore
   }
 });
 
-// exports.feedbackNotification = functions.firestore
-//   .document('Feedback/{id}')
-//   .onWrite(async (change, context) => {
-//     try {
-//       const { after } = change;
-//       const { _fieldsProto } = after;
-//       const courseName = await getCourseNameFromPasscode(_fieldsProto.passCode.stringValue);
-//       console.log('Feedback Notification executing');
-//       var str1 = _fieldsProto.startTime.stringValue.substring(0, 10);
-//       var str2 = _fieldsProto.startTime.stringValue.substring(10, _data.startTime.length);
-//       console.log(str2);
-
-//       str1 = str1.replace('/', '-');
-//       str1 = str1.replace('/', '-');
-
-//       var newdate = str1
-//         .split('-')
-//         .reverse()
-//         .join('-');
-//       newdate = newdate.concat(str2);
-//       var t = new Date(newdate);
-//       console.log(`The new date is ${t}`);
-//       var clientTime = (t.getTime() - 330 * 60 * 1000) / 1000;
-//       console.log(`The call date in UTC seconds ${clientTime}`);
-//       var server = new Date();
-//       console.log(`The server date is ${server}`);
-//       console.log(`The server date in UTC seconds ${server.getTime() / 1000}`);
-//       //console.log(new Date().toString().split('GMT')[0] + ' UTC');
-//       serverTime = server.getTime() / 1000;
-
-//       if (
-//         serverTime > clientTime &&
-//         !_fieldsProto.emailResponse.booleanValue &&
-//         _fieldsProto.startTime.stringValue != ''
-//       ) {
-//         console.log('Sending Notif');
-//         const Noitfier = {
-//           notification: {
-//             title: 'FeedBack',
-//             body: `A new feedBack form has been posted in ${courseName} !`,
-//           },
-//           topic: _fieldsProto.passCode.stringValue, // Passing the path params along with the notification to the device. [optional]
-//         };
-//         return await admin.messaging().send(Noitfier);
-//       }
-//     } catch (ex) {
-//       return console.error('Error:', ex.toString());
-//     }
-//   });
 
 exports.feedbackNotificationFirestore = functions.firestore
 .document('Feedback/{id}')
@@ -1760,29 +1566,6 @@ exports.feedbackNotificationFirestore = functions.firestore
   }
 });
 
-// exports.announcementsNotification = functions.firestore
-//   .document('Announcements/{docId}')
-//   .onWrite(async (change, context) => {
-//     try {
-//       const { after } = change;
-//       const { _fieldsProto } = after;
-//       console.log("checking",change);
-//       console.log("docId",context.params);
-//       const courseName = await getCourseNameFromPasscode(_fieldsProto.passCode.stringValue);
-//       console.log('Announcement Notification executing', courseName);
-//       const Announce = {
-//         notification: {
-//           title: `${courseName} : ${_fieldsProto.heading.stringValue}`,
-//           body: `${_fieldsProto.description.stringValue}`,
-//         },
-//         topic: _fieldsProto.passCode.stringValue, // Passing the path params along with the notification to the device. [optional]
-//       };
-//       return await admin.messaging().send(Announce);
-//     } catch (ex) {
-//       return console.error('Error:', ex.toString());
-//     }
-//   });
-
 exports.announcementsNotificationFirestore = functions.firestore
 .document('Announcements/{docId}')
 .onWrite(async (change, context) => {
@@ -1804,24 +1587,6 @@ exports.announcementsNotificationFirestore = functions.firestore
   }
 });
 
-// exports.countStudentChanges = functions.database
-//   .ref('InternalDb/KBCResponse/{response_id}')
-//   .onUpdate((change,context)=>
-//   {
-//     const after = change.after.val()
-//     const before = change.before.val()
-//     if (after['answer']!=before['answer']){
-//       if('updateCount' in after){
-//       updateCount= after['updateCount']+1}
-//       else{
-//         updateCount =1
-//       }
-//       return change.after.ref.update({updateCount:updateCount},(error)=> {if(error){console.log(error)}})
-//     }
-//     else{
-//       return null
-//     }
-//   })
 
 exports.countStudentChangesFirestore = functions.firestore
 .document('KBCResponse/{response_id}')

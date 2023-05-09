@@ -55,7 +55,7 @@ function CheckUserLoggedIn({ navigation: { navigate } }) {
                                 console.log('User not found')
                                 navigate(
                                     'Login', {
-                                        getUserType : this.getUserType
+                                        getUserType : getUserType
                                     })
                             }
                         })

@@ -24,8 +24,7 @@ function LogIn({navigation:{navigate}}) {
                 .signInWithEmailAndPassword(email, password)
                 .then(async(res)=> {
                     console.log(res)
-                    await route.params.getUserType(res.user.displayName, res.user.email)
-                    
+                    await route.params.getUserType(res.user.displayName, res.user.email)                    
                     setEmail('')
                     setPassword('')
                     setError(null)

@@ -1,15 +1,15 @@
-import React, {useEffect,useState} from 'react';
-import {SafeAreaView, ScrollView, View, Text, ImageBackground} from 'react-native';
-import Toast from 'react-native-simple-toast';
 import Clipboard from "@react-native-community/clipboard";
-import Dimensions from '../../Utils/Dimensions';
-import {Avatar} from 'react-native-elements';
-import { useRoute } from '@react-navigation/native';
-import {CoursePics} from '../../Utils/CoursePics';
 import database from '@react-native-firebase/database';
-import AnnouncementCard from './AnnouncementCard';
-import moment from 'moment';
 import firestore from '@react-native-firebase/firestore';
+import { useRoute } from '@react-navigation/native';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { ImageBackground, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { Avatar } from 'react-native-elements';
+import Toast from 'react-native-simple-toast';
+import { CoursePics } from '../../Utils/CoursePics';
+import Dimensions from '../../Utils/Dimensions';
+import AnnouncementCard from './AnnouncementCard';
 
 function Announcement() {
     const routes = useRoute()
@@ -24,11 +24,9 @@ function Announcement() {
     const getAnnouncements = () => {
         firestore()
             .collection('Announcements')
-            .where("passCode", "==", this.state.course.passCode)
+            .where("passCode", "==", course.passCode)
             .onSnapshot(snapshot => {
-                this.setState({
-                    announcementList : []
-                })
+                setAnnouncementList([]);
                 if (!snapshot.empty){
                     const list = snapshot.docs.map((doc)=>{
                         let id = doc.id
@@ -44,9 +42,7 @@ function Announcement() {
                         if (keyA > keyB) return -1;
                         return 0;
                     });
-                    this.setState({
-                        announcementList : list
-                    })
+                    setAnnouncementList(list);
                 }
             })
     }

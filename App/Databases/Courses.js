@@ -7,7 +7,7 @@ class Courses {
   room: string;
   passCode: string;
   instructors = [];
-  TAs=[];
+  TAs = [];
   imageURL: string;
   instructor: string;
 
@@ -58,25 +58,24 @@ class Courses {
     this.instructor = faculty.getName();
   }
 
-
-
-  addTAs= async(TaURL,courseURL)=> {
+  addTAs = async (TaURL, courseURL) => {
     let TaList = await this.getTAs(courseURL).then(value => {
       if (!value.includes(TaURL)) {
         value.push(TaURL);
-        this.setTAs(courseURL,TaList);
+        this.setTAs(courseURL, TaList);
       }
     });
-    
+
     try {
-      await database().ref('InternalDb/Courses/'+courseURL+'/TAs/'+TaURL).set(true)  
+      await database()
+        .ref('InternalDb/Courses/' + courseURL + '/TAs/' + TaURL)
+        .set(true);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
+  };
 
-  }
-
-  getTAs=async (url)=>{
+  getTAs = async url => {
     let ans = [];
     await database()
       .ref('InternalDb/Courses/' + url)
@@ -88,23 +87,18 @@ class Courses {
         }
       });
     return ans;
-  }
+  };
 
-
-  setTAs= async (url,TaList) => {
+  setTAs = async (url, TaList) => {
     await database()
       .ref(`InternalDb/Courses/${url}`)
-      .update({TAs:TaList})
+      .update({TAs: TaList})
       .then(() => {
         console.log('Courses Tas set');
       });
-  }
-  
-  // reference = database().ref('InternalDb/Courses/');
+  };
 
-  // reference = database().ref('InternalDb/Courses/');
   reference = firestore().collection('Courses');
-
 
   getCourse = async passCode => {
     let ans = '';
@@ -121,24 +115,6 @@ class Courses {
     return ans;
   };
 
-  // createCourse = () => {
-  //   this.reference
-  //     .push()
-  //     .set({
-  //       courseName: this.courseName,
-  //       courseCode: this.courseCode,
-  //       room: this.room,
-  //       passCode: this.passCode,
-  //       instructors: this.instructors,
-  //       imageURL: this.imageURL,
-  //       instructor: this.instructor,
-  //     })
-  //     .then(() => {
-  //       console.log('Data added');
-  //       console.log(this.passCode);
-  //     });
-  // };
-
   createCourse = async () => {
     this.reference
       .add({
@@ -147,7 +123,7 @@ class Courses {
         room: this.room,
         passCode: this.passCode,
         instructors: this.instructors,
-        TAs:this.TAs,
+        TAs: this.TAs,
         imageURL: this.imageURL,
         instructor: this.instructor,
       })
@@ -155,17 +131,6 @@ class Courses {
         console.log('Course Added');
       });
   };
-
-  // getCourseByUrl = async courseUrl => {
-  //   let ans = {};
-  //   await database()
-  //     .ref('InternalDb/Courses/' + courseUrl)
-  //     .once('value')
-  //     .then(snapshot => {
-  //       if (snapshot.val()) ans = snapshot.val();
-  //     });
-  //   return ans;
-  // };
 
   getCourseByUrl = async courseUrl => {
     let ans = {};
@@ -206,7 +171,7 @@ class Courses {
         instructors: instructors,
         imageURL: imageURL,
         instructor: instructor,
-        TAs:TAs,
+        TAs: TAs,
         quizEmail: quizEmail,
         feedbackEmail: feedbackEmail,
         defaultEmailOption: defaultEmailOption,
