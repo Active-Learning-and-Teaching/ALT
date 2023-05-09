@@ -4,7 +4,7 @@ import database from '@react-native-firebase/database';
 import {firebase} from '@react-native-firebase/functions';
 import messaging from '@react-native-firebase/messaging';
 import {CommonActions, useRoute} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Alert, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
 import Courses from '../../Databases/Courses';
@@ -102,7 +102,7 @@ function StudentDashBoard({navigation: {navigate}}) {
       });
   };
 
-  const getAllCourses = currentUser => {
+  const getAllCourses = useCallback(currentUser => {
     firestore()
       .collection('Student')
       .doc(currentUser.url)
@@ -129,7 +129,7 @@ function StudentDashBoard({navigation: {navigate}}) {
           }
         }
       });
-  };
+  }, []);
 
   const getAllTACourses = currentUser => {
     database()

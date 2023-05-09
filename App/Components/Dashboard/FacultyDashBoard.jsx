@@ -113,7 +113,7 @@ function FacultyDashBoard({navigation: {navigate}}) {
           }
         }
       });
-  });
+  }, []);
 
   useEffect(() => {
     const onLoad = async () => {
@@ -126,7 +126,7 @@ function FacultyDashBoard({navigation: {navigate}}) {
       getAllCourses(faculty);
       setUser(faculty);
     };
-    console.log('useeffect');
+
     onLoad();
   }, []);
 
@@ -134,9 +134,7 @@ function FacultyDashBoard({navigation: {navigate}}) {
     <SafeAreaView className="flex-1 bg-transparent ">
       <ScrollView>
         <View className="mt-2 mb-2 pb-2 pt-2 items-center">
-          {courseList.map((item, i) => {
-            console.log('inside working course card cccvcvcv', item);
-            return (
+          {courseList.map((item, i) => (
               <CourseCard
                 course={item}
                 type={'faculty'}
@@ -144,8 +142,8 @@ function FacultyDashBoard({navigation: {navigate}}) {
                 navigation={navigate}
                 key={i}
               />
-            );
-          })}
+            )
+          )}
         </View>
         <Button
           buttonStyle={styles.signout}

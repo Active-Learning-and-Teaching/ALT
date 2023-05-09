@@ -37,7 +37,7 @@ class Quiz {
       .then(snapshot => {
         if (!snapshot.empty) {
           const keys = snapshot.docs[0].data();
-          console.log('Finding Issues');
+          console.log('Finding Issues in loop');
           console.log(keys);
           ans = keys;
         }

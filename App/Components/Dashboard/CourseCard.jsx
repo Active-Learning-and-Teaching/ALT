@@ -10,7 +10,6 @@ import { useNavigation } from '@react-navigation/native';
 import {firebase} from '@react-native-firebase/functions';
 
 function CourseCard({type,user,course}) {
-    console.log("inside working course card", course);
     const navigation = useNavigation();
     const [image,setImage] = useState("")
     const [courseState,setCourseState] = useState(course)
