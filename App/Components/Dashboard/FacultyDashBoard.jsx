@@ -1,6 +1,5 @@
 import {GoogleSignin} from '@react-native-community/google-signin';
 import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
 import {firebase} from '@react-native-firebase/functions';
 import {CommonActions, useRoute} from '@react-navigation/native';

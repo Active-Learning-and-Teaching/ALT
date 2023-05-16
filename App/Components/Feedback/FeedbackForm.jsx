@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
-// Done refactorrrr
 import React, {Component} from 'react';
 import {
   SafeAreaView,

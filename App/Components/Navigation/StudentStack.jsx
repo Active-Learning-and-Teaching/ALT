@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React from 'react';
 import StudentList from '../StudentList/StudentList';
 import {Icon} from 'react-native-elements';
 import {Alert, View} from 'react-native';

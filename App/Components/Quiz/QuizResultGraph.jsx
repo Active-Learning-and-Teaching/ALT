@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {useState} from 'react';
 import { PieChart } from "react-native-chart-kit";
 import {ScrollView, StyleSheet, View} from 'react-native';
 import Dimensions from '../../Utils/Dimensions';

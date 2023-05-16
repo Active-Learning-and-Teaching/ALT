@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import FeedbackStudentPage from './FeedbackStudentPage';
-import FeedbackFacultyPage from './FeedbackFacultyPagee';
+import FeedbackFacultyPage from './FeedbackFacultyPage';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
-import { useCallback } from 'react';
+
 
 const FeedbackHomePage = (props) => {
   
 
-  const [state, useState] = useState({
+  const [state, setState] = useState({
     type: props.route.params.type,
       course: props.route.params.course,
       user: props.route.params.user,
@@ -23,12 +23,11 @@ const FeedbackHomePage = (props) => {
       
   })
 
-   setFeedbackState = useCallback(()=> {
-    
-        isCurrentFeedback();
-      
-  },[]);
+  const setFeedbackState = () => {
+    isCurrentFeedback();
+  }
 
+ 
   cancelFeedback = () => {
     let feedbackCount = state.feedbackCount;
     setState (prevState => ({

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, View, TextInput, Animated} from 'react-native';
 import {Slider, Text, Button,Icon} from 'react-native-elements';
 import Quiz from '../../Databases/Quiz';

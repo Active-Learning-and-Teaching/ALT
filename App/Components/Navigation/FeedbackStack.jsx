@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {Component} from 'react';
+import React from 'react';
 import FeedbackHomePage from '../Feedback/FeedbackHomePage';
 import { useRoute } from '@react-navigation/native';
 const Stack = createStackNavigator();

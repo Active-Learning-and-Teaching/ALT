@@ -39,22 +39,23 @@ const FeedbackFacultyPage = (props) =>  {
     processedMinutePaperResponses : false,
   })
 
-  const feedbackresultData = useCallback(() => {
+  const feedbackresultData = (resultData,feedbackNumber) => {
     setState (prevState => ({
       ...prevState,
       results: resultData,
       feedbackNumber: feedbackNumber,
 
     }))
-
-  },[resultData,feedbackNumber])
-  
-  const setKind = useCallback (() => {
+  }
+ 
+  const setKind = (kind) => {
     setState(prevState => ({
       ...prevState,
       kind:kind,
     }))
-  },[kind])
+  }
+  
+ 
   
 
   checkEmailSent = async () => {
@@ -175,7 +176,8 @@ const FeedbackFacultyPage = (props) =>  {
     }
   };
 
-  const FeedbackMailer = useCallback(async () => {
+
+  const FeedbackMailer = async () => {
     console.log('triggering mail for passCode:' + state.course.passCode);
     Toast.show('Sending Email...');
     const {data} = await firebase
@@ -197,9 +199,9 @@ const FeedbackFacultyPage = (props) =>  {
       }))
      
     });
-  },[])
+  }
  
-  const HTTPTrigger = useCallback (async () => {
+  const sendHTTPTrigger = async () => {
     const feedback = new Feedback();
     await feedback.getFeedbackDetails(state.course.passCode).then(async values => {
       const url = `https://minute-paper-summarizer-775rx6qcca-uc.a.run.app/minutePaperSummarizer?passCode=${state.course.passCode}&startTime=${values.startTime}&endTime=${values.endTime}`;
@@ -252,7 +254,7 @@ const FeedbackFacultyPage = (props) =>  {
     })
   // });
     
-  },[])
+  }
 
   
   setResultPage = () =>

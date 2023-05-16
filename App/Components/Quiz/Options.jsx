@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {useState} from 'react';
 import {Avatar} from 'react-native-elements';
 import {StyleSheet, View} from 'react-native';
 

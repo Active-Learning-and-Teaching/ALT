@@ -85,20 +85,6 @@ class Student {
       });
   };
 
-  getTACourseStudent = async () => {
-    let ans = [];
-    await database()
-      .ref('InternalDb/Student/' + this.url)
-      .once('value')
-      .then(snapshot => {
-        if (snapshot.val()) {
-          const keys = Object(snapshot.val());
-          if ('tacourses' in keys) ans = keys['tacourses'].map(x => x);
-        }
-      });
-    return ans;
-  };
-
   setCourseStudent = async courses => {
     await database()
       .ref('InternalDb/Student/' + this.url)
@@ -108,19 +94,7 @@ class Student {
       .then(() => {
         console.log('Courses set');
       });
-  };
-
-  setTACourseStudent = async tacourses => {
-    console.log(tacourses);
-    await database()
-      .ref('InternalDb/Student/' + this.url)
-      .update({
-        tacourses: tacourses,
-      })
-      .then(() => {
-        console.log(tacourses, 'Courses set');
-      });
-  };
+  }
 
   addCourseStudent = async courseUrl => {
     let courses = await this.getCourseStudent().then(value => {
@@ -131,23 +105,6 @@ class Student {
     });
   };
 
-  addTACourseStudent = async courseUrl => {
-    let tacourses = await this.getTACourseStudent().then(value => {
-      if (!value?.includes(courseUrl)) {
-        value?.push(courseUrl);
-        this.setTACourseStudent(value);
-      }
-    });
-  };
-
-  // deleteCourseTA = async courseUrl => {
-  //   await this.getTACourseStudent().then(value => {
-  //     if (value?.includes(courseUrl)) {
-  //       const index = value?.indexOf(courseUrl);
-  //       value?.splice(index, 1);
-
-  //       this.setCourseStudent(value);
-  //     }
   addCourseStudent = async courseUrl => {
     await this.reference2.doc(this.url).update({
       courses: firestore.FieldValue.arrayUnion(courseUrl),

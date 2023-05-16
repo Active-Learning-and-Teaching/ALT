@@ -1,6 +1,6 @@
 //Possible bug in line 81 because function is passed prop - useCallback
 
-import React, {Component} from 'react';
+import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import moment from 'moment';
 import database from '@react-native-firebase/database';

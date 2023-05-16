@@ -1,5 +1,4 @@
 import Clipboard from "@react-native-community/clipboard";
-import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
 import { useRoute } from '@react-navigation/native';
 import moment from 'moment';
@@ -13,7 +12,7 @@ import AnnouncementCard from './AnnouncementCard';
 
 function Announcement() {
     const routes = useRoute()
-    const {type,course,user} = routes.params
+    const {type,course} = routes.params
     const [image,setImage] = useState("")
     const [announcementList,setAnnouncementList] = useState([])
 

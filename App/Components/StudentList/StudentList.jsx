@@ -1,16 +1,14 @@
 import React, {useState, useCallback} from 'react';
 import {Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import database from '@react-native-firebase/database';
 import Courses from '../../Databases/Courses';
 import StudentCard from './StudentCard';
-import TACard from './TACard.jsx';
 import { useRoute,useFocusEffect } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+
 function StudentList() {
     const route = useRoute()
     const {type,course,} = route.params
     const [studentList,setStudentList] = useState([])
-    const [taList,setTaList] = useState([])
     const [courseURL,setCourseURL] = useState('')
 
     const getStudents = (courseURL) => {
@@ -28,13 +26,12 @@ function StudentList() {
                     dict["email"] = data["email"]
                     dict["photo"] = data["photo"]
                     dict["verified"] = 1
-
-                    // if ("verified" in keys){
-                    //     const arr = data.val()["verified"]
-                    //     if (arr.includes(this.state.courseURL)){
-                    //         dict["verified"] = 1
-                    //     }
-                    // }
+                    if ("verified" in keys){
+                        const arr = data.val()["verified"]
+                        if (arr.includes(this.state.courseURL)){
+                            dict["verified"] = 1
+                        }
+                    }
                     list.push(dict)
                         
                 })
@@ -56,53 +53,6 @@ function StudentList() {
             })
     }
 
-    const getTAs = (courseURL) => {
-        database()
-            .ref('InternalDb/Student/')
-            .orderByChild("tacourses")
-            .on('value', snapshot => {
-                const list = []
-                snapshot.forEach( (data) => {
-                    const url = Object(data.key)
-                    const keys = Object(data.val())
-                    if ("tacourses" in keys){
-                        const arr = data.val()["tacourses"]
-                        if (arr.includes(courseURL)){
-                            const dict = {}
-                            dict["url"]=url
-                            dict["name"] = keys["name"]
-                            dict["email"] = keys["email"]
-                            dict["photo"] = keys["photo"]
-                            dict["verified"] = 0
-
-                            if ("verified" in keys){
-                                const arr = data.val()["verified"]
-                                if (arr.includes(courseURL)){
-                                    dict["verified"] = 1
-                                }
-                            }
-                            list.push(dict)
-                        }
-                    }
-                })
-                list.sort((a,b) =>
-                    a.name!==undefined && b.name!==undefined
-                    ? a.name.toUpperCase() > b.name.toUpperCase()
-                        ? 1
-                        : ((b.name.toUpperCase()  > a.name.toUpperCase())
-                            ? -1
-                            : 0)
-                    : a.email > b.email
-                        ? 1
-                        : b.email > a.email
-                            ? -1
-                            : 0
-                );
-                console.log(list)
-                setTaList(list)
-            })
-    }
-
     useFocusEffect(
     useCallback(() => {
         const onLoad = async () =>{
@@ -110,7 +60,6 @@ function StudentList() {
             const url = await courseObj.getCourse(course.passCode)
             setCourseURL(url)
             getStudents(url)
-            getTAs(url)
         }
         onLoad()
     }, []))

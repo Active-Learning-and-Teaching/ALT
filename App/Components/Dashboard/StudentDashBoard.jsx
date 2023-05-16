@@ -1,6 +1,5 @@
 import {GoogleSignin} from '@react-native-community/google-signin';
 import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
 import {firebase} from '@react-native-firebase/functions';
 import messaging from '@react-native-firebase/messaging';
 import {CommonActions, useRoute} from '@react-navigation/native';
@@ -11,12 +10,13 @@ import Courses from '../../Databases/Courses';
 import Student from '../../Databases/Student';
 import CourseCard from './CourseCard';
 import firestore from '@react-native-firebase/firestore';
+
+
 function StudentDashBoard({navigation: {navigate}}) {
   const route = useRoute();
   const {setUser} = route.params;
   const [currentUser, setCurrentUser] = useState(null);
   const [courseList, setCourseList] = useState([]);
-  const [TAcourseList, setTAcourseList] = useState([]);
 
   const unSubscribe_Notifications = () => {
     for (let i = 0; i < courseList.length; i++) {
@@ -106,55 +106,21 @@ function StudentDashBoard({navigation: {navigate}}) {
     firestore()
       .collection('Student')
       .doc(currentUser.url)
-      .onSnapshot(doc => {
-        if (doc.exists) {
-          console.log(doc.data());
-          const keys = Object(doc.data());
-          if ('courses' in keys) {
-            const arr = doc.data()['courses'].filter(n => n);
+      .onSnapshot(snapshot => {
+        if (!snapshot.empty) {
+            setCourseList([]);
+          if (snapshot.data().courses && snapshot.data().courses.length) {
+            const arr = snapshot.data().courses;
             const course = new Courses();
-            const courses = [];
-
             for (var i = 0; i < arr.length; i++) {
               course.getCourseByUrl(arr[i]).then(r => {
-                courses.push(r);
-                messaging()
-                  .subscribeToTopic(r.passCode)
-                  .then(() =>
-                    console.log(`Subscribed to topic! ${r.passCode}`),
-                  );
-                setCourseList(courses);
+                setCourseList(prev => [...prev, r]);
               });
             }
           }
         }
       });
   }, []);
-
-  const getAllTACourses = currentUser => {
-    database()
-      .ref('InternalDb/Student/' + currentUser.url)
-      .on('value', snapshot => {
-        if (snapshot.val()) {
-          const keys = Object(snapshot.val());
-          if ('courses' in keys) {
-            const arr = snapshot.val()['tacourses']?.filter(n => n);
-            const course = new Courses();
-            setTAcourseList([]);
-            for (var i = 0; i < arr?.length; i++) {
-              course.getCourseByUrl(arr[i]).then(r => {
-                messaging()
-                  .subscribeToTopic(r.passCode)
-                  .then(() =>
-                    console.log(`Subscribed to topic! ${r.passCode}`),
-                  );
-                setTAcourseList(prev => [...prev, r]);
-              });
-            }
-          }
-        }
-      });
-  };
 
   useEffect(() => {
     const onLoad = async () => {
@@ -163,10 +129,9 @@ function StudentDashBoard({navigation: {navigate}}) {
       await student.setName(curr.displayName);
       await student.setEmail(curr.email);
       await student.setUrl();
+      setUser(student);
       setCurrentUser(student);
       getAllCourses(student);
-      getAllTACourses(student);
-      setUser(student);
     };
 
     onLoad();
@@ -180,7 +145,6 @@ function StudentDashBoard({navigation: {navigate}}) {
             Courses
           </Text>
           {courseList
-            .filter(item => !TAcourseList.includes(item))
             .map((item, i) => (
               <CourseCard
                 course={item}
@@ -191,22 +155,6 @@ function StudentDashBoard({navigation: {navigate}}) {
               />
             ))}
         </View>
-
-        <View className="my-3 items-center ">
-          <Text h2 className="font-bold text-2xl">
-            TA Courses
-          </Text>
-          {TAcourseList.map((item, i) => (
-            <CourseCard
-              course={item}
-              type={'student'}
-              user={currentUser}
-              navigation={navigate}
-              key={i}
-            />
-          ))}
-        </View>
-
         <Button
           buttonStyle={{
             backgroundColor: 'tomato',

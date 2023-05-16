@@ -58,46 +58,6 @@ class Courses {
     this.instructor = faculty.getName();
   }
 
-  addTAs = async (TaURL, courseURL) => {
-    let TaList = await this.getTAs(courseURL).then(value => {
-      if (!value.includes(TaURL)) {
-        value.push(TaURL);
-        this.setTAs(courseURL, TaList);
-      }
-    });
-
-    try {
-      await database()
-        .ref('InternalDb/Courses/' + courseURL + '/TAs/' + TaURL)
-        .set(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  getTAs = async url => {
-    let ans = [];
-    await database()
-      .ref('InternalDb/Courses/' + url)
-      .once('value')
-      .then(snapshot => {
-        if (snapshot.val()) {
-          const keys = Object.keys(snapshot.val());
-          if ('TAs' in keys) ans = keys['TAs'].map(x => x);
-        }
-      });
-    return ans;
-  };
-
-  setTAs = async (url, TaList) => {
-    await database()
-      .ref(`InternalDb/Courses/${url}`)
-      .update({TAs: TaList})
-      .then(() => {
-        console.log('Courses Tas set');
-      });
-  };
-
   reference = firestore().collection('Courses');
 
   getCourse = async passCode => {

@@ -1,18 +1,12 @@
 import React, {FC,useEffect} from 'react';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import * as config from './config';
-import IconF from 'react-native-vector-icons/FontAwesome';
-import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconI from 'react-native-vector-icons/MaterialIcons';
 import MainNavigator from './Components/Navigation/MainNavigator';
 import NotifiactionCentre from './NotificationCenter';
 import {BackHandler} from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import { NavigationContainer } from '@react-navigation/native';
-
-IconF.loadFont();
-IconM.loadFont();
-IconI.loadFont();
+import { YellowBox } from "react-native";
+YellowBox.ignoreWarnings(['Non-serializable values were found in the navigation state']);
 
 console.disableYellowBox = true;
 

@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { Component } from 'react';
 import { useEffect } from 'react';
 import { useCallback } from 'react';
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -19,7 +19,7 @@ import FeedbackResponses from '../../Databases/FeedbackResponses';
 import StudentFeedbackCard from './StudentFeedbackCard';
 
  const FeedbackStudentPage = (props) => {
- 
+  const prevProps = useRef(props);
 
   const [state,setState] = useState({
     course: props.course,
@@ -34,16 +34,16 @@ import StudentFeedbackCard from './StudentFeedbackCard';
     opens: 0,
   })
 
-  const studentResponses = useCallback(() => {
+  const studentResponses = (value) => {
     console.log('Student response ', value);
     setState(prevState => ({
         ...prevState,
         responses: value,
         error:null
     }))
-  },[value])
+  }
 
-  const getTopics = useCallback (async () => {
+  const getTopics = async () => {
     const feedback = new Feedback();
     await feedback
       .getFeedbackDetails(state.course.passCode)
@@ -71,7 +71,7 @@ import StudentFeedbackCard from './StudentFeedbackCard';
         
         }
       });
-  },[])
+  }
 
  
 
@@ -225,14 +225,14 @@ import StudentFeedbackCard from './StudentFeedbackCard';
       });
   },[])
  
+ 
   useEffect(() => {
-    if (prevProps.currentFeedback != props.currentFeedback) {
-        getTopics().then(r => {
-          console.log('Feedback Started');
-        });
-      }
-  },[prevProps])
-
+    if (props.currentFeedback !== prevProps.currentFeedback) {
+      getTopics().then(() => {
+        console.log('Feedback Started');
+      });
+    }
+  }, [props.currentFeedback]);
   
     if (!state.loading) {
 
