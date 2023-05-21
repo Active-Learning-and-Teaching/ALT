@@ -191,7 +191,7 @@ class QuizResponses {
                     const temp2 = moment(endTime, "DD/MM/YYYY HH:mm:ss")
 
                     if (temp1<=temp2 && temp1>=temp){
-                        let answer = keys["answer"].trim().toUpperCase().replace(/,/g,"")
+                        let answer = keys["answer"].trim().replace(/,/g,"")       // trim().toUppercase().
                         console.log(answer)
                         if(answer in dict){
                             dict[answer]+=1
