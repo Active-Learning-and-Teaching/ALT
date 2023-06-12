@@ -278,7 +278,7 @@ const FeedbackResultsList = (props) =>  {
         </View>
       );
     }
-    else if ( state.kind === "2" && state.responses){
+    else if ( state.kind === '2'   && state.responses){
       return(
         <View style = {styles.container}>
           <Text style = {styles.heading}> 

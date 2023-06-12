@@ -65,12 +65,7 @@ function StudentDashBoard({navigation: {navigate}}) {
             const uid = auth().currentUser.uid;
             console.log(auth().currentUser);
             deleteAccount(studenURL, uid);
-            navigate.dispatch(
-              CommonActions.reset({
-                index: 1,
-                routes: [{name: 'Login'}],
-              }),
-            );
+            navigate('Login');
           },
         },
       ],
@@ -80,16 +75,12 @@ function StudentDashBoard({navigation: {navigate}}) {
   const signOut = async () => {
     // Unsubcribing to notifications before signout
     unSubscribe_Notifications();
+
     auth()
       .signOut()
       .then(async r => {
-        await navigate.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{name: 'Login'}],
-          }),
-        );
-
+        console.log('Signout successful');
+        navigate('Login');
         try {
           await GoogleSignin.revokeAccess();
           await GoogleSignin.signOut();
@@ -98,7 +89,7 @@ function StudentDashBoard({navigation: {navigate}}) {
         }
       })
       .catch(err => {
-        console.log(err.message);
+        console.log("chbjdfdfd",err.message);
       });
   };
 

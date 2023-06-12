@@ -4,13 +4,13 @@ import FeedbackStudentPage from './FeedbackStudentPage';
 import FeedbackFacultyPage from './FeedbackFacultyPage';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
-
+import firestore from '@react-native-firebase/firestore';
 
 const FeedbackHomePage = (props) => {
   
 
   const [state, setState] = useState({
-    type: props.route.params.type,
+      type: props.route.params.type,
       course: props.route.params.course,
       user: props.route.params.user,
       beforeFeedback: false,
@@ -37,15 +37,13 @@ const FeedbackHomePage = (props) => {
     }))
   }
 
-
   isCurrentFeedback = () => {
-    database()
-      .ref('InternalDb/Feedback/')
-      .orderByChild('passCode')
-      .equalTo(state.course.passCode)
-      .on('value', snapshot => {
-        if (snapshot.val()) {
-          const values = Object.values(snapshot.val())[0];
+    firestore()
+      .collection('Feedback')
+      .where('passCode', '==', state.course.passCode)
+      .onSnapshot(snapshot => {
+        if (!snapshot.empty) {
+          const values = snapshot.docs[0].data();
           const curr = moment.utc(database().getServerTime());
           const startTime = moment.utc(values.startTime, 'DD/MM/YYYY HH:mm:ss');
           const endTime = moment.utc(values.endTime, 'DD/MM/YYYY HH:mm:ss');
@@ -55,44 +53,38 @@ const FeedbackHomePage = (props) => {
           const duration = Math.abs(moment.utc(curr).diff(endTime, 'seconds'));
 
           if (curr >= startTime && curr <= endTime) {
-            setState(prevState => ({
-                ...prevState,
-                beforeFeedback: false,
+            setState({...state,
+              beforeFeedback: false,
               currentFeedback: true,
               currentDuration: duration,
               beforeDuration: 0,
               feedbackCount: values.feedbackCount,
               kind: values.kind,
-            }))
-            
+            });
           } else if (curr < startTime) {
-            setState(prevState => ({
-                ...prevState,
-                beforeFeedback: true,
+            setState({...state,
+              beforeFeedback: true,
               currentFeedback: false,
               currentDuration: 0,
               beforeDuration: beforeDuration,
               startTime: startTime,
               feedbackCount: values.feedbackCount,
               kind: values.kind,
-
-            }))
-           
+            });
           } else {
-            setState(prevState => ({
-                ...prevState,
-                beforeFeedback: false,
-                currentFeedback: false,
-                currentDuration: 0,
-                beforeDuration: 0,
-                feedbackCount: values.feedbackCount,
-                kind: values.kind,
-
-            }))
+            setState({...state,
+              beforeFeedback: false,
+              currentFeedback: false,
+              currentDuration: 0,
+              beforeDuration: 0,
+              feedbackCount: values.feedbackCount,
+              kind: values.kind,
+            });
           }
         }
       });
   };
+
 
   useEffect (() => {
     isCurrentFeedback();

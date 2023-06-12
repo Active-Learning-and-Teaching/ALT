@@ -20,7 +20,7 @@ import FeedbackResultsList from './FeedbackResultsList';
 
 const FeedbackFacultyPage = (props) =>  {
   // TODO change duration at deployment
-  duration = 5;
+  duration = 6;
 
 
 
@@ -58,7 +58,7 @@ const FeedbackFacultyPage = (props) =>  {
  
   
 
-  checkEmailSent = async () => {
+  const checkEmailSent = async () => {
     const feedback = new Feedback();
     feedback.getFeedbackDetails(state.course.passCode).then(value => {
       if (value != null) {
@@ -78,7 +78,7 @@ const FeedbackFacultyPage = (props) =>  {
     const feedback = new Feedback();
     feedback.getFeedbackDetails(state.course.passCode).then(value => {
       feedback.getFeedback(state.course.passCode).then(values => {
-        const url = Object.keys(values)[0];
+        const url = values.id;
         feedback.setFeedback(
           state.course.passCode,
           value.startTime,
@@ -121,7 +121,7 @@ const FeedbackFacultyPage = (props) =>  {
 
       await feedback.getFeedbackDetails(state.course.passCode).then(value => {
         feedback.getFeedback(state.course.passCode).then(values => {
-          const url = Object.keys(values)[0];
+          const url = values.id;
           feedback.setFeedback(
             state.course.passCode,
             '',
@@ -144,7 +144,7 @@ const FeedbackFacultyPage = (props) =>  {
         .format('DD/MM/YYYY HH:mm:ss');
       await feedback.getFeedbackDetails(state.course.passCode).then(value => {
         feedback.getFeedback(state.course.passCode).then(values => {
-          const url = Object.keys(values)[0];
+          const url = values.id;
           feedback.setFeedback(
             state.course.passCode,
             value.startTime,
@@ -160,7 +160,7 @@ const FeedbackFacultyPage = (props) =>  {
     } else {
       await feedback.getFeedbackDetails(state.course.passCode).then(value => {
         feedback.getFeedback(state.course.passCode).then(values => {
-          const url = Object.keys(values)[0];
+          const url = values.id;
           feedback.setFeedback(
             state.course.passCode,
             startTime,
@@ -379,7 +379,7 @@ const FeedbackFacultyPage = (props) =>  {
                       size={24}
                       onFinish={() => {
                         checkEmailSent().then(r => {
-                          console.log('');
+                          FeedbackMailer();
                         });
                         props.setFeedbackState();
                       }}

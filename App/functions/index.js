@@ -672,7 +672,7 @@ async function getFeedbackResponse(passCode, startTime, endTime, type) {
   } else {
     await admin
       .app()
-      .firebase()
+      .firestore()
       .collection('FeedbackResponse')
       .where('passCode', '==', passCode)
       .get()
@@ -1190,9 +1190,9 @@ async function feedbackResearchLogger(
     .app()
     .firestore()
     .collection('Lectures');
-  timings = await db_ref.where('passCode', '==', passCode).get();
+  const timings = await db_ref.where('passCode', '==', passCode).get();
 
-  if (snapshot.empty) return;
+  if (timings.empty) return;
 
   console.log(timings)
   console.log(curr_time.day())
@@ -1219,7 +1219,7 @@ async function feedbackResearchLogger(
       .firestore()
       .collection('StudentResearch');
 
-    snapshot = await db_ref.where('email-startTime-passCode', '==', student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' + passCode).get();
+    const snapshot = await db_ref.where('email-startTime-passCode', '==', student.Email + '-'+ startTime.format('DD/MM/YYYY HH:mm:ss') + '-' + passCode).get();
     if(snapshot.empty){
 
       await db_ref.add({
@@ -1315,8 +1315,8 @@ exports.mailingSystem = functions.https.onCall(async (data, context) => {
       .then(async snapshot => {
 
         if(!snapshot.empty){
-          const values = snapshot.docs[0].data();
-          type = values.kind || '0';
+          const value = snapshot.docs[0].data();
+          type = value.kind || '0';
           const data = await getFeedbackResponse(
             passCode,
             value['startTime'],

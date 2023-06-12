@@ -33,7 +33,7 @@ import { useState } from 'react';
         .format('HH:mm:ss'),
         error: null,
         duration: 1,
-         kind: null,
+        kind: '0',
     }
   )
 
@@ -69,8 +69,8 @@ import { useState } from 'react';
               console.log(state.kind);
             });
         } else {
-          const url = Object.keys(values)[0];
-          const feedbackCount = Object.values(values)[0].feedbackCount;
+          const url = values.id;
+          const feedbackCount = values.feedbackCount;
           feedback
             .setFeedback(
               state.course.passCode,
@@ -162,6 +162,7 @@ if (state.kind == 0) {
                 ))
                
               }}
+              initial={0}
               textColor={'black'}
               selectedColor={'black'}
               borderColor={'#383030'}

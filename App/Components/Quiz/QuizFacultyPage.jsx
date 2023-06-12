@@ -103,7 +103,7 @@ const QuizFacultyPage = (props) => {
             .then(value => {
                 Kbc.getQuestion(state.course.passCode)
                     .then(values => {
-                        const url = Object.keys(values)[0];
+                        const url = values.id;
                         Kbc.setQuestion(
                             state.course.passCode,
                             value["startTime"],
@@ -149,8 +149,8 @@ const QuizFacultyPage = (props) => {
             const kbc = new Quiz()
             await kbc.getQuestion(state.course.passCode)
             .then((values)=>{
-                const url = Object.keys(values)[0];
-                const questionCount = Object.values(values)[0].questionCount;
+                const url = values.id;
+                const questionCount = values.questionCount;
                 kbc.setQuestion(
                     state.course.passCode,
                     '',
@@ -202,8 +202,8 @@ const QuizFacultyPage = (props) => {
                             })
                     }
                     else{
-                        const url = Object.keys(values)[0];
-                        const questionCount = Object.values(values)[0].questionCount
+                        const url = values.id;
+                        const questionCount = values.questionCount
                         kbc.setQuestion(
                             state.course.passCode,
                             startTime,
@@ -270,7 +270,7 @@ const QuizFacultyPage = (props) => {
                 .then(value => {
                     Kbc.getQuestion(state.course.passCode)
                         .then(values => {
-                            const url = Object.keys(values)[0];
+                            const url = values.id;
                             Kbc.setQuestion(
                                 state.course.passCode,
                                 value["startTime"],
@@ -474,7 +474,7 @@ const QuizFacultyPage = (props) => {
 
                             }))
                            
-                            checkEmailSent().then(r=>{console.log("")})
+                            checkEmailSent().then(r=>{QuizMailer()})
                             props.setQuizState()
                         }}
                         digitStyle={{backgroundColor: '#FFF'}}

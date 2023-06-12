@@ -53,12 +53,7 @@ function FacultyDashBoard({navigation: {navigate}}) {
             console.log(auth().currentUser);
             deleteAccount(currProfUrl, uid);
 
-            navigate.dispatch(
-              CommonActions.reset({
-                index: 1,
-                routes: [{name: 'Login'}],
-              }),
-            );
+            navigate('Login');
           },
         },
       ],
@@ -69,13 +64,7 @@ function FacultyDashBoard({navigation: {navigate}}) {
     auth()
       .signOut()
       .then(async r => {
-        await navigate.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{name: 'Login'}],
-          }),
-        );
-
+        navigate('Login');
         try {
           await GoogleSignin.revokeAccess();
           await GoogleSignin.signOut();

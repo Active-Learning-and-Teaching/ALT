@@ -26,12 +26,12 @@ function StudentList() {
                     dict["email"] = data["email"]
                     dict["photo"] = data["photo"]
                     dict["verified"] = 1
-                    if ("verified" in keys){
-                        const arr = data.val()["verified"]
-                        if (arr.includes(this.state.courseURL)){
-                            dict["verified"] = 1
-                        }
-                    }
+                    // if ("verified" in dict){
+                    //     const arr = doc.data()["verified"]
+                    //     if (arr.includes(courseURL)){
+                    //         dict["verified"] = 1
+                    //     }
+                    // }
                     list.push(dict)
                         
                 })
@@ -67,22 +67,7 @@ function StudentList() {
     return(
         <SafeAreaView style={styles.safeContainer}>
             <ScrollView>
-                <View style={styles.grid}>
-                    <Text style={styles.text}>
-                        {taList.length===0
-                        ?"No TA"
-                        :"Total TA : "+taList.length}
-                    </Text>
-                    {taList.map((student,i)=> (
-                        <TACard      
-                            student={student}
-                            key={i}
-                            type={type}
-                            course={course}
-                            courseURL={courseURL}
-                        />
-                    ))}
-                </View>
+               
                 <View style={styles.grid}>
                     <Text style={styles.text}>
                         {studentList.length===0

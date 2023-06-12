@@ -12,14 +12,7 @@ function CheckUserLoggedIn({ navigation: { navigate } }) {
         auth()
             .signOut()
             .then(async r=>{
-                await navigate.dispatch(
-                    CommonActions.reset({
-                        index: 1,
-                        routes: [
-                            { name: 'Login' },
-                        ]
-                    })
-                )
+                navigate('Login');
 
                 try{
                     await GoogleSignin.revokeAccess()
@@ -111,7 +104,7 @@ function CheckUserLoggedIn({ navigation: { navigate } }) {
     },[])
 
     return(
-        <View className="absolute inset-0 flex items-center justify-center bg-white">
+        <View className="absolute inset-0 flex items-center justify-center w-screen h-screen bg-white">
             <ActivityIndicator size="large" color="#9E9E9E"/>
         </View>
     );
