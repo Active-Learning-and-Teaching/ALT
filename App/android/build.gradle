@@ -1,11 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
 
 buildscript {
     ext {
         buildToolsVersion = "28.0.3"
-        minSdkVersion = 16
-        compileSdkVersion = 30
-        targetSdkVersion = 30
+        minSdkVersion = 21
+        compileSdkVersion = 31
+        targetSdkVersion = 31
         androidXCore = "1.7.0"
     }
     repositories {
@@ -22,6 +23,12 @@ buildscript {
 }
 
 allprojects {
+    configurations.all {
+        resolutionStrategy {
+            // Remove this override in 0.65+, as a proper fix is included in react-native itself.
+            force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+        }
+    }
     repositories {
         mavenLocal()
         maven {
@@ -35,6 +42,6 @@ allprojects {
 
         google()
         jcenter()
-        maven { url 'https://www.jitpack.io' }
-      }
+        maven { url 'https://www.jitpack.io' } 
+      } 
 }

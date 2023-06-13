@@ -138,8 +138,8 @@ android {
         applicationId "com.IIITD.ALT"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.2.1"
+        versionCode 17
+        versionName "1.6.3"
         multiDexEnabled true
     }
     splits {
@@ -152,7 +152,7 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
+            storeFile file('/Users/utkarsh/Desktop/github/ALT/App/android/app/debug.keystore')
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
@@ -160,7 +160,7 @@ android {
             
         }
         release {
-            storeFile file('/Users/decentral/Documents/GitHub/ALT/keystore.jks')
+            storeFile file('/Users/utkarsh/Desktop/github/ALT/App/android/app/keystore.jks')
             storePassword '123456'
             keyAlias 'testfortls'
             keyPassword '123456'
