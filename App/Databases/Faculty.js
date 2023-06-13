@@ -79,12 +79,8 @@ class Faculty {
 
   //@Vishwesh
   deleteCourse = async (passCode, courseUrl) => {
-    await this.getCourseFaculty().then(value => {
-      if (value.includes(courseUrl)) {
-        const index = value.indexOf(courseUrl);
-        value.splice(index, 1);
-        this.setCourseFaculty(value);
-      }
+    await this.reference.doc(this.url).update({
+      courses: firestore.FieldValue.arrayRemove(courseUrl),
     });
     console.log('>>');
     console.log('triggering delete for passCode:' + passCode);

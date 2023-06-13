@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useRoute } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import { CoursePics } from '../../Utils/CoursePics';
@@ -67,6 +67,8 @@ function Announcement() {
                         }}
                     >
                         <Avatar
+                            titleStyle={styles.title}
+                            containerStyle={styles.container}
                             onPress={()=>{
                                 console.log(course.passCode)
                                 Clipboard.setString(course.passCode)
@@ -99,5 +101,33 @@ function Announcement() {
 
     )
 }
+
+const styles  = StyleSheet.create({
+    container: {
+        flex: 1,
+        width : Dimensions.window.width-20,
+        height : Dimensions.window.height/(5),
+        marginBottom: 8,
+        paddingBottom : 8,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 2.00,
+        elevation: 25,
+    },
+    title: {
+        alignSelf:'flex-start',
+        textAlign: 'left',
+        position: 'absolute',
+        left: 15,
+        right: 5,
+        fontSize: 20,
+        top: 15,
+        color:'white',
+    }
+});
 
 export default Announcement

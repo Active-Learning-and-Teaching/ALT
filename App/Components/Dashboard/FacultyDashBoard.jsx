@@ -89,13 +89,15 @@ function FacultyDashBoard({navigation: {navigate}}) {
             const course = new Courses();
             for (var i = 0; i < arr.length; i++) {
               course.getCourseByUrl(arr[i]).then(r => {
-                if (!('quizEmail' in r)) r.quizEmail = currentUser.email;
+                if(r){
+                  if (!('quizEmail' in r)) r.quizEmail = currentUser.email;
 
-                if (!('feedbackEmail' in r))
-                  r.feedbackEmail = currentUser.email;
-
-                if (!('defaultEmailOption' in r)) r.defaultEmailOption = true;
-                setCourseList(prev => [...prev, r]);
+                  if (!('feedbackEmail' in r))
+                    r.feedbackEmail = currentUser.email;
+  
+                  if (!('defaultEmailOption' in r)) r.defaultEmailOption = true;
+                  setCourseList(prev => [...prev, r]);
+                }   
               });
             }
           }

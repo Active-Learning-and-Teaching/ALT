@@ -52,10 +52,16 @@ const QuizStudentPage = (props) =>  {
             props.currentQuiz
           ) {
             console.log('Quiz has come to the foreground for First time!');
-            setState({opens: state.opens + 1});
+            setState(prevState => ({
+              ...prevState,
+              opens: state.opens + 1,
+            }));
             console.log(state.opens);
           } 
-          setState({appState: nextAppState});
+          setState(prevState => ({
+            ...prevState,
+            opens: state.opens + 1,
+          }));;
         },
       );
 
@@ -69,7 +75,7 @@ const QuizStudentPage = (props) =>  {
 
 
 
-  const quizresultData = useCallback((restultData, quizNumber ) => {
+  const quizresultData = useCallback((resultData, quizNumber ) => {
     setState(prevState => ({
         ...prevState,
         results:resultData
@@ -88,6 +94,7 @@ const QuizStudentPage = (props) =>  {
 
   const getCorrectAnswer = async () => {
     const Kbc = new Quiz();
+    console.log("checking", state, "dfdfd", state.course);
     Kbc.getTiming(state.course.passCode).then(value => {
         setState (prevState => ({
             ...prevState,
@@ -134,19 +141,22 @@ const QuizStudentPage = (props) =>  {
             ...prevState,
             error: 'Please answer'
         }))
+        return;
       
     } else if (props.quizType === 'numeric' && isNaN(parseFloat(option))) {
         setState(prevState => ({
             ...prevState,
             error: 'Please Input a Numerical Response',
         }))
+        return;
 
     } else {
 
         setState (prevState => ({
+            ...prevState,
             error: null,
         }))
-    
+        
     }
 
     Toast.show('Answer has been recorded!');
@@ -298,12 +308,12 @@ const QuizStudentPage = (props) =>  {
                     setState(prevState => ({
                         ...prevState,
                         quizResults: true,
-                    option: '',
-                    icon: '',
-                    error: null,
-                    opens: 0,
+                        option: '',
+                        icon: '',
+                        error: null,
+                        opens: 0,
 
-                    }))
+                        }))
                   
                   props.setQuizState();
                   getCorrectAnswer().then(r => {
