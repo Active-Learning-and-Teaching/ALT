@@ -428,7 +428,7 @@ const FeedbackFacultyPage = (props) =>  {
                   }))
                     
                     checkEmailSent().then(r => {
-                      console.log('');
+                      FeedbackMailer();
                     });
                     props.setFeedbackState();
                 }}

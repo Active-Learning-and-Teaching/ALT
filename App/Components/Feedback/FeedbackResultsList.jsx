@@ -41,7 +41,7 @@ const FeedbackResultsList = (props) =>  {
       });
   }, [])
 
-  showMinutePaperSummary = (index) => {
+  const showMinutePaperSummary = (index) => {
     return state.responses[index].map((item,i) => {
       return( 
         <Text style = {styles.answers} key={i}>
@@ -51,7 +51,7 @@ const FeedbackResultsList = (props) =>  {
     })
   }
 
-  handleMinutePaperSummary = (r) => {
+  const handleMinutePaperSummary = (r) => {
     const values = r.summary
     setState(prevState => ({
         ...prevState,
@@ -79,7 +79,7 @@ const FeedbackResultsList = (props) =>  {
     }
   }
 
-  getResponseData = async () => {
+  const getResponseData = async () => {
     const feedbackResponses = new FeedbackResponses();
     const feedback = new Feedback();
     await feedback
@@ -96,7 +96,7 @@ const FeedbackResultsList = (props) =>  {
             )
             .then(async values => {
               // console.log("Logging resp values");
-              // console.log(values);
+              console.log("checking value in result",values);
               await setState(prevState => ({
                 ...prevState,
                 responses: values,
@@ -122,19 +122,26 @@ const FeedbackResultsList = (props) =>  {
                   await props.FeedbackMailer().then();
                 }
               }});
+            console.log("🚀 ~ file: FeedbackResultsList.jsx:125 ~ getResponseData= ~ values:", values)
         } else if(r.kind=="2") {
           // props.summarizeResponses().then(() => {
-            if (r.summary){
-              handleMinutePaperSummary(r);
-              console.log("Showing Processed Summary");
-            }
-            else{
-              console.log("Processing Summary");
-              props.summarizeResponses().then(() => {
-                console.log("Handle MP Summary");
-                handleMinutePaperSummary(r);
-              });
-            }
+            console.log("kind 2 and wait", state.responses);
+            setState(prevState => ({
+              ...prevState,
+              feedbackNumber: r.feedbackCount,
+              kind: r.kind,
+            }))
+            // if (r.summary){
+            //   handleMinutePaperSummary(r);
+            //   console.log("Showing Processed Summary");
+            // }
+            // else{
+            //   console.log("Processing Summary");
+            //   props.summarizeResponses().then(() => {
+            //     console.log("Handle MP Summary");
+            //     handleMinutePaperSummary(r);
+            //   });
+            // }
           // })
         }   
       })
@@ -278,33 +285,13 @@ const FeedbackResultsList = (props) =>  {
         </View>
       );
     }
-    else if ( state.kind === '2'   && state.responses){
+    else if ( state.kind === '2' ){
       return(
         <View style = {styles.container}>
           <Text style = {styles.heading}> 
-            Summary Of Responses
+            Email Sent
           </Text>
-          {state.responses ? (
-            <View style = {styles.container}>
-              <Text style={[styles.questions, styles.shadow]}>
-                What are the three most important things that you learnt?
-              </Text>
-              {showMinutePaperSummary(0)}
-              {/* <Text style = {styles.answers}>Present Value of Future Payments</Text>
-              <Text style = {styles.answers}>Forex Reserves</Text>
-              <Text style = {styles.answers}>Straight Line Depreciation</Text> */}
-              <Text style={[styles.questions, styles.shadow]}>
-                What are the things that remain doubtful?
-              </Text>
-              {/* <Text style = {styles.answers}>Estimating price using Dividend discount model</Text>
-              <Text style = {styles.answers}>Imports and Exports dependence on Forex Rates</Text>
-              <Text style = {styles.answers}>Risk Adjusted Returns</Text> */}
-              {showMinutePaperSummary(1)}
-            </View>
-            ) : (
-                <Text />
-            )
-          }
+          {/* previous minute paper code snipper present at https://docs.google.com/document/d/1wFULJ4skuuC4WR-ooB45HhbN5nUDM6HJLnJkAmkMGRA/edit?usp=sharing */}
         </View>
       );
     }

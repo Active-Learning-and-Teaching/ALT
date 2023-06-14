@@ -98,22 +98,12 @@ function emailTemplate(
     <body>
     <div>
         <p style="color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; text-align:left;">
-              
-            Following are the results of Minute Paper Feedback conducted on ${date} for the course ${courseName}.
-            <br/> 
+            Please find attached the csv containing all the feedback responses 
+             <br/> 
             <br/>
 
         </p>
-        <div style = "font-family:Arial, Helvetica, sans-serif; text-align:left;">
-          <h4> Question 1 : What are the three most important things that you learnt? </h4> <br/>
-            ${results[0][0]} <br/>
-            ${results[0][1]} <br/>
-            ${results[0][2]} <br/>
-          <h4> Question 2 : What are the things that remain doubtful? </h4> <br/>
-            ${results[1][0]} <br/>
-            ${results[1][1]} <br/>
-            ${results[1][2]} <br/>
-        </div>
+        
     </div>	
     </body>
     </html>
@@ -717,8 +707,9 @@ async function getFeedbackCSV(passCode, startTime, endTime) {
           const temp1 = moment(keys['timestamp'], 'DD/MM/YYYY HH:mm:ss');
           const temp2 = moment(endTime, 'DD/MM/YYYY HH:mm:ss');
           // generate csv file for feedback responses between start and end time
+          const typeBack = [keys['responses'][0], keys['responses'][1]];
           if (temp1 <= temp2 && temp1 >= temp) {
-            list.push(keys['responses']);
+            list.push(typeBack);
           }
         });
       }

@@ -1,27 +1,30 @@
 import database from '@react-native-firebase/database';
 import moment from 'moment';
-import React, { Component } from 'react';
-import { useEffect } from 'react';
-import { useCallback } from 'react';
-import { useState,useRef } from 'react';
+import React, {
+  Component,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View
+  View,
 } from 'react-native';
 import CountDown from 'react-native-countdown-component';
-import { Button, Text } from 'react-native-elements';
+import {Button, Text} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import Feedback from '../../Databases/Feedback';
 import FeedbackResponses from '../../Databases/FeedbackResponses';
 import StudentFeedbackCard from './StudentFeedbackCard';
 
- const FeedbackStudentPage = (props) => {
+const FeedbackStudentPage = props => {
   const prevProps = useRef(props);
 
-  const [state,setState] = useState({
+  const [state, setState] = useState({
     course: props.course,
     user: props.user,
     responded: false,
@@ -32,16 +35,16 @@ import StudentFeedbackCard from './StudentFeedbackCard';
     firstOpen: 0,
     date: '',
     opens: 0,
-  })
+  });
 
-  const studentResponses = (value) => {
+  const studentResponses = value => {
     console.log('Student response ', value);
     setState(prevState => ({
-        ...prevState,
-        responses: value,
-        error:null
-    }))
-  }
+      ...prevState,
+      responses: value,
+      error: null,
+    }));
+  };
 
   const getTopics = async () => {
     const feedback = new Feedback();
@@ -62,75 +65,70 @@ import StudentFeedbackCard from './StudentFeedbackCard';
             .then(r => {
               respondedValue = r;
             });
-            setState(prevState => ({
-              ...prevState,
-              responded: respondedValue,
-              kind: value.kind,
-
-            }))
-        
+          setState(prevState => ({
+            ...prevState,
+            responded: respondedValue,
+            kind: value.kind,
+          }));
         }
       });
-  }
-
- 
+  };
 
   getStartTime = async () => {
     const feedback = new Feedback();
-    await feedback
-      .getFeedbackDetails(state.course.passCode)
-      .then(value => {
-        console.log('Output line 82 FeedbackStudent.js' + value['startTime']);
-        setState(prevState => ({
-          ...prevState,
-          date: value['startTime'],
-
-        }))
-        
-      });
+    await feedback.getFeedbackDetails(state.course.passCode).then(value => {
+      console.log('Output line 82 FeedbackStudent.js' + value['startTime']);
+      setState(prevState => ({
+        ...prevState,
+        date: value['startTime'],
+      }));
+    });
   };
 
   submitFeedback = async () => {
     var {responses} = state;
     var err = false;
 
-    let msg = "";
-    console.log("Submit Feedback ",responses);
+    let msg = '';
+    console.log('Submit Feedback ', responses);
     if (state.responses === -1 || !responses) {
-
       err = true;
       msg = 'Please enter a response';
     }
     if (state.kind == 2) {
-
       responses = [...state.responses];
-      if(Array.isArray(state.responses)){
-        if (!responses[0] || !responses[1] ) {
+      if (Array.isArray(state.responses)) {
+        if (!responses[0] || !responses[1]) {
           err = true;
           if (!responses[0]) {
-            msg = "Atleast 1 response needed for Question 1";
-          }
-          else{
-            msg = "Atleast 1 response needed for Question 2";
+            msg = 'Atleast 1 response needed for Question 1';
+          } else {
+            msg = 'Atleast 1 response needed for Question 2';
           }
         }
-      }
-      else{
+        console.log('coming here dfdfdfd');
+        // setState((prevState)=>({
+        //   ...prevState,
+        //   responses : {
+        //     0: responses[0],
+        //     1: responses[1],
+        //   },
+        // }));
+      } else {
         err = true;
-        msg = "Expected an array of responses. Got " + String(responses);
+        msg = 'Expected an array of responses. Got ' + String(responses);
       }
     }
     if (err) {
-      setState (prevState => ({
+      setState(prevState => ({
         ...prevState,
         error: msg,
-      }))
-     
+      }));
     } else {
-      setState (prevState => ({
+      setState(prevState => ({
         ...prevState,
         error: null,
-      }))
+      }));
     }
 
     if (!err) {
@@ -152,8 +150,7 @@ import StudentFeedbackCard from './StudentFeedbackCard';
 
       let date1 = new Date(temp);
       let date2 = new Date(temp1);
-      let date3 = new Date(temp3)
-
+      let date3 = new Date(temp3);
 
       const difference = date3.getTime() - date1.getTime();
       const differenceOpen = date2.getTime() - date1.getTime();
@@ -168,10 +165,16 @@ import StudentFeedbackCard from './StudentFeedbackCard';
       console.log('Printing line-> 136, FeedbackStudentPage.js');
       console.log(first_open_time);
 
-
+      // console.log("dfdfdfdfd",state);
       console.log(state.responses);
-      const studentResponses = state.responses;
-
+      let studentResponses = state.responses;
+      if (state.kind == 2) {
+        studentResponses = {
+          0: state.responses[0],
+          1: state.responses[1],
+        };
+      }
+      console.log('Student Responses ', studentResponses);
       await feedbackResponse
         .getFeedbackResponse(state.user.url, state.course.passCode)
         .then(url => {
@@ -207,25 +210,23 @@ import StudentFeedbackCard from './StudentFeedbackCard';
           }
         })
         .then(
-          setState (prevState => ({
+          setState(prevState => ({
             ...prevState,
             responded: true,
             responses: -1,
             kind: null,
             error: null,
-          }))
-         
+          })),
         );
     }
   };
 
   useEffect(() => {
     getTopics().then(r => {
-        // console.log(state.topics);
-      });
-  },[])
- 
- 
+      // console.log(state.topics);
+    });
+  }, []);
+
   useEffect(() => {
     if (props.currentFeedback !== prevProps.currentFeedback) {
       getTopics().then(() => {
@@ -233,120 +234,114 @@ import StudentFeedbackCard from './StudentFeedbackCard';
       });
     }
   }, [props.currentFeedback]);
-  
-    if (!state.loading) {
 
-      if (props.currentFeedback && state.opens === 0) {
-        console.log('Printing line-> 202, FeedbackStudentPage.js');
-        const timestamp_first = moment
-          .utc(database().getServerTime())
-          .format('DD/MM/YYYY HH:mm:ss');
-        setState(prevState => ({
-          ...prevState,
-          firstOpen: timestamp_first,
-          opens: state.opens + 1
-          
-        }))
-        console.log(state.firstOpen);
-      }
+  if (!state.loading) {
+    if (props.currentFeedback && state.opens === 0) {
+      console.log('Printing line-> 202, FeedbackStudentPage.js');
+      const timestamp_first = moment
+        .utc(database().getServerTime())
+        .format('DD/MM/YYYY HH:mm:ss');
+      setState(prevState => ({
+        ...prevState,
+        firstOpen: timestamp_first,
+        opens: state.opens + 1,
+      }));
+      console.log(state.firstOpen);
+    }
 
-      return (
-        <SafeAreaView style={styles.safeContainer}>
-          {props.currentFeedback === false ? (
-            props.beforeFeedback === false ? (
-              <ScrollView>
-                <Text style={styles.or}> No current feedback form!</Text>
-              </ScrollView>
-            ) : (
-              <ScrollView>
-                <Text style={styles.or}> No current feedback form!</Text>
-                <View style={styles.invisible}>
-                  <CountDown
-                    until={props.beforeDuration + 5}
-                    onFinish={() => {
-                      getTopics().then(r => {});
-                      props.setFeedbackState();
-                    }}
-                  />
-                </View>
-              </ScrollView>
-            )
-          ) : state.responded === true ? (
+    return (
+      <SafeAreaView style={styles.safeContainer}>
+        {props.currentFeedback === false ? (
+          props.beforeFeedback === false ? (
             <ScrollView>
               <Text style={styles.or}> No current feedback form!</Text>
             </ScrollView>
           ) : (
             <ScrollView>
-              <View style={styles.container}>
-                <Text style={styles.heading}> Feedback </Text>
+              <Text style={styles.or}> No current feedback form!</Text>
+              <View style={styles.invisible}>
                 <CountDown
-                  until={props.currentDuration + 2}
-                  size={24}
+                  until={props.beforeDuration + 5}
                   onFinish={() => {
-                    setState(prevState => ({
-                      ...prevState,
-                      responded: false,
-                      responses: -1,
-                      error: null,
-                      opens:0,
-
-                    }))
-                   
+                    getTopics().then(r => {});
                     props.setFeedbackState();
                   }}
-                  digitStyle={{backgroundColor: 'white'}}
-                  digitTxtStyle={{color: 'tomato'}}
-                  timeToShow={['M', 'S']}
-                  timeLabels={{m: 'Min', s: 'Sec'}}
-                />
-                <Text style={styles.text}> Please provide your Feedback</Text>
-                <View style={[styles.grid]}>
-                  <StudentFeedbackCard
-                    value="Question"
-                    key="0"
-                    index="0"
-                    kind={state.kind}
-                    studentResponses={studentResponses}
-                  />
-                </View>
-                <View style={styles.buttonContainer}>
-                  {state.error ? (
-                    <Text style={styles.errorMessage}>{state.error}</Text>
-                  ) : (
-                    <Text />
-                  )}
-                </View>
-              </View>
-              <View style={[styles.buttonContainer]}>
-                <Button
-                  buttonStyle={[styles.mybutton]}
-                  titleStyle={{color: 'white', fontWeight: 'normal'}}
-                  style={styles.buttonMessage}
-                  title="Submit"
-                  onPress={submitFeedback}
                 />
               </View>
             </ScrollView>
-          )}
-        </SafeAreaView>
-      );
-    } else {
-      
-      setTimeout(function() {
-        setState(prevState => ({
-          ...prevState,
-          loading: false,
-        }))
-        
-      }, 1000);
-      return (
-        <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E" />
-        </View>
-      );
-    }
-  
-}
+          )
+        ) : state.responded === true ? (
+          <ScrollView>
+            <Text style={styles.or}> No current feedback form!</Text>
+          </ScrollView>
+        ) : (
+          <ScrollView>
+            <View style={styles.container}>
+              <Text style={styles.heading}> Feedback </Text>
+              <CountDown
+                until={props.currentDuration + 2}
+                size={24}
+                onFinish={() => {
+                  setState(prevState => ({
+                    ...prevState,
+                    responded: false,
+                    responses: -1,
+                    error: null,
+                    opens: 0,
+                  }));
+
+                  props.setFeedbackState();
+                }}
+                digitStyle={{backgroundColor: 'white'}}
+                digitTxtStyle={{color: 'tomato'}}
+                timeToShow={['M', 'S']}
+                timeLabels={{m: 'Min', s: 'Sec'}}
+              />
+              <Text style={styles.text}> Please provide your Feedback</Text>
+              <View style={[styles.grid]}>
+                <StudentFeedbackCard
+                  value="Question"
+                  key="0"
+                  index="0"
+                  kind={state.kind}
+                  studentResponses={studentResponses}
+                />
+              </View>
+              <View style={styles.buttonContainer}>
+                {state.error ? (
+                  <Text style={styles.errorMessage}>{state.error}</Text>
+                ) : (
+                  <Text />
+                )}
+              </View>
+            </View>
+            <View style={[styles.buttonContainer]}>
+              <Button
+                buttonStyle={[styles.mybutton]}
+                titleStyle={{color: 'white', fontWeight: 'normal'}}
+                style={styles.buttonMessage}
+                title="Submit"
+                onPress={submitFeedback}
+              />
+            </View>
+          </ScrollView>
+        )}
+      </SafeAreaView>
+    );
+  } else {
+    setTimeout(function() {
+      setState(prevState => ({
+        ...prevState,
+        loading: false,
+      }));
+    }, 1000);
+    return (
+      <View style={styles.preloader}>
+        <ActivityIndicator size="large" color="#9E9E9E" />
+      </View>
+    );
+  }
+};
 
 const styles = StyleSheet.create({
   safeContainer: {
