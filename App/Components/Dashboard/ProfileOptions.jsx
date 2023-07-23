@@ -7,11 +7,11 @@ import messaging from '@react-native-firebase/messaging';
 import Modal from 'react-native-modal';
 import {Alert, SafeAreaView, ScrollView, View, StyleSheet} from 'react-native';
 import {Button,Icon} from 'react-native-elements';
-import Dimensions from '../../Utils/Dimensions';
+import Dimensions from '../../utils/Dimensions';
 import { useNavigation } from '@react-navigation/native';
-import Faculty from '../../Databases/Faculty';
-import Student from '../../Databases/Student';
-import Courses from '../../Databases/Courses';
+import Faculty from '../../database/Faculty';
+import Student from '../../database/Student';
+import Courses from '../../database/Courses';
 
 function ProfileOptions({type}) {
 

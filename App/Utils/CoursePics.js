@@ -4,31 +4,31 @@ export const CoursePics = (imageNumber) => {
 
     switch (imageNumber) {
         case 1:
-            url = require('../Assets/1.jpeg');
+            url = require('../assets/1.jpeg');
             break;
         case 2:
-            url = require('../Assets/2.jpeg');
+            url = require('../assets/2.jpeg');
             break;
         case 3:
-            url = require('../Assets/3.jpeg');
+            url = require('../assets/3.jpeg');
             break;
         case 4:
-            url = require('../Assets/4.jpeg');
+            url = require('../assets/4.jpeg');
             break;
         case 5:
-            url = require('../Assets/1.jpeg');
+            url = require('../assets/1.jpeg');
             break;
         case 6:
-            url = require('../Assets/2.jpeg');
+            url = require('../assets/2.jpeg');
             break;
         case 7:
-            url = require('../Assets/3.jpeg');
+            url = require('../assets/3.jpeg');
             break;
         case 8:
-            url = require('../Assets/4.jpeg');
+            url = require('../assets/4.jpeg');
             break;
         default:
-            url = require('../Assets/2.jpeg');
+            url = require('../assets/2.jpeg');
     }
 
     return url

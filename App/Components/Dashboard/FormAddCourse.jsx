@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet,View,TextInput} from 'react-native';
 import {Button, Text} from 'react-native-elements';
-import Courses from '../../Databases/Courses';
+import Courses from '../../database/Courses';
 
 function FormAddCourse({instructor,toggle}) {
   

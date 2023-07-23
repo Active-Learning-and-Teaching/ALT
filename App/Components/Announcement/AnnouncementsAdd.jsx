@@ -4,7 +4,7 @@ import {View,TextInput,} from 'react-native';
 import {Button, Text} from 'react-native-elements';
 import moment from 'moment';
 import database from '@react-native-firebase/database';
-import Announcement from '../../Databases/Announcement';
+import Announcement from '../../database/Announcement';
 
 function AnnouncementsAdd({course,toggle}) {
     const [heading,setHeading] = useState('')

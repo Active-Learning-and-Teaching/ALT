@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import FormAddCourse from './FormAddCourse';
 import StudentAddCourseForm from './StudentAddCourseForm';
 import AnnouncementsAdd from '../Announcement/AnnouncementsAdd';
-import Dimensions from '../../Utils/Dimensions';
+import Dimensions from '../../utils/Dimensions';
 
 function CourseAdd({type, instructor, student, course}) {
 

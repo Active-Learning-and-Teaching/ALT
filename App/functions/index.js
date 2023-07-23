@@ -25,7 +25,6 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
-
 admin.initializeApp(functions.config().firebase);
 
 function emailTemplate(
@@ -242,7 +241,6 @@ function emailTemplate(
 				`
 								: '';
 }
-
 async function getURLFromPasscode(passCode) {
 	const db_ref = admin
 		.app()

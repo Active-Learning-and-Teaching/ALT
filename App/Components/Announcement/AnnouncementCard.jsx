@@ -1,9 +1,9 @@
 import React from 'react';
 import {View} from 'react-native';
 import { ListItem, Badge } from 'react-native-elements'
-import Dimensions from '../../Utils/Dimensions';
+import Dimensions from '../../utils/Dimensions';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import Announcement from '../../Databases/Announcement';
+import Announcement from '../../database/Announcement';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
 

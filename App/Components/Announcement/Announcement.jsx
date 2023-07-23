@@ -6,8 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import { CoursePics } from '../../Utils/CoursePics';
-import Dimensions from '../../Utils/Dimensions';
+import { CoursePics } from '../../utils/CoursePics';
+import Dimensions from '../../utils/Dimensions';
 import AnnouncementCard from './AnnouncementCard';
 
 function Announcement() {
@@ -58,7 +58,7 @@ function Announcement() {
                 <View className='mt-5 pb-5 items-center'>
                     <ImageBackground
                         source={image}
-                        loadingIndicatorSource={require('../../Assets/LoadingImage.jpg')}
+                        loadingIndicatorSource={require('../../assets/LoadingImage.jpg')}
                         borderRadius={20}
                         className="mb-2 h-[calc(100vh/5)] p-2 shadow-md "
                         style={{

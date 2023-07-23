@@ -1,8 +1,8 @@
 import React, {FC,useEffect} from 'react';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import * as config from './config';
-import MainNavigator from './Components/Navigation/MainNavigator';
-import NotifiactionCentre from './NotificationCenter';
+import MainNavigator from './components/Navigation/MainNavigator';
+import NotifiactionCentre from './components/Notifications/NotificationCenter';
 import {BackHandler} from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { YellowBox } from "react-native";

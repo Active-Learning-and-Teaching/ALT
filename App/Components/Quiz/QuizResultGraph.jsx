@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import { PieChart } from "react-native-chart-kit";
 import {ScrollView, StyleSheet, View} from 'react-native';
-import Dimensions from '../../Utils/Dimensions';
-import QuizResponses from '../../Databases/QuizResponses';
-import Quiz from '../../Databases/Quiz';
+import Dimensions from '../../utils/Dimensions';
+import QuizResponses from '../../database/QuizResponses';
+import Quiz from '../../database/Quiz';
 import {Text} from 'react-native-elements';
 import { useEffect } from 'react';
 

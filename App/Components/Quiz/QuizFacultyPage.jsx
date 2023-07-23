@@ -1,14 +1,14 @@
 import React from 'react';
 import {ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, View, TextInput, Animated} from 'react-native';
 import {Slider, Text, Button,Icon} from 'react-native-elements';
-import Quiz from '../../Databases/Quiz';
+import Quiz from '../../database/Quiz';
 import moment from 'moment';
 import Options from './Options';
 import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
 import Toast from 'react-native-simple-toast';
 import SwitchSelector from "react-native-switch-selector";
-import Dimensions from '../../Utils/Dimensions';
+import Dimensions from '../../utils/Dimensions';
 import database from "@react-native-firebase/database";
 import MultiCorrectOptions from './MultiCorrectOptions';
 import {firebase} from '@react-native-firebase/functions';

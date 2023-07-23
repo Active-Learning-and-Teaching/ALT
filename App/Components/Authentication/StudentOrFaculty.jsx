@@ -2,9 +2,9 @@ import React, {useState,} from 'react';
 import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import {Avatar, Button} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
-import ErrorMessages from '../../Utils/ErrorMessages';
-import Faculty from '../../Databases/Faculty';
-import Student from '../../Databases/Student';
+import ErrorMessages from '../../utils/ErrorMessages';
+import Faculty from '../../database/Faculty';
+import Student from '../../database/Student';
 import { useRoute } from '@react-navigation/native';
 
 function StudentOrFaculty({navigation:{navigate}}) {
@@ -91,7 +91,7 @@ function StudentOrFaculty({navigation:{navigate}}) {
                     <Avatar
                         size="xlarge"
                         rounded
-                        source = {require('../../Assets/Faculty.png')}
+                        source = {require('../../assets/Faculty.png')}
                         overlayContainerStyle={{backgroundColor: 'white'}}
                         onPress={() => {
                             setSelected('faculty')
@@ -114,7 +114,7 @@ function StudentOrFaculty({navigation:{navigate}}) {
                     <Avatar
                         size="xlarge"
                         rounded
-                        source = {require('../../Assets/Student.png')}
+                        source = {require('../../assets/Student.png')}
                         overlayContainerStyle={{backgroundColor: 'white'}}
                         onPress={() => {
                             setSelected('student')

@@ -1,9 +1,9 @@
 import React, {useState,useEffect} from 'react';
 import {StyleSheet, ImageBackground, Text, Alert} from 'react-native';
 import {Avatar} from 'react-native-elements';
-import Dimensions from '../../Utils/Dimensions';
-import {CoursePics} from '../../Utils/CoursePics';
-import Courses from '../../Databases/Courses';
+import Dimensions from '../../utils/Dimensions';
+import {CoursePics} from '../../utils/CoursePics';
+import Courses from '../../database/Courses';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import Toast from 'react-native-simple-toast';
 import { useNavigation } from '@react-navigation/native';
@@ -111,7 +111,7 @@ function CourseCard({type,user,course}) {
         <ImageBackground
             className='flex-1 w-[calc(100%-20px)] h-[calc(100vh/3.5)] my-2 py-2 shadow-md'
             source={image}
-            loadingIndicatorSource={require('../../Assets/LoadingImage.jpg')}
+            loadingIndicatorSource={require('../../assets/LoadingImage.jpg')}
             borderRadius={20}
         >
             <Avatar

@@ -3,8 +3,8 @@ import firestore from '@react-native-firebase/firestore';
 import {useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View, ActivityIndicator} from 'react-native'
-import Courses from '../../Databases/Courses';
-import Faculty from '../../Databases/Faculty';
+import Courses from '../../database/Courses';
+import Faculty from '../../database/Faculty';
 import CourseCard from './CourseCard';
 
 function FacultyDashBoard({navigation}) {

@@ -2,9 +2,9 @@ import React, { Component, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { Text } from 'react-native-elements';
-import Feedback from '../../Databases/Feedback';
-import FeedbackResponses from '../../Databases/FeedbackResponses';
-import Dimensions from '../../Utils/Dimensions';
+import Feedback from '../../database/Feedback';
+import FeedbackResponses from '../../database/FeedbackResponses';
+import Dimensions from '../../utils/Dimensions';
 
 const FeedbackResultsList = ({course, date, emailStatus, feedbackresultData, FeedbackMailer, cancelFB, summarizeResponses}) => {
 

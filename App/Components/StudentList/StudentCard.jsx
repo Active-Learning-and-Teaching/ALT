@@ -1,11 +1,11 @@
 import React from 'react';
 import {Avatar, Icon, ListItem} from 'react-native-elements';
 import {Linking, StyleSheet, View} from 'react-native';
-import Dimensions from '../../Utils/Dimensions';
+import Dimensions from '../../utils/Dimensions';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import Courses from '../../Databases/Courses';
+import Courses from '../../database/Courses';
 import Toast from 'react-native-simple-toast';
-import Student from '../../Databases/Student';
+import Student from '../../database/Student';
 import CheckBox from '@react-native-community/checkbox';
 import database from '@react-native-firebase/database';
 

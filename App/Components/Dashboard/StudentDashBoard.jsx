@@ -2,8 +2,8 @@ import auth from '@react-native-firebase/auth';
 import {useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, Text, View, ActivityIndicator} from 'react-native';
-import Courses from '../../Databases/Courses';
-import Student from '../../Databases/Student';
+import Courses from '../../database/Courses';
+import Student from '../../database/Student';
 import CourseCard from './CourseCard';
 import firestore from '@react-native-firebase/firestore';
 

@@ -17,8 +17,8 @@ import {
 import CountDown from 'react-native-countdown-component';
 import {Button, Text} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import Feedback from '../../Databases/Feedback';
-import FeedbackResponses from '../../Databases/FeedbackResponses';
+import Feedback from '../../database/Feedback';
+import FeedbackResponses from '../../database/FeedbackResponses';
 import StudentFeedbackCard from './StudentFeedbackCard';
 
 const FeedbackStudentPage = props => {

@@ -11,8 +11,8 @@ import {
 import CountDown from 'react-native-countdown-component';
 import { Button } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import Feedback from '../../Databases/Feedback';
-import Dimensions from '../../Utils/Dimensions';
+import Feedback from '../../database/Feedback';
+import Dimensions from '../../utils/Dimensions';
 import FeedbackForm from './FeedbackForm';
 import FeedbackResultsList from './FeedbackResultsList';
 

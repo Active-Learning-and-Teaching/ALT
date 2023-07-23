@@ -1,7 +1,7 @@
 import React, {Component,useState} from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
 import {ListItem, Text} from 'react-native-elements';
-import Dimensions from '../../Utils/Dimensions';
+import Dimensions from '../../utils/Dimensions';
 import SwitchSelector from 'react-native-switch-selector';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 

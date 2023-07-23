@@ -11,10 +11,10 @@ import {
 import {Text, Button} from 'react-native-elements';
 import moment from 'moment';
 import Options from './Options';
-import QuizResponses from '../../Databases/QuizResponses';
+import QuizResponses from '../../database/QuizResponses';
 import CountDown from 'react-native-countdown-component';
 import QuizResultGraph from './QuizResultGraph';
-import Quiz from '../../Databases/Quiz';
+import Quiz from '../../database/Quiz';
 import Toast from 'react-native-simple-toast';
 import database from '@react-native-firebase/database';
 import MultiCorrectOptions from './MultiCorrectOptions';

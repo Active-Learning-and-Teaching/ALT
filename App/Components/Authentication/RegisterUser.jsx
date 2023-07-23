@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import {Button} from 'react-native-elements';
 import {Text, View, Image, TextInput, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
-import Dimensions from '../../Utils/Dimensions';
+import Dimensions from '../../utils/Dimensions';
 
 function RegisterUser({navigation}) {
   
@@ -77,7 +77,7 @@ function RegisterUser({navigation}) {
 								width : Dimensions.window.width/2.5,
 								height: Dimensions.window.width/2.5
 							}} 
-							source={require('../../Assets/Logo.png')} 
+							source={require('../../assets/Logo.png')} 
 						/>
 					</View>
 				</View>

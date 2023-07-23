@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react';
 import {Text, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import Courses from '../../Databases/Courses';
+import Courses from '../../database/Courses';
 import StudentCard from './StudentCard';
 import { useRoute,useFocusEffect } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';

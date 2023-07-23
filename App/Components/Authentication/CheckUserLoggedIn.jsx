@@ -2,8 +2,8 @@ import React, {useEffect} from 'react';
 import auth from '@react-native-firebase/auth'
 import {View,ActivityIndicator} from 'react-native';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
-import Faculty from '../../Databases/Faculty';
-import Student from '../../Databases/Student';
+import Faculty from '../../database/Faculty';
+import Student from '../../database/Student';
 import {CommonActions } from '@react-navigation/native';
 
 function CheckUserLoggedIn({ navigation: { navigate } }) {

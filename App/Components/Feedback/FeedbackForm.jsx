@@ -10,9 +10,9 @@ import {
 import {Slider, Text, Button, ListItem} from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
-import Feedback from '../../Databases/Feedback';
+import Feedback from '../../database/Feedback';
 import SwitchSelector from 'react-native-switch-selector';
-import Dimensions from '../../Utils/Dimensions';
+import Dimensions from '../../utils/Dimensions';
 import { useState } from 'react';
 
 

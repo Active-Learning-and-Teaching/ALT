@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import Courses from '../../Databases/Courses';
+import Courses from '../../database/Courses';
 import { useRoute } from '@react-navigation/native';
 import {
   Text,

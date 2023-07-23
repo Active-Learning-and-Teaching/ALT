@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { useRoute } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth'
-import ErrorMessages from "../../Utils/ErrorMessages"
+import ErrorMessages from "../../utils/ErrorMessages"
 import {Button, Text} from 'react-native-elements';
 import { View, TextInput, Image, ScrollView, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
 import { GoogleSignin,GoogleSigninButton} from '@react-native-community/google-signin';
-import Faculty from '../../Databases/Faculty';
-import Student from '../../Databases/Student';
-import Dimensions from '../../Utils/Dimensions';
+import Faculty from '../../database/Faculty';
+import Student from '../../database/Student';
+import Dimensions from '../../utils/Dimensions';
 
 function LogIn({navigation}) {
     route = useRoute()
@@ -115,7 +115,7 @@ function LogIn({navigation}) {
                                 width : Dimensions.window.width/2.5,
                                 height: Dimensions.window.width/2.5
                             }} 
-                            source={require('../../Assets/Logo.png')} 
+                            source={require('../../assets/Logo.png')} 
                         />
                     </View>
                     <View className='pt-10'>
