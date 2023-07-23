@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Icon } from 'react-native-elements';
-import { View, Platform, ScrollView } from 'react-native';
+import { SafeAreaView,View, Platform, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
 import FormAddCourse from './FormAddCourse';
 import StudentAddCourseForm from './StudentAddCourseForm';
 import AnnouncementsAdd from '../Announcement/AnnouncementsAdd';
+import Dimensions from '../../Utils/Dimensions';
 
 function CourseAdd({type, instructor, student, course}) {
 
@@ -38,18 +39,21 @@ function CourseAdd({type, instructor, student, course}) {
                     animationOut="slideOutDown"
                     isVisible={visible}
                     onBackdropPress = {toggleModal}
+                    style={{padding:10}}
                     onBackButtonPress= {toggleModal}
                     avoidKeyboard>
-                    <View 
-                        className="flex-1 flex bg-white max-h-screen/1.6 max-w-screen-2xl my-12 mx-5">
-                        { 
-                            type==="faculty"?
-                            <FormAddCourse toggle={toggleModal} instructor = {instructor} />:
-                            type==="student"?
-                            <StudentAddCourseForm student = {student} toggle={toggleModal}/>:
-                            <AnnouncementsAdd course = {course} toggle={toggleModal}/>
-                        }
-                    </View>
+                    <SafeAreaView>
+                        <View 
+                            style={{borderRadius:10,borderWidth:5,borderColor:'#FFFFFF',height:Dimensions.window.height/3}}>
+                            { 
+                                type==="faculty"?
+                                <FormAddCourse toggle={toggleModal} instructor = {instructor} />:
+                                type==="student"?
+                                <StudentAddCourseForm student = {student} toggle={toggleModal}/>:
+                                <AnnouncementsAdd course = {course} toggle={toggleModal}/>
+                            }
+                        </View>
+                    </SafeAreaView>
                 </Modal>
             </ScrollView>
         </View>

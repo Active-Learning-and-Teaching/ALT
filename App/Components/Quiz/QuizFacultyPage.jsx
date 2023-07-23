@@ -122,14 +122,10 @@ const QuizFacultyPage = (props) => {
     }
 
     const startKBC = async (action = "start") => {
-
- 
         if (action==="stop")
         {
             console.log("Created stop Quiz"); 
             console.log(state.correctAnswer);
-            //console.log(state.option);
-            
             setState (prevState => ({
                 ...prevState,
                 time : 2,
@@ -229,8 +225,6 @@ const QuizFacultyPage = (props) => {
                         error: null
 
                     }))
-            
-
                 })
 
         }}
@@ -329,16 +323,15 @@ const QuizFacultyPage = (props) => {
                                     correctAnswer : "*",
 
                                 }))
-                               
                             }}
                             textStyle={{fontSize:12}}
                             textColor={'black'}
                             selectedColor={'black'}
-                            borderColor={'#383030'}
-                            // hasPadding
+                            selectedTextStyle={{fontSize:12}}
+                            selectedTextContainerStyle={{padding:2}}
                             options={[
-                                { label: "Single-Correct", value: "mcq", activeColor: 'tomato'},
-                                { label: "Multi-Correct", value: "multicorrect" ,activeColor: 'tomato'},
+                                { label: "MCQ", value: "mcq", activeColor: 'tomato'},
+                                { label: "Multi-Choice", value: "multicorrect" ,activeColor: 'tomato'},
                                 { label: "Numeric", value: "numeric" ,activeColor: 'tomato'},
                                 { label: "Text", value: "alphaNumerical" ,activeColor: 'tomato'},
                             ]}
@@ -623,7 +616,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         paddingTop : 25,
-        padding: 5,
+        padding: 2,
         marginTop: 5,
         textAlign: 'center',
     },

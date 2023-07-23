@@ -9,6 +9,7 @@ import StudentDashBoard from '../Dashboard/StudentDashBoard';
 import CourseAdd from '../Dashboard/CourseAdd';
 import FacultyDashBoard from '../Dashboard/FacultyDashBoard';
 import TabNavigator from './TabNavigator';
+import ProfileOptions from '../Dashboard/ProfileOptions';
 
 const MyTheme = {
 	dark: false,
@@ -39,7 +40,7 @@ function MainNavigator() {
 							  options={{
 								  headerTitle : "Loading",
 								  headerLeft : null,
-								  gestureEnabled: false
+								  gestureEnabled: false,
 							  }}/>
 				<Stack.Screen name = "Login" component={LogIn}
 							  options={{
@@ -60,29 +61,40 @@ function MainNavigator() {
 								  setUser : setUser
 							  }}
 							  options={{
-								  headerTitle : "Dashboard",
-								  headerLeft : null,
-								  gestureEnabled: false,
-								  headerRight : ()=>(
-									  <CourseAdd
-										  type = {"student"}
-										  student ={user}
-									  />
-								  )
+								  	headerTitle : "Dashboard",
+								  	headerLeft : null,
+								  	gestureEnabled: false,
+									headerRight : ()=>(
+										<CourseAdd
+											type = {"student"}
+											student ={user}
+										/>
+									),
+									headerLeft: ()=>(
+										<ProfileOptions
+											type = {"student"}
+										/>
+									)
 							  }}/>
 				<Stack.Screen name = "Faculty DashBoard" component={FacultyDashBoard}
 							  initialParams={{
 								  setUser : setUser
 							  }}
 							  options={{
-								  headerTitle : "Dashboard",
-								  headerLeft : null,
-								  gestureEnabled: false,
-								  headerRight : ()=>(
+								 	headerTitle : "Dashboard",
+								  	headerLeft : null,
+								  	gestureEnabled: false,
+								  	headerRight : ()=>(
 									  <CourseAdd
 										  type = {"faculty"}
 										  instructor = {user}
-									  />)
+									  />),
+									headerLeft: ()=>(
+										<ProfileOptions
+											type = {"faculty"}
+										/>
+									)
+									
 							  }}/>
 				<Stack.Screen name = "Course" component={TabNavigator}
 							  options={{

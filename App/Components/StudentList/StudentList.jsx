@@ -9,6 +9,7 @@ function StudentList() {
     const route = useRoute()
     const {type,course,} = route.params
     const [studentList,setStudentList] = useState([])
+    const [facultyList,setFacultyList] = useState([])
     const [courseURL,setCourseURL] = useState('')
 
     const getStudents = (courseURL) => {
@@ -49,8 +50,42 @@ function StudentList() {
                             : 0
                 );
 
-                setStudentList(list);
-            })
+            setStudentList(list);
+        })
+    }
+
+    const getFaculty = (courseURL) => {
+        firestore()
+            .collection('Faculty')
+            .where("courses", 'array-contains', courseURL)
+            .onSnapshot(snapshot => {
+                const list = []
+                snapshot.docs.forEach((doc) => {
+                    const data = doc.data();
+                    const dict = {}
+                    dict["name"] = data["name"]
+                    dict["email"] = data["email"]
+                    dict["photo"] = data["photo"]
+                    dict["verified"] = 1
+                    list.push(dict)
+                        
+                })
+                list.sort((a,b) =>
+                    a.name!==undefined && b.name!==undefined
+                    ? a.name.toUpperCase() > b.name.toUpperCase()
+                        ? 1
+                        : ((b.name.toUpperCase()  > a.name.toUpperCase())
+                            ? -1
+                            : 0)
+                    : a.email > b.email
+                        ? 1
+                        : b.email > a.email
+                            ? -1
+                            : 0
+                );
+
+            setFacultyList(list);
+        })
     }
 
     useFocusEffect(
@@ -60,6 +95,7 @@ function StudentList() {
             const url = await courseObj.getCourse(course.passCode)
             setCourseURL(url)
             getStudents(url)
+            getFaculty(url)
         }
         onLoad()
     }, []))
@@ -70,10 +106,26 @@ function StudentList() {
                
                 <View style={styles.grid}>
                     <Text style={styles.text}>
+                        Faculty
+                    </Text>
+
+                    {facultyList.map((student,i)=> (
+                        <StudentCard 
+                            student={student}
+                            key={i}
+                            type={type}
+                            course={course}
+                            courseURL={courseURL}
+                        />
+                    ))}
+
+                    <Text style={styles.text}>
                         {studentList.length===0
                         ?"No Students"
-                        :"Total Students : "+studentList.length}
+                        :studentList.length+(studentList.length==1?" Student"
+                        :" Students")}
                     </Text>
+
                     {studentList.map((student,i)=> (
                         <StudentCard 
                             student={student}
@@ -102,7 +154,7 @@ const styles = StyleSheet.create({
         textAlign : 'center',
         alignSelf: "center",
         fontSize: 18,
-        paddingTop : 10,
+        paddingTop : 25,
         paddingBottom : 25,
         fontWeight : "bold"
     },

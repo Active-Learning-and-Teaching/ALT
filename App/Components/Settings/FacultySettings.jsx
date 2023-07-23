@@ -77,24 +77,29 @@ function FacultySettings() {
 							value={defaultEmailOption}
 						/>
 					</View>
-					<Text style={styles.text}>Email for Quiz Results</Text>
-					<TextInput
-						caretHidden
-						style={styles.textInput}
-						autoCapitalize="none"
-						textAlign={'center'}
-						onChangeText={text => setQuizEmail(text)}
-						value={quizEmail}
-					/>
-					<Text style={styles.text}>Email for Feedback Results</Text>
-					<TextInput
-						caretHidden
-						style={styles.textInput}
-						autoCapitalize="none"
-						textAlign={'center'}
-						onChangeText={text => setFeedbackEmail(text)}
-						value={feedbackEmail}
-					/>
+
+					{defaultEmailOption&&<>
+						<Text style={styles.text}>Email for Quiz Results</Text>
+						<TextInput
+							caretHidden
+							style={styles.textInput}
+							autoCapitalize="none"
+							textAlign={'left'}
+							onChangeText={text => setQuizEmail(text)}
+							value={quizEmail}
+						/>
+						<Text style={styles.text}>Email for Feedback Results</Text>
+						<TextInput
+							caretHidden
+							style={styles.textInput}
+							autoCapitalize="none"
+							textAlign={'left'}
+							onChangeText={text => setFeedbackEmail(text)}
+							value={feedbackEmail}
+						/>
+					</>}
+
+
 					{error ? (
 					<Text style={styles.errorMessage}>{error}</Text>
 					) : (
@@ -132,7 +137,7 @@ const styles = StyleSheet.create({
 	flex: 1,
 	flexDirection: 'row',
 	justifyContent: 'flex-end',
-	alignItems: 'center',
+	alignItems: 'flex-start',
 	paddingTop: 30,
   },
   toggleText: {
@@ -142,14 +147,14 @@ const styles = StyleSheet.create({
 	fontSize: 25,
 	fontWeight: 'bold',
 	color: '#333',
-	textAlign: 'center',
+	textAlign: 'left',
   },
   textInput: {
 	color: 'black',
 	width: '100%',
 	paddingTop: 15,
 	paddingBottom: 5,
-	alignSelf: 'center',
+	alignSelf: 'flex-start',
 	borderColor: '#ccc',
 	borderBottomWidth: 1,
 	fontSize: 20,
@@ -160,12 +165,11 @@ const styles = StyleSheet.create({
 	flexDirection: 'column',
 	justifyContent: 'center',
 	paddingTop: 55,
-	padding: 15,
 	fontSize: 20,
 	fontWeight: 'bold',
 	color: '#333',
 	marginTop: 25,
-	textAlign: 'center',
+	textAlign: 'left',
   },
   errorMessage: {
 	color: 'red',

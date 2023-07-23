@@ -48,14 +48,14 @@ function AnnouncementCard({course,announcement,type,key}) {
                 key = {key}
                 containerStyle={{
                     width : Dimensions.window.width-20,
-                    height : Dimensions.window.height/(6),
+                    height : Dimensions.window.height/8,
                     margin: 6,
                     shadowOffset: {
                         width: 0,
                         height: 3,
                     },
                     shadowOpacity: 0.05,
-                    borderRadius: 25,
+                    borderRadius: 16,
                 }}
                 bottomDivider
                 >

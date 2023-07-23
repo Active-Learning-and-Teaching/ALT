@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: 35,
+        paddingHorizontal: 35,
         backgroundColor: '#fff'
     },
     textInput: {

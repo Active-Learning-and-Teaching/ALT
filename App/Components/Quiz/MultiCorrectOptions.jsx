@@ -29,6 +29,7 @@ import { useState } from 'react';
     
         return(
             <View style={styles.container}>
+                {/* add submitted value and loader */}
                 {state.values.map((value, i)=> (
                     <Avatar
                         key = {i}

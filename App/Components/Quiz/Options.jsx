@@ -10,6 +10,7 @@ const Options = (props) => {
     
         return(
             <View style={styles.container}>
+                {/* Add loader and submitted */}
                 {state.values.map((value, i)=> (
                     <Avatar
                         key = {i}
