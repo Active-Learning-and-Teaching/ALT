@@ -287,15 +287,22 @@ const QuizFacultyPage = (props) => {
     const QuizMailer = useCallback(async () => {
         console.log('triggering mail for passCode:' + state.course.passCode)
         Toast.show('Sending Email...');
-        const { data } = firebase.functions().httpsCallable('mailingSystem')({passCode:state.course.passCode, type:"Quiz"})
-        .catch(function(error) {console.log('There has been a problem with your mail operation: ' + error);})
+        const data = firebase
+                    .functions()
+                    .httpsCallable('mailingSystem')({
+                        passCode:state.course.passCode, 
+                        type:"Quiz"
+                    })
+                    .catch(function(error) {
+                        console.log('There has been a problem with your mail operation: ' + error);
+                    })
         await dbUpdateEmailStatus().then(() => {
             setState(prevState => ({
                 ...prevState,
                 emailStatus: false,
             }))
             })
-        console.log("Email Status Updated")
+        console.log("Email Status Updated",data)
     },[])
 
   

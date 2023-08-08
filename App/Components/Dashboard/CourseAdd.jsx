@@ -44,7 +44,7 @@ function CourseAdd({type, instructor, student, course}) {
                     avoidKeyboard>
                     <SafeAreaView>
                         <View 
-                            style={{borderRadius:10,borderWidth:5,borderColor:'#FFFFFF',height:Dimensions.window.height/3}}>
+                            style={{borderRadius:10,borderWidth:5,borderColor:'#FFFFFF',height:Dimensions.window.height/2}}>
                             { 
                                 type==="faculty"?
                                 <FormAddCourse toggle={toggleModal} instructor = {instructor} />:
