@@ -1,0 +1,95 @@
+{
+  "project_info": {
+    "project_number": "50954815215",
+    "firebase_url": "https://alt-development-42a78-default-rtdb.firebaseio.com",
+    "project_id": "alt-development-42a78",
+    "storage_bucket": "alt-development-42a78.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50954815215:android:e109ee41dfbb7f792e3d1a",
+        "android_client_info": {
+          "package_name": "com.IIITD.ALT"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50954815215-5gca0n6g39h2m5he03bt34tq2rj1jefl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IIITD.ALT",
+            "certificate_hash": "1d19ca985cce7ad4edec1e0edfbd4aeafd66413a"
+          }
+        },
+        {
+          "client_id": "50954815215-c51qve8lnmojhu51s11h32d4nufdm172.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IIITD.ALT",
+            "certificate_hash": "b2784583bc3ca592ca469018b494ec75ca5fafee"
+          }
+        },
+        {
+          "client_id": "50954815215-gdukv9i6vf38kevo1tsil60f1fuh33v4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IIITD.ALT",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "50954815215-iv8u5cf350f9kfc82a4elndpabddvadt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IIITD.ALT",
+            "certificate_hash": "fd05977439034da51321d2ef1f1341c002938611"
+          }
+        },
+        {
+          "client_id": "50954815215-os7n56k5eo4gq9c9k1c2caodh8na757m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IIITD.ALT",
+            "certificate_hash": "4a0e42d61dc2ea6bc9d95eb195ad2403f6d6a48d"
+          }
+        },
+        {
+          "client_id": "50954815215-va930tuibil55b5h2d1jo81q4c5019o6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IIITD.ALT",
+            "certificate_hash": "b9a17dae4ea0ead117edf379bdc23673595e6ad4"
+          }
+        },
+        {
+          "client_id": "50954815215-nmndogittp58jvj65qk7vntqk53430oq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZdlLM4w-I4aVo8XO3jswMCqu0QTLg8Gg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50954815215-nmndogittp58jvj65qk7vntqk53430oq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "50954815215-rcfk923tprhd56ak6j096cro9u784srs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.IIITD.ALT"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
