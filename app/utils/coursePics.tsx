@@ -1,6 +1,8 @@
 export const CoursePics = (imageNumber: any) => {
-
     let url = ""
+
+    // printing type of imageNumber
+    console.log('Type: ', typeof imageNumber);
 
     switch (imageNumber) {
         case 1:
@@ -31,5 +33,6 @@ export const CoursePics = (imageNumber: any) => {
             url = require('../../assets/2.jpeg');
     }
 
+    console.log('URL: ', url);
     return url
 }

@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-elements';
 import { Text, View, Image, TextInput, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Dimensions from '../utils/Dimentions';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
 
-type RegisterUserProps = {
-  navigation: NativeStackNavigationProp<any, 'RegisterUser'>;
-  route: RouteProp<any, 'RegisterUser'>;
-};
+const RegisterUser: React.FC = () => {
+  // Access the navigation and route hooks directly
+  const navigation = useNavigation<any>();
+  const route = useRoute();
 
-const RegisterUser: React.FC<RegisterUserProps> = ({ navigation }) => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
