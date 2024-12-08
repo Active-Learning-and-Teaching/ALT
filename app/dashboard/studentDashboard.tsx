@@ -43,12 +43,13 @@ function StudentDashBoard({ navigation }: StudentDashBoardProps) {
       .collection('Student')
       .doc(currentUser.url)
       .onSnapshot(snapshot => {
-        if (!snapshot.empty) {
+        if (snapshot.exists) {
           setCourseList([]);
           if (snapshot.data()?.courses && snapshot.data()?.courses.length) {
             const arr = snapshot.data()?.courses;
             const course = new Courses();
             for (const courseUrl of arr) {
+              console.log(courseUrl);
               course.getCourseByUrl(courseUrl).then(r => {
                 setCourseList(prev => [...prev, r] as Courses[]);
               });
@@ -89,12 +90,12 @@ function StudentDashBoard({ navigation }: StudentDashBoardProps) {
       <ScrollView>
         <View style={styles.headerContainer}>
           <Text style={styles.headerText}>Courses</Text>
-          {courseList.map((item, i) => (
+          {courseList.map((item, i) => 
+            currentUser && (
             <CourseCard
               course={item}
               type={'student'}
               user={currentUser}
-              navigation={navigation.navigate}
               key={i}
             />
           ))}

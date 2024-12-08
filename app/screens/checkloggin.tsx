@@ -72,7 +72,7 @@ function CheckUserLoggedIn({ navigation }: CheckUserLoggedInProps) {
     }, []);
 
     return (
-        <View className="absolute inset-0 flex items-center justify-center w-screen h-screen bg-white">
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: 'white' }}>
             <ActivityIndicator size="large" color="#9E9E9E" />
         </View>
     );
