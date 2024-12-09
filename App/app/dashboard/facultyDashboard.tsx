@@ -41,7 +41,7 @@ const FacultyDashBoard: React.FC<FacultyDashBoardProps> = ({ navigation }) => {
   const route = useRoute<FacultyDashboardRouteProp>();
   const { setUser } = route.params;
   const [currentUser, setCurrentUser] = useState<Faculty | null>(null);
-  const [courseList, setCourseList] = useState<Courses[]>([]);
+  const [courseList, setCourseList] = useState<Courses[] | any>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -67,14 +67,13 @@ const FacultyDashBoard: React.FC<FacultyDashBoardProps> = ({ navigation }) => {
             coursesArray.forEach((url: string) => {
               course.getCourseByUrl(url).then((courseData) => {
                 if (courseData) {
+                  console.log(courseData);
                   if (!courseData.quizEmail) courseData.quizEmail = currentUser.email;
                   if (!courseData.feedbackEmail)
                     courseData.feedbackEmail = currentUser.email;
                   if (!courseData.defaultEmailOption)
                     courseData.defaultEmailOption = true;
-                  if (courseData instanceof Courses) {
-                    setCourseList((prev) => [...prev, courseData]);
-                  }
+                  setCourseList((prev) => [...prev, courseData]);
                 }
               });
             });
@@ -95,6 +94,7 @@ const FacultyDashBoard: React.FC<FacultyDashBoardProps> = ({ navigation }) => {
         getAllCourses(faculty);
         setUser(faculty);
       }
+      console.log(courseList);
     };
 
     onLoad();
@@ -116,7 +116,7 @@ const FacultyDashBoard: React.FC<FacultyDashBoardProps> = ({ navigation }) => {
             currentUser && (
             <CourseCard
               course={item}
-              type={'faculty'}
+              type='faculty'
               user={currentUser}
               key={index}
             />

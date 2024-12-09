@@ -17,7 +17,7 @@ interface User {
 interface CourseAddProps {
   type: 'faculty' | 'student' | 'course';
   instructor?: string | any; // Instructor name or details, optional based on type
-  student: User | any; // Student name or details, optional based on type
+  student?: User | any; // Student name or details, optional based on type
   course?: Courses | any; // Course details, optional based on type
 }
 

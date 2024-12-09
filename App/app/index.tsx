@@ -121,9 +121,18 @@ function MainNavigator() {
             setUser,
           }}
           options={{
-            headerLeft: () => null,
-            headerTitle: 'Dashboard',
+            headerTitle : "Dashboard",
             gestureEnabled: false,
+            headerRight : ()=>(
+              <CourseAdd
+                type = "faculty"
+                instructor = {user}
+              />),
+            headerLeft: ()=>(
+              <ProfileOptions
+                type = "faculty"
+              />
+            )
           }}
         />
         <Stack.Screen name = "Course" component={TabNavigator}

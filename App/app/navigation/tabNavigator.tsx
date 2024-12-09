@@ -58,8 +58,8 @@ function TabNavigator() {
           user: user,
           course: course,
         }}
-      />
-      <Tab.Screen
+      /> */}
+      {/* <Tab.Screen
         name="Feedback DashBoard"
         component={FeedbackStack}
         options={{
@@ -88,8 +88,8 @@ function TabNavigator() {
           user: user,
           course: course,
         }}
-      />
-      {type === 'faculty' && (
+      /> */}
+      {/* {type === 'faculty' && (
         <Tab.Screen
           name="Settings"
           component={SettingsStack}
