@@ -83,8 +83,8 @@ class FeedbackResponses {
     responses: any,
     timestamp: string,
     url: string,
-    firstOpen: boolean,
-    feedback_response_time: number
+    firstOpen: string,
+    feedback_response_time: string
   ): Promise<void> => {
     await this.reference
       .doc(url)
@@ -119,8 +119,8 @@ class FeedbackResponses {
     userName: string,
     responses: any,
     timestamp: string,
-    firstOpen: boolean,
-    feedback_response_time: number
+    firstOpen: string,
+    feedback_response_time: string
   ): Promise<void> => {
     await this.reference
       .add({
