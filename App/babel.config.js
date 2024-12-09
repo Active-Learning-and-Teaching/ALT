@@ -1,6 +1,6 @@
-module.exports = {
-  plugins: ["nativewind/babel"],
-  presets: [['module:metro-react-native-babel-preset', {
-       unstable_disableES6Transforms: true
-   }]],
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+  };
 };
