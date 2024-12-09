@@ -2,6 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Button, Text } from 'react-native-elements';
 import { View, TextInput, Image, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
 import Dimensions from '../utils/Dimentions'; // Assume you have this utils file
+import auth from '@react-native-firebase/auth';
+import ErrorMessages from '../utils/errormessages';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
+
+// Define the type for your route parameters
+type RootStackParamList = {
+  LogIn: {
+    getUserType: (displayName: string, email: string) => Promise<string>; // Returns userType as a string
+  };
+  RegisterUser: undefined;
+  StudentDashboard: undefined;
+  AdminDashboard: undefined;
+};
 
 type LogInProps = {
   navigation: any;
@@ -12,6 +26,8 @@ function LogIn({ navigation }: LogInProps) {
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const route = useRoute<RouteProp<RootStackParamList, 'LogIn'>>();
+  const nav = useNavigation<any>();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -23,13 +39,38 @@ function LogIn({ navigation }: LogInProps) {
     return unsubscribe;
   }, [navigation]);
 
-  const LoginUser = () => {
+  const LoginUser = async () => {
     if (email === '' || password === '') {
       setError('Enter details.');
     } else {
-      setError(null);
-      // Placeholder for login logic
-      console.log('Logging in with:', email, password);
+      try {
+        const res = await auth().signInWithEmailAndPassword(email, password);
+        console.log(res);
+
+        // Check if route.params and getUserType exist
+        if (route.params?.getUserType) {
+          const userType = await route.params.getUserType(res.user?.displayName || '', email);
+
+          if (userType === 'student') {
+            nav.navigate('StudentDashboard');
+          } else if (userType === 'admin') {
+            nav.navigate('AdminDashboard');
+          } else {
+            setError('Unknown user type');
+          }
+        } else {
+          console.error('getUserType is not defined in route.params');
+          setError('Error retrieving user type');
+        }
+
+        setEmail('');
+        setPassword('');
+        setError(null);
+      } catch (err) {
+        const errorMessages = new ErrorMessages();
+        const message = errorMessages.getErrorMessage(err.code);
+        setError(message);
+      }
     }
   };
 
@@ -103,7 +144,7 @@ function LogIn({ navigation }: LogInProps) {
                 backgroundColor: '#333',
                 borderRadius: 20,
               }}
-              onPress={() => navigation.navigate('SignUp')}
+              onPress={() => navigation.navigate('RegisterUser')}
             />
           </View>
         </View>
