@@ -28,7 +28,7 @@ interface CourseCardProps {
 }
 
 function CourseCard({ type, user, course }: CourseCardProps) {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const [image, setImage] = useState<string>('');
     const [courseState, setCourseState] = useState<Course>(course);
     const { showActionSheetWithOptions } = useActionSheet();
@@ -127,9 +127,13 @@ function CourseCard({ type, user, course }: CourseCardProps) {
             borderRadius={20}
         >
             <Avatar
-                onPress={() =>
-                    console.log('Course Code: ' + courseState.courseCode + ' Course Name: ' + courseState.courseName)
-                }
+                onPress={()=>
+                    navigation.navigate('Course', {
+                         type : type,
+                         user : user,
+                         course : courseState,
+                         setCourse : setCourseState,
+                 })}
                 onLongPress={() => {
                     showActionSheet();
                 }}

@@ -1,14 +1,15 @@
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from '@react-native-clipboard/clipboard';
 import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, ImageSourcePropType, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import { CoursePics } from '../utils/coursePics';
 import Dimensions from '../utils/Dimentions';
 import AnnouncementCard from './announcementCard';
+import { Image } from 'react-native-elements/dist/image/Image';
 
 // Define the types for the props passed from the route
 type AnnouncementRouteProp = RouteProp<{ params: { type: string; course: Course } }, 'params'>;
@@ -75,7 +76,7 @@ function Announcement() {
             <ScrollView>
                 <View style={styles.headerContainer}>
                     <ImageBackground
-                        source={{ uri: image }}
+                        source={image as ImageSourcePropType}
                         loadingIndicatorSource={require('../../assets/LoadingImage.jpg')}
                         style={styles.imageBackground}
                     >
