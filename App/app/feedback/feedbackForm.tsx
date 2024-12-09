@@ -18,6 +18,7 @@ interface FeedbackFormProps {
   course: { passCode: string };
   user: { email: string };
   feedbackCount: number;
+  setKind: (kind: string) => void;
 }
 
 interface State {
