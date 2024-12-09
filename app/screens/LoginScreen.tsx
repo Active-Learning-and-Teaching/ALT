@@ -62,7 +62,7 @@ function LogIn({ navigation }: LogInProps) {
                     var message = errorMessages.getErrorMessage(err.code)
                     setError(message)
                 })
-      } catch (err) {
+      } catch (err: any) {
         const errorMessages = new ErrorMessages();
         const message = errorMessages.getErrorMessage(err.code);
         setError(message);
@@ -140,7 +140,7 @@ function LogIn({ navigation }: LogInProps) {
                 backgroundColor: '#333',
                 borderRadius: 20,
               }}
-              onPress={() => navigation.navigate('RegisterUser')}
+              onPress={() => navigation.navigate('Register User')}
             />
           </View>
         </View>

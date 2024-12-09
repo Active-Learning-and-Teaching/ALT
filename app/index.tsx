@@ -6,8 +6,9 @@ import LogIn from './screens/LoginScreen';
 import RegisterUser from './screens/RegisterUser';
 import StudentOrFaculty from './screens/SignupScreen';
 import StudentDashBoard from './dashboard/studentDashboard';
+import FacultyDashBoard from './dashboard/facultyDashboard';
+import ProfileOptions from './dashboard/profileOptions';
 import CourseAdd from './dashboard/courseAdd';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 // Define types for user data if needed (e.g., User type)
 interface User {
@@ -62,6 +63,7 @@ function MainNavigator() {
           name="Loading"
           component={CheckUserLoggedIn}
           options={{
+            headerLeft: () => null,
             headerTitle: 'Loading',
             gestureEnabled: false,
           }}
@@ -70,6 +72,7 @@ function MainNavigator() {
           name="Login"
           component={LogIn}
           options={{
+            headerLeft: () => null,
             headerTitle: 'Login',
             gestureEnabled: false,
           }}
@@ -91,6 +94,28 @@ function MainNavigator() {
         <Stack.Screen
           name="Student DashBoard"
           component={StudentDashBoard}
+          initialParams={{
+            setUser,
+          }}
+          options={{
+            headerLeft: () => (
+              <ProfileOptions
+                type='student'
+              />
+            ),
+            headerRight: () => (
+              <CourseAdd 
+                type='student'
+                student={user}
+              />
+            ),
+            headerTitle: 'Dashboard',
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="Faculty DashBoard"
+          component={FacultyDashBoard}
           initialParams={{
             setUser,
           }}
