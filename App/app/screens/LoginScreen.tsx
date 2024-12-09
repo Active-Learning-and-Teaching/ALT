@@ -44,28 +44,24 @@ function LogIn({ navigation }: LogInProps) {
       setError('Enter details.');
     } else {
       try {
-        const res = await auth().signInWithEmailAndPassword(email, password);
-        console.log(res);
-
-        // Check if route.params and getUserType exist
-        if (route.params?.getUserType) {
-          const userType = await route.params.getUserType(res.user?.displayName || '', email);
-
-          if (userType === 'student') {
-            nav.navigate('StudentDashboard');
-          } else if (userType === 'admin') {
-            nav.navigate('AdminDashboard');
-          } else {
-            setError('Unknown user type');
-          }
-        } else {
-          console.error('getUserType is not defined in route.params');
-          setError('Error retrieving user type');
-        }
-
-        setEmail('');
-        setPassword('');
-        setError(null);
+            auth()
+                .signInWithEmailAndPassword(email, password)
+                .then(async(res)=> {
+                    console.log(res)
+                    if (res.user) {
+                        const name = res.user.displayName || '';
+                        const email = res.user.email || '';
+                        const userType = await route.params.getUserType(name, email);
+                    }
+                    setEmail('')
+                    setPassword('')
+                    setError(null)
+                })
+                .catch( err => {
+                    var errorMessages = new ErrorMessages()
+                    var message = errorMessages.getErrorMessage(err.code)
+                    setError(message)
+                })
       } catch (err) {
         const errorMessages = new ErrorMessages();
         const message = errorMessages.getErrorMessage(err.code);

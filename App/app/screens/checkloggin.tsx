@@ -39,7 +39,7 @@ function CheckUserLoggedIn({ navigation }: CheckUserLoggedInProps) {
                 const studentVal = await student.getUser(email);
                 console.log(studentVal);
                 if (studentVal) {
-                    navigation.navigate('StudentDashboard');
+                    navigation.navigate('Student DashBoard');
                 } else {
                     console.log('User not found');
                     navigation.navigate('Login', {

@@ -1,41 +1,131 @@
-import React from 'react';
-import { SafeAreaView, ScrollView, Text, View, Button } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import { useRoute } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { SafeAreaView, ScrollView, Text, View, ActivityIndicator, StyleSheet } from 'react-native';
+import Courses from '../database/courses';
+import Student from '../database/student';
+import CourseCard from './courseAdd';
+import firestore from '@react-native-firebase/firestore';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 
-function StudentDashboard() {
-  // Sample data for courses
-  const courses = [
-    { name: 'Math 101', code: 'MATH101' },
-    { name: 'Physics 201', code: 'PHYS201' },
-    { name: 'Computer Science 101', code: 'CS101' },
-    { name: 'Biology 105', code: 'BIO105' },
-  ];
+type RootStackParamList = {
+  StudentDashBoard: { setUser: (user: Student) => void };
+};
 
-  const logout = async () => {
-    await auth().signOut();
-    console.log('Log out button pressed');
+type StudentDashBoardNavigationProp = StackNavigationProp<RootStackParamList, 'StudentDashBoard'>;
+type StudentDashBoardRouteProp = RouteProp<RootStackParamList, 'StudentDashBoard'>;
+
+interface StudentDashBoardProps {
+  navigation: StudentDashBoardNavigationProp;
+}
+
+function StudentDashBoard({ navigation }: StudentDashBoardProps) {
+  const route = useRoute<StudentDashBoardRouteProp>();
+  console.log(route.params);
+  const { setUser } = route.params;
+  const [currentUser, setCurrentUser] = useState<Student | null>(null);
+  const [courseList, setCourseList] = useState<Courses[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const getAllCourses = useCallback((currentUser: Student) => {
+    firestore()
+      .collection('Student')
+      .doc(currentUser.url)
+      .onSnapshot(snapshot => {
+        if (!snapshot.empty) {
+          setCourseList([]);
+          if (snapshot.data()?.courses && snapshot.data()?.courses.length) {
+            const arr = snapshot.data()?.courses;
+            const course = new Courses();
+            for (const courseUrl of arr) {
+              course.getCourseByUrl(courseUrl).then(r => {
+                setCourseList(prev => [...prev, r] as Courses[]);
+              });
+            }
+          }
+        }
+      });
+  }, []);
+
+  useEffect(() => {
+    const onLoad = async () => {
+      const curr = await auth().currentUser;
+      if (curr) {
+        console.log(curr);
+        const student = new Student();
+        await student.setName(curr.displayName || '');
+        await student.setEmail(curr.email || '');
+        await student.setUrl();
+        setUser(student);
+        setCurrentUser(student);
+        getAllCourses(student);
+      }
+    };
+
+    onLoad();
+  }, [getAllCourses, setUser]);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#9E9E9E" />
+      </View>
+    );
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#f9f9f9', padding: 10 }}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={{ padding: 20, backgroundColor: 'white', borderRadius: 10, shadowColor: '#000', shadowOpacity: 0.1, shadowOffset: { width: 0, height: 2 }, elevation: 3 }}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>Welcome to Your Dashboard</Text>
-          <Text style={{ fontSize: 16, color: '#555' }}>Here are your current courses:</Text>
-          
-          {/* Display the list of courses */}
-          {courses.map((course, index) => (
-            <View key={index} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd' }}>
-              <Text style={{ fontSize: 18, fontWeight: '500' }}>{course.name}</Text>
-              <Text style={{ fontSize: 14, color: '#777' }}>{course.code}</Text>
-            </View>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>Courses</Text>
+          {courseList.map((item, i) => (
+            <CourseCard
+              course={item}
+              type={'student'}
+              user={currentUser}
+              navigation={navigation.navigate}
+              key={i}
+            />
           ))}
-          
-          <Button title="Log Out" onPress={() => logout()} />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-export default StudentDashboard;
+// Define the styles using StyleSheet.create for better type safety
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  loadingContainer: {
+    position: 'absolute',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  headerContainer: {
+    marginTop: 8,
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+});
+
+export default StudentDashBoard;

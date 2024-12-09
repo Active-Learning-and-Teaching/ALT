@@ -7,6 +7,7 @@ import Courses from '../database/courses';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '@react-native-firebase/functions';
+import { ImageSourcePropType } from 'react-native';
 
 interface User {
     deleteCourse: (passCode: string, value?: any) => Promise<void>;
@@ -51,6 +52,7 @@ function CourseCard({ type, user, course }: CourseCardProps) {
 
     const getImage = () => {
         setImage(CoursePics(courseState.imageURL));
+        console.log('Image URL: ', image);
     };
 
     const emailCourseDetails = async () => {
@@ -120,7 +122,7 @@ function CourseCard({ type, user, course }: CourseCardProps) {
     return (
         <ImageBackground
             style={styles.container}
-            source={{ uri: image }}
+            source={image as ImageSourcePropType}
             loadingIndicatorSource={require('../../assets/LoadingImage.jpg')}
             borderRadius={20}
         >
