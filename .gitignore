@@ -195,3 +195,6 @@ App/functions/MinutePaper/.pytest_cache
 App/android/app/release/
 App/functions/.runtimeconfig.json
 App/ios/TLS/GoogleService-Info.plist
+
+App/.expo
+App/expo-env.d.ts
