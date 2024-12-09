@@ -16,9 +16,9 @@ interface User {
 
 interface CourseAddProps {
   type: 'faculty' | 'student' | 'course';
-  instructor?: string; // Instructor name or details, optional based on type
-  student: User | null; // Student name or details, optional based on type
-  course?: Courses; // Course details, optional based on type
+  instructor?: string | any; // Instructor name or details, optional based on type
+  student: User | any; // Student name or details, optional based on type
+  course?: Courses | any; // Course details, optional based on type
 }
 
 const CourseAdd: React.FC<CourseAddProps> = ({ type, instructor, student, course }) => {

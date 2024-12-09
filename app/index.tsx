@@ -9,6 +9,7 @@ import StudentDashBoard from './dashboard/studentDashboard';
 import FacultyDashBoard from './dashboard/facultyDashboard';
 import ProfileOptions from './dashboard/profileOptions';
 import CourseAdd from './dashboard/courseAdd';
+import TabNavigator from './navigation/tabNavigator';
 
 // Define types for user data if needed (e.g., User type)
 interface User {
@@ -125,6 +126,10 @@ function MainNavigator() {
             gestureEnabled: false,
           }}
         />
+        <Stack.Screen name = "Course" component={TabNavigator}
+            options={{
+              headerShown : false
+            }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

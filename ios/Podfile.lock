@@ -2831,6 +2831,8 @@ PODS:
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
   - RecaptchaInterop (100.0.0)
+  - RNCClipboard (1.15.0):
+    - React-Core
   - RNCMaskedView (0.1.11):
     - React
   - RNFBApp (21.6.1):
@@ -3010,6 +3012,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
@@ -3214,6 +3217,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNFBApp:
@@ -3348,6 +3353,7 @@ SPEC CHECKSUMS:
   React-utils: 3f1fcffc14893afb9a7e5b7c736353873cc5fc95
   ReactCommon: f79ae672224dc1e6c2d932062176883c98eebd57
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  RNCClipboard: 69ab8e51324d5b351f6ba72bbdb72478087a2c64
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNFBApp: 1de631bffe154f4f8b56f8dbfb13d6305d658e97
   RNFBAuth: aa53108a283606c560e4380d75d093c35a13d8dd
