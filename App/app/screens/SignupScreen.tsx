@@ -96,9 +96,9 @@ const StudentOrFaculty: React.FC<NavigationProps> = ({ navigation: { navigate } 
     };
 
     return (
-        <SafeAreaView className="flex flex-col flex-1 p-6 bg-gray-100">
+        <SafeAreaView style={{ flex: 1, padding: 6, backgroundColor: 'gray' }}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg mt-4">
+                <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', padding: 6, borderRadius: 10, shadowColor: 'black', shadowOpacity: 0.5, marginTop: 4 }}>
                     {/* Faculty Avatar */}
                     <Avatar
                         size="xlarge"
@@ -121,7 +121,7 @@ const StudentOrFaculty: React.FC<NavigationProps> = ({ navigation: { navigate } 
                             },
                         ]}
                     />
-                    <Text className="text-xl font-bold text-center mb-4">Faculty</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 4 }}>Faculty</Text>
 
                     {/* Student Avatar */}
                     <Avatar
@@ -145,10 +145,10 @@ const StudentOrFaculty: React.FC<NavigationProps> = ({ navigation: { navigate } 
                             },
                         ]}
                     />
-                    <Text className="text-xl font-bold text-center mb-4">Student</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 4 }}>Student</Text>
 
                     {/* Error Message */}
-                    {error && <Text className="text-red-600 text-center mb-4">{error}</Text>}
+                    {error && <Text style={{ color: 'red', textAlign: 'center', marginBottom: 4 }}>{error}</Text>}
 
                     {/* Register Button */}
                     <Button
