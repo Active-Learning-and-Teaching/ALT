@@ -2,9 +2,9 @@ import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firest
 import { firebase } from '@react-native-firebase/functions';
 
 class Faculty {
-  private name: string | undefined;
-  private email: string | undefined;
-  private url: string | undefined;
+  name: string | undefined;
+  email: string | undefined;
+  url: string | undefined;
 
   private reference = firestore().collection('Faculty');
 

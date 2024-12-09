@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View, ActivityIndicator, StyleSheet } from 'react-native';
 import Courses from '../database/courses';
 import Student from '../database/student';
-import CourseCard from './courseAdd';
+import CourseCard from './courseCard';
 import firestore from '@react-native-firebase/firestore';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
@@ -22,7 +22,6 @@ interface StudentDashBoardProps {
 
 function StudentDashBoard({ navigation }: StudentDashBoardProps) {
   const route = useRoute<StudentDashBoardRouteProp>();
-  console.log(route.params);
   const { setUser } = route.params;
   const [currentUser, setCurrentUser] = useState<Student | null>(null);
   const [courseList, setCourseList] = useState<Courses[]>([]);
