@@ -98,6 +98,7 @@ function TabNavigator() {
           name="Settings"
           component={SettingsStack}
           options={{
+            headerShown: false,
             tabBarLabel: 'Settings',
             tabBarIcon: ({ focused }: { focused: boolean }) => (
               <Icon name="cog" type="font-awesome" size={25} color={focused ? 'tomato' : 'grey'} />
