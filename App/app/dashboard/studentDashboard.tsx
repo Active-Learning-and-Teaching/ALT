@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   loadingContainer: {
-    position: 'absolute',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

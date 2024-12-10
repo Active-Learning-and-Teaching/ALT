@@ -15,7 +15,7 @@
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "com.IIITD.ALT",
-            "googleServicesFile": "./GoogleService-Info.plist",
+            "googleServicesFile": "./GoogleService-Info.plist"
         },
         "android": {
             "adaptiveIcon": {
@@ -23,7 +23,7 @@
                 "backgroundColor": "#ffffff"
             },
             "package": "com.IIITD.ALT",
-            "googleServicesFile": "./google-services.json",
+            "googleServicesFile": "./google-services.json"
         },
         "web": {
             "bundler": "metro",
@@ -39,7 +39,8 @@
                 }
             }],
             "@react-native-firebase/app",
-            "@react-native-firebase/auth"
+            "@react-native-firebase/auth",
+            "@react-native-google-signin/google-signin"
         ],
         "experiments": {
             "typedRoutes": true

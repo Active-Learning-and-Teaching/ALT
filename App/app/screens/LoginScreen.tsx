@@ -6,6 +6,9 @@ import auth from '@react-native-firebase/auth';
 import ErrorMessages from '../utils/errormessages';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
+import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import Faculty from '../database/faculty';
+import Student from '../database/student';
 
 // Define the type for your route parameters
 type RootStackParamList = {
@@ -28,6 +31,10 @@ function LogIn({ navigation }: LogInProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const route = useRoute<RouteProp<RootStackParamList, 'LogIn'>>();
   const nav = useNavigation<any>();
+
+  GoogleSignin.configure({
+    webClientId: "50954815215-nmndogittp58jvj65qk7vntqk53430oq.apps.googleusercontent.com"
+  });
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -69,6 +76,56 @@ function LogIn({ navigation }: LogInProps) {
       }
     }
   };
+
+  const signInWithGoogle = async () => {
+    try{   
+        console.log("Signing in with Google")
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+        if (userInfo.type === 'success') {
+
+            const googleCredential = auth.GoogleAuthProvider.credential(userInfo.data.idToken);
+    
+            return auth()
+                .signInWithCredential(googleCredential)
+                .then(async ()=>{
+                    const faculty = new Faculty()
+                    await faculty.getUser(userInfo.data.user.email)
+                    .then(async val => {
+                        if (val){
+                            navigation.navigate('Faculty DashBoard')
+                        }
+                        else{
+                            const student = new Student();
+                            await student.getUser(userInfo.data.user.email)
+                            .then(async val => {
+                                if (val){
+                                    navigation.navigate('Student DashBoard')
+                                }
+                                else{
+                                    navigation.navigate(
+                                        'User Type', {
+                                            email : userInfo.data.user.email,
+                                            name : userInfo.data.user.name,
+                                            google : true
+                                        }
+                                    )
+                                }
+                            })
+                        }
+                    })
+                });
+            }
+            
+      }
+      catch (error: any){
+        var errorMessages = new ErrorMessages()
+        var message = errorMessages.getGoogleSignInError(error.code)
+        setError(message)
+        console.log("Error",error)
+    }
+};
+
 
   if (loading) {
     return (
@@ -142,6 +199,20 @@ function LogIn({ navigation }: LogInProps) {
               }}
               onPress={() => navigation.navigate('Register User')}
             />
+            <Text 
+                style={{ color: 'black', marginTop: 2, marginBottom: 5, paddingVertical: 5, alignSelf: 'center' }}> 
+            </Text>
+            {<GoogleSigninButton
+              style={{
+                  borderRadius:20, 
+                  width:192, 
+                  alignSelf: "center", 
+                  borderWidth:2
+              }}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Light}
+              onPress={signInWithGoogle}
+            />}
           </View>
         </View>
       </ScrollView>

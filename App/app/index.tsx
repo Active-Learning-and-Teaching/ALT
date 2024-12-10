@@ -19,11 +19,6 @@ interface User {
   email: string;
 }
 
-// Type for initial params
-interface MainNavigatorParams {
-  setUser?: (user: User | null) => void;
-}
-
 // Create the navigation stack type
 type StackParamList = {
   Loading: undefined;
