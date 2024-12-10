@@ -60,6 +60,33 @@ class Courses {
     this.instructor = faculty.getName();
   }
 
+  async addTAs(taId: string, courseUrl: string): Promise<void> {
+    try {
+      // Retrieve the current TAs for the course
+      const courseDoc = await this.reference.doc(courseUrl).get();
+
+      if (!courseDoc.exists) {
+        throw new Error('Course does not exist');
+      }
+
+      const courseData = courseDoc.data();
+      const currentTAs: string[] = courseData?.TAs || [];
+
+      // Add the new TA if not already present
+      if (!currentTAs.includes(taId)) {
+        currentTAs.push(taId);
+
+        // Update the course document
+        await this.reference.doc(courseUrl).update({ TAs: currentTAs });
+        console.log(`TA added to course: ${taId}`);
+      } else {
+        console.log('TA already exists in the course');
+      }
+    } catch (error) {
+      console.error('Error adding TA:', error);
+    }
+  }
+
   async getCourse(passCode: string): Promise<string> {
     let ans = '';
     await this.reference

@@ -73,7 +73,7 @@ const FacultyDashBoard: React.FC<FacultyDashBoardProps> = ({ navigation }) => {
                     courseData.feedbackEmail = currentUser.email;
                   if (!courseData.defaultEmailOption)
                     courseData.defaultEmailOption = true;
-                  setCourseList((prev) => [...prev, courseData]);
+                  setCourseList((prev: any) => [...prev, courseData]);
                 }
               });
             });
@@ -112,7 +112,7 @@ const FacultyDashBoard: React.FC<FacultyDashBoardProps> = ({ navigation }) => {
     <SafeAreaView style={styles.safeAreaView}>
       <ScrollView>
         <View style={styles.courseListContainer}>
-          {courseList.map((item, index) => 
+          {courseList.map((item: any, index: any) => 
             currentUser && (
             <CourseCard
               course={item}

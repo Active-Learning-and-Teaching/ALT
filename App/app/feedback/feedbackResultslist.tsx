@@ -9,7 +9,7 @@ import Dimensions from '../utils/Dimentions';
 interface FeedbackResultsListProps {
   course: {
     passCode: string;
-    defaultEmailOption: boolean;
+    defaultEmailOption?: boolean;
   };
   date: string;
   emailStatus: boolean;

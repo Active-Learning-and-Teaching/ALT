@@ -6,6 +6,7 @@ class Student {
   name: string | undefined;
   email: string | undefined;
   url: string | undefined;
+  TAs: string[] = [];
 
   private reference2 = firestore().collection('Student');
 
@@ -25,6 +26,39 @@ class Student {
 
   getEmail(): string | undefined {
     return this.email;
+  }
+
+  async addTACourseStudent(courseUrl: string): Promise<void> {
+    if (this.url) {
+      // 1. Add the course to the student's TAs array (in the Student document)
+      await this.reference2.doc(this.url).update({
+        TAs: firestore.FieldValue.arrayUnion(courseUrl),
+      });
+  
+      // 2. Now, update the course document to include the student's URL in the TAs field
+      try {
+        // Check if the course document exists first
+        const courseDoc = await firestore().collection('Courses').doc(courseUrl).get();
+  
+        if (!courseDoc.exists) {
+          throw new Error("Course does not exist");
+        }
+  
+        const courseData = courseDoc.data();
+        if (!courseData?.TAs) {
+          throw new Error("TAs field is missing in the course document");
+        }
+  
+        // Update the TAs array in the Courses collection
+        await firestore().collection('Courses').doc(courseUrl).update({
+          TAs: firestore.FieldValue.arrayUnion(this.url),
+        });
+  
+        console.log('TA added to course');
+      } catch (error) {
+        console.log('Error adding TA to course:', error);
+      }
+    }
   }
 
   async setUrl(): Promise<void> {

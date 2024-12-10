@@ -21,7 +21,7 @@ import FeedbackResultsList from './feedbackResultslist';
 interface FeedbackFacultyPageProps {
   course: {
     passCode: string,
-    defaultEmailOption: boolean
+    defaultEmailOption?: boolean
   }; // Define the exact shape of `course` as per your data model
   user: any; // Replace `any` with the actual type of `user`
   feedbackCount: number;
@@ -85,7 +85,8 @@ const FeedbackFacultyPage: React.FC<FeedbackFacultyPageProps> = (props) => {
 
   const checkEmailSent = async () => {
     const feedback = new Feedback();
-    feedback.getFeedbackDetails(state.course.passCode).then((value: any) => {
+    try {
+      const value = await feedback.getFeedbackDetails(state.course.passCode);
       if (value != null) {
         setState((prevState) => ({
           ...prevState,
@@ -93,9 +94,26 @@ const FeedbackFacultyPage: React.FC<FeedbackFacultyPageProps> = (props) => {
           resultPage: true,
           kind: value.kind,
           date: value.startTime,
+          loading: false, // Stop loading
+        }));
+      } else {
+        console.log("Feedback not found");
+        setState((prevState) => ({
+          ...prevState,
+          emailStatus: false,
+          resultPage: false,
+          kind: null,
+          date: '',
+          loading: false, // Stop loading
         }));
       }
-    });
+    } catch (error) {
+      console.error("Error checking email sent:", error);
+      setState((prevState) => ({
+        ...prevState,
+        loading: false, // Stop loading even on error
+      }));
+    }
   };
 
   const dbUpdateEmailStatus = async () => {

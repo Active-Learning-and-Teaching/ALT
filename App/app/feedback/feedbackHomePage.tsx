@@ -5,25 +5,25 @@ import FeedbackFacultyPage from './feedbackFaculty';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
 import firestore from '@react-native-firebase/firestore';
+import { RouteProp } from '@react-navigation/native';
 
-interface FeedbackHomePageProps {
-  route: {
-    params: {
-      type: 'faculty' | 'student'; // Type can be either 'faculty' or 'student'
-      course: {
-        passCode: string;
-        defaultEmailOption: boolean;
-      };
+type FeedbackStackParamList = {
+    Feedback: {
+      type: 'faculty' | 'student';
       user: any; // Replace `any` with a specific type if available
+      course: {
+        courseName: string;
+        passCode: string;
+        defaultEmailOption?: boolean;
+      };
     };
   };
-}
 
 interface FeedbackState {
   type: 'faculty' | 'student';
   course: {
     passCode: string;
-    defaultEmailOption: boolean;
+    defaultEmailOption?: boolean;
   };
   user: any; // Replace `any` with a specific type if available
   beforeFeedback: boolean;
@@ -33,6 +33,10 @@ interface FeedbackState {
   feedbackCount: number;
   startTime: string;
   kind: string | null;
+}
+
+interface FeedbackHomePageProps {
+    route: RouteProp<FeedbackStackParamList, 'Feedback'>;
 }
 
 const FeedbackHomePage: React.FC<FeedbackHomePageProps> = (props) => {

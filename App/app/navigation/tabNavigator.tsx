@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-elements';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import AnnouncementStack from './announcementStack';
+import FeedbackStack from './feedbackStack';
 // import QuizStack from './QuizStack';
 // import FeedbackStack from './FeedbackStack';
 // import StudentStack from './StudentStack';
@@ -32,6 +33,7 @@ function TabNavigator() {
         name="Course DashBoard"
         component={AnnouncementStack}
         options={{
+          headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused }: { focused: boolean }) => (
             <Icon name="home" type="font-awesome" size={25} color={focused ? 'tomato' : 'grey'} />
@@ -59,10 +61,11 @@ function TabNavigator() {
           course: course,
         }}
       /> */}
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Feedback DashBoard"
         component={FeedbackStack}
         options={{
+          headerShown: false,
           tabBarLabel: 'Feedback',
           tabBarIcon: ({ focused }: { focused: boolean }) => (
             <Icon name="comments" type="font-awesome" size={25} color={focused ? 'tomato' : 'grey'} />
@@ -73,7 +76,7 @@ function TabNavigator() {
           user: user,
           course: course,
         }}
-      /> */}
+      />
       {/* <Tab.Screen
         name="Student List"
         component={StudentStack}
