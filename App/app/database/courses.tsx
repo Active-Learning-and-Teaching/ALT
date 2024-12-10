@@ -136,13 +136,13 @@ class Courses {
     room: string,
     passCode: string,
     instructors: string[],
-    TAs: string[],
     imageURL: string,
     instructor: string,
     quizEmail: string,
     feedbackEmail: string,
     defaultEmailOption: boolean,
     url: string,
+    TAs?: string[],
   ): Promise<void> {
     await this.reference
       .doc(url)
