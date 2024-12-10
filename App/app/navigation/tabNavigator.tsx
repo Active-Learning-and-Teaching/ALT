@@ -5,9 +5,8 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import AnnouncementStack from './announcementStack';
 import FeedbackStack from './feedbackStack';
 import QuizStack from './quizStack';
-// import FeedbackStack from './FeedbackStack';
 import StudentStack from './studentStack';
-// import SettingsStack from './SettingsStack';
+import SettingsStack from './facultyStack';
 
 // Define the route params type
 interface TabNavigatorParams {
@@ -94,7 +93,7 @@ function TabNavigator() {
           course: course,
         }}
       />
-      {/* {type === 'faculty' && (
+      {type === 'faculty' && (
         <Tab.Screen
           name="Settings"
           component={SettingsStack}
@@ -111,7 +110,7 @@ function TabNavigator() {
             setCourse: setCourse,
           }}
         />
-      )} */}
+      )}
     </Tab.Navigator>
   );
 }
