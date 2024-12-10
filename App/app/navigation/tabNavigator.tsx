@@ -4,7 +4,7 @@ import { Icon } from 'react-native-elements';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import AnnouncementStack from './announcementStack';
 import FeedbackStack from './feedbackStack';
-// import QuizStack from './QuizStack';
+import QuizStack from './quizStack';
 // import FeedbackStack from './FeedbackStack';
 import StudentStack from './studentStack';
 // import SettingsStack from './SettingsStack';
@@ -46,11 +46,12 @@ function TabNavigator() {
           course: course,
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Quiz DashBoard"
         component={QuizStack}
         options={{
           tabBarLabel: 'Quiz',
+          headerShown: false,
           tabBarIcon: ({ focused }: { focused: boolean }) => (
             <Icon name="gamepad" type="font-awesome" size={25} color={focused ? 'tomato' : 'grey'} />
           ),
@@ -60,7 +61,7 @@ function TabNavigator() {
           user: user,
           course: course,
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Feedback DashBoard"
         component={FeedbackStack}

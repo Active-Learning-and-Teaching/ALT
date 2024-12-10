@@ -79,12 +79,12 @@ class Quiz {
     endTime: string,
     duration: string,
     correctAnswer: string,
-    errorRate: number,
+    errorRate: string | undefined,
     instructor: string,
     quizType: string,
-    url: string,
+    url: string | undefined,
     emailResponse: boolean,
-    questionCount: number
+    questionCount: number | undefined
   ): Promise<void> {
     await this.reference2
       .doc(url)
@@ -109,9 +109,9 @@ class Quiz {
     passCode: string,
     startTime: string,
     endTime: string,
-    duration: string,
+    duration: number,
     correctAnswer: string,
-    errorRate: number,
+    errorRate: string,
     instructor: string,
     quizType: string
   ): Promise<void> {

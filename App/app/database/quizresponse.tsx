@@ -42,11 +42,11 @@ setResponse = async (
     answer: string,
     timestamp: string,
     name: string,
-    quiz_response_time: number,
-    normalised_response_time: number,
+    quiz_response_time: string,
+    normalised_response_time: string,
     url: string,
     opens: number,
-    firstOpen: boolean
+    firstOpen: string
 ): Promise<void> => {
     try {
     await this.reference2.doc(url).set({
@@ -76,10 +76,10 @@ createResponse = async (
     answer: string,
     timestamp: string,
     name: string,
-    quiz_response_time: number,
-    normalised_response_time: number,
+    quiz_response_time: string,
+    normalised_response_time: string,
     opens: number,
-    firstOpen: boolean
+    firstOpen: string
 ): Promise<void> => {
     try {
     await this.reference2.add({

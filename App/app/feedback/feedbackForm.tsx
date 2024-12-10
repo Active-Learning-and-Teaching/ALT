@@ -11,8 +11,8 @@ import { Button, ListItem, Slider, Text } from 'react-native-elements';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
 import Feedback from '../database/feedback';
-import { Switch } from 'react-native-gesture-handler';
 import Dimensions from '../utils/Dimentions';
+import SwitchSelector from 'react-native-switch-selector';
 
 interface FeedbackFormProps {
   course: { passCode: string };
@@ -107,14 +107,14 @@ const FeedbackForm: React.FC<FeedbackFormProps> = (props) => {
   } else if (state.kind === '2') {
     kindElement = (
       <View>
-        <ListItem containerStyle={styles.container}>
+        <ListItem containerStyle={styles.listContainer}>
           <ListItem.Content>
             <ListItem.Title style={styles.title}>
               What are the three most important things that you learnt?
             </ListItem.Title>
           </ListItem.Content>
         </ListItem>
-        <ListItem containerStyle={styles.container}>
+        <ListItem containerStyle={styles.listContainer}>
           <ListItem.Content>
             <ListItem.Title style={styles.title}>
               What are the things that remain doubtful?
@@ -122,6 +122,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = (props) => {
           </ListItem.Content>
         </ListItem>
         <Text style={styles.minPaperHelperText}>
+          {' '}
           Students will provide input in text format
         </Text>
       </View>
@@ -133,28 +134,25 @@ const FeedbackForm: React.FC<FeedbackFormProps> = (props) => {
       <ScrollView>
         <Text style={styles.heading}>Feedback {props.feedbackCount + 1}</Text>
 
-        <View style={styles.selector}>
-          <View style={styles.switchContainer}>
-            <Text>Feedback Type:</Text>
-            <View style={styles.switchWrapper}>
-              <Text>Color Scale</Text>
-              <Switch
-                value={state.kind === '0'}
-                onValueChange={() => setState({ ...state, kind: state.kind === '0' ? null : '0' })}
-              />
-              <Text>Likert Scale</Text>
-              <Switch
-                value={state.kind === '1'}
-                onValueChange={() => setState({ ...state, kind: state.kind === '1' ? null : '1' })}
-              />
-              <Text>Minute Paper</Text>
-              <Switch
-                value={state.kind === '2'}
-                onValueChange={() => setState({ ...state, kind: state.kind === '2' ? null : '2' })}
-              />
-            </View>
-          </View>
-        </View>
+        <SwitchSelector
+          onPress={value => {
+            console.log(value)
+            setState((prevState) => ({
+              ...prevState,
+              kind: value.toString(),
+            }));
+          }}
+          buttonColor='tomato'
+          initial={0}
+          textColor={'black'}
+          selectedColor={'black'}
+          borderColor={'#383030'}
+          options={[
+            {label: 'Color Scale', value: 0},
+            {label: 'Likert Scale', value: 1},
+            {label: 'Minute Paper', value: 2},
+          ]}
+        />
 
         <View style={styles.buttonContainer}>
           {state.error && <Text style={styles.errorMessage}>{state.error}</Text>}
@@ -253,6 +251,14 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 5,
   },
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: 15,
+    alignItems: 'center',
+  },
   slider: {
     display: 'flex',
     justifyContent: 'center',
@@ -277,13 +283,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  container: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    padding: 15,
-    alignItems: 'center',
+  listContainer: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 5.0,
+    elevation: 24,
+
+    borderColor: 'tomato',
+    borderRadius: 8,
+    marginTop: 2,
+    marginBottom: 2,
+    paddingTop: 2,
+    paddingBottom: 2,
+    marginRight: 10,
   },
   buttonContainer: {
     flex: 1,
