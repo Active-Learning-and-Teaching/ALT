@@ -139,27 +139,47 @@ class Student {
   }
 
   async addCourseStudent(courseUrl: string): Promise<void> {
-    if (this.url) {
-      // Add course to the current student's courses
-      await this.reference2.doc(this.url).update({
-        courses: firestore.FieldValue.arrayUnion(courseUrl),
-      });
-
-      try {
-        const obj: Record<string, boolean> = {};
+    try {
+      // Get the current student's course list
+      let courses = await this.getCourseStudent();
+  
+      // If the student doesn't already have this course in their list, add it
+      if (courses && !courses.includes(courseUrl)) {
+        courses.push(courseUrl);
+        await this.setCourseStudent(courses); // Update the student's course list
+      }
+  
+      console.log('Adding course to student');
+  
+      // Add course to the current student's courses in Firestore
+      if (this.url) {
+        await this.reference2.doc(this.url).update({
+          courses: firestore.FieldValue.arrayUnion(courseUrl),
+        });
+      } else {
+        console.error('Student URL is not set');
+      }
+  
+      // Add the student to the course document in Firestore
+      console.log("Adding student to course");
+      const obj: Record<string, boolean> = {};
+      if (this.url) {
         obj['students.' + this.url] = true;
         await firestore()
           .collection('Courses')
           .doc(courseUrl)
           .update(obj)
           .then(() => {
-            console.log('Student updated');
+            console.log('Student added to course');
           });
-      } catch (error) {
-        console.log(error);
+      } else {
+        console.error('Student URL is not set');
       }
+    } catch (error) {
+      console.error('Error adding course to student or student to course:', error);
     }
   }
+  
 
   async deleteCourse(courseUrl: string): Promise<void> {
     if (this.url) {

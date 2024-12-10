@@ -12,13 +12,12 @@ interface User {
 
 interface StudentAddCourseFormProps {
   toggle: () => void;
-  student: User | null;
+  student: Student;
 }
 
 const StudentAddCourseForm: React.FC<StudentAddCourseFormProps> = ({ toggle, student }) => {
   const [passCode, setPassCode] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  const studentDatabase = new Student();
   
 
   const joinCourse = async () => {
@@ -34,7 +33,7 @@ const StudentAddCourseForm: React.FC<StudentAddCourseFormProps> = ({ toggle, stu
         console.log(value);
 
         if (value) {
-          await studentDatabase
+          await student
             .addCourseStudent(value)
             .then(() => console.log('Added Course to Student'));
           toggle();

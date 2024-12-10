@@ -6,7 +6,7 @@ import AnnouncementStack from './announcementStack';
 import FeedbackStack from './feedbackStack';
 // import QuizStack from './QuizStack';
 // import FeedbackStack from './FeedbackStack';
-// import StudentStack from './StudentStack';
+import StudentStack from './studentStack';
 // import SettingsStack from './SettingsStack';
 
 // Define the route params type
@@ -77,10 +77,11 @@ function TabNavigator() {
           course: course,
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Student List"
         component={StudentStack}
         options={{
+          headerShown: false,
           tabBarLabel: 'Students',
           tabBarIcon: ({ focused }: { focused: boolean }) => (
             <Icon name="users" type="font-awesome" size={25} color={focused ? 'tomato' : 'grey'} />
@@ -91,7 +92,7 @@ function TabNavigator() {
           user: user,
           course: course,
         }}
-      /> */}
+      />
       {/* {type === 'faculty' && (
         <Tab.Screen
           name="Settings"
