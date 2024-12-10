@@ -34,6 +34,7 @@ interface Props {
   currentDuration: number;
   beforeDuration: number;
   setFeedbackState: () => void;
+  kind: string | null;
 }
 
 interface State {

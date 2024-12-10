@@ -32,6 +32,7 @@ interface FeedbackFacultyPageProps {
   startTime?: string;
   setFeedbackState: () => void;
   cancelFeedback: () => void;
+  kind: string | null;
 }
 
 interface FeedbackFacultyPageState {
